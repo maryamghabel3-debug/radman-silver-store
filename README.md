@@ -68,3 +68,5 @@ cat docs/PHASE-1-AGENTS.md
 - [docs/MULTILINGUAL-FUTURE.md](docs/MULTILINGUAL-FUTURE.md) — Regional expansion roadmap for Arabic, Turkish, and English storefronts.
 - [docs/LEGACY-API-RECONNAISSANCE.md](docs/LEGACY-API-RECONNAISSANCE.md) — Legacy API technical reconnaissance, custom MVC platform analysis, hybrid extraction mapping, and the Python inventory buffer rule.
 - [docs/EXTERNAL-AGENT-PROMPTS.md](docs/EXTERNAL-AGENT-PROMPTS.md) — External Agent Skill Injection guide (3 system prompts for ChatGPT/Claude: Instagram Content Creator, Sales Closer, and Jewelry SEO Specialist).
+- [docs/AGENT-LEGACY-SYNC-GUIDE.md](docs/AGENT-LEGACY-SYNC-GUIDE.md) — Operational guide for running Agent-LegacySync (catalog migration, inventory buffer rule, SQLite staging, and CLI reference).
+- [agents/agent_legacy_sync.py](agents/agent_legacy_sync.py) — Authoritative Python 3 automation module for Legacy Store Catalog & Inventory Sync.
