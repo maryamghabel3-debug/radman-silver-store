@@ -1,3 +1,6 @@
+> **STATUS: PUBLIC HTML RECONNAISSANCE ONLY — NOT AN AUTHENTICATED API AUDIT**  
+> *This document represents initial external HTML/CDN observations and is retained as a scraping fallback.*
+
 # LEGACY API RECONNAISSANCE & MAPPING ANALYSIS (`noghrehmashhad.ir`)
 
 This document provides a technical reconnaissance report on the legacy store (`noghrehmashhad.ir`), its underlying e-commerce platform architecture, mapping strategies for catalog and image extraction, and the Python inventory buffer rule for `radman-silver-store`.

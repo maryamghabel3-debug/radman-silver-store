@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Sanitized Legacy Store Product Sample (noghrehmashhad.ir)",
+  "description": "Safe, read-only representation of legacy product payload with zero secrets, zero internal server paths, and zero customer PII.",
+  "data": [
+    {
+      "id": 1014,
+      "title": "انگشتر مردانه عقیق سبز خوشرنگ کد ۱۰۱۴",
+      "slug": "انگشتر-مردانه-عقیق-سبز-خوشرنگ-کد-۱۰۱۴",
+      "category_id": 12,
+      "category_name": "انگشترهای خطی و عقیق",
+      "price_irr": 78900000,
+      "sale_price_irr": null,
+      "currency": "IRR",
+      "in_stock": true,
+      "stock_quantity": 5,
+      "weight_grams": 6.80,
+      "purity": "925 Sterling",
+      "gemstone_type": "Agate (عقیق)",
+      "ring_size": "60",
+      "images": [
+        {
+          "url": "https://noghrehmashhad.ir/shop-resources/ARW2Oo2BZd/product-images/1785842823_4580729600.jpg",
+          "is_thumbnail": false,
+          "width": 1600,
+          "height": 1600
+        }
+      ],
+      "updated_at": "2026-08-01T10:15:00Z",
+      "is_active": true
+    },
+    {
+      "id": 1013,
+      "title": "عقیق سیاه انگشتر ضریح نقره مردانه کد ۱۰۱۳",
+      "slug": "عقیق-سیاه-انگشتر-ضریح-نقره-مردانه-کد-۱۰۱۳",
+      "category_id": 12,
+      "category_name": "انگشترهای خطی و عقیق",
+      "price_irr": 58590000,
+      "sale_price_irr": 55000000,
+      "currency": "IRR",
+      "in_stock": true,
+      "stock_quantity": 1,
+      "weight_grams": 5.10,
+      "purity": "925 Sterling",
+      "gemstone_type": "Black Agate (عقیق سیاه)",
+      "ring_size": "58",
+      "images": [
+        {
+          "url": "https://noghrehmashhad.ir/shop-resources/ARW2Oo2BZd/product-images/1785842513_4351929313.jpg",
+          "is_thumbnail": false,
+          "width": 1600,
+          "height": 1600
+        }
+      ],
+      "updated_at": "2026-08-02T14:30:00Z",
+      "is_active": true
+    }
+  ]
+}
