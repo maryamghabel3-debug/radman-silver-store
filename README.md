@@ -66,3 +66,5 @@ cat docs/PHASE-1-AGENTS.md
 - [docs/TELEGRAM-BOT.md](docs/TELEGRAM-BOT.md) — Webhook/polling architecture, interactive slash commands, and owner Telegram admin ID whitelist.
 - [docs/WHOLESALE-FUTURE.md](docs/WHOLESALE-FUTURE.md) — Future B2B tiered wholesale pricing model and partner gallery portal.
 - [docs/MULTILINGUAL-FUTURE.md](docs/MULTILINGUAL-FUTURE.md) — Regional expansion roadmap for Arabic, Turkish, and English storefronts.
+- [docs/LEGACY-API-RECONNAISSANCE.md](docs/LEGACY-API-RECONNAISSANCE.md) — Legacy API technical reconnaissance, custom MVC platform analysis, hybrid extraction mapping, and the Python inventory buffer rule.
+- [docs/EXTERNAL-AGENT-PROMPTS.md](docs/EXTERNAL-AGENT-PROMPTS.md) — External Agent Skill Injection guide (3 system prompts for ChatGPT/Claude: Instagram Content Creator, Sales Closer, and Jewelry SEO Specialist).
