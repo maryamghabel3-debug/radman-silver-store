@@ -1,40 +1,49 @@
-# قوانین قیمت‌گذاری و محاسبه اجرت نقره (`PRICING-RULES.md`)
+# قوانین قیمت‌گذاری و محاسبه نرخ روز نقره (`PRICING-RULES.md`)
 
-This document defines the mathematical pricing formulas, daily silver rate verification protocols, and Toman presentation rules for **RADMAN SILVER 925**.
-
----
-
-## 1. Mathematical Pricing Formula (`فرمول محاسبه قیمت فروش`)
-
-All retail silver jewelry prices in `radman-silver-store` are calculated using the following deterministic formula:
-
-```text
-Retail_Price_IRR = (Daily_Silver_925_Gram_Rate_IRR * Net_Weight_Grams) + Gemstone_Cost_IRR + Craftsmanship_Fee_IRR + Packaging_Fee_IRR + Profit_Margin_IRR
-```
-
-### Formula Variable Definitions
-- **`Daily_Silver_925_Gram_Rate_IRR`:** Live 925 sterling silver rate in Iranian Rials per gram, queried daily at 10:30 AM Tehran time.
-- **`Net_Weight_Grams`:** Verified silver metal weight (`e.g., 5.40 grams`).
-- **`Gemstone_Cost_IRR`:** Fixed cost of gemstone (`e.g., Agate, Turquoise, Zirconia`); `0` for plain silver items.
-- **`Craftsmanship_Fee_IRR`:** Fixed silversmithing craftsmanship fee per gram (`اجرت ساخت`).
-- **`Packaging_Fee_IRR`:** Fixed cost of luxury gift box and authenticity certificate (`e.g., 150,000 Toman`).
-- **`Profit_Margin_IRR`:** Retail brand markup percentage (`e.g., 25%`).
+This document defines the authoritative, simplified pricing model for **RADMAN SILVER 925** (`radman-silver-store`), replacing all legacy complex formulas with a direct daily gram-rate calculation.
 
 ---
 
-## 2. Daily Market Rate Verification Protocol (`تأیید روزانه نرخ نقره`)
+## 1. Extremely Simple Daily Rate Model (`مدل قیمت‌گذاری ساده روزانه`)
 
-1. At **10:30 AM Tehran time**, `Agent-Pricing` fetches the daily silver gram rate from primary Tehran market API.
-2. If the price variance compared to yesterday is **> 3%**, `Agent-Pricing` marks the alert as **HIGH VOLATILITY (`نوسان شدید بازار`)** in Telegram.
-3. No price update is pushed to WooCommerce until the owner clicks `[تأیید و اعمال قیمت امروز]` in Telegram.
-4. If the owner clicks `[لغو و تنظیم دستی]`, they can enter a custom gram rate using command `/price 85000`.
+To ensure absolute operational clarity and eliminate unnecessary pricing complexity, **RADMAN SILVER** operates on a direct daily silver gram rate model:
+- The business owner enters **ONE number daily** (or whenever market conditions require) via Telegram Bot:
+  ```text
+  نرخ امروز هر گرم نقره = X تومان
+  ```
+- No complex formulas involving global spot silver prices, Tether (`USDT`) exchange rates, or separate silversmithing labor calculations are used.
 
 ---
 
-## 3. Rounding & Currency Display Rules (`قوانین گرد کردن و نمایش تومان`)
+## 2. Three-Tier Product Pricing Reality (`قوانین ۳ گانه محاسبه قیمت محصولات`)
 
-- **Internal Database Currency:** All prices stored in WooCommerce database in **Iranian Rials (`IRR`)** to prevent payment gateway truncation errors.
-- **Storefront Display Currency:** Displayed to customers in **Toman (`تومان`)** via Persian WooCommerce localization (`1 Toman = 10 IRR`).
-- **Luxury Rounding Standard:**
-  - All retail prices are rounded up to the nearest **10,000 Toman (`100,000 IRR`)** for clean luxury presentation.
-  - Example: Calculated price `2,483,200 Toman` -> Displayed as **`۲,۴۹۰,۰۰۰ تومان`**.
+Every product in `radman-silver-store` falls into exactly one of three deterministic pricing modes:
+
+### A. Weight-Based Products (`pricing_mode = weight_based`)
+- **Applies to:** Plain silver rings, bracelets, necklaces, and standard sterling silver jewelry items with a verified net weight in grams.
+- **Formula:**
+  ```text
+  final_price_toman = weight_grams * daily_rate_toman_per_gram
+  ```
+- **Example:** If `weight_grams = 5.40` and `daily_rate = 85,000 Toman`, then `final_price = 459,000 Toman`.
+
+### B. Special / Gemstone / Unique Products (`pricing_mode = manual_locked`)
+- **Applies to:** Jewelry pieces featuring precious or semi-precious gemstones (`عقیق یمنی`, `فیروزه نیشابور`), custom engraving, or intricate silversmithing labor.
+- **Rule:** The owner sets the retail price **manually** in WooCommerce. Automated pricing scripts **NEVER overwrite** a product marked with `pricing_mode = manual_locked`.
+
+### C. Missing Weight Products (`pricing_mode = legacy_mirror`)
+- **Applies to:** Products imported from the legacy store (`noghrehmashhad.ir`) where the gram weight field is missing or unverified.
+- **Rule:** Temporarily mirror the legacy store's final price (`legacy_price`) until the owner weighs the item and updates its metadata to `weight_based` or `manual_locked`.
+
+---
+
+## 3. Telegram Daily Rate Confirmation Workflow (`گردش کار تلگرامی`)
+
+1. The owner sends slash command `/price 85000` in the `@RadmanSilverStoreBot` Telegram channel.
+2. `Agent-Pricing` recalculates all active products where `pricing_mode = weight_based`.
+3. The bot replies with a summary report:
+   ```text
+   نرخ جدید هر گرم نقره: ۸۵,۰۰۰ تومان
+   تعداد محصولات وزن‌محور به‌روزرسانی‌شده: ۱۴۵ محصول
+   محصولات قفل‌شده دستی (بدون تغییر): ۴۲ محصول
+   ```
