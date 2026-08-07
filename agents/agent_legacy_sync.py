@@ -24,25 +24,47 @@ logging.basicConfig(
 )
 logger = logging.getLogger("Agent-LegacySync")
 
-# --- 1. CORE MATH & BUSINESS LOGIC MODULES ---
+# --- 1. CORE BUSINESS & STOCK/PRICING MODULES ---
 
 def calculate_radman_stock(legacy_stock: int) -> int:
     """
-    Applies the authoritative Inventory Buffer Rule:
-      - If legacy_stock <= 1: return 0 (prevent overselling on last single item).
-      - If legacy_stock > 1:  return legacy_stock - 1 (1-item safety buffer).
+    AUTHORITATIVE STOCK REALITY RULE:
+      - Most silver rings are UNIQUE pieces (stock = 1 is NORMAL and sellable).
+      - NO "safety buffer" logic is applied.
+      - Exact 1:1 Mapping:
+          stock = 1 on old site -> stock = 1 on new site
+          stock = 0 -> stock = 0
+          stock = N -> stock = N
+      - Overselling risk is handled by HUMAN CONFIRMATION via Telegram before shipping.
     """
     if not isinstance(legacy_stock, int) or legacy_stock < 0:
         return 0
-    if legacy_stock <= 1:
-        return 0
-    return legacy_stock - 1
+    return legacy_stock
+
+def determine_pricing_mode(legacy_item: Dict[str, Any]) -> tuple[str, str]:
+    """
+    AUTHORITATIVE PRICING REALITY RULE:
+      - Old site has only FINAL prices (no breakdown of stone/labor).
+      - New site 3-Tier Model:
+          1. Weight-based products: price = weight * daily_rate (owner enters rate via Telegram)
+          2. Special/gemstone products: manual_locked price
+          3. Products with missing weight: mirror old site price temporarily
+    """
+    weight = legacy_item.get("weight_g")
+    has_special_gem = legacy_item.get("is_special_gemstone", False)
+    legacy_price = str(legacy_item.get("price_irr", 0))
+    
+    if has_special_gem:
+        return "manual_locked", legacy_price
+    elif weight and float(weight) > 0:
+        # Will be updated dynamically by Agent-Pricing using daily gram rate
+        return "weight_based", legacy_price
+    else:
+        return "legacy_mirror", legacy_price
 
 def generate_radman_sku(category_code: str, gender_code: str, legacy_id: int) -> str:
     """
     Generates the locked SKU syntax: RAD-[CAT]-[GENDER]-[LEGACY_ID]
-      - CAT: RNG, NEC, BRC, SET, EAR
-      - GENDER: W, M, U
     """
     cat = category_code.upper().strip()
     gen = gender_code.upper().strip()
@@ -54,12 +76,9 @@ def generate_radman_sku(category_code: str, gender_code: str, legacy_id: int) ->
 
 def clean_persian_title(raw_title: str) -> str:
     """
-    Standardizes Persian product titles:
-      - Normalizes Persian characters and digits.
-      - Strips unnecessary promo tags.
+    Standardizes Persian product titles with official web typography and Persian digits.
     """
     cleaned = raw_title.replace("ي", "ی").replace("ك", "ک")
-    # Replace Arabic digits with standard Persian digits
     trans_table = str.maketrans("0123456789٠١٢٣٤٥٦٧٨٩", "۰۱۲۳۴۵۶۷۸۹۰۱۲۳۴۵۶۷۸۹")
     return cleaned.translate(trans_table).strip()
 
@@ -69,49 +88,48 @@ def build_woocommerce_payload(legacy_item: Dict[str, Any], is_existing_published
     OVERWRITE PROTECTION RULE:
       - If product is already PUBLISHED in WooCommerce, we NEVER overwrite name, description,
         short_description, or images. We ONLY synchronize stock_quantity and manage_stock.
-      - If product is DRAFT or NEW, we import the clean base metadata and images.
+      - If product is DRAFT or NEW, we import clean base metadata and images.
     """
-    safe_stock = calculate_radman_stock(legacy_item.get("stock", 0))
+    exact_stock = calculate_radman_stock(legacy_item.get("stock", 0))
     legacy_id = legacy_item.get("id")
     
     if is_existing_published:
-        logger.info(f"Product {legacy_id} is PUBLISHED -> Overwrite Protection active (syncing stock={safe_stock} only).")
+        logger.info(f"Product {legacy_id} is PUBLISHED -> Overwrite Protection active (syncing exact stock={exact_stock} only).")
         return {
             "manage_stock": True,
-            "stock_quantity": safe_stock
+            "stock_quantity": exact_stock
         }
     
-    # New or Draft Product Payload
     raw_title = legacy_item.get("title", f"محصول نقره کد {legacy_id}")
     clean_title = clean_persian_title(raw_title)
     cat_code = legacy_item.get("cat_code", "RNG")
     gender_code = legacy_item.get("gender_code", "M")
     sku = generate_radman_sku(cat_code, gender_code, legacy_id)
+    pricing_mode, initial_price = determine_pricing_mode(legacy_item)
     
     payload = {
         "name": clean_title,
         "sku": sku,
         "status": "draft",  # ALWAYS import as draft in Phase 1 for human review
         "manage_stock": True,
-        "stock_quantity": safe_stock,
-        "regular_price": str(legacy_item.get("price_irr", 0)),
-        "short_description": f"نقره ۹۲۵ استرلینگ اصل | وزن: {legacy_item.get('weight_g', '۰.۰۰')} گرم",
+        "stock_quantity": exact_stock,
+        "regular_price": initial_price,
+        "short_description": f"نقره ۹۲۵ استرلینگ اصل | وزن: {legacy_item.get('weight_g', '۰.۰۰')} گرم | مدل قیمت‌گذاری: {pricing_mode}",
         "description": f"خرید آنلاین {clean_title} با ضمانت اصالت کالا، بسته‌بندی لوکس هدیه و ارسال فوری از رادمان سیلور.",
         "meta_data": [
             {"key": "_legacy_store_id", "value": str(legacy_id)},
+            {"key": "_pricing_mode", "value": pricing_mode},
             {"key": "_legacy_last_sync", "value": datetime.now(timezone.utc).isoformat()}
         ]
     }
     
-    # Process images if present
     if "image_url" in legacy_item and legacy_item["image_url"]:
-        # Strip query params like ?size=320x320 to get raw high-res image
         raw_img_url = legacy_item["image_url"].split("?")[0]
         payload["images"] = [{"src": raw_img_url, "alt": clean_title}]
         
     return payload
 
-# --- 2. SQLITE STAGING & STATE DATABASE ---
+# --- 2. SQLITE STAGING DATABASE ---
 
 class StagingDatabase:
     def __init__(self, db_path: str = "legacy_sync_map.db"):
@@ -127,8 +145,8 @@ class StagingDatabase:
                 radman_sku TEXT UNIQUE,
                 woocommerce_id INTEGER,
                 wc_status TEXT,
-                raw_stock INTEGER,
-                radman_buffer_stock INTEGER,
+                exact_stock INTEGER,
+                pricing_mode TEXT,
                 last_sync_utc TEXT
             )
         """)
@@ -136,7 +154,7 @@ class StagingDatabase:
         
     def get_product_mapping(self, legacy_id: int) -> Optional[Dict[str, Any]]:
         cursor = self.conn.cursor()
-        cursor.execute("SELECT legacy_id, radman_sku, woocommerce_id, wc_status, raw_stock, radman_buffer_stock, last_sync_utc FROM legacy_sync_map WHERE legacy_id = ?", (legacy_id,))
+        cursor.execute("SELECT legacy_id, radman_sku, woocommerce_id, wc_status, exact_stock, pricing_mode, last_sync_utc FROM legacy_sync_map WHERE legacy_id = ?", (legacy_id,))
         row = cursor.fetchone()
         if not row:
             return None
@@ -145,25 +163,25 @@ class StagingDatabase:
             "radman_sku": row[1],
             "woocommerce_id": row[2],
             "wc_status": row[3],
-            "raw_stock": row[4],
-            "radman_buffer_stock": row[5],
+            "exact_stock": row[4],
+            "pricing_mode": row[5],
             "last_sync_utc": row[6]
         }
         
-    def save_mapping(self, legacy_id: int, sku: str, wc_id: int, status: str, raw_stock: int, buffer_stock: int):
+    def save_mapping(self, legacy_id: int, sku: str, wc_id: int, status: str, exact_stock: int, pricing_mode: str):
         cursor = self.conn.cursor()
         now_utc = datetime.now(timezone.utc).isoformat()
         cursor.execute("""
-            INSERT INTO legacy_sync_map (legacy_id, radman_sku, woocommerce_id, wc_status, raw_stock, radman_buffer_stock, last_sync_utc)
+            INSERT INTO legacy_sync_map (legacy_id, radman_sku, woocommerce_id, wc_status, exact_stock, pricing_mode, last_sync_utc)
             VALUES (?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(legacy_id) DO UPDATE SET
                 radman_sku = excluded.radman_sku,
                 woocommerce_id = excluded.woocommerce_id,
                 wc_status = excluded.wc_status,
-                raw_stock = excluded.raw_stock,
-                radman_buffer_stock = excluded.radman_buffer_stock,
+                exact_stock = excluded.exact_stock,
+                pricing_mode = excluded.pricing_mode,
                 last_sync_utc = excluded.last_sync_utc
-        """, (legacy_id, sku, wc_id, status, raw_stock, buffer_stock, now_utc))
+        """, (legacy_id, sku, wc_id, status, exact_stock, pricing_mode, now_utc))
         self.conn.commit()
         
     def close(self):
@@ -178,6 +196,7 @@ MOCK_LEGACY_FEED = [
         "price_irr": 78900000,
         "stock": 5,
         "weight_g": 6.80,
+        "is_special_gemstone": False,
         "cat_code": "RNG",
         "gender_code": "M",
         "image_url": "https://noghrehmashhad.ir/shop-resources/ARW2Oo2BZd/product-images/1785842823_4580729600.jpg?size=320x320&rs=fit"
@@ -188,6 +207,7 @@ MOCK_LEGACY_FEED = [
         "price_irr": 86900000,
         "stock": 2,
         "weight_g": 7.20,
+        "is_special_gemstone": True,
         "cat_code": "RNG",
         "gender_code": "M",
         "image_url": "https://noghrehmashhad.ir/shop-resources/ARW2Oo2BZd/product-images/1785843129_9880917938.jpg?size=320x320&rs=fit"
@@ -196,8 +216,9 @@ MOCK_LEGACY_FEED = [
         "id": 1013,
         "title": "عقیق سیاه انگشتر ضریح نقره مردانه کد 1013",
         "price_irr": 58590000,
-        "stock": 1,  # Buffer rule will convert this to 0!
+        "stock": 1,  # Stock = 1 is NORMAL and sellable! Exact 1:1 mapping!
         "weight_g": 5.10,
+        "is_special_gemstone": False,
         "cat_code": "RNG",
         "gender_code": "M",
         "image_url": "https://noghrehmashhad.ir/shop-resources/ARW2Oo2BZd/product-images/1785842513_4351929313.jpg?size=320x320&rs=fit"
@@ -206,51 +227,42 @@ MOCK_LEGACY_FEED = [
 
 def run_sync_pipeline(dry_run: bool = True, use_mock: bool = True):
     logger.info("="*60)
-    logger.info("STARTING AGENT-LEGACYSYNC CATALOG & INVENTORY RECONCILIATION")
+    logger.info("STARTING AGENT-LEGACYSYNC (EXACT 1:1 STOCK MAPPING & 3-TIER PRICING)")
     logger.info(f"Mode: {'DRY-RUN / MOCK SIMULATION' if dry_run else 'LIVE WOOCOMMERCE SYNC'}")
     logger.info("="*60)
     
     db = StagingDatabase(db_path="legacy_sync_map.db")
-    
-    if use_mock:
-        logger.info(f"Loaded {len(MOCK_LEGACY_FEED)} products from Mock Legacy Catalog Feed (noghrehmashhad.ir format).")
-        items = MOCK_LEGACY_FEED
-    else:
-        logger.error("Live API fetching requires WordPress/WooCommerce live server credentials in .env. Falling back to mock feed.")
-        items = MOCK_LEGACY_FEED
+    items = MOCK_LEGACY_FEED
         
     for item in items:
         legacy_id = item["id"]
-        raw_stock = item["stock"]
-        safe_stock = calculate_radman_stock(raw_stock)
+        exact_stock = calculate_radman_stock(item["stock"])
+        pricing_mode, _ = determine_pricing_mode(item)
         
-        # Check SQLite staging state
         existing = db.get_product_mapping(legacy_id)
         is_published = False
-        wc_id = 20000 + legacy_id  # Mock WooCommerce ID assignment
+        wc_id = 20000 + legacy_id
         
-        if existing:
-            logger.info(f"Product {legacy_id} exists in staging table -> SK={existing['radman_sku']}, Status={existing['wc_status']}")
-            if existing["wc_status"] == "publish":
-                is_published = True
+        if existing and existing["wc_status"] == "publish":
+            is_published = True
                 
         payload = build_woocommerce_payload(item, is_existing_published=is_published)
         
-        logger.info("-" * 50)
+        logger.info("-" * 55)
         logger.info(f"Legacy ID   : {legacy_id}")
         logger.info(f"Title       : {item['title']} -> Clean: {payload.get('name', 'N/A (Protected)')}")
         logger.info(f"SKU         : {payload.get('sku', existing['radman_sku'] if existing else 'N/A')}")
-        logger.info(f"Stock Buffer: Raw={raw_stock:2d} -> Safe Radman Stock={safe_stock:2d} | Rule: {'<=1 -> 0' if raw_stock<=1 else '>1 -> N-1'}")
+        logger.info(f"Stock Rule  : Raw={item['stock']} -> Exact Radman Stock={exact_stock} (Zero Buffer applied)")
+        logger.info(f"Pricing Mode: {pricing_mode.upper()}")
         logger.info(f"Payload     : {json.dumps(payload, ensure_ascii=False)}")
         
-        # Save state in SQLite
         db.save_mapping(
             legacy_id=legacy_id,
             sku=payload.get("sku", f"RAD-RNG-M-{legacy_id}"),
             wc_id=wc_id,
             status=payload.get("status", "draft"),
-            raw_stock=raw_stock,
-            buffer_stock=safe_stock
+            exact_stock=exact_stock,
+            pricing_mode=pricing_mode
         )
         
     db.close()

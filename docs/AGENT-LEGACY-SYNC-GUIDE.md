@@ -24,7 +24,7 @@ WC_CONSUMER_SECRET=cs_your_woocommerce_consumer_secret
 ## 2. Execution Modes & CLI Reference (`حالت‌های اجرایی ایجنت`)
 
 ### A. Mock / Dry-Run Simulation (`شبیه‌سازی آفلاین و تست بدون خطر`)
-To test data transformations, SKU generation, inventory buffer math, and SQLite staging state updates without pushing to a live server:
+To test data transformations, SKU generation, inventory exact 1:1 stock math, and SQLite staging state updates without pushing to a live server:
 ```bash
 python3 agents/agent_legacy_sync.py --mock --dry-run
 ```
@@ -41,7 +41,7 @@ python3 agents/agent_legacy_sync.py
 
 1. **The Inventory Buffer Rule (`قانون بافر موجودی انبار`):**
    - **Rule 1 (`legacy_stock <= 1`):** Sets `radman_stock = 0` to prevent overselling the last single item.
-   - **Rule 2 (`legacy_stock > 1`):** Sets `radman_stock = legacy_stock - 1` to maintain a 1-item safety buffer.
+   - **Rule 2 (`legacy_stock > 1`):** Sets `radman_stock = legacy_stock - 1` to maintain a 1-item safety exact 1:1 stock.
 2. **Standardized SKU Taxonomy (`کد محصول استاندارد`):**
    - Implements locked format: `RAD-[CAT]-[GENDER]-[LEGACY_ID]` (e.g., `RAD-RNG-M-1014`).
 3. **High-Resolution Image Extraction (`استخراج تصویر اورجینال`):**
