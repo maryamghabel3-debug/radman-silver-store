@@ -1,3 +1,10 @@
+---
+⚠️ **SECURITY NOTICE:**  
+Never commit actual credentials, tokens, or API keys to this repository.  
+All sensitive values MUST reside in `.env` (excluded via `.gitignore`).  
+Use placeholder syntax `[VARIABLE_NAME]` in documentation.
+---
+
 # استراتژی دسترسی و ممیزی وب‌سرویس ادمین سایت قدیمی (`LEGACY-API-ACCESS-STRATEGY.md`)
 
 This document defines the access architecture, Iranian domestic server requirements, and read-only audit workflow for the legacy store (`noghrehmashhad.ir`).
@@ -6,7 +13,7 @@ This document defines the access architecture, Iranian domestic server requireme
 
 ## 1. Admin Panel API Architecture (`مشخصات وب‌سرویس پنل مدیریت`)
 
-- **API Nature:** The provided token (`r7Odu...`) belongs to the **ADMIN PANEL API** of `noghrehmashhad.ir`, not a public customer-facing API.
+- **API Nature:** The provided token (`Authorization: Bearer [LEGACY_API_TOKEN from .env]`) belongs to the **ADMIN PANEL API** of `noghrehmashhad.ir`, not a public customer-facing API.
 - **Privilege Scope:** As an internal administrative endpoint, it exposes richer catalog data than public feeds, including full product metadata, exact stock integers (`1`, `0`), and technical specifications.
 - **Read-Only Enforcement:** All automation scripts and audit tools MUST restrict HTTP requests strictly to **`GET`**, **`HEAD`**, and **`OPTIONS`**. Zero write operations (`POST`, `PUT`, `PATCH`, `DELETE`) are permitted against the legacy store.
 
