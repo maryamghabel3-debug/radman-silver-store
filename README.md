@@ -42,3 +42,5 @@
 - [docs/TELEGRAM-BOT.md](docs/TELEGRAM-BOT.md) — Webhook/polling architecture, interactive slash commands (`/price`, `/orders`), and admin ID whitelist.
 - [docs/WHOLESALE-FUTURE.md](docs/WHOLESALE-FUTURE.md) — Future B2B tiered wholesale pricing model and partner gallery portal.
 - [docs/MULTILINGUAL-FUTURE.md](docs/MULTILINGUAL-FUTURE.md) — Regional expansion roadmap for Arabic, Turkish, and English storefronts.
+
+- [docs/HOSTING-QUESTIONS-CHECKLIST.md](docs/HOSTING-QUESTIONS-CHECKLIST.md) — Pre-purchase questions checklist for hosting support and payment gateway support (6 tickets + Red Flags).
