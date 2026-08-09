@@ -39,7 +39,7 @@ This document defines the authoritative 4-mode pricing architecture, fixed gemst
 
 ## 4. Telegram Pricing Preview & Human Approval Workflow (`گردش کار تلگرامی`)
 
-1. **Owner Input:** Owner sends command `/price 85000` to `@RadmanSilverStoreBot`.
+1. **Owner Input:** Owner sends command `/price 85000` to `[RADMAN_TELEGRAM_BOT_USERNAME: TBD]`.
 2. **Automated Recalculation:** `Agent-Pricing` recalculates all products in `silver_weight_only` and `silver_weight_plus_stone` modes. It skips `manual_locked` products and any products missing required weight/stone fields.
 3. **Mandatory Preview Summary:** Before applying any changes to WooCommerce, the bot sends an interactive summary report:
    ```text

@@ -4,6 +4,15 @@
 
 ---
 
+## وضعیت ارزیابی فنی و استعلام از هاستینگ‌ها (Technical Due Diligence Status)
+- **تاریخ ارزیابی (Date):** `2026-08-09` (`Asia/Tehran` timezone)
+- **ارسال سوالات فنی به میزبان‌فا (Technical questions sent to MizbanFa):** وضعیت: **`AWAITING TECHNICAL RESPONSE`** (`PENDING VENDOR ANSWER`)
+- **ارسال سوالات فنی به پارس‌پک (Technical questions sent to ParsPack):** وضعیت: **`AWAITING TECHNICAL RESPONSE`** (`PENDING VENDOR ANSWER`)
+- **مجوز خرید نهایی (Purchase Authorization):** **`NO FINAL PURCHASE AUTHORIZATION YET`** (`PENDING TECHNICAL DUE DILIGENCE`)
+- **سند معماری و تصمیم‌گیری هاستینگ:** برای جزئیات کامل معماری‌ها و معیارهای پذیرش به سند [HOSTING-ARCHITECTURE-DECISION.md](HOSTING-ARCHITECTURE-DECISION.md) مراجعه کنید.
+
+---
+
 ## SECTION 1 — تیکت اول: API، ایجنت‌ها و اجرای اسکریپت‌ها
 
 1. آیا WooCommerce REST API روی این پلن به‌صورت کامل فعال است؟  

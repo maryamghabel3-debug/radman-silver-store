@@ -14,7 +14,7 @@
   https://noghrehmashhad.ir / https://noghrehmashhad.ir/admin / https://api.noghrehmashhad.ir
   ```
 - **Technical Diagnosis:** Domestic Iranian hosting infrastructure firewalls and drops incoming connection attempts originating from external cloud IP ranges.
-- **Action Required:** To execute live authenticated GET requests against the Admin Panel API, `Agent-LegacySync` must be deployed and run from a server located inside Iran (`Iran Server Sonic 30`).
+- **Action Required:** To execute live authenticated GET requests against the Admin Panel API, `Agent-LegacySync` must be deployed and run from a server located inside Iran (`[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]`).
 
 ---
 
@@ -79,7 +79,7 @@
 
 ## 6. MIGRATION FEASIBILITY VERDICT
 
-- **Can we build a full automated importer?** **`YES`** *(Exclusively from an Iranian hosting server such as Iran Server Sonic 30).*
+- **Can we build a full automated importer?** **`YES`** *(Exclusively from an Iranian hosting server: `[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]`).*
 - **Can we build automated stock sync?** **`YES`** *(Exact 1:1 integer sync: `1 -> 1`, `0 -> 0`).*
 - **What are the blockers before implementation?**
   1. **Geographic Hosting Firewall Blocker:** Sync script must be deployed to a server inside Iran.

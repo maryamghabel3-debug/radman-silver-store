@@ -8,7 +8,7 @@ This document identifies every technical blocker discovered during the read-only
 
 - **Technical Blocker:** Direct HTTP/HTTPS requests from non-Iranian cloud IP ranges to `noghrehmashhad.ir` are rejected or timed out by domestic Iranian hosting firewalls.
 - **Mitigation Standard:**
-  - `Agent-LegacySync` MUST be executed exclusively from a server located inside Iran (`Iran Server Sonic 30`).
+  - `Agent-LegacySync` MUST be executed exclusively from a server located inside Iran (`[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]`).
   - As an operational fallback, a CSV/JSON catalog export generated from the legacy server administrative panel can be ingested locally.
 
 ---

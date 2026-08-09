@@ -36,7 +36,7 @@ python3 agents/agent_legacy_sync.py --mock --dry-run
 ```
 
 ### B. Live WooCommerce Synchronization (`همگام‌سازی مستقیم روی سرور زنده`)
-When deployed on the Iranian production server (`Iran Server Sonic 30`), execute against live APIs:
+When deployed on the Iranian production server (`[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]`), execute against live APIs:
 ```bash
 python3 agents/agent_legacy_sync.py
 ```

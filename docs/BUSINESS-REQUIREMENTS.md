@@ -18,4 +18,4 @@ This document defines the core business objectives, sourcing models, operational
    - *Missing weight items:* `pricing_mode = legacy_mirror` (temporarily mirror old site price).
 4. **Admin Panel API & Iranian Host Requirement:**
    - Sourcing from `noghrehmashhad.ir` uses its internal Admin Panel API.
-   - To prevent cloud firewall timeouts, all sync scripts execute from an Iranian hosting server (**`Iran Server Sonic 30`**).
+   - To prevent cloud firewall timeouts, all sync scripts execute from an Iranian hosting server (`[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]`).

@@ -1,6 +1,6 @@
 # مشخصات فنی ایجنت‌های فاز اول (`PHASE-1-AGENTS.md`)
 
-This document provides detailed technical specifications and operational logic for the core automation agents deployed in Phase 1 on **Iran Server Sonic 30**.
+This document provides detailed technical specifications and operational logic for the core automation agents deployed in Phase 1 on `[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]`.
 
 ---
 
