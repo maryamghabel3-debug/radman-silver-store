@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS inventory_registry (
     legacy_id INTEGER,
     woocommerce_id INTEGER,
     stock_quantity INTEGER NOT NULL,  -- Exact 1:1 quantity (1 = sellable, 0 = out of stock)
-    pricing_mode TEXT NOT NULL,       -- 'silver_weight_only', 'manual_locked', or 'legacy_mirror'
+    pricing_mode TEXT NOT NULL,       -- 'silver_weight_only', 'silver_weight_plus_stone', 'manual_locked', or 'legacy_mirror'
     last_reconciled_utc TEXT NOT NULL
 );
 ```
