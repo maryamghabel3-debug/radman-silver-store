@@ -24,13 +24,25 @@ logging.basicConfig(
 )
 logger = logging.getLogger("Agent-LegacySync")
 
+# --- Environment Variable Loading (Primary Official Names + Deprecated Fallbacks) ---
+# Official primary env vars: LEGACY_API_BASE_URL, LEGACY_API_KEY, LEGACY_API_SECRET
+# DEPRECATED fallback support: LEGACY_STORE_URL -> LEGACY_API_BASE_URL, LEGACY_API_TOKEN -> LEGACY_API_KEY
+LEGACY_API_BASE_URL = os.getenv("LEGACY_API_BASE_URL") or os.getenv("LEGACY_STORE_URL", "https://noghrehmashhad.ir")
+LEGACY_API_KEY = os.getenv("LEGACY_API_KEY") or os.getenv("LEGACY_API_TOKEN", "")
+LEGACY_API_SECRET = os.getenv("LEGACY_API_SECRET", "")
+
+if os.getenv("LEGACY_STORE_URL"):
+    logger.warning("DEPRECATED: 'LEGACY_STORE_URL' is deprecated; please migrate to 'LEGACY_API_BASE_URL'.")
+if os.getenv("LEGACY_API_TOKEN"):
+    logger.warning("DEPRECATED: 'LEGACY_API_TOKEN' is deprecated; please migrate to 'LEGACY_API_KEY'.")
+
 # --- 1. CORE BUSINESS & STOCK/PRICING MODULES ---
 
 def calculate_radman_stock(legacy_stock: int) -> int:
     """
     AUTHORITATIVE STOCK REALITY RULE:
       - Most silver rings are UNIQUE pieces (stock = 1 is NORMAL and sellable).
-      - NO "safety offset" logic is applied.
+      - NO historical stock-offset logic is applied.
       - Exact 1:1 Mapping:
           stock = 1 on old site -> stock = 1 on new site
           stock = 0 -> stock = 0
@@ -43,21 +55,23 @@ def calculate_radman_stock(legacy_stock: int) -> int:
 
 def determine_pricing_mode(legacy_item: Dict[str, Any]) -> tuple[str, str]:
     """
-    AUTHORITATIVE PRICING REALITY RULE:
-      - Old site has only FINAL prices (no breakdown of stone/labor).
-      - New site 3-Tier Model:
-          1. Weight-based products: price = weight * daily_rate (owner enters rate via Telegram)
-          2. Special/gemstone products: manual_locked price
-          3. Products with missing weight: mirror old site price temporarily
+    AUTHORITATIVE PRICING REALITY RULE (4 Official Modes Only):
+      - Official modes: silver_weight_only, silver_weight_plus_stone, legacy_mirror, manual_locked
+      - 1. silver_weight_only       : price = weight_grams * daily_rate
+      - 2. silver_weight_plus_stone : price = (weight_grams * daily_rate) + stone_fixed_value_toman
+      - 3. legacy_mirror            : copy legacy price as-is
+      - 4. manual_locked            : special/masterwork manual price
     """
     weight = legacy_item.get("weight_g")
     has_special_gem = legacy_item.get("is_special_gemstone", False)
+    has_stone_val = legacy_item.get("stone_fixed_value_toman", 0) > 0
     legacy_price = str(legacy_item.get("price_irr", 0))
     
-    if has_special_gem:
+    if legacy_item.get("price_locked") or (has_special_gem and not has_stone_val):
         return "manual_locked", legacy_price
+    elif weight and float(weight) > 0 and has_stone_val:
+        return "silver_weight_plus_stone", legacy_price
     elif weight and float(weight) > 0:
-        # Will be updated dynamically by Agent-Pricing using daily gram rate
         return "silver_weight_only", legacy_price
     else:
         return "legacy_mirror", legacy_price
@@ -197,6 +211,7 @@ MOCK_LEGACY_FEED = [
         "stock": 5,
         "weight_g": 6.80,
         "is_special_gemstone": False,
+        "stone_fixed_value_toman": 0,
         "cat_code": "RNG",
         "gender_code": "M",
         "image_url": "https://noghrehmashhad.ir/shop-resources/ARW2Oo2BZd/product-images/1785842823_4580729600.jpg?size=320x320&rs=fit"
@@ -208,6 +223,7 @@ MOCK_LEGACY_FEED = [
         "stock": 2,
         "weight_g": 7.20,
         "is_special_gemstone": True,
+        "stone_fixed_value_toman": 500000,
         "cat_code": "RNG",
         "gender_code": "M",
         "image_url": "https://noghrehmashhad.ir/shop-resources/ARW2Oo2BZd/product-images/1785843129_9880917938.jpg?size=320x320&rs=fit"
@@ -219,6 +235,7 @@ MOCK_LEGACY_FEED = [
         "stock": 1,  # Stock = 1 is NORMAL and sellable! Exact 1:1 mapping!
         "weight_g": 5.10,
         "is_special_gemstone": False,
+        "stone_fixed_value_toman": 0,
         "cat_code": "RNG",
         "gender_code": "M",
         "image_url": "https://noghrehmashhad.ir/shop-resources/ARW2Oo2BZd/product-images/1785842513_4351929313.jpg?size=320x320&rs=fit"
@@ -227,7 +244,7 @@ MOCK_LEGACY_FEED = [
 
 def run_sync_pipeline(dry_run: bool = True, use_mock: bool = True):
     logger.info("="*60)
-    logger.info("STARTING AGENT-LEGACYSYNC (EXACT 1:1 STOCK MAPPING & 3-TIER PRICING)")
+    logger.info("STARTING AGENT-LEGACYSYNC (1:1 EXACT STOCK MAPPING & 4 OFFICIAL PRICING MODES)")
     logger.info(f"Mode: {'DRY-RUN / MOCK SIMULATION' if dry_run else 'LIVE WOOCOMMERCE SYNC'}")
     logger.info("="*60)
     
@@ -252,7 +269,7 @@ def run_sync_pipeline(dry_run: bool = True, use_mock: bool = True):
         logger.info(f"Legacy ID   : {legacy_id}")
         logger.info(f"Title       : {item['title']} -> Clean: {payload.get('name', 'N/A (Protected)')}")
         logger.info(f"SKU         : {payload.get('sku', existing['radman_sku'] if existing else 'N/A')}")
-        logger.info(f"Stock Rule  : Raw={item['stock']} -> Exact Radman Stock={exact_stock} (Exact 1:1 Mapping applied)")
+        logger.info(f"Stock Rule  : Raw={item['stock']} -> Exact Radman Stock={exact_stock} (1:1 mapping)")
         logger.info(f"Pricing Mode: {pricing_mode.upper()}")
         logger.info(f"Payload     : {json.dumps(payload, ensure_ascii=False)}")
         

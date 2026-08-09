@@ -20,7 +20,7 @@
 ## 2. API Architecture & Protocol Audit
 
 1. **API Base URL:** Configured dynamically via environment variable `LEGACY_API_BASE_URL` (expected base: `https://noghrehmashhad.ir/api/v1` or `/search/?sort=newest` feed).
-2. **Authentication Method:** Detected via environment variables as Bearer Token / Secret Key (`LEGACY_API_KEY` / `LEGACY_API_SECRET`).
+2. **Authentication Method:** Detected via environment variables as Bearer Token / Secret Key (`LEGACY_API_KEY (or DEPRECATED fallback LEGACY_API_TOKEN)` / `LEGACY_API_SECRET`).
 3. **API Version:** Unverified (`v1` inferred from standard custom Iranian gallery shop builders).
 4. **Platform / Vendor Indicators:** Custom Iranian MVC E-Commerce Platform (non-WordPress, non-OpenCart, non-PrestaShop).
 5. **OpenAPI / Swagger Specification:** `NOT_AVAILABLE` publicly.

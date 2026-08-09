@@ -13,7 +13,7 @@ This document defines the access architecture, Iranian domestic server requireme
 
 ## 1. Admin Panel API Architecture (`مشخصات وب‌سرویس پنل مدیریت`)
 
-- **API Nature:** The provided token (`Authorization: Bearer [LEGACY_API_TOKEN from .env]`) belongs to the **ADMIN PANEL API** of `noghrehmashhad.ir`, not a public customer-facing API.
+- **API Nature:** The provided token (`Authorization: Bearer [LEGACY_API_KEY from .env (or DEPRECATED fallback LEGACY_API_TOKEN)]`) belongs to the **ADMIN PANEL API** of `noghrehmashhad.ir`, not a public customer-facing API.
 - **Privilege Scope:** As an internal administrative endpoint, it exposes richer catalog data than public feeds, including full product metadata, exact stock integers (`1`, `0`), and technical specifications.
 - **Read-Only Enforcement:** All automation scripts and audit tools MUST restrict HTTP requests strictly to **`GET`**, **`HEAD`**, and **`OPTIONS`**. Zero write operations (`POST`, `PUT`, `PATCH`, `DELETE`) are permitted against the legacy store.
 
