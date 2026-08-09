@@ -3,7 +3,7 @@
 
 # LEGACY API RECONNAISSANCE & MAPPING ANALYSIS (`noghrehmashhad.ir`)
 
-This document provides a technical reconnaissance report on the legacy store (`noghrehmashhad.ir`), its underlying e-commerce platform architecture, mapping strategies for catalog and image extraction, and the Python inventory buffer rule for `radman-silver-store`.
+This document provides a technical reconnaissance report on the legacy store (`noghrehmashhad.ir`), its underlying e-commerce platform architecture, mapping strategies for catalog and image extraction, and the Python historical stock offset rule (DEPRECATED) for `radman-silver-store`.
 
 ---
 
@@ -63,20 +63,23 @@ To build the **`Agent-LegacySync` (Catalog Sync Agent)** without risking server 
 
 ---
 
-## 3. Inventory Logic Refinement — The "Buffer Rule"
+## 3. Inventory Logic Refinement
 
-Because inventory on `noghrehmashhad.ir` is updated manually by legacy store operators, there is an inherent latency and risk of overselling (stock conflicts). To guarantee a **100% stock conflict-free fulfillment rate** in `radman-silver-store`, we implement the **Inventory Buffer Rule**:
+> **DEPRECATED (superseded by exact 1:1 rule per SYNC-RULES.md)**
+> *Historical stock offset notes below are DEPRECATED. Official rule: legacy_stock=1 -> radman_stock=1 (sellable), legacy_stock=0 -> radman_stock=0. No offset. Oversell protection = Telegram HITL approval.*
+
+Because inventory on `noghrehmashhad.ir` is updated manually by legacy store operators, there is an inherent latency and risk of overselling (stock conflicts). To guarantee a **100% stock conflict-free fulfillment rate** in `radman-silver-store`, we implement the **Historical Offset Rule (DEPRECATED)**:
 
 ### Mathematical Definition
 - **Rule 1 (`legacy_stock <= 1`):** Set `radman_stock = 0` *(Treat single remaining items as out-of-stock to prevent overselling).*
-- **Rule 2 (`legacy_stock > 1`):** Set `radman_stock = legacy_stock - 1` *(Always maintain a 1-item safety buffer).*
+- **DEPRECATED Rule 2 (`legacy_stock > 1`):** Set `radman_stock = legacy_stock - 1` *(Always maintain a 1-item safety buffer).*
 
-### Production Python Implementation (`Agent-LegacySync` Core Buffer Module)
+### Production Python Implementation (`Agent-LegacySync` Historical Module (DEPRECATED))
 
 ```python
 #!/usr/bin/env python3
 """
-RADMAN SILVER STORE — Legacy Inventory Buffer Rule
+RADMAN SILVER STORE — Legacy Historical Offset Rule (DEPRECATED)
 Guarantees zero stock conflicts when synchronizing from noghrehmashhad.ir
 """
 
@@ -96,23 +99,23 @@ def calculate_radman_stock(legacy_stock: int) -> int:
         return 0
         
     if legacy_stock <= 1:
-        # Buffer Rule 1: Prevent overselling on last remaining item
+        # DEPRECATED rule 1: Prevent overselling on last remaining item
         return 0
     else:
-        # Buffer Rule 2: Maintain 1-item safety buffer
+        # DEPRECATED rule 2: Maintain 1-item safety buffer
         return legacy_stock - 1
 
 # --- Verification Unit Tests ---
 if __name__ == "__main__":
     test_cases = [
         (0, 0, "Zero legacy stock -> Radman stock 0"),
-        (1, 0, "Last single item (legacy_stock=1) -> Radman stock 0 (Buffer applied)"),
+        (1, 0, "Last single item (legacy_stock=1) -> Radman stock 0 (DEPRECATED historical test)"),
         (2, 1, "Legacy stock 2 -> Radman stock 1"),
         (5, 4, "Legacy stock 5 -> Radman stock 4"),
         (10, 9, "Legacy stock 10 -> Radman stock 9"),
     ]
     for raw, expected, desc in test_cases:
         result = calculate_radman_stock(raw)
-        assert result == expected, f"Buffer rule failed for raw {raw}!"
+        assert result == expected, f"1:1 rule failed for raw {raw}!"
         print(f"PASS: raw={raw:2d} -> radman={result:2d} | {desc}")
 ```

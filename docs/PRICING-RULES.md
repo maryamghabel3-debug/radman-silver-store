@@ -11,59 +11,29 @@ This document defines the authoritative 4-mode pricing architecture, fixed gemst
   نرخ امروز هر گرم نقره = X تومان
   ```
   *(Example slash command in Telegram: `/price 85000`)*
-- No complex formulas involving global spot silver prices, Tether (`USDT`) exchange rates, or separate silversmithing labor calculations are used.
+- No complex legacy formulas or automated external rate feeds are used in the pricing engine.
 
 ---
 
-## 2. Four Authoritative Pricing Modes (`قوانین ۴ گانه محاسبه قیمت محصولات`)
+## 2. Official Pricing Taxonomy (`۴ حالت رسمی قیمت‌گذاری`)
 
-Every product in `radman-silver-store` operates under exactly one of four locked `pricing_mode` classifications:
-
-```text
-       [ Owner enters Daily Rate in Telegram: /price 85000 ]
-                                 │
-         ┌───────────────────────┴───────────────────────┐
-         ▼                                               ▼
-[ AUTOMATED RECALCULATION ]                  [ UNTOUCHED / SKIPPED ]
-  ├── 1. silver_weight_only                    ├── 3. legacy_mirror
-  │      price = weight * rate                 │      price = legacy_price
-  └── 2. silver_weight_plus_stone              └── 4. manual_locked
-         price = (weight * rate) + stone              price = manual_price
-```
-
-### 1. `silver_weight_only`
-- **Applies to:** Plain silver rings, bracelets, necklaces, and standard sterling silver jewelry items without gemstones.
-- **Mathematical Formula:**
-  ```text
-  final_price_toman = silver_weight_grams * daily_rate_toman_per_gram
-  ```
-- **Example:** If `silver_weight_grams = 5.40` and `daily_rate = 85,000 Toman`, then `final_price = 459,000 Toman`.
-
-### 2. `silver_weight_plus_stone`
-- **Applies to:** Semi-automated gemstone jewelry pieces where the silver weight is known and the gemstone has a fixed valuation (`e.g., عقیق یمنی`, `فیروزه نیشابور`).
-- **Mathematical Formula:**
-  ```text
-  final_price_toman = (silver_weight_grams * daily_rate_toman_per_gram) + stone_fixed_value_toman
-  ```
-- **Example:** If `silver_weight_grams = 6.80`, `daily_rate = 85,000 Toman`, and `stone_fixed_value_toman = 500,000 Toman`, then:
-  `final_price = (6.80 * 85,000) + 500,000 = 578,000 + 500,000 = 1,078,000 Toman`.
-- **Why this excels:** Keeps pricing simple while allowing gemstone rings to be semi-automated without manual re-entry every time silver fluctuates.
-
-### 3. `legacy_mirror`
-- **Applies to:** Products imported from the legacy store (`noghrehmashhad.ir`) where `silver_weight_grams` is missing or unverified.
-- **Rule:** Temporarily mirror the legacy store's final price (`legacy_price_toman`) until the owner weighs the item and transitions it to `silver_weight_only` or `silver_weight_plus_stone`.
-
-### 4. `manual_locked`
-- **Applies to:** Custom masterwork jewelry, rare collector gemstones, or pieces where `price_locked = true`.
-- **Rule:** The owner sets the retail price manually (`manual_price_toman`). Automated pricing scripts **NEVER overwrite** a product marked with `pricing_mode = manual_locked`.
+| Mode | Description | Formula |
+|------|-------------|---------|
+| `silver_weight_only` | Pure silver items | weight_grams × daily_rate |
+| `silver_weight_plus_stone` | Silver + gemstone | (weight_grams × daily_rate) + stone_fixed_value_toman |
+| `legacy_mirror` | No trusted weight | Copy legacy price as-is |
+| `manual_locked` | Special/masterwork | Manual price, never auto-updated |
 
 ---
 
-## 3. Mandatory Rounding Standard (`قانون گرد کردن قیمت به تومان`)
+## 3. Daily Rate Input Method (`روش وارد کردن نرخ روزانه`)
 
-- **Internal Database Currency:** All prices stored in WooCommerce in **IRR / Toman** based on localization settings.
-- **Rounding Step (`rounding_step_toman`):** All calculated retail prices are rounded up to the nearest **`10,000 Toman`** (`100,000 IRR`) for clean luxury presentation.
-  - *Example:* Calculated `1,078,000 Toman` -> Displayed as **`۱,۰۸۰,۰۰۰ تومان`**.
+- **Source:** Telegram owner command
+- **Format:** `/price [amount in Toman per gram]`
+- **Frequency:** Owner updates as needed (typically daily)
+- **Preview:** Agent must show affected product count and top changes
+- **Approval:** Owner must click confirm button before WooCommerce update
+- **No automatic live market feed in current roadmap (Phase 1-5)**
 
 ---
 

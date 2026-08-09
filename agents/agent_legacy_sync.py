@@ -30,7 +30,7 @@ def calculate_radman_stock(legacy_stock: int) -> int:
     """
     AUTHORITATIVE STOCK REALITY RULE:
       - Most silver rings are UNIQUE pieces (stock = 1 is NORMAL and sellable).
-      - NO "safety buffer" logic is applied.
+      - NO "safety offset" logic is applied.
       - Exact 1:1 Mapping:
           stock = 1 on old site -> stock = 1 on new site
           stock = 0 -> stock = 0
@@ -58,7 +58,7 @@ def determine_pricing_mode(legacy_item: Dict[str, Any]) -> tuple[str, str]:
         return "manual_locked", legacy_price
     elif weight and float(weight) > 0:
         # Will be updated dynamically by Agent-Pricing using daily gram rate
-        return "weight_based", legacy_price
+        return "silver_weight_only", legacy_price
     else:
         return "legacy_mirror", legacy_price
 
@@ -252,7 +252,7 @@ def run_sync_pipeline(dry_run: bool = True, use_mock: bool = True):
         logger.info(f"Legacy ID   : {legacy_id}")
         logger.info(f"Title       : {item['title']} -> Clean: {payload.get('name', 'N/A (Protected)')}")
         logger.info(f"SKU         : {payload.get('sku', existing['radman_sku'] if existing else 'N/A')}")
-        logger.info(f"Stock Rule  : Raw={item['stock']} -> Exact Radman Stock={exact_stock} (Zero Buffer applied)")
+        logger.info(f"Stock Rule  : Raw={item['stock']} -> Exact Radman Stock={exact_stock} (Exact 1:1 Mapping applied)")
         logger.info(f"Pricing Mode: {pricing_mode.upper()}")
         logger.info(f"Payload     : {json.dumps(payload, ensure_ascii=False)}")
         

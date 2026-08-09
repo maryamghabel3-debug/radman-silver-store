@@ -39,7 +39,7 @@ python3 agents/agent_legacy_sync.py
 
 ## 3. Core Business & Mathematical Enforcement Rules (`قوانین اساسی پیاده‌سازی‌شده`)
 
-1. **The Inventory Buffer Rule (`قانون بافر موجودی انبار`):**
+1. **The Inventory 1:1 Mapping Rule (`قانون بافر موجودی انبار`):**
    - **Rule 1 (`legacy_stock <= 1`):** Sets `radman_stock = 0` to prevent overselling the last single item.
    - **Rule 2 (`legacy_stock > 1`):** Sets `radman_stock = legacy_stock - 1` to maintain a 1-item safety exact 1:1 stock.
 2. **Standardized SKU Taxonomy (`کد محصول استاندارد`):**

@@ -9,7 +9,7 @@ This document provides detailed technical specifications and operational logic f
 - **Purpose:** Connect to `noghrehmashhad.ir`'s Admin Panel API from an Iranian hosting server, extract silver jewelry product data, and import them into `radman-silver-store` as **Draft (`پیش‌نویس`)**.
 - **1:1 Stock Reality Enforcement:**
   - Exact 1:1 stock mapping (`legacy_stock = radman_stock`).
-  - `stock = 1` is sellable. Zero safety buffers are applied.
+  - `stock = 1` is sellable. Exact 1:1 mappings are applied.
 - **Pricing Mode Assignment:**
   - If item has verified weight and no gemstone -> `pricing_mode = silver_weight_only`.
   - If item has verified weight + gemstone -> `pricing_mode = silver_weight_plus_stone`.

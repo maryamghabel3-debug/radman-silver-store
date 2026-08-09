@@ -113,7 +113,7 @@
     "gemstone_type": "Agate (عقیق)",
     "ring_size": "60",
     "is_special_gemstone": false,
-    "pricing_mode": "weight_based",
+    "pricing_mode": "silver_weight_only",
     "images": [
       {
         "url": "https://noghrehmashhad.ir/shop-resources/ARW2Oo2BZd/product-images/1785842823_4580729600.jpg",

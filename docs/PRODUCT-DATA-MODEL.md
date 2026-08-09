@@ -26,7 +26,7 @@ To support the 4-mode pricing engine and semi-automated gemstone calculation, ev
 
 | Field Name | Type / Format | Allowed Values & Description | Required For Mode |
 | :--- | :--- | :--- | :---: |
-| **`pricing_mode`** | String (`enum`) | `silver_weight_only`, `silver_weight_plus_stone`, `legacy_mirror`, `manual_locked` | **ALL PRODUCTS** |
+| **`pricing_mode`** | String (`enum`) | `pricing_mode: enum['silver_weight_only', 'silver_weight_plus_stone', 'legacy_mirror', 'manual_locked']` | **ALL PRODUCTS** |
 | **`silver_weight_grams`** | Float (`decimal`) | Verified silver metal weight in grams (`e.g., 6.80`) | `silver_weight_only`, `silver_weight_plus_stone` |
 | **`stone_type`** | String | Natural gemstone identifier (`e.g., عقیق یمنی اصل Agate, فیروزه نیشابور Turquoise`) | `silver_weight_plus_stone` |
 | **`stone_fixed_value_toman`** | Integer | Fixed valuation of the gemstone in Toman (`e.g., 500000`) | `silver_weight_plus_stone` |
