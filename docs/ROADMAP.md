@@ -1,94 +1,60 @@
-# نقشه راه پروژه رادمان سیلور (`ROADMAP.md`)
+# RADMAN SILVER 925 Store — Deployment & Launch Roadmap (`docs/ROADMAP.md`)
 
-This document outlines the multi-phase execution schedule for **RADMAN SILVER 925** from brand locking to international market expansion.
-
----
-
-## Phase 0 — Brand & Planning (COMPLETED ✅)
-- [x] Brand name selected and locked: **RADMAN SILVER 925 / رادمان سیلور**
-- [x] Domains purchased and verified: `radmansilver.ir` (primary), `radman925.ir` (redirect)
-- [x] Logo suite designed, validated, and locked in GitHub:
-  - English Didot serif canonical suite (`brand-assets/radman-silver/APPROVED/`)
-  - Persian Estedad Bold final suite (`brand-assets/radman-silver/APPROVED-FA/` — S2 secondary size, T2 tagline / T0 minimal)
-- [x] Business requirements and operational rules documented (`BUSINESS-REQUIREMENTS.md`)
-- [x] AI Automation Agent architecture and governance planned
+> **Single Source of Truth Roadmap (PR-01 Alignment)**  
+> *Date Convention: All repository dates use Asia/Tehran timezone (UTC+3:30) in ISO format YYYY-MM-DD.*
 
 ---
 
-## Phase 1 — Infrastructure Setup (CURRENT ⏭)
-- [ ] Provision high-speed Iranian hosting (`Iran Server Sonic 30` Linux cloud hosting).
-- [ ] Install WordPress 6.x core and configure Nginx/LiteSpeed caching rules.
-- [ ] Deploy WooCommerce e-commerce engine and Persian WooCommerce localization plugin.
-- [ ] Install and activate **Blocksy Child Theme** configured for luxury jewelry (`#0B0B0E` matte black background, `#FAF7F2` ivory typography).
-- [ ] Install essential free production plugins:
-  - **WooCommerce** & **Persian WooCommerce (`ووکامرس فارسی`)**
-  - **Zarinpal Payment Gateway (`درگاه پرداخت زرین‌پال`)**
-  - **RankMath SEO** (Persian schema & XML sitemaps)
-  - **WP Super Cache** / **LiteSpeed Cache**
-  - **Wordfence Security** (Firewall & login hardening)
-  - **UpdraftPlus Backup** (Automated S3/ArvanCloud database backups)
-- [ ] Enforce SSL TLS 1.3 HTTPS encryption across all routes.
-- [ ] Create essential storefront pages: About Us (`درباره ما`), Contact Us (`تماس با ما`), Return Policy (`شرایط بازگشت کالا`), Privacy Policy (`حریم خصوصی`), FAQ (`سوالات متداول`).
-- [ ] Register and integrate **Enamad (`اینماد`)** electronic trust badge.
-- [ ] Connect and verify Zarinpal sandbox merchant gateway.
-- [ ] Connect and verify Kavenegar SMS gateway sandbox for OTP and order notifications.
-- [ ] Provision Telegram Bot (`@RadmanSilverStoreBot`) for management alerts and human-in-the-loop approvals.
-- [ ] Ensure repository security and `.env` secret exclusion.
+## 1. Official Phase Model & Current Target Status
+
+```text
+RADMAN SILVER 925: [Phase 0: DONE] ──> [Phase 1: DONE] ──> [Phase 2: CURRENT] ──> [Phase 3: NEXT]
+```
+
+- **Phase 0: Documentation & Brand Identity** — **DONE ✅**
+- **Phase 1: Repository Setup & Architecture** — **DONE ✅**
+- **Phase 2: Infrastructure & Hosting Setup** — **CURRENT ⏭**
+- **Phase 3: WordPress/WooCommerce Deployment** — **NEXT ⏳**
+- **Phase 4: Agent Integration & Testing** — **PENDING ⏳**
+- **Phase 5: Soft Launch & VIP Cohort** — **PENDING ⏳**
+- **Phase 6: Public Launch & Scale** — **PENDING 🎯**
 
 ---
 
-## Phase 2 — Product Migration & Catalog Seeding (PENDING ⏳)
-- [ ] Build and deploy `Agent-LegacySync` to connect to `noghrehmashhad.ir` API.
-- [ ] Define SKU taxonomy (`RAD-[CAT]-[GENDER]-[ID]`) and initialize custom WooCommerce attribute schema.
-- [ ] Run `Agent-LegacySync` to import initial cohort of 50 legacy products as **Draft (`پیش‌نویس`)**.
-- [ ] Conduct human review and approve draft products via Telegram management interface.
-- [ ] Execute `Agent-Media` to process, crop (1:1 square), convert to WebP, and watermark product gallery images.
-- [ ] Write RankMath-optimized Persian SEO titles and descriptions for first 50 products.
-- [ ] Configure product attributes: Purity (`۹۲۵ استرلینگ`), Weight in grams, Gemstone type, Plating, Gender, and Ring Size.
-- [ ] Deploy `Agent-Pricing` with daily 10:30 AM Telegram confirmation workflow.
-- [ ] Execute end-to-end sandbox checkout test with real Shetab debit card payment and SMS receipt.
+## 2. Master Execution Schedule
 
----
+### Phase 0: Documentation & Brand Identity (DONE ✅ — 2026-08-06)
+- [x] Integrate canonical English Didot and Persian Estedad Bold logo suites (`brand-assets/radman-silver/APPROVED/` and `APPROVED-FA/`).
+- [x] Lock 3-tier pricing model and 1:1 stock reality (`stock = 1` is sellable, zero buffers).
 
-## Phase 3 — Launch Preparation & Hardening (PENDING ⏳)
-- [ ] Migrate remaining legacy product catalog from `noghrehmashhad.ir`.
-- [ ] Build and deploy `Agent-OrderApproval` (Telegram interactive order fulfillment bot).
-- [ ] Build and deploy `Agent-Inventory` for automated twice-daily stock reconciliation.
-- [ ] Build and deploy `Agent-Intake` for new Tehran Grand Bazaar supplier products.
-- [ ] Build and deploy `Agent-Support` rule-based FAQ chatbot engine.
-- [ ] Build and deploy `Agent-Reporting` for daily sales and gross margin Telegram digests.
-- [ ] Perform comprehensive Wordfence security audit and penetration testing.
-- [ ] Verify automated UpdraftPlus restoration procedure from ArvanCloud Object Storage.
-- [ ] Conduct **Soft Launch (`راه اندازی آزمایشی`)**: Invite cohort of 10-20 VIP test customers with launch vouchers.
+### Phase 1: Repository Setup & Architecture (DONE ✅ — 2026-08-06)
+- [x] Establish 19 core documentation files (`docs/BUSINESS-REQUIREMENTS.md` through `docs/MULTILINGUAL-FUTURE.md`).
+- [x] Build and test `Agent-LegacySync` (`agents/agent_legacy_sync.py`) for catalog migration from `noghrehmashhad.ir` Admin Panel API.
+- [x] Complete 11 static Persian pages in `content/static-pages/`.
 
----
+### Phase 2: Infrastructure & Hosting Setup (CURRENT ⏭)
+- [ ] Provision **Iran Server Sonic 30** Linux cloud hosting (required for domestic Shetab banking gateways and legacy API reachability).
+- [ ] Configure Nginx reverse proxy, LiteSpeed / PHP-FPM 8.2+, MySQL 8.0+ / MariaDB 10.11+ (`utf8mb4_unicode_ci`), and Let's Encrypt TLS 1.3.
+- [ ] Configure `.env` securely in repository root (never committed to Git).
+- [ ] Verify DNS propagation for `radmansilver.ir` and `radman925.ir`.
 
-## Phase 4 — Official Launch & Marketing Scale (PENDING 🎯)
-- [ ] **Official Store Launch on `radmansilver.ir`.**
-- [ ] Launch official Instagram page (`@radmansilver.ir`) with luxury unboxing reels and brand story posts.
-- [ ] Launch official Telegram channel for customer product drops and seasonal collections.
-- [ ] Allocate initial performance advertising budget (Torob / Emalls CPC campaign).
-- [ ] Monitor product page conversion rate (`CR`) and optimize checkout friction.
-- [ ] Enable automated Kavenegar cart-abandonment SMS after 2 hours.
-- [ ] Enable post-purchase SMS review request with 5% discount incentive.
+### Phase 3: WordPress/WooCommerce Deployment (NEXT ⏳)
+- [ ] Install WordPress 6.x core and WooCommerce e-commerce engine.
+- [ ] Deploy and customize **Blocksy Child Theme** (`#0B0B0E` matte black background, `#FAF7F2` ivory typography).
+- [ ] Install essential free production plugins (WooCommerce, Persian WooCommerce, Zarinpal Payment Gateway, RankMath SEO, WP Super Cache, Wordfence Security, UpdraftPlus Backup).
+- [ ] Apply for Enamad trust badge, connect Zarinpal sandbox, connect Kavenegar SMS sandbox, and configure `@RadmanSilverStoreBot`.
 
----
+### Phase 4: Agent Integration & Testing (PENDING ⏳)
+- [ ] Deploy `Agent-LegacySync` on Iran Server Sonic 30 to connect to `noghrehmashhad.ir` Admin Panel API.
+- [ ] Execute batch import of initial 50 legacy products as **Draft (`پیش‌نویس`)**.
+- [ ] Deploy `Agent-Pricing` with daily Telegram rate confirmation workflow (`/price 85000`).
+- [ ] Deploy `Agent-OrderApproval` Telegram HITL fulfillment bot.
+- [ ] Execute end-to-end sandbox checkout test with Shetab debit card and SMS receipt.
 
-## Phase 5 — Growth, CRM & Conversion Optimization (PENDING 🚀)
-- [ ] Implement AI-powered product description generator for unique SEO enrichment.
-- [ ] Upgrade customer chatbot to LLM-powered luxury jewelry concierge.
-- [ ] Deploy recommendation engine (similar rings, matching necklace sets).
-- [ ] Integrate automated customer relationship management (`CRM` — Dittofeed / Mautic).
-- [ ] Deploy competitor price monitoring script for Tehran silver market rates.
-- [ ] Create bundled gift sets (`ست هدیه عروس`, `ست انگشتر و دستبند مردانه`).
-- [ ] Perform A/B testing on product detail page call-to-action (`CTA`) buttons.
+### Phase 5: Soft Launch & VIP Cohort (PENDING ⏳)
+- [ ] Conduct Soft Launch 1 (`RADMAN-VIP15` voucher cohort of 10-20 test customers).
+- [ ] Verify courier shipping (Tipax/Post) and customer support chatbot responsiveness.
 
----
-
-## Phase 6 — Regional & International Expansion (PENDING 🌍)
-- [ ] Deploy WPML / Polylang multi-language architecture.
-- [ ] Add Arabic (`ar_AE` / `ar_IQ`) regional storefront for UAE and Iraq markets.
-- [ ] Add Turkish (`tr_TR`) regional storefront.
-- [ ] Add English (`en_US`) international storefront.
-- [ ] Integrate multi-currency switcher (`IRR`, `AED`, `TRY`, `USD`).
-- [ ] Integrate international shipping and logistics gateway.
+### Phase 6: Public Launch & Scale (PENDING 🎯)
+- [ ] Official public launch of `radmansilver.ir`.
+- [ ] Roll out SEO indexing, Google Merchant / Torob integration, and Instagram/Telegram content calendars.
