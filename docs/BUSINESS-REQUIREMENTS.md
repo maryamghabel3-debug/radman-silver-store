@@ -7,9 +7,9 @@ This document defines the core business objectives, sourcing models, operational
 ## 1. Core Business & Inventory Rules (`قوانین اساسی کسب‌وکار و انبار`)
 
 1. **Unique SKU Mandatory:** Every product variation must possess a standardized SKU (`RAD-[CAT]-[GENDER]-[ID]`).
-2. **1:1 Stock Reality (Zero Buffers):**
+2. **1:1 Stock Reality (Exact 1:1 Mappings):**
    - Silver rings are unique handcrafted pieces; **`stock = 1` is completely normal and sellable**.
-   - **All buffer logic is strictly removed.** Rule: `legacy_stock = radman_stock` (1:1 mapping).
+   - **All historical stock-offset logic is strictly removed.** Rule: `legacy_stock = radman_stock` (1:1 mapping).
    - Oversell protection is handled exclusively by **Human Order Confirmation via Telegram** for every paid order before shipping.
 3. **Simplified Daily Rate Pricing Model:**
    - The owner enters ONE daily silver gram rate via Telegram Bot: `نرخ امروز هر گرم نقره = X تومان`.

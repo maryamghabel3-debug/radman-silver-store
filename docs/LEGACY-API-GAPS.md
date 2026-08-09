@@ -24,9 +24,11 @@ This document identifies every technical blocker discovered during the read-only
     requires_manual_confirmation = true
     ```
   - **Never convert binary `InStock` to 1, 2, or any arbitrary integer.**
-  - Enforce the **Inventory Buffer Rule** in Python for numeric counts:
-    - If `legacy_stock <= 1`, set `radman_stock = 0`.
-    - If `legacy_stock > 1`, set `radman_stock = legacy_stock - 1`.
+  - DEPRECATED (superseded by exact 1:1 rule per SYNC-RULES.md):
+    - Old historical stock offset logic was removed.
+    - Authoritative rule: legacy_stock=1 -> radman_stock=1 (sellable), legacy_stock=0 -> radman_stock=0.
+    - 
+    - 
 
 ---
 

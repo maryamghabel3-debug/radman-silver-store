@@ -15,7 +15,7 @@
 - **Official Brand Assets Repository:** [github.com/maryamghabel3-debug/brand-assets](https://github.com/maryamghabel3-debug/brand-assets)
   - English Canonical Logo Suite: `APPROVED/` (Didot serif, Shamsa crest)
   - Persian Final Approved Logo Suite: `APPROVED-FA/` (`Estedad Bold`, `S2` sizing, `T2` tagline / `T0` minimal header logo)
-- **Inventory Reality (1:1 Stock):** Radman Silver maintains its own Inventory Registry (`legacy_stock = radman_stock`, `stock = 1` is normal and sellable; zero safety buffers). Oversell protection = Human Order Confirmation via Telegram.
+- **Inventory Reality (1:1 Stock):** Radman Silver maintains its own Inventory Registry (`legacy_stock = radman_stock`, `stock = 1` is normal and sellable; exact 1:1 mappings). Oversell protection = Human Order Confirmation via Telegram.
 - **Pricing Reality (Simple Daily Rate):** Owner inputs one daily rate via Telegram (`نرخ امروز هر گرم نقره = X تومان`). Weight-based items compute `price = weight * daily_rate`. Special gemstone/labor items use `manual_locked`.
 - **Legacy Store (Admin Panel API):** [noghrehmashhad.ir](http://noghrehmashhad.ir) (Admin Panel API accessed from Iran Server Sonic 30).
 

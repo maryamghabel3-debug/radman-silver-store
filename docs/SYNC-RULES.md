@@ -4,10 +4,10 @@ This document defines the authoritative field-level ownership table and inventor
 
 ---
 
-## 1. 1:1 Inventory Mapping Rule — Zero Safety Buffer (`قانون همگام‌سازی ۱ به ۱ انبار`)
+## 1. Official 1:1 Inventory Mapping Rule (`قانون همگام‌سازی ۱ به ۱ انبار`)
 
 1. **Stock Reality:** Most silver rings in our inventory are **unique pieces (`stock = 1` is NORMAL and sellable)**.
-2. **Zero Buffer Rule:** All mathematical "safety buffer" rules (`if stock <= 1: stock = 0`, `stock - 1`) are **STRICTLY REMOVED AND FORBIDDEN**.
+2. **Exact 1:1 Inventory Rule:** Official rule: legacy_stock=1 -> radman_stock=1 (sellable), legacy_stock=0 -> radman_stock=0. No offset.
 3. **Exact 1:1 Stock Synchronization:**
    ```text
    radman_stock = legacy_stock (Exact 1:1 Mapping)
@@ -34,7 +34,7 @@ Because inventory on `noghrehmashhad.ir` is managed manually and is not 100% rea
 | :--- | :---: | :---: | :--- |
 | `SKU` | **Radman Store** | **NO ❌** | Controlled by Radman `RAD-[CAT]-[GENDER]-[ID]` taxonomy |
 | `stock_quantity` | **Radman Registry** | **YES ✅** | Exact 1:1 integer sync (`1 -> 1`, `0 -> 0`); no buffers |
-| `regular_price` | **Radman Store** | **NO ❌** | Controlled by 3-Tier Pricing Model (`weight_based`, `manual_locked`, `legacy_mirror`) |
+| `regular_price` | **Radman Store** | **NO ❌** | Controlled by 3-Tier Pricing Model (`silver_weight_only`, `manual_locked`, `legacy_mirror`) |
 | `name` (Product Title) | **Radman Store** | **NO ❌** | SEO Persian title locked after owner draft approval |
 | `description` | **Radman Store** | **NO ❌** | Luxury persuasive copy locked in Radman store |
 | `images` (Gallery) | **Radman Store** | **NO ❌** | Processed 1:1 WebP images locked in Radman media library |
