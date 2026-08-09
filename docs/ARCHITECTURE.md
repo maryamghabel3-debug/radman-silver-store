@@ -28,7 +28,7 @@ This document defines the high-level system architecture, software boundaries, d
                                                    |
                                                    v
 +---------------------------------------------------------------------------------------------------+
-|               PYTHON 3.11+ ASYNC AUTOMATION AGENTS (HOSTED ON IRAN SERVER SONIC 30)               |
+|               PYTHON 3.11+ ASYNC AUTOMATION AGENTS ([HOSTING: TBD - PENDING DUE DILIGENCE])       |
 |                                                                                                   |
 |  +--------------------+   +--------------------+   +--------------------+   +------------------+  |
 |  | Agent-LegacySync   |   | Agent-Pricing      |   | Agent-OrderApproval|   | Agent-Media      |  |
@@ -40,7 +40,7 @@ This document defines the high-level system architecture, software boundaries, d
              v                         v                              v
 +------------------------+  +--------------------------+  +-----------------------------------------+
 |  LEGACY ADMIN API      |  |  TELEGRAM BOT GATEWAY    |  |  EXTERNAL SERVICES & GATEWAYS           |
-|  (noghrehmashhad.ir)   |  |  (@RadmanSilverStoreBot) |  |  - Zarinpal Payment API (Shetab)        |
+|  (noghrehmashhad.ir)   |  | ([RADMAN_TELEGRAM_BOT_TBD])|  |  - Zarinpal Payment API (Shetab)        |
 |  - Read-Only GET Audit |  |  - Daily Rate Input (/price)|  - Kavenegar SMS OTP / Order Alerts     |
 |  - Exact Stock (1=1)   |  |  - Order Fulfillment Confirmation                             |
 +------------------------+  +--------------------------+  +-----------------------------------------+
@@ -50,6 +50,6 @@ This document defines the high-level system architecture, software boundaries, d
 
 ## 2. Core Operational Realities
 
-1. **Iranian Hosting Infrastructure:** All automation agents execute on **Iran Server Sonic 30** Linux cloud hosting inside Iran to ensure uninterrupted access to both `noghrehmashhad.ir` Admin Panel API and Shetab banking gateways.
+1. **Iranian Hosting Infrastructure:** All automation agents execute on an Iranian hosting server (`[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]`) inside Iran to ensure uninterrupted access to both `noghrehmashhad.ir` Admin Panel API and Shetab banking gateways. Candidate hosting vendors under due diligence include MizbanFa and ParsPack. Status: `PENDING TECHNICAL DUE DILIGENCE — NO PURCHASE APPROVED YET`.
 2. **1:1 Stock Reality:** Radman Silver maintains its own Inventory Registry. `Stock = 1` is sellable and synced exactly (`1:1 mapping`; zero buffers).
 3. **Simple Daily Rate Pricing:** The owner inputs one daily silver gram rate via Telegram (`نرخ امروز هر گرم نقره = X تومان`). Weight-based products compute retail price as `weight * daily_rate`.

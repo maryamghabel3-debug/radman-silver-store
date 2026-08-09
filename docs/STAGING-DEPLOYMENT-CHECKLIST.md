@@ -1,14 +1,21 @@
 # چک‌لیست استقرار و پیکربندی محیط آزمایشی (`STAGING-DEPLOYMENT-CHECKLIST.md`)
 
 > **راهنمای اجرایی استقرار وردپرس و ووکامرس در محیط استیجینگ (Staging Setup Checklist)**  
-> *این چک‌لیست مراحل گام‌به‌گام نصب، مقاوم‌سازی، تست و پیکربندی فروشگاه رادمان سیلور (`radman-silver-store`) را قبل از ورود به سرور پروداکشن پوشش می‌دهد. مواردی که پاسخ فروشنده هاستینگ هنوز تأیید نشده است، با برچسب `TBD / PENDING` مشخص شده‌اند.*
+> *این چک‌لیست مراحل گام‌به‌گام نصب، مقاوم‌سازی، تست و پیکربندی فروشگاه رادمان سیلور (`radman-silver-store`) را قبل از ورود به سرور پروداکشن پوشش می‌دهد.*
+
+> **راهنمای وضعیت‌های چک‌لیست (Status Definitions):**  
+> - **`CONFIRMED`**: تأییدشده و نهایی  
+> - **`PENDING VENDOR ANSWER`**: در انتظار پاسخ فنی پشتیبانی هاستینگ (میزبان‌فا / پارس‌پک)  
+> - **`PENDING OWNER DECISION`**: در انتظار تصمیم یا تأیید مالک برند  
+> - **`NOT YET TESTED`**: هنوز تست نشده (آماده برای تست در استیجینگ/پروداکشن)  
+> - **`NOT APPLICABLE`**: غیرقابل اعمال / بلاموضوع  
 
 ---
 
 ## 1. Server Access Prerequisites (`پیش‌نیازهای دسترسی سرور`)
 
-- [ ] Pending : دسترسی به پنل مدیریت سرور (`cPanel / DirectAdmin / SSH / SFTP`) — وضعیت: `TBD / PENDING` (نیازمند تأیید نهایی هاستینگ `Iran Server Sonic 30`).
-- [ ] Pending : تأیید رکوردهای DNS برای ساب‌دامنه استیجینگ (`staging.radmansilver.ir`) و دامنه اصلی (`radmansilver.ir`).
+- [ ] Pending : دسترسی به پنل مدیریت سرور (`cPanel / DirectAdmin / SSH / SFTP`) — وضعیت: `PENDING VENDOR ANSWER` (نیازمند تأیید نهایی هاستینگ `[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]`).
+- [ ] Pending : تأیید رکوردهای DNS برای ساب‌دامنه استیجینگ (`[PROPOSED: staging.radmansilver.ir — DNS status TBD]`) و دامنه اصلی (`radmansilver.ir`).
 - [ ] Pending : صدور و نصب گواهینامه امنیتی SSL (`Let's Encrypt / Wildcard TLS 1.3`).
 - [ ] Pending : ایجاد پایگاه داده اختصاصی MySQL / MariaDB و نام کاربری مستقل با دسترسی کامل (`ALL PRIVILEGES`).
 
@@ -25,7 +32,7 @@
 
 ## 3. WordPress & WooCommerce Installation (`نصب وردپرس و ووکامرس`)
 
-- [ ] Pending : نصب هسته وردپرس نسخه `6.x` روی ساب‌دامنه استیجینگ (`staging.radmansilver.ir`).
+- [ ] Pending : نصب هسته وردپرس نسخه `6.x` روی ساب‌دامنه استیجینگ (`[PROPOSED: staging.radmansilver.ir — DNS status TBD]`).
 - [ ] Pending : تنظیم زمان سرور روی منطقه زمانی ایران (`Asia/Tehran` - `UTC+3:30`).
 - [ ] Pending : نصب و فعال‌سازی افزونه فروشگاه‌ساز **WooCommerce** نسخه پایدار.
 - [ ] Pending : تنظیم واحد پول روی **تومان (`Toman`)** و پیکربندی آدرس فروشگاه در تهران.
@@ -41,13 +48,13 @@
 - [ ] Pending : **RankMath SEO** — جهت مدیریت سئو، متاداده‌ها و اسکیمای محصولات.
 - [ ] Pending : **Wordfence Security** — فایروال و محافظت در برابر حملات Brute-Force.
 - [ ] Pending : **UpdraftPlus Backup** — خودکارسازی بک‌آپ دیتابیس و فایل‌ها.
-- [ ] Pending : **Redis Object Cache / LiteSpeed Cache** — در صورت فعال بودن روی سرور میزبان (`Status: TBD / PENDING`).
+- [ ] Pending : **Redis Object Cache / LiteSpeed Cache** — در صورت فعال بودن روی سرور میزبان (`Status: PENDING VENDOR ANSWER`).
 
 ---
 
 ## 5. Staging Domain & Indexing Rules (`محیط استیجینگ و عدم ایندکس`)
 
-- [ ] Pending : استقرار روی ساب‌دامنه مستقل `staging.radmansilver.ir` (ایزوله از دامنه اصلی).
+- [ ] Pending : استقرار روی ساب‌دامنه مستقل `[PROPOSED: staging.radmansilver.ir — DNS status TBD]` (ایزوله از دامنه اصلی).
 - [ ] Pending : **الزام اکید `noindex`:** فعال‌سازی گزینه *«از موتورهای جستجو درخواست کن تا این وب‌سایت را بررسی نکنند»* در تنظیمات خواندن وردپرس و تنظیم هدر `X-Robots-Tag: noindex, nofollow` در Nginx/LiteSpeed جهت جلوگیری از ایندکس شدن استیجینگ در گوگل.
 
 ---
@@ -80,9 +87,9 @@
 
 | Item | Owner | Status | Notes |
 | :--- | :---: | :---: | :--- |
-| **Server & Hosting Provisioning** | Technical Lead / Hosting Admin | `TBD / PENDING` | Iran Server Sonic 30 cloud hosting confirmation |
-| **PHP 8.2+ & MySQL 8.0+ Verification** | DevOps Lead | `TBD / PENDING` | Verify mbstring, cURL, imagick, bcmath |
-| **WordPress & WooCommerce Setup** | E-Commerce Developer | `TBD / PENDING` | Blocksy Child theme & Persian localization |
-| **Staging noindex Enforcement** | SEO Strategist | `TBD / PENDING` | Prevent Google indexing of staging.radmansilver.ir |
-| **Security Hardening & .env Separation** | Security Lead | `TBD / PENDING` | Wordfence setup, zero cleartext secrets |
-| **REST API & Webhook Verification** | Automation Agent Lead | `TBD / PENDING` | Verify WooCommerce REST API v3 & Telegram webhook |
+| **Server & Hosting Provisioning** | Technical Lead / Hosting Admin | `PENDING VENDOR ANSWER` | Iranian hosting confirmation (`[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]`) |
+| **PHP 8.2+ & MySQL 8.0+ Verification** | DevOps Lead | `PENDING VENDOR ANSWER` | Verify mbstring, cURL, imagick, bcmath |
+| **WordPress & WooCommerce Setup** | E-Commerce Developer | `NOT YET TESTED` | Blocksy Child theme & Persian localization |
+| **Staging noindex Enforcement** | SEO Strategist | `NOT YET TESTED` | Prevent Google indexing of `[PROPOSED: staging.radmansilver.ir — DNS status TBD]` |
+| **Security Hardening & .env Separation** | Security Lead | `NOT YET TESTED` | Wordfence setup, zero cleartext secrets |
+| **REST API & Webhook Verification** | Automation Agent Lead | `NOT YET TESTED` | Verify WooCommerce REST API v3 & Telegram webhook |

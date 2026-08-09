@@ -3,6 +3,13 @@
 > **مجموعه آزمون‌های کیفیت‌سنجی و تضمین عملکرد (Staging & Pre-Launch QA Test Scenarios)**  
 > *این سند حداقل ۲۰ سناریوی آزمون عملیاتی را جهت بررسی سلامت فروشگاه رادمان سیلور (`radman-silver-store`) در محیط استیجینگ و قبل از لانچ عمومی تدوین می‌کند.*
 
+> **راهنمای وضعیت‌های چک‌لیست (Status Definitions):**  
+> - **`CONFIRMED`**: تأییدشده و نهایی  
+> - **`PENDING VENDOR ANSWER`**: در انتظار پاسخ فنی پشتیبانی هاستینگ (میزبان‌فا / پارس‌پک)  
+> - **`PENDING OWNER DECISION`**: در انتظار تصمیم یا تأیید مالک برند  
+> - **`NOT YET TESTED`**: هنوز تست نشده (آماده برای تست در استیجینگ/پروداکشن)  
+> - **`NOT APPLICABLE`**: غیرقابل اعمال / بلاموضوع  
+
 ---
 
 ## 1. Customer Storefront & Checkout Scenarios (`سناریوهای مرور و خرید مشتری`)
@@ -18,7 +25,7 @@
 ## 2. Telegram Human-in-the-Loop & Order Scenarios (`سناریوهای تلگرام و تأیید سفارش`)
 
 - [ ] Pending : **Order Created in WooCommerce:** بررسی ثبت دقیق اطلاعات مشتری (نام، تلفن، آدرس و اقلام سفارش) در پنل مدیریت ووکامرس.
-- [ ] Pending : **Telegram Notification Sent:** بررسی دریافت آنی پیامک هشدار سفارش جدید در گروه مدیریتی تلگرام (`@RadmanSilverStoreBot`) به همراه شناسه سفارش و مبلغ کل.
+- [ ] Pending : **Telegram Notification Sent:** بررسی دریافت آنی پیامک هشدار سفارش جدید در گروه مدیریتی تلگرام (`[RADMAN_TELEGRAM_BOT_USERNAME: TBD]`) به همراه شناسه سفارش و مبلغ کل.
 - [ ] Pending : **Owner Approval Path (`تأیید موجودی و ارسال`):** کلیک مالک روی دکمه `[تأیید موجودی و ارسال]` در تلگرام؛ تأیید تغییر وضعیت خودکار سفارش به `Processing` (`در حال پردازش`) و کسر موجودی کالا.
 - [ ] Pending : **Owner Rejection Path (`عدم موجودی و لغو`):** کلیک مالک روی دکمه `[عدم موجودی و لغو]` در تلگرام؛ تأیید تغییر وضعیت سفارش به `Cancelled` (`لغو شده`) و صدور هشدار استرداد وجه.
 - [ ] Pending : **Out-of-Stock Item Behavior:** بررسی رفتار سایت هنگام اتمام موجودی یک کالا (`stock = 0`)؛ تأیید تغییر دکمه به «ناموجود» و ممانعت از افزودن به سبد خرید.
@@ -45,6 +52,6 @@
 ## 5. Security, API & Infrastructure Scenarios (`سناریوهای امنیت، وب‌سرویس و بک‌آپ`)
 
 - [ ] Pending : **Backup Creation Test:** اجرای دستی بک‌آپ در افزونه UpdraftPlus و تأیید تولید فایل‌های پشتیبان دیتابیس و فایل سیستم.
-- [ ] Pending : **Restore Drill Placeholder:** تست آزمایشی بازیابی بک‌آپ روی محیط استیجینگ (`Status: TBD / PENDING` — نیازمند تأیید فرآیند روی سرور میزبان).
+- [ ] Pending : **Restore Drill Placeholder:** تست آزمایشی بازیابی بک‌آپ روی محیط استیجینگ (`Status: NOT YET TESTED` — نیازمند تأیید فرآیند روی سرور میزبان).
 - [ ] Pending : **REST API Authentication Test:** ارسال درخواست احراز هویت‌شده به `/wp-json/wc/v3/products` و تأیید بازگشت کد `HTTP 200 OK`.
-- [ ] Pending : **Legacy API Connectivity Test Placeholder:** تست ارتباط خواندنی (`GET`) اسکریپت `Agent-LegacySync` با پنل مدیریت سایت قدیمی `noghrehmashhad.ir` از روی سرور داخلی ایران (`Status: TBD / PENDING` - سرور میزبان `Sonic 30`).
+- [ ] Pending : **Legacy API Connectivity Test Placeholder:** تست ارتباط خواندنی (`GET`) اسکریپت `Agent-LegacySync` با پنل مدیریت سایت قدیمی `noghrehmashhad.ir` از روی سرور داخلی ایران (`Status: PENDING VENDOR ANSWER` - سرور میزبان `[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]`).

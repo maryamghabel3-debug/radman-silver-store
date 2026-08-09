@@ -1,6 +1,6 @@
 # مستندات ربات تلگرام مدیریت فروشگاه (`TELEGRAM-BOT.md`)
 
-This document details the webhook architecture, command whitelist, interactive menu structure, and the **Daily Pricing Preview Workflow** for `@RadmanSilverStoreBot`.
+This document details the webhook architecture, command whitelist, interactive menu structure, and the **Daily Pricing Preview Workflow** for `[RADMAN_TELEGRAM_BOT_USERNAME: TBD]`.
 
 ---
 

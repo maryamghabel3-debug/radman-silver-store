@@ -22,14 +22,14 @@ This document defines the access architecture, Iranian domestic server requireme
 ## 2. Iranian Server Hosting Requirement (`الزام استقرار روی سرور ایران`)
 
 - **Firewall Routing Constraint:** Domestic Iranian hosting infrastructure blocks or times out connection attempts originating from foreign/cloud IP ranges.
-- **Mandatory Host Server:** To communicate with `noghrehmashhad.ir`'s Admin Panel API without timing out, all import agents and audit scripts MUST be executed from an Iranian hosting server (**`Iran Server Sonic 30`** Linux cloud host).
+- **Mandatory Host Server:** To communicate with `noghrehmashhad.ir`'s Admin Panel API without timing out, all import agents and audit scripts MUST be executed from an Iranian hosting server (`[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]` Linux cloud host).
 
 ---
 
 ## 3. Phased Audit & Import Strategy (`مراحل ممیزی و تصمیم‌گیری واردات`)
 
 ```text
-[ Deploy Audit Script on Sonic 30 (Iran IP) ]
+[ Deploy Audit Script on Iranian Host (Iran IP) ]
                      │
                      v
 [ Execute Read-Only GET Field Audit ] ──> Map available fields (price, weight, stock=1)
@@ -38,5 +38,5 @@ This document defines the access architecture, Iranian domestic server requireme
 [ Determine Final Import Strategy ] ──> Direct REST API vs JSON/CSV Admin Export
 ```
 
-1. **Step 1 — Read-Only Field Audit:** We will first run a read-only audit script from the domestic Iranian server (`Sonic 30`) to inspect available product fields, exact stock numbers, and image CDN resolutions.
+1. **Step 1 — Read-Only Field Audit:** We will first run a read-only audit script from the domestic Iranian server (`[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]`) to inspect available product fields, exact stock numbers, and image CDN resolutions.
 2. **Step 2 — Import Strategy Selection:** Based on the audit findings, we will decide the optimal import method (Direct API synchronization vs Admin Panel JSON/CSV export) before deploying the live `Agent-LegacySync` importer.
