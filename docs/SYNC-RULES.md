@@ -34,7 +34,7 @@ Because inventory on `noghrehmashhad.ir` is managed manually and is not 100% rea
 | :--- | :---: | :---: | :--- |
 | `SKU` | **Radman Store** | **NO ❌** | Controlled by Radman `RAD-[CAT]-[GENDER]-[ID]` taxonomy |
 | `stock_quantity` | **Radman Registry** | **YES ✅** | Exact 1:1 integer sync (`1 -> 1`, `0 -> 0`); no buffers |
-| `regular_price` | **Radman Store** | **NO ❌** | Controlled by 3-Tier Pricing Model (`weight_based`, `manual_locked`, `legacy_mirror`) |
+| `regular_price` | **Radman Store** | **NO ❌** | Controlled by 3-Tier Pricing Model (`silver_weight_only`, `silver_weight_plus_stone`, `manual_locked`, `legacy_mirror`) |
 | `name` (Product Title) | **Radman Store** | **NO ❌** | SEO Persian title locked after owner draft approval |
 | `description` | **Radman Store** | **NO ❌** | Luxury persuasive copy locked in Radman store |
 | `images` (Gallery) | **Radman Store** | **NO ❌** | Processed 1:1 WebP images locked in Radman media library |
