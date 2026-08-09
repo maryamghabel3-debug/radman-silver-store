@@ -33,6 +33,7 @@ RADMAN SILVER 925: [Phase 0: DONE] ──> [Phase 1: DONE] ──> [Phase 2: CUR
 - [x] Complete 11 static Persian pages in `content/static-pages/`.
 
 ### Phase 2: Infrastructure & Hosting Setup (CURRENT ⏭)
+- [ ] **Deployment Readiness Governance:** Apply official step-by-step execution checklists (`docs/STAGING-DEPLOYMENT-CHECKLIST.md`, `docs/PRODUCTION-CUTOVER-CHECKLIST.md`, `docs/SOFT-LAUNCH-GO-NO-GO.md`, and `docs/TEST-SCENARIOS-RADMAN.md`) to govern zero-ambiguity transition from hosting purchase to staging, QA validation, and Soft Launch.
 - [ ] Provision **Iran Server Sonic 30** Linux cloud hosting (required for domestic Shetab banking gateways and legacy API reachability).
 - [ ] Configure Nginx reverse proxy, LiteSpeed / PHP-FPM 8.2+, MySQL 8.0+ / MariaDB 10.11+ (`utf8mb4_unicode_ci`), and Let's Encrypt TLS 1.3.
 - [ ] Configure `.env` securely in repository root (never committed to Git).
