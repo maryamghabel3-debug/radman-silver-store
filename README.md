@@ -44,6 +44,7 @@
 - [docs/MULTILINGUAL-FUTURE.md](docs/MULTILINGUAL-FUTURE.md) — Regional expansion roadmap for Arabic, Turkish, and English storefronts.
 
 - [docs/HOSTING-ARCHITECTURE-DECISION.md](docs/HOSTING-ARCHITECTURE-DECISION.md) — Official hosting architecture decision record, candidate evaluations (MizbanFa/ParsPack), and mandatory acceptance criteria.
+- [docs/WORDPRESS-INSTALLATION-RUNBOOK.md](docs/WORDPRESS-INSTALLATION-RUNBOOK.md) — Detailed 19-Step WP-CLI installation runbook for WordPress 6.x, WooCommerce (IRR/Persian), and required plugins on MizbanFa Mars plan.
 - [docs/HOSTING-QUESTIONS-CHECKLIST.md](docs/HOSTING-QUESTIONS-CHECKLIST.md) — Pre-purchase questions checklist for hosting support and payment gateway support (6 tickets + Red Flags).
 
 - [docs/STAGING-DEPLOYMENT-CHECKLIST.md](docs/STAGING-DEPLOYMENT-CHECKLIST.md) — Step-by-step staging deployment checklist for WordPress/WooCommerce setup.
