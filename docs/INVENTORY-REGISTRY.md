@@ -28,14 +28,14 @@ CREATE TABLE IF NOT EXISTS inventory_registry (
 
 ---
 
-## 3. Human Order Confirmation as Sole Oversell Protection
+## 3. Human-in-the-Loop (HITL) Order Confirmation as Oversell Protection
 
-1. When a customer order occurs on `radmansilver.ir`, the Registry reserves the item (`stock_quantity = 0`).
-2. The owner receives a Telegram notification:
+1. When a customer order occurs on `radmansilver.ir`, the Registry reserves the item (`stock_quantity = 0`) and sets order status to `On-Hold`.
+2. The owner receives a mandatory SMS alert via Kavenegar, and an optional Telegram notification (when reachable):
    ```text
    📦 سفارش جدید #1058
    محصول: RAD-RNG-M-1014 (انگشتر عقیق سبز) | موجودی ثبت‌شده: ۱ عدد
    
    [تأیید موجودی و ارسال]     [عدم موجودی و لغو]
    ```
-3. Only after owner verification is the item dispatched. If out of stock, the owner can source a replacement or refund immediately.
+3. Only after owner verification (via Telegram interactive buttons or WooCommerce Admin manual approval fallback) is the item dispatched. If out of stock, the owner can source a replacement or refund immediately.

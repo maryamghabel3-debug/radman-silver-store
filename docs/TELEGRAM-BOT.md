@@ -1,6 +1,6 @@
 # مستندات ربات تلگرام مدیریت فروشگاه (`TELEGRAM-BOT.md`)
 
-This document details the webhook architecture, command whitelist, interactive menu structure, and the **Daily Pricing Preview Workflow** for `[RADMAN_TELEGRAM_BOT_USERNAME: TBD]`.
+This document details the webhook architecture, command whitelist, interactive menu structure, and the **Daily Pricing Preview Workflow** for `[RADMAN_TELEGRAM_BOT_USERNAME: TBD]` as an **optional operational convenience channel**.
 
 ---
 
@@ -45,3 +45,13 @@ This document details the webhook architecture, command whitelist, interactive m
       v                                   v
 [ WooCommerce Batch Update ]       [ Zero Changes Made ]
 ```
+
+---
+
+## 4. Operational Role & Business Continuity Fallback (`نقش عملیاتی و جایگزین مواقع قطعی`)
+
+- **Optional Operational Convenience Channel:** The Telegram bot (`[RADMAN_TELEGRAM_BOT_USERNAME: TBD]`) serves as an optional operational convenience channel for daily rate input and interactive order approvals.
+- **Not Sole Business-Critical Mechanism:** **Telegram is NOT the sole business-critical approval mechanism.** The platform is designed so that no order fulfillment or store operations are permanently blocked if Telegram becomes unreachable or filtered.
+- **WooCommerce Admin Fallback:** If Telegram is unreachable, owner approval continues through the **WooCommerce Admin Panel** fallback path:
+  1. For new order review, the owner logs into WooCommerce Admin (`radmansilver.ir/wp-admin`), checks pending `On-Hold` orders, and manually updates order status to `Processing` (approved) or `Cancelled` (rejected).
+  2. Automation agents monitor WooCommerce order statuses directly and send mandatory SMS customer notifications via Kavenegar without requiring Telegram connectivity.

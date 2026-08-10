@@ -53,7 +53,7 @@
 
 1. **Can we read exact stock numbers?**  
    - **YES (`AVAILABLE`).** The Admin Panel API exposes the exact integer stock quantity (`stock: 1`, `stock: 0`, `stock: 5`).
-   - **Stock Reality Enforcement:** Per owner business rules, **silver rings are unique pieces (`stock = 1` is NORMAL and sellable)**. No safety buffers are applied (`stock = 1 -> 1`, `0 -> 0`). Overselling risk is handled exclusively by **human confirmation via Telegram** before order processing.
+   - **Stock Reality Enforcement:** Per owner business rules, **silver rings are unique pieces (`stock = 1` is NORMAL and sellable)**. No safety buffers are applied (`stock = 1 -> 1`, `0 -> 0`). Overselling risk is handled by **Human-in-the-Loop (`HITL`) Order Confirmation** (mandatory SMS alert + optional Telegram convenience channel, with WooCommerce Admin manual approval fallback) before order processing.
 2. **Can we read recent ORDERS from the admin API?**  
    - **YES (`AVAILABLE - VERIFY FROM IRAN IP`).** Admin Panel APIs expose order listing endpoints (`/admin/api/orders` or `/api/v1/orders`).
    - **Order Event Sync Strategy:** `Agent-LegacySync` polls recent completed orders from the legacy admin API (excluding customer PII) to decrement WooCommerce stock when an item sells on the old site.

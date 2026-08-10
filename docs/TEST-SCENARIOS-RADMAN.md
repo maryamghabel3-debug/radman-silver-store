@@ -22,12 +22,15 @@
 
 ---
 
-## 2. Telegram Human-in-the-Loop & Order Scenarios (`سناریوهای تلگرام و تأیید سفارش`)
+## 2. Hybrid Owner Notification, Human-in-the-Loop & Order Scenarios (`سناریوهای اطلاع‌رسانی ترکیبی، تأیید انسانی و سفارش`)
 
-- [ ] Pending : **Order Created in WooCommerce:** بررسی ثبت دقیق اطلاعات مشتری (نام، تلفن، آدرس و اقلام سفارش) در پنل مدیریت ووکامرس.
-- [ ] Pending : **Telegram Notification Sent:** بررسی دریافت آنی پیامک هشدار سفارش جدید در گروه مدیریتی تلگرام (`[RADMAN_TELEGRAM_BOT_USERNAME: TBD]`) به همراه شناسه سفارش و مبلغ کل.
-- [ ] Pending : **Owner Approval Path (`تأیید موجودی و ارسال`):** کلیک مالک روی دکمه `[تأیید موجودی و ارسال]` در تلگرام؛ تأیید تغییر وضعیت خودکار سفارش به `Processing` (`در حال پردازش`) و کسر موجودی کالا.
-- [ ] Pending : **Owner Rejection Path (`عدم موجودی و لغو`):** کلیک مالک روی دکمه `[عدم موجودی و لغو]` در تلگرام؛ تأیید تغییر وضعیت سفارش به `Cancelled` (`لغو شده`) و صدور هشدار استرداد وجه.
+- [ ] Pending : **Order Created in WooCommerce:** بررسی ثبت دقیق اطلاعات مشتری (نام، تلفن، آدرس و اقلام سفارش) در پنل مدیریت ووکامرس در وضعیت `On-Hold` (`در انتظار بررسی`).
+- [ ] Pending : **Telegram Available + SMS Available (`Dual Notification Test`):** بررسی دریافت آنی پیامک هشدار سفارش جدید به مالک توسط کاوه‌نگار (مسیر الزامی) به همراه ارسال همزمان پیامک/اعلان در ربات تلگرام (`[RADMAN_TELEGRAM_BOT_USERNAME: TBD]` - مسیر اختیاری).
+- [ ] Pending : **Telegram Unavailable + SMS Available (`Business Continuity Check`):** شبیه‌سازی عدم دسترسی یا اختلال تلگرام؛ تأیید اینکه مالک همچنان پیامک حیاتی هشدار سفارش جدید را از کاوه‌نگار دریافت می‌کند و هیچ وقفه‌ای در اطلاع‌رسانی رخ نمی‌دهد.
+- [ ] Pending : **Owner Approves via Telegram Buttons (`Telegram HITL Path A`):** کلیک مالک روی دکمه `[تأیید موجودی و ارسال]` در تلگرام؛ تأیید تغییر وضعیت خودکار سفارش به `Processing` (`در حال پردازش`) و کسر موجودی کالا.
+- [ ] Pending : **Owner Approves through WooCommerce Admin Fallback (`WooCommerce Admin Path B`):** در شرایط عدم دسترسی به تلگرام، ورود مالک به پنل مدیریت ووکامرس (`/wp-admin`) و تغییر دستی وضعیت سفارش از `On-Hold` به `Processing` (`در حال پردازش`) یا `Cancelled` (`لغو شده`).
+- [ ] Pending : **Customer Receives Correct SMS After Fallback Approval:** تأیید اینکه پس از تغییر دستی وضعیت سفارش به `Processing` در پنل مدیریت ووکامرس، پیامک تأیید و آماده‌سازی مرسوله به‌صورت خودکار برای مشتری ارسال می‌شود.
+- [ ] Pending : **Customer Receives Correct SMS After Fallback Rejection:** تأیید اینکه پس از تغییر دستی وضعیت سفارش به `Cancelled` در پنل مدیریت ووکامرس، پیامک لغو سفارش، هشدار استرداد وجه و کد تخفیف ۱۵٪ دلجویی به‌صورت خودکار برای مشتری ارسال می‌شود.
 - [ ] Pending : **Out-of-Stock Item Behavior:** بررسی رفتار سایت هنگام اتمام موجودی یک کالا (`stock = 0`)؛ تأیید تغییر دکمه به «ناموجود» و ممانعت از افزودن به سبد خرید.
 - [ ] Pending : **`stock = 1` Sellable Behavior:** بررسی کالاهایی که موجودی آن‌ها دقیقاً `1` عدد است؛ تأیید امکان ثبت سفارش و فروش موفق (طبق قانون تک‌محصول بودن انگشترهای نقره).
 
