@@ -33,10 +33,11 @@ RADMAN SILVER 925: [Phase 0: DONE] ──> [Phase 1: DONE] ──> [Phase 2: CUR
 - [x] Complete 11 static Persian pages in `content/static-pages/`.
 
 ### Phase 2: Infrastructure & Hosting Setup (CURRENT ⏭)
-> **Current Architecture Decision Status:** PENDING TECHNICAL DUE DILIGENCE — NO PURCHASE APPROVED YET. RADMAN hosting vendor and architecture are NOT yet selected; **MizbanFa** (`میزبان‌فا`) and **ParsPack** (`پارس‌پک`) are candidates under technical due diligence (see [docs/HOSTING-ARCHITECTURE-DECISION.md](HOSTING-ARCHITECTURE-DECISION.md)).
-- [ ] **Deployment Readiness Governance:** Apply official step-by-step execution checklists (`docs/STAGING-DEPLOYMENT-CHECKLIST.md`, `docs/PRODUCTION-CUTOVER-CHECKLIST.md`, `docs/SOFT-LAUNCH-GO-NO-GO.md`, `docs/TEST-SCENARIOS-RADMAN.md`, and `docs/HOSTING-ARCHITECTURE-DECISION.md`) to govern zero-ambiguity transition from hosting purchase to staging, QA validation, and Soft Launch.
-- [ ] Provision Iranian Linux cloud hosting (`[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]`, required for domestic Shetab banking gateways and legacy API reachability).
-- [ ] Configure Nginx reverse proxy, LiteSpeed / PHP-FPM 8.2+, MySQL 8.0+ / MariaDB 10.11+ (`utf8mb4_unicode_ci`), and Let's Encrypt TLS 1.3.
+> **Current Architecture Decision Status:** APPROVED TEMPORARY DECISION — CURRENT MONTH (`MizbanFa Mars`, RADMAN only, single-host temporary architecture, re-evaluate next month). RIDELIN is not deployed on this host this month. See [docs/HOSTING-ARCHITECTURE-DECISION.md](HOSTING-ARCHITECTURE-DECISION.md) and [docs/POST-PURCHASE-SETUP-RUNBOOK.md](POST-PURCHASE-SETUP-RUNBOOK.md).
+- [ ] **Next Step Execution Path:** `purchase Mars plan -> provision staging -> install WordPress/WooCommerce for RADMAN only`.
+- [ ] **Deployment Readiness Governance:** Apply official step-by-step execution checklists (`docs/POST-PURCHASE-SETUP-RUNBOOK.md`, `docs/STAGING-DEPLOYMENT-CHECKLIST.md`, `docs/PRODUCTION-CUTOVER-CHECKLIST.md`, `docs/SOFT-LAUNCH-GO-NO-GO.md`, `docs/TEST-SCENARIOS-RADMAN.md`, and `docs/HOSTING-ARCHITECTURE-DECISION.md`) to govern zero-ambiguity transition from hosting purchase to staging, QA validation, and Soft Launch.
+- [ ] Provision temporary single-host Iranian WooCommerce cloud hosting (`MizbanFa Mars plan`, RADMAN only, required for domestic Shetab banking gateways and legacy API reachability; re-evaluate next month).
+- [ ] Configure Nginx reverse proxy, LiteSpeed / PHP-FPM 8.2+, MySQL 8.0+ / MariaDB 10.11+ (`utf8mb4_unicode_ci` — verify reported `MariaDB 10.3.39` after purchase), and Let's Encrypt TLS 1.3.
 - [ ] Configure `.env` securely in repository root (never committed to Git).
 - [ ] Verify DNS propagation for `radmansilver.ir` and `radman925.ir`.
 

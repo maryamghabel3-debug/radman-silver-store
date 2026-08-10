@@ -20,7 +20,7 @@
 - [ ] CONFIRMED : تأیید اصل انبار دقیق ۱ به ۱ (`stock=1` قابل فروش است، بدون بافر ریاضی).
 
 ### B. Technical & Infrastructure Readiness (`آمادگی فنی و زیرساخت`)
-- [ ] Pending : پایداری سرور میزبان داخل ایران (`[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]` - `Status: PENDING VENDOR ANSWER`).
+- [ ] Pending : پایداری سرور میزبان داخل ایران (`MizbanFa Mars Plan` — تک‌سرور موقت برای ماه جاری، صرفاً RADMAN؛ ارزیابی مجدد ماه بعد / `Status: APPROVED TEMPORARILY — CURRENT MONTH`).
 - [ ] Pending : صحت نصب وردپرس ۶.x، ووکامرس و قالب Blocksy Child Theme (`Status: NOT YET TESTED`).
 - [ ] Pending : صحت عملکرد وب‌سرویس ووکامرس (`WooCommerce REST API v3`) و وب‌هوک‌های خروجی (`Status: NOT YET TESTED`).
 

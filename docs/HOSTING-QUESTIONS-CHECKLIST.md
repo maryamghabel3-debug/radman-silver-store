@@ -5,11 +5,31 @@
 ---
 
 ## وضعیت ارزیابی فنی و استعلام از هاستینگ‌ها (Technical Due Diligence Status)
-- **تاریخ ارزیابی (Date):** `2026-08-09` (`Asia/Tehran` timezone)
-- **ارسال سوالات فنی به میزبان‌فا (Technical questions sent to MizbanFa):** وضعیت: **`AWAITING TECHNICAL RESPONSE`** (`PENDING VENDOR ANSWER`)
-- **ارسال سوالات فنی به پارس‌پک (Technical questions sent to ParsPack):** وضعیت: **`AWAITING TECHNICAL RESPONSE`** (`PENDING VENDOR ANSWER`)
-- **مجوز خرید نهایی (Purchase Authorization):** **`NO FINAL PURCHASE AUTHORIZATION YET`** (`PENDING TECHNICAL DUE DILIGENCE`)
-- **سند معماری و تصمیم‌گیری هاستینگ:** برای جزئیات کامل معماری‌ها و معیارهای پذیرش به سند [HOSTING-ARCHITECTURE-DECISION.md](HOSTING-ARCHITECTURE-DECISION.md) مراجعه کنید.
+- **تاریخ ارزیابی (Date):** `2026-08-10` (`Asia/Tehran` timezone)
+- **وضعیت خرید (Purchase Status):** **`OWNER PROCEEDING TO PURCHASE MARS PLAN`** (`MizbanFa Mars`, تک‌سرور موقت برای ماه جاری، صرفاً برای برند RADMAN SILVER).
+- **محدوده استقرار (Scope Limitation):** **`RADMAN ONLY`** (`RIDELIN is not deployed on this host during the current month`).
+- **ارزیابی مجدد در آینده (Future Separation):** این یک تصمیم موقت عملیاتی برای سرعت‌بخشی به لانچ است و قفل چندساله معماری محسوب نمی‌شود؛ تفکیک سرورها و بازنگری معماری در ماه آینده پس از بررسی داده‌های واقعی مصرف (`re-evaluate next month`) انجام خواهد شد.
+
+### مشخصات تأییدشدهٔ پلن مارس میزبان‌فا (Confirmed Vendor Facts - MizbanFa Mars Plan)
+- **Plan:** Mars (`مارس`)
+- **Disk:** 60 GB NVMe
+- **CPU:** 12 cores / 12 GHz equivalent
+- **RAM:** 12 GB
+- **Panel:** cPanel
+- **Cache stack:** LSCache + WP Rocket + Object Cache + Redis Cache
+- **Backups:** daily DB + weekly full
+- **Datacenter:** Iran
+- **Remote MySQL:** not available / not required
+- **Python + Cron + WooCommerce REST API + Outbound HTTPS:** supported per vendor response
+- **Money-back/test window:** up to 14 days after purchase
+
+### هشدار فنی و ریسک دیتابیس (Yellow Flag & Database Baseline Risk)
+- **Reported DB version from vendor support:** `MariaDB 10.3.39`
+- **Technical Baseline Comparison:** This is below current preferred baseline (`MariaDB 10.6+`/`10.11+` or `MySQL 8.0+`).
+- **Status:** **`ACCEPTED TEMPORARILY FOR LAUNCH TESTING`**
+- **Action / Remaining Open Item:** Verify actual live MariaDB/MySQL version after purchase and request upgrade path if needed.
+
+- **سند معماری و تصمیم‌گیری هاستینگ:** برای جزئیات کامل معماری‌ها و معیارهای پذیرش به سند [HOSTING-ARCHITECTURE-DECISION.md](HOSTING-ARCHITECTURE-DECISION.md) و برای راهنمای استقرار پس از خرید به سند [POST-PURCHASE-SETUP-RUNBOOK.md](POST-PURCHASE-SETUP-RUNBOOK.md) مراجعه کنید.
 
 ---
 
