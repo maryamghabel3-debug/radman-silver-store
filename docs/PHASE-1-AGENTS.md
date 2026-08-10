@@ -38,7 +38,8 @@ This document provides detailed technical specifications and operational logic f
 
 ## 3. Order Approval Agent (`Agent-OrderApproval`)
 
-- **Purpose:** Enforce Human Order Confirmation via Telegram as the sole oversell protection mechanism.
+- **Purpose:** Enforce Human-in-the-Loop (`HITL`) Order Confirmation as the oversell protection mechanism (mandatory SMS primary alert, optional Telegram convenience channel, and WooCommerce Admin manual approval fallback).
 - **Execution Workflow:**
-  1. On order checkout, `Agent-OrderApproval` sends an interactive alert to Telegram with customer details and ordered SKUs.
-  2. The owner checks physical stock and clicks `[تأیید موجودی و ارسال]` to approve dispatch, or `[عدم موجودی و لغو]` if out of stock.
+  1. On order checkout, WooCommerce sets order status to `On-Hold` and fires a mandatory SMS alert via Kavenegar to the owner.
+  2. If Telegram is reachable, `Agent-OrderApproval` sends an interactive alert to Telegram with customer details and ordered SKUs.
+  3. The owner approves dispatch (`Processing`) or rejects (`Cancelled`) via Telegram interactive buttons (Path A) or via manual status change in WooCommerce Admin `/wp-admin` fallback (Path B).

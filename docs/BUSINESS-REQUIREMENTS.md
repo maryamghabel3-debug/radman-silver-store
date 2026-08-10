@@ -10,7 +10,7 @@ This document defines the core business objectives, sourcing models, operational
 2. **1:1 Stock Reality (Exact 1:1 Mappings):**
    - Silver rings are unique handcrafted pieces; **`stock = 1` is completely normal and sellable**.
    - **All historical stock-offset logic is strictly removed.** Rule: `legacy_stock = radman_stock` (1:1 mapping).
-   - Oversell protection is handled exclusively by **Human Order Confirmation via Telegram** for every paid order before shipping.
+   - Oversell protection is handled by **Human-in-the-Loop (`HITL`) Order Confirmation** (mandatory SMS primary alert + optional Telegram convenience channel, with WooCommerce Admin manual approval fallback) for every paid order before shipping.
 3. **Simplified Daily Rate Pricing Model:**
    - The owner enters ONE daily silver gram rate via Telegram Bot: `نرخ امروز هر گرم نقره = X تومان`.
    - *Weight-based products:* `final_price = weight_grams * daily_rate`.

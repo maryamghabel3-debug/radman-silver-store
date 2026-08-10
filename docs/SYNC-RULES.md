@@ -20,11 +20,11 @@ This document defines the authoritative field-level ownership table and inventor
 
 ## 2. Oversell Protection via Human Order Confirmation (`حفاظت از فروش مالایطاق`)
 
-Because inventory on `noghrehmashhad.ir` is managed manually and is not 100% real-time reliable, overselling protection is enforced exclusively by **HUMAN ORDER CONFIRMATION via Telegram**:
-- When a customer places a paid order on `radmansilver.ir`, the order enters **On-Hold (`در انتظار بررسی`)**.
-- `Agent-OrderApproval` sends an instant Telegram alert to the owner.
-- The owner physically verifies stock availability before clicking `[تأیید موجودی و ارسال]`.
-- If an item was sold offline on the old site, the owner can either source a replacement from Tehran Grand Bazaar or click `[عدم موجودی و لغو]` for an immediate refund.
+Because inventory on `noghrehmashhad.ir` is managed manually and is not 100% real-time reliable, overselling protection is enforced by **HUMAN-IN-THE-LOOP (`HITL`) ORDER CONFIRMATION** (mandatory SMS alert + optional Telegram convenience channel, with WooCommerce Admin manual approval fallback):
+- When a customer places a paid order on `radmansilver.ir`, the order enters **On-Hold (`در انتظار بررسی`)** and triggers a mandatory SMS alert via Kavenegar.
+- If reachable, `Agent-OrderApproval` sends an optional Telegram alert with interactive buttons.
+- The owner physically verifies stock availability and approves dispatch (`Processing`) via Telegram buttons or via manual status change in WooCommerce Admin (`/wp-admin`).
+- If an item was sold offline on the old site, the owner can either source a replacement from Tehran Grand Bazaar or reject the order (`Cancelled`) for an immediate refund.
 
 ---
 

@@ -78,3 +78,12 @@ Every candidate hosting vendor and architecture must satisfy all of the followin
 
 ## 4. Decision Rule
 No purchase and no final architecture approval until the technical answers from both vendors are reviewed by the project manager and owner.
+
+---
+
+## 5. Hybrid Owner Notification Model (Phase 1-5)
+- **Primary Mandatory Channel (`SMS via Kavenegar`):** SMS is the mandatory primary notification channel for alerting the brand owner of new orders (`On-Hold` / pending human review state) and sending customer order-status updates.
+- **Secondary Optional Channel (`Telegram Bot`):** Telegram is an optional secondary convenience channel. It provides interactive approval buttons (`[تأیید موجودی و ارسال]` / `[عدم موجودی و لغو]`), but operations and launch are **never blocked** solely because Telegram is unavailable or unreachable.
+- **Human-in-the-Loop (`HITL`) Fallback Approval Path:** Owner approval must remain possible even during international internet disruptions or Telegram connectivity loss. When Telegram is unavailable, the owner logs into the **WooCommerce Admin Panel** and manually changes the order status from `On-Hold` (`در انتظار بررسی`) to `Processing` (`در حال پردازش` / approved) or `Cancelled` (`لغو شده` / rejected). Automation agents observe this status change and trigger appropriate SMS customer notifications.
+- **Impact on Architecture Viability:** Because Telegram is no longer a single point of operational failure, consolidated one-host architectures (Candidate A and Candidate C hosted in Iran) become significantly more viable and resilient.
+- **Hosting Decision Status:** **`PENDING TECHNICAL DUE DILIGENCE — NO PURCHASE APPROVED`** (Status remains strictly unchanged).

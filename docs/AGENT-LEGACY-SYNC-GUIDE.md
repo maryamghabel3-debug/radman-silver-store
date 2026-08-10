@@ -50,7 +50,7 @@ python3 agents/agent_legacy_sync.py
    legacy_stock=1 -> radman_stock=1 (sellable)
    legacy_stock=0 -> radman_stock=0
    ```
-   No safety offset. Oversell protection = Telegram HITL approval before order fulfillment.
+   No safety offset. Oversell protection = Hybrid SMS/Telegram HITL approval (or WooCommerce Admin fallback) before order fulfillment.
 2. **Official 4-Mode Pricing Taxonomy (`۴ حالت رسمی قیمت‌گذاری`):**
    - `silver_weight_only`: `final_price = weight_grams * daily_rate`
    - `silver_weight_plus_stone`: `final_price = (weight_grams * daily_rate) + stone_fixed_value_toman`
