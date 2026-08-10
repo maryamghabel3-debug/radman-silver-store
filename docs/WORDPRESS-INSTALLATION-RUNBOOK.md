@@ -1,230 +1,128 @@
-# راهنمای جامع نصب و پیکربندی وردپرس ۶.x و ووکامرس (`WORDPRESS-INSTALLATION-RUNBOOK.md`)
+# راهنمای استقرار وردپرس ۶.x و ووکامرس (`WORDPRESS-INSTALLATION-RUNBOOK.md`)
 
-> **راهنمای عملیاتی و گزارش تأییدیه نصب وردپرس، ووکامرس و افزونه‌های مصوب روی پلن مارس میزبان‌فا**  
-> *این سند شامل تمام ۱۹ گام اجرایی از طریق خط فرمان `WP-CLI` در ترمینال cPanel برای استقرار فروشگاه **رادمان سیلور (`radman-silver-store`)** است.*
-
----
-
-## 1. Mission Objective & Prerequisites (`هدف مأموریت و پیش‌نیازها`)
-- **MISSION:** `MISSION: Install WordPress 6.x + WooCommerce + Required Plugins on MizbanFa Mars Plan`
-- **Host Specifications:** MizbanFa Mars Plan (60GB NVMe Disk, 12 Cores / 12 GHz Equivalent CPU, 12GB RAM, cPanel, MariaDB 10.3.39).
-- **Domain:** `radmansilver.ir` | **Staging Subdomain:** `staging.radmansilver.ir`
-- **Owner Prerequisites:** cPanel URL, username, password, SFTP credentials.
+> **راهنمای آماده‌سازی و استقرار در محیط آزمایشی (Staging Deployment Preparation Toolkit)**  
+> **Operational Status:** **`Preparation Runbook — Not Yet Executed`** (`DEPLOYMENT TOOLKIT PREPARED — NOT EXECUTED ON HOST`)
 
 ---
 
-## 2. Required Plugins List (`فهرست افزونه‌های ضروری مصوب`)
-1. **WooCommerce (official):** فروشگاه‌ساز رسمی وردپرس (`woocommerce`).
-2. **RankMath SEO:** ابزار جامع سئو، متاداده و اسکیما (`wordpress-seo` / `seo-by-rank-math`).
-3. **Wordfence Security:** فایروال و سیستم حفاظت امنیت پیشرفته (`wordfence`).
-4. **UpdraftPlus:** خودکارسازی بک‌آپ‌گیری دیتابیس و فایل‌ها در فضای ابری (`updraftplus`).
-5. **Persian WooCommerce:** بومی‌سازی ووکامرس فارسی، تقویم جلالی و شهرهای ایران (`persian-woocommerce`).
-6. **LiteSpeed Cache / Blocksy Companion:** افزونه بهینه‌سازی کش ال‌اس‌کش (`litespeed-cache`) و افزونه مکمل قالب مینیمال (`blocksy-companion`).
-7. **Redis Object Cache:** بهینه‌سازی کش آبجکت در دیتابیس (`redis-cache` در صورت فعال بودن در هاست).
-8. **Kavenegar SMS Integration / Persian Date:** یکپارچه‌سازی پیامک کاوه‌نگار (`kavenegar`) و تاریخ شمسی وردپرس (`wp-persian`).
+## 1. Preflight (`پیش‌نیازها و بررسی‌های اولیه`)
+
+این راهنما و مجموعه اسکریپت‌های همراه (`scripts/install_wordpress_mizbanfa.sh` و `config/wp-config-env.php`) برای اجرای ایمن و کنترل‌شدهٔ استقرار وردپرس و ووکامرس بر روی هاست میزبان‌فا (پلن مارس: ۶۰ گیگابایت NVMe، ۱۲ هسته CPU، ۱۲ گیگابایت رم، cPanel و `MariaDB 10.3`) تدوین شده‌اند.
+- **وضعیت اجرای واقعی:** **`NOT YET EXECUTED ON HOST`** — هیچ استقرار واقعی، ساخت دیتابیس یا تنظیم رکوردهای DNS روی سرور انجام نشده است.
+- **تأیید نسخه‌ها در زمان اجرا:**
+  - **وردپرس:** به صورت پیش‌فرض آخرین نسخه پایدار رسمی در زمان اجرا نصب می‌شود (نسخه پایدار فعلی در تاریخ `2026-08-10` نسخه `7.0.3` است؛ امکان اورراید از طریق متغیر `WP_VERSION` جهت تست سازگاری وجود دارد).
+  - **ووکامرس:** آخرین نسخه پایدار سازگار در زمان اجرا نصب و نسخه دقیق گزارش می‌شود.
+  - **دیتابیس (`MariaDB 10.3.x`):** با توجه به اینکه نسخه `MariaDB 10.3` پایین‌تر از سطح ترجیحی استاندارد (`MariaDB 10.6+` یا `MySQL 8.0+`) است، اجرای اسکریپت روی این نسخه همراه با **`YELLOW FLAG`** بوده و منحصراً برای تست سازگاری در استیجینگ با تنظیم متغیر `ALLOW_LEGACY_DB_FOR_STAGING=1` مجاز است.
 
 ---
 
-## 3. Detailed 19-Step WP-CLI Installation Procedure (`مراحل ۱۹ گانه نصب با WP-CLI`)
+## 2. Manual cPanel Prerequisites (`پیش‌نیازهای دستی cPanel`)
 
-### Step 1: Verify environment (`بررسی اکوسیستم سرور`)
-```bash
-php --version       # Must be PHP 8.2+
-wp --info           # Verify WP-CLI is available and functional
-mysql --version     # Verify MariaDB 10.3.39+
-```
-
-### Step 2: Create WordPress database (`ساخت دیتابیس در cPanel`)
-- ورود به `cPanel > MySQL Databases`:
-  - ساخت پایگاه داده: `radman_wp`
-  - ساخت کاربر: `radman_wp_user` (با رمز عبور قدرتمند)
-  - اعطای دسترسی کامل (`ALL PRIVILEGES`) روی `radman_wp.*` به `radman_wp_user`
-- ثبت مشخصات در فایل `.env` ریشه.
-
-### Step 3: Install WordPress core (`نصب هسته وردپرس نسخه 6.x فارسی`)
-```bash
-wp core download --version=6.6 --locale=fa_IR
-wp config create --dbname=radman_wp --dbuser=radman_wp_user --dbpass="[PASSWORD]" --dbhost=localhost --dbcharset=utf8mb4 --dbcollate=utf8mb4_unicode_ci
-wp core install --url=radmansilver.ir --title="رادمان سیلور ۹۲۵" --admin_user=[ADMIN] --admin_password="[STRONG_PASSWORD]" --admin_email=[EMAIL] --skip-email
-```
-
-### Step 4: Install WooCommerce (`نصب و تنظیم واحد پول ریال/تومان و کشور ایران`)
-```bash
-wp plugin install woocommerce --activate
-wp option update woocommerce_store_address "ایران"
-wp option update woocommerce_store_city "مشهد"
-wp option update woocommerce_default_country "IR"
-wp option update woocommerce_currency "IRR"
-wp option update woocommerce_currency_pos "right"
-wp option update woocommerce_price_thousand_sep ","
-wp option update woocommerce_price_decimal_sep "."
-wp option update woocommerce_price_num_decimals "0"
-```
-
-### Step 5: Install Persian WooCommerce (`نصب ووکامرس فارسی`)
-```bash
-wp plugin install persian-woocommerce --activate
-```
-
-### Step 6: Install RankMath SEO (`نصب افزونه سئو`)
-```bash
-wp plugin install wordpress-seo --activate || wp plugin install seo-by-rank-math --activate
-```
-
-### Step 7: Install Wordfence (`نصب فایروال امنیتی`)
-```bash
-wp plugin install wordfence --activate
-```
-
-### Step 8: Install UpdraftPlus (`نصب افزونه پشتیبان‌گیری`)
-```bash
-wp plugin install updraftplus --activate
-```
-
-### Step 9: Install LiteSpeed Cache (`نصب افزونه کش پیشنهادشده توسط میزبان‌فا`)
-```bash
-wp plugin install litespeed-cache --activate
-```
-
-### Step 10: Install Blocksy Companion (`نصب مکمل قالب Blocksy`)
-```bash
-wp plugin install blocksy-companion --activate
-```
-
-### Step 11: Install Persian date/Shamsi plugin & Redis Cache (`نصب تاریخ شمسی و کش آبجکت`)
-```bash
-wp plugin install wp-persian --activate
-wp plugin install redis-cache --activate || echo "Redis Object Cache dependent on host module"
-```
-
-### Step 12: Configure basic WordPress settings (`تنظیمات پایه وردپرس و منطقه زمانی ایران`)
-```bash
-wp option update timezone_string "Asia/Tehran"
-wp option update date_format "Y/m/d"
-wp option update time_format "H:i"
-wp option update WPLANG "fa_IR"
-wp option update blogname "رادمان سیلور ۹۲۵"
-wp option update blogdescription "خرید انگشتر نقره ۹۲۵ اصل | رادمان سیلور"
-```
-
-### Step 13: Set permalink structure (`تنظیم ساختار پیوندهای یکتا`)
-```bash
-wp rewrite structure '/%postname%/'
-wp rewrite flush
-```
-
-### Step 14: Create `.env` file in WordPress root (`ایجاد فایل متغیرهای محیطی`)
-ایجاد فایل `.env` (بر اساس الگو از `.env.example`):
-```env
-DB_NAME=radman_wp
-DB_USER=radman_wp_user
-DB_PASSWORD=[PASSWORD]
-DB_HOST=localhost
-LEGACY_API_BASE_URL=https://noghrehmashhad.ir
-LEGACY_API_KEY=[TO_BE_PROVIDED]
-KAVENEGAR_API_KEY=[TO_BE_PROVIDED]
-TELEGRAM_BOT_TOKEN=[TO_BE_PROVIDED]
-TELEGRAM_OWNER_CHAT_ID=[TO_BE_PROVIDED]
-ZARINPAL_MERCHANT_ID=[TO_BE_PROVIDED]
-```
-
-### Step 15: Update `wp-config.php` to read from `.env` (`تزریق اسکریپت لودر محیطی`)
-درج قطعه‌کد زیر در بالای `wp-config.php` (قبل از `require_once ABSPATH . 'wp-settings.php';`) طبق فایل [config/wp-config-env.php](../config/wp-config-env.php):
-```php
-if (file_exists(__DIR__ . '/.env')) {  
-    $dotenv = parse_ini_file(__DIR__ . '/.env');  
-    foreach ($dotenv as $key => $value) {  
-        putenv("$key=$value");  
-        $_ENV[$key] = $value;  
-        $_SERVER[$key] = $value;  
-    }  
-}  
-define('DB_NAME', getenv('DB_NAME'));  
-define('DB_USER', getenv('DB_USER'));  
-define('DB_PASSWORD', getenv('DB_PASSWORD'));  
-define('DB_HOST', getenv('DB_HOST'));  
-```
-
-### Step 16: Add `.env` to `.gitignore` (`بررسی عدم تعهد اسرار در گیت`)
-بررسی فایل `.gitignore` و اطمینان از قرار داشتن `.env` و `.env.*` در استثنائات مخزن.
-
-### Step 17: Create staging subdomain (`ساخت ساب‌دامنه استیجینگ`)
-در cPanel > Domains > Create New Domain:
-- Domain: `staging.radmansilver.ir`
-- برداشتن تیک «Share document root» (پوشه مستقل)
-- تأیید و ساخت.
-
-### Step 18: Install WordPress on staging (`نصب وردپرس استیجینگ و عدم ایندکس`)
-- تکرار مراحل نصب با دیتابیس مجزا روی دامنه استیجینگ.
-- اعمال دستور منع ایندکس:
-```bash
-wp option update blog_public 0
-```
-
-### Step 19: Verify installation (`تأییدیه نهایی نصب و تست سلامت`)
-```bash
-wp plugin list
-wp option get home
-wp db check
-```
+اسکریپت اتوماسیون به هیچ عنوان اقدام به ایجاد منابع سی‌پنل (دامنه، ساب‌دامنه، دیتابیس، کاربر دیتابیس، رکوردهای DNS یا گواهینامه SSL) نمی‌کند. پیش از اجرای اسکریپت، مدیر زیرساخت باید موارد زیر را در cPanel انجام دهد:
+1. **ساخت ساب‌دامنه استیجینگ:** ایجاد ساب‌دامنه `staging.radmansilver.ir` با پوشه ریشه مستقل (`Document Root` ایزوله از `public_html`).
+2. **ساخت دیتابیس استیجینگ:** ایجاد پایگاه داده مستقل (مانند `user_radman_wp`) و کاربر پایگاه داده (مانند `user_radman_user`) با رمز عبور قدرتمند و اعطای تمامی دسترسی‌ها (`ALL PRIVILEGES`).
+3. **فعال‌سازی SSL:** صدور گواهینامه امنیتی `Let's Encrypt / TLS 1.3` برای ساب‌دامنه استیجینگ.
+4. **ایجاد فایل محیطی امن خارج از پوشه وب:** ایجاد فایل محیطی خارج از ریشه وب (به عنوان مثال در `/home/[CPANEL_USER]/.config/radman/staging.env`) طبق الگو از `.env.example`.
 
 ---
 
-## 4. Verification Outputs (`خروجی‌های اعتبارسنجی نهایی`)
+## 3. Staging-Only Execution (`اجرای انحصاری روی محیط استیجینگ`)
 
-### A. Output of `wp plugin list`
-```text
-+---------------------+--------+-----------+---------+
-| name                | status | update    | version |
-+---------------------+--------+-----------+---------+
-| woocommerce         | active | none      | 9.x     |
-| persian-woocommerce | active | none      | 4.x     |
-| wordpress-seo       | active | none      | 1.x     |
-| wordfence           | active | none      | 7.x     |
-| updraftplus         | active | none      | 1.x     |
-| litespeed-cache     | active | none      | 6.x     |
-| blocksy-companion   | active | none      | 2.x     |
-| wp-persian          | active | none      | 3.x     |
-| redis-cache         | active | none      | 2.x     |
-+---------------------+--------+-----------+---------+
+استقرار روی محیط پروداکشن در این ابزار اکیداً ممنوع و مسدود شده است. برای اجرای استقرار در ساب‌دامنه استیجینگ، پس از تنظیم فایل محیطی خارج از ریشه وب، دستور زیر در محیط ترمینال SSH اجرا می‌شود:
+
+```bash
+# Example execution command on staging host:
+export WP_PATH="/home/[CPANEL_USER]/staging.radmansilver.ir"
+export WP_URL="https://staging.radmansilver.ir"
+export WP_TITLE="رادمان سیلور ۹۲۵ (استیجینگ)"
+export ADMIN_USER="radman_admin"
+export ADMIN_EMAIL="admin@radmansilver.ir"
+export DB_NAME="user_radman_wp"
+export DB_USER="user_radman_user"
+export DB_HOST="localhost"
+export RADMAN_ENV_FILE="/home/[CPANEL_USER]/.config/radman/staging.env"
+export ALLOW_LEGACY_DB_FOR_STAGING=1  # Mandatory waiver for MariaDB 10.3 yellow flag
+
+# Secret credentials supplied via protected server environment:
+export ADMIN_PASSWORD="[PROTECTED_SERVER_SECRET]"
+export DB_PASSWORD="[PROTECTED_SERVER_SECRET]"
+
+/home/[CPANEL_USER]/radman-silver-store/scripts/install_wordpress_mizbanfa.sh --execute-staging
 ```
 
-### B. Output of `wp option get home` (Production & Staging)
-```text
-# Production:
-https://radmansilver.ir
-
-# Staging:
-https://staging.radmansilver.ir
-```
-
-### C. Output of `wp option get blog_public` (Staging noindex check)
-```text
-0
-```
-
-### D. Output of `wp option get timezone_string` & `WPLANG`
-```text
-# timezone_string:
-Asia/Tehran
-
-# WPLANG:
-fa_IR
-```
-
-### E. Output of `wp rewrite structure`
-```text
-/%postname%/
-```
-
-### F. Output of `wp db check`
-```text
-Success: Database checked. OK
-```
+### ساختار افزونه‌ها و قالب مصوب:
+- **قالب:** نصب قالب `blocksy` و افزونه مکمل `blocksy-companion` (استقرار قالب فرزند `Blocksy Child Theme` تا زمان بررسی بسته نهایی در وضعیت `PENDING` است).
+- **سئو:** افزونه رسمی `seo-by-rank-math` (بدون نصب Yoast یا `wordpress-seo`).
+- **کش:** افزونه بهینه‌سازی `litespeed-cache` (افزونه `WP Rocket` غیرفعال است مگر طبق تصمیم آتی جایگزین شود).
+- **کش آبجکت:** افزونه `redis-cache` صرفاً در صورت موفقیت تست ارتباط `wp redis status` فعال می‌شود؛ در غیر این صورت وضعیت آن `PENDING HOST CONFIGURATION` خواهد بود.
+- **بومی‌سازی و امنیت:** افزونه‌های `persian-woocommerce`، `wp-persian`، `wordfence` و `updraftplus`.
+- **پیامک کاوه‌نگار:** یکپارچه‌سازی کاوه‌نگار تا زمان شناسایی و تأیید پکیج/پلاگین دقیق در وضعیت `PENDING` است.
 
 ---
 
-## 5. Official Mission Status Statement (`اعلامیه رسمی وضعیت مأموریت`)
-- **WORDPRESS + WOOCOMMERCE INSTALLED SUCCESSFULLY**
+## 4. Post-Install Verification (`اعتبارسنجی پس از نصب`)
+
+هرگونه خروجی دستورات در این بخش صرفاً **مثال خروجی مورد انتظار** بوده و گواه بر اجرای واقعی روی سرور نیست.
+
+```text
+EXPECTED OUTPUT EXAMPLE — NOT ACTUAL HOST EVIDENCE
+```
+
+| Verification Check | Command to Run | Expected Condition | Actual Output Field |
+| :--- | :--- | :--- | :---: |
+| **Plugin List Audit** | `wp plugin list` | All approved plugins active | **`PENDING`** |
+| **Home URL Check** | `wp option get home` | `https://staging.radmansilver.ir` | **`PENDING`** |
+| **Staging Noindex Check** | `wp option get blog_public` | `0` (Strictly noindex) | **`PENDING`** |
+| **Timezone Check** | `wp option get timezone_string` | `Asia/Tehran` | **`PENDING`** |
+| **Locale Check** | `wp option get WPLANG` | `fa_IR` | **`PENDING`** |
+| **Permalink Check** | `wp rewrite structure` | `/%postname%/` | **`PENDING`** |
+| **Database Integrity Check** | `wp db check` | `Success: Database checked. OK` | **`PENDING`** |
+
+---
+
+## 5. Evidence Collection (`جمع‌آوری شواهد و گزارش‌دهی`)
+
+هنگام اجرای واقعی در آینده، اپراتور موظف است شواهد زیر را بدون درج اطلاعات محرمانه (اسرار، نام‌های کاربری، مسیرهای دایرکتوری هوم، توکن‌ها و رمزهای عبور) جمع‌آوری و در گزارش ثبت کند:
+- برچسب زمانی دقیق به وقت UTC و `Asia/Tehran`
+- نام سرور/هاست (Sanitized Hostname)
+- نسخه دقیق PHP و اکستنشن‌های فعال
+- نسخه دقیق پایگاه داده (`MySQL / MariaDB`)
+- نسخه دقیق هسته وردپرس (`WordPress Version`)
+- نسخه دقیق ووکامرس (`WooCommerce Version`)
+- وضعیت قالب فعال و قالب فرزند
+- نام دقیق و نسخه تک‌تک افزونه‌های نصب‌شده
+- آدرس‌های `home` و `siteurl`
+- وضعیت گزینه `blog_public` (`0` برای استیجینگ)
+- تأیید صحت اتصال گواهینامه HTTPS
+- نتیجه سلامت پایگاه داده (`wp db check`)
+- نتیجه تست سلامت `REST API` وردپرس و ووکامرس
+
+---
+
+## 6. Stop Conditions (`خطوط قرمز و شرایط توقف عملیات`)
+
+در صورت بروز هر یک از ۱۰ شرط زیر، اجرای اسکریپت و عملیات استقرار باید **فوراً متوقف** و به مدیر پروژه گزارش شود:
+1. **PHP below approved target:** نسخه PHP سرور پایین‌تر از ۸.۲ باشد.
+2. **WP-CLI unavailable:** ابزار خط فرمان `WP-CLI` روی سرور نصب یا در دسترس نباشد.
+3. **Actual database version not reported:** نسخه دقیق پایگاه داده قابل تشخیص و گزارش نباشد.
+4. **MariaDB 10.3 without explicit staging waiver:** نسخه پایگاه داده `MariaDB 10.3` باشد و متغیر `ALLOW_LEGACY_DB_FOR_STAGING=1` ست نشده باشد.
+5. **Missing HTTPS:** گواهینامه SSL فعال نبوده یا اتصال HTTPS روی استیجینگ برقرار نباشد.
+6. **Document root not empty:** مسیر پوشه ریشه استیجینگ (`WP_PATH`) خالی نبوده یا وردپرس از قبل در آن نصب باشد.
+7. **Staging database not independent:** پایگاه داده استیجینگ با پروداکشن مشترک باشد.
+8. **Secret file located inside web root:** فایل اسرار `.env` داخل ریشه وب (`public_html` یا دایرکتوری استیجینگ) قرار داشته باشد.
+9. **Plugin slug unavailable:** هر یک از اسلاگ‌های رسمی افزونه‌های ضروری در مخزن وردپرس ناموجود یا ناسازگار باشد.
+10. **Redis connectivity failure when Redis is expected:** ارتباط با سرویس Redis برقرار نباشد در حالی که فعال‌سازی اجباری کش آبجکت درخواست شده باشد.
+
+---
+
+## 7. Production Deployment Deferred (`به تعویق افتادن استقرار پروداکشن`)
+
+استقرار وردپرس و ووکامرس روی دامنه اصلی پروداکشن (`radmansilver.ir`) در این ابزار و راهنما **اکیداً ممنوع** است. ورود به مرحله پروداکشن نیازمند تأیید نهایی عملکرد استیجینگ، ممیزی امنیتی و صدور مأموریت مستقل مصوب توسط بازبین پروژه خواهد بود.
+
+---
+
+## 8. Official Mission Status Statement (`اعلامیه رسمی وضعیت مأموریت`)
+- **WORDPRESS/WOOCOMMERCE DEPLOYMENT TOOLKIT PREPARED. HOST EXECUTION HAS NOT OCCURRED. WAITING FOR SECURE HOST ACCESS AND STAGING-ONLY EXECUTION APPROVAL.**
+- **DEPLOYMENT TOOLKIT PREPARED — NOT EXECUTED ON HOST**
 - **No token/auth method was changed**
 - **Ready for reviewer approval**

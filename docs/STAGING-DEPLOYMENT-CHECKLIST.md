@@ -31,7 +31,7 @@
 ---
 
 ## 3. WordPress & WooCommerce Installation (`نصب وردپرس و ووکامرس`)
-> **راهنمای نصب خودکار با WP-CLI:** برای اجرای ۱۹ گام نصب وردپرس، ووکامرس و افزونه‌های ضروری با دستورات WP-CLI روی پلن مارس میزبان‌فا به سند [WORDPRESS-INSTALLATION-RUNBOOK.md](WORDPRESS-INSTALLATION-RUNBOOK.md) و اسکریپت [scripts/install_wordpress_mizbanfa.sh](../scripts/install_wordpress_mizbanfa.sh) مراجعه کنید.
+> **ابزار و راهنمای استقرار استیجینگ با WP-CLI (وضعیت: DEPLOYMENT TOOLKIT PREPARED — NOT EXECUTED ON HOST):** ابزار آماده‌سازی و استقرار در محیط آزمایشی طبق سند [WORDPRESS-INSTALLATION-RUNBOOK.md](WORDPRESS-INSTALLATION-RUNBOOK.md) و اسکریپت [scripts/install_wordpress_mizbanfa.sh](../scripts/install_wordpress_mizbanfa.sh) تدوین شده است. اجرای روی سرور هنوز انجام نشده و نیازمند دسترسی امن است.
 
 - [ ] Pending : نصب هسته وردپرس نسخه `6.x` روی ساب‌دامنه استیجینگ (`[PROPOSED: staging.radmansilver.ir — DNS status TBD]`).
 - [ ] Pending : تنظیم زمان سرور روی منطقه زمانی ایران (`Asia/Tehran` - `UTC+3:30`).
