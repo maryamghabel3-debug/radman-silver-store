@@ -31,6 +31,7 @@
 ---
 
 ## 3. WordPress & WooCommerce Installation (`نصب وردپرس و ووکامرس`)
+> **راهنمای نصب خودکار با WP-CLI روی پلن مارس:** برای اجرای ۱۱ گام نصب وردپرس، ووکامرس و افزونه‌های ضروری با دستورات WP-CLI روی پلن مارس میزبان‌فا (صرفاً برای رادمان) به سند [WORDPRESS-INSTALLATION-MARS-RUNBOOK.md](WORDPRESS-INSTALLATION-MARS-RUNBOOK.md) و اسکریپت [scripts/install_wordpress_mars.sh](../scripts/install_wordpress_mars.sh) مراجعه کنید.
 
 - [ ] Pending : نصب هسته وردپرس نسخه `6.x` روی ساب‌دامنه استیجینگ (`[PROPOSED: staging.radmansilver.ir — DNS status TBD]`).
 - [ ] Pending : تنظیم زمان سرور روی منطقه زمانی ایران (`Asia/Tehran` - `UTC+3:30`).

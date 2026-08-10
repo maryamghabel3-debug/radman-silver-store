@@ -41,7 +41,7 @@ RADMAN SILVER 925: [Phase 0: DONE] ──> [Phase 1: DONE] ──> [Phase 2: CUR
 - [ ] Verify DNS propagation for `radmansilver.ir` and `radman925.ir`.
 
 ### Phase 3: WordPress/WooCommerce Deployment (NEXT ⏳)
-- [ ] Install WordPress 6.x core and WooCommerce e-commerce engine.
+- [ ] Install WordPress 6.6 core and WooCommerce e-commerce engine via automated WP-CLI script ([scripts/install_wordpress_mars.sh](../scripts/install_wordpress_mars.sh) and [docs/WORDPRESS-INSTALLATION-MARS-RUNBOOK.md](WORDPRESS-INSTALLATION-MARS-RUNBOOK.md)).
 - [ ] Deploy and customize **Blocksy Child Theme** (`#0B0B0E` matte black background, `#FAF7F2` ivory typography).
 - [ ] Install essential free production plugins (WooCommerce, Persian WooCommerce, Zarinpal Payment Gateway, RankMath SEO, WP Super Cache, Wordfence Security, UpdraftPlus Backup).
 - [ ] Apply for Enamad trust badge, connect Zarinpal sandbox, connect Kavenegar SMS sandbox, and configure `[RADMAN_TELEGRAM_BOT_USERNAME: TBD]`.
