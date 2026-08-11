@@ -6,28 +6,30 @@
 
 ## وضعیت ارزیابی فنی و استعلام از هاستینگ‌ها (Technical Due Diligence Status)
 - **تاریخ ارزیابی (Date):** `2026-08-10` (`Asia/Tehran` timezone)
-- **وضعیت خرید (Purchase Status):** **`OWNER PROCEEDING TO PURCHASE MARS PLAN`** (`MizbanFa Mars`, تک‌سرور موقت برای ماه جاری، صرفاً برای برند RADMAN SILVER).
-- **محدوده استقرار (Scope Limitation):** **`RADMAN ONLY`** (`RIDELIN is not deployed on this host during the current month`).
-- **ارزیابی مجدد در آینده (Future Separation):** این یک تصمیم موقت عملیاتی برای سرعت‌بخشی به لانچ است و قفل چندساله معماری محسوب نمی‌شود؛ تفکیک سرورها و بازنگری معماری در ماه آینده پس از بررسی داده‌های واقعی مصرف (`re-evaluate next month`) انجام خواهد شد.
+- **وضعیت تصمیم و خرید (Official Status):** **`APPROVED FOR INITIAL ONE-MONTH PURCHASE AND STAGING TRIAL — NOT YET PURCHASED`** (`MizbanFa Mars`, approved to purchase, but not yet purchased; صرفاً برای برند RADMAN SILVER).
+- **محدوده استقرار (Scope Limitation):** **`RADMAN ONLY`** (RIDELIN must not be installed or deployed on this host).
+- **مهلت بررسی و ارزیابی معماری (Review Deadline):** **Review within 30 days after the actual provisioning date and before production launch, whichever occurs first. Provisioning date: TBD.**
+- **هم‌مکانی ایجنت‌ها (Agent Co-Location):** **`CONDITIONAL — pending post-purchase Python/Cron/outbound connectivity acceptance tests.`**
 
 ### مشخصات تأییدشدهٔ پلن مارس میزبان‌فا (Confirmed Vendor Facts - MizbanFa Mars Plan)
 - **Plan:** Mars (`مارس`)
 - **Disk:** 60 GB NVMe
-- **CPU:** 12 cores / 12 GHz equivalent
-- **RAM:** 12 GB
+- **CPU:** Advertised 12 cores / 12 GHz equivalent
+- **RAM:** Advertised 12 GB
 - **Panel:** cPanel
-- **Cache stack:** LSCache + WP Rocket + Object Cache + Redis Cache
+- **Vendor Advertised Cache Stack:** LSCache + WP Rocket + Object Cache + Redis Cache
+- **Project-Approved Active Cache Configuration:** **`LiteSpeed Cache active, WP Rocket inactive, Redis conditional.`** (LiteSpeed Cache and WP Rocket must not be activated simultaneously; Redis persistent object cache may only be activated after real connectivity verification).
 - **Backups:** daily DB + weekly full
 - **Datacenter:** Iran
 - **Remote MySQL:** not available / not required
-- **Python + Cron + WooCommerce REST API + Outbound HTTPS:** supported per vendor response
-- **Money-back/test window:** up to 14 days after purchase
+- **Python + Cron + WooCommerce REST API + Outbound HTTPS:** supported per vendor response (agent co-location conditional on actual host verification)
+- **Money-back/test window:** Vendor support stated up to 14 days after purchase. **`TO BE RECONFIRMED AGAINST THE PURCHASE TERMS AT CHECKOUT.`**
 
 ### هشدار فنی و ریسک دیتابیس (Yellow Flag & Database Baseline Risk)
 - **Reported DB version from vendor support:** `MariaDB 10.3.39`
 - **Technical Baseline Comparison:** This is below current preferred baseline (`MariaDB 10.6+`/`10.11+` or `MySQL 8.0+`).
-- **Status:** **`ACCEPTED TEMPORARILY FOR LAUNCH TESTING`**
-- **Action / Remaining Open Item:** Verify actual live MariaDB/MySQL version after purchase and request upgrade path if needed.
+- **Status:** **`STAGING-ONLY TEMPORARY COMPATIBILITY WAIVER; production acceptance pending.`**
+- **Action / Remaining Open Item:** Verify actual live MariaDB/MySQL version after purchase and request upgrade path if needed. Production Go/No-Go must remain blocked until database compatibility, security risk, and upgrade options are reviewed.
 
 - **سند معماری و تصمیم‌گیری هاستینگ:** برای جزئیات کامل معماری‌ها و معیارهای پذیرش به سند [HOSTING-ARCHITECTURE-DECISION.md](HOSTING-ARCHITECTURE-DECISION.md) و برای راهنمای استقرار پس از خرید به سند [POST-PURCHASE-SETUP-RUNBOOK.md](POST-PURCHASE-SETUP-RUNBOOK.md) مراجعه کنید.
 
