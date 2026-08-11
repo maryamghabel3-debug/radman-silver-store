@@ -33,10 +33,11 @@ RADMAN SILVER 925: [Phase 0: DONE] ──> [Phase 1: DONE] ──> [Phase 2: CUR
 - [x] Complete 11 static Persian pages in `content/static-pages/`.
 
 ### Phase 2: Infrastructure & Hosting Setup (CURRENT ⏭)
-> **Current Architecture Decision Status:** PENDING TECHNICAL DUE DILIGENCE — NO PURCHASE APPROVED YET. RADMAN hosting vendor and architecture are NOT yet selected; **MizbanFa** (`میزبان‌فا`) and **ParsPack** (`پارس‌پک`) are candidates under technical due diligence (see [docs/HOSTING-ARCHITECTURE-DECISION.md](HOSTING-ARCHITECTURE-DECISION.md)).
-- [ ] **Deployment Readiness Governance:** Apply official step-by-step execution checklists (`docs/STAGING-DEPLOYMENT-CHECKLIST.md`, `docs/PRODUCTION-CUTOVER-CHECKLIST.md`, `docs/SOFT-LAUNCH-GO-NO-GO.md`, `docs/TEST-SCENARIOS-RADMAN.md`, and `docs/HOSTING-ARCHITECTURE-DECISION.md`) to govern zero-ambiguity transition from hosting purchase to staging, QA validation, and Soft Launch.
-- [ ] Provision Iranian Linux cloud hosting (`[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]`, required for domestic Shetab banking gateways and legacy API reachability).
-- [ ] Configure Nginx reverse proxy, LiteSpeed / PHP-FPM 8.2+, MySQL 8.0+ / MariaDB 10.11+ (`utf8mb4_unicode_ci`), and Let's Encrypt TLS 1.3.
+> **Current Architecture Decision Status:** APPROVED FOR INITIAL ONE-MONTH PURCHASE AND STAGING TRIAL — NOT YET PURCHASED (`MizbanFa Mars`, RADMAN only, storefront approved, agent co-location conditional; Review within 30 days after the actual provisioning date and before production launch, whichever occurs first. Provisioning date: TBD). RIDELIN must not be installed or deployed on this host. See [docs/HOSTING-ARCHITECTURE-DECISION.md](HOSTING-ARCHITECTURE-DECISION.md) and [docs/POST-PURCHASE-SETUP-RUNBOOK.md](POST-PURCHASE-SETUP-RUNBOOK.md).
+- [ ] **Next Step Execution Path:** `purchase Mars plan -> provision staging -> install WordPress/WooCommerce for RADMAN only`.
+- [ ] **Deployment Readiness Governance:** Apply official step-by-step execution checklists (`docs/POST-PURCHASE-SETUP-RUNBOOK.md`, `docs/STAGING-DEPLOYMENT-CHECKLIST.md`, `docs/PRODUCTION-CUTOVER-CHECKLIST.md`, `docs/SOFT-LAUNCH-GO-NO-GO.md`, `docs/TEST-SCENARIOS-RADMAN.md`, and `docs/HOSTING-ARCHITECTURE-DECISION.md`) to govern zero-ambiguity transition from hosting purchase to staging, QA validation, and Soft Launch.
+- [ ] Provision temporary single-host Iranian WooCommerce cloud hosting (`MizbanFa Mars plan`, RADMAN only, required for domestic Shetab banking gateways and legacy API reachability; Review within 30 days after the actual provisioning date and before production launch, whichever occurs first. Provisioning date: TBD).
+- [ ] Configure Nginx reverse proxy, LiteSpeed / PHP-FPM 8.2+, MySQL 8.0+ / MariaDB 10.11+ (`utf8mb4_unicode_ci` — verify reported `MariaDB 10.3.39` after purchase; STAGING-ONLY TEMPORARY COMPATIBILITY WAIVER; production acceptance pending), and Let's Encrypt TLS 1.3.
 - [ ] Configure `.env` securely in repository root (never committed to Git).
 - [ ] Verify DNS propagation for `radmansilver.ir` and `radman925.ir`.
 
@@ -47,7 +48,7 @@ RADMAN SILVER 925: [Phase 0: DONE] ──> [Phase 1: DONE] ──> [Phase 2: CUR
 - [ ] Apply for Enamad trust badge, connect Zarinpal sandbox, connect Kavenegar SMS sandbox, and configure `[RADMAN_TELEGRAM_BOT_USERNAME: TBD]`.
 
 ### Phase 4: Agent Integration & Testing (PENDING ⏳)
-- [ ] Deploy `Agent-LegacySync` on the selected Iranian hosting server (`[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]`) to connect to `noghrehmashhad.ir` Admin Panel API.
+- [ ] Deploy `Agent-LegacySync` on the Iranian hosting server (`MizbanFa Mars plan` — CONDITIONAL: pending post-purchase Python/Cron/outbound connectivity acceptance tests) to connect to `noghrehmashhad.ir` Admin Panel API.
 - [ ] Execute batch import of initial 50 legacy products as **Draft (`پیش‌نویس`)**.
 - [ ] Deploy `Agent-Pricing` with daily Telegram rate confirmation workflow (`/price 85000`).
 - [ ] Deploy `Agent-OrderApproval` Telegram HITL fulfillment bot.

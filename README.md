@@ -11,13 +11,13 @@
 - **Tagline:** `اصالت در جزئیات`
 - **Primary Domain:** [radmansilver.ir](http://radmansilver.ir) | **Secondary Domain:** [radman925.ir](http://radman925.ir)
 - **Product Category:** 925 Sterling Silver Jewelry (`انگشتر نقره ۹۲۵` Rings, `گردنبند` Necklaces, `دستبند` Bracelets)
-- **Technology Stack:** WordPress 6.x + WooCommerce + Blocksy Child Theme + Python 3.11+ Automation Agents (`[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]`) + Telegram Bot Interface (`[RADMAN_TELEGRAM_BOT_USERNAME: TBD]`)
+- **Technology Stack:** WordPress 6.x + WooCommerce + Blocksy Child Theme + Python 3.11+ Automation Agents (`MizbanFa Mars Plan — APPROVED FOR INITIAL TRIAL; NOT YET PURCHASED; RADMAN ONLY`) + Telegram Bot Interface (`[RADMAN_TELEGRAM_BOT_USERNAME: TBD]`)
 - **Official Brand Assets Repository:** [github.com/maryamghabel3-debug/brand-assets](https://github.com/maryamghabel3-debug/brand-assets)
   - English Canonical Logo Suite: `APPROVED/` (Didot serif, Shamsa crest)
   - Persian Final Approved Logo Suite: `APPROVED-FA/` (`Estedad Bold`, `S2` sizing, `T2` tagline / `T0` minimal header logo)
 - **Inventory Reality (1:1 Stock):** Radman Silver maintains its own Inventory Registry (`legacy_stock = radman_stock`, `stock = 1` is normal and sellable; exact 1:1 mappings). Oversell protection = Human-in-the-Loop (`HITL`) Order Confirmation (mandatory SMS alert + optional Telegram convenience channel, with WooCommerce Admin fallback).
 - **Pricing Reality (Simple Daily Rate):** Owner inputs one daily rate via Telegram (`نرخ امروز هر گرم نقره = X تومان`). Weight-based items compute `price = weight * daily_rate`. Special gemstone/labor items use `manual_locked`.
-- **Legacy Store (Admin Panel API):** [noghrehmashhad.ir](http://noghrehmashhad.ir) (Admin Panel API accessed from `[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]`).
+- **Legacy Store (Admin Panel API):** [noghrehmashhad.ir](http://noghrehmashhad.ir) (Admin Panel API accessed from `MizbanFa Mars Plan — CONDITIONAL on post-purchase tests`).
 
 ---
 
@@ -25,7 +25,7 @@
 
 - [docs/BUSINESS-REQUIREMENTS.md](docs/BUSINESS-REQUIREMENTS.md) — Core business goals, 1:1 stock reality, simple daily rate pricing, and legal compliance.
 - [docs/ROADMAP.md](docs/ROADMAP.md) — Multi-phase project roadmap from Phase 0 to Phase 6.
-- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — Technical ASCII architecture diagram, hosting infrastructure evaluation (`[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]`), and Admin Panel API integration.
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — Technical ASCII architecture diagram, hosting infrastructure evaluation (`MizbanFa Mars Plan — APPROVED FOR INITIAL TRIAL; NOT YET PURCHASED; RADMAN ONLY`), and Admin Panel API integration.
 - [docs/AGENT-STRATEGY.md](docs/AGENT-STRATEGY.md) — Human-in-the-loop governance, Telegram daily rate input, and order confirmation.
 - [docs/PHASE-1-AGENTS.md](docs/PHASE-1-AGENTS.md) — Technical specifications for `Agent-LegacySync`, `Agent-Pricing`, and `Agent-OrderApproval`.
 - [docs/SYNC-RULES.md](docs/SYNC-RULES.md) — Exact 1:1 stock mapping (`stock=1 is normal`), field ownership table, and overwrite protection.
@@ -44,6 +44,7 @@
 - [docs/MULTILINGUAL-FUTURE.md](docs/MULTILINGUAL-FUTURE.md) — Regional expansion roadmap for Arabic, Turkish, and English storefronts.
 
 - [docs/HOSTING-ARCHITECTURE-DECISION.md](docs/HOSTING-ARCHITECTURE-DECISION.md) — Official hosting architecture decision record, candidate evaluations (MizbanFa/ParsPack), and mandatory acceptance criteria.
+- [docs/POST-PURCHASE-SETUP-RUNBOOK.md](docs/POST-PURCHASE-SETUP-RUNBOOK.md) — Step-by-step operator guide and post-purchase setup runbook for MizbanFa Mars plan (RADMAN only).
 - [docs/WORDPRESS-INSTALLATION-MARS-RUNBOOK.md](docs/WORDPRESS-INSTALLATION-MARS-RUNBOOK.md) — Detailed 11-Step WP-CLI installation runbook for WordPress 6.6, WooCommerce (IRR/Persian), and required plugins on MizbanFa Mars plan (RADMAN only).
 - [docs/HOSTING-QUESTIONS-CHECKLIST.md](docs/HOSTING-QUESTIONS-CHECKLIST.md) — Pre-purchase questions checklist for hosting support and payment gateway support (6 tickets + Red Flags).
 
