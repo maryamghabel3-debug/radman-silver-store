@@ -31,6 +31,7 @@
 ---
 
 ## 3. WordPress & WooCommerce Installation (`نصب وردپرس و ووکامرس`)
+> **ابزار و راهنمای استقرار استیجینگ روی پلن مارس با WP-CLI (وضعیت: DEPLOYMENT TOOLKIT PREPARED — NOT EXECUTED ON HOST):** ابزار آماده‌سازی و استقرار در محیط آزمایشی طبق سند [WORDPRESS-INSTALLATION-MARS-RUNBOOK.md](WORDPRESS-INSTALLATION-MARS-RUNBOOK.md) و اسکریپت [scripts/install_wordpress_mars.sh](../scripts/install_wordpress_mars.sh) تدوین شده است. اجرای روی سرور هنوز انجام نشده و نیازمند دسترسی امن است.
 
 - [ ] Pending : نصب هسته وردپرس نسخه `6.x` روی ساب‌دامنه استیجینگ (`[PROPOSED: staging.radmansilver.ir — DNS status TBD]`).
 - [ ] Pending : تنظیم زمان سرور روی منطقه زمانی ایران (`Asia/Tehran` - `UTC+3:30`).
