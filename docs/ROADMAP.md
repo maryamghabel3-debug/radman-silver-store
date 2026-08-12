@@ -25,7 +25,7 @@ RADMAN SILVER 925: [Phase 0: DONE] ──> [Phase 1: DONE] ──> [Phase 2: CUR
 
 ### Phase 0: Documentation & Brand Identity (DONE ✅ — 2026-08-06)
 - [x] Integrate canonical English Didot and Persian Estedad Bold logo suites (`brand-assets/radman-silver/APPROVED/` and `APPROVED-FA/`).
-- [x] Lock 3-tier pricing model and 1:1 stock reality (`stock = 1` is sellable, zero buffers).
+- [x] Lock 4 pricing modes and 1:1 stock reality (`stock = 1` is sellable, zero buffers).
 
 ### Phase 1: Repository Setup & Architecture (DONE ✅ — 2026-08-06)
 - [x] Establish 19 core documentation files (`docs/BUSINESS-REQUIREMENTS.md` through `docs/MULTILINGUAL-FUTURE.md`).
@@ -44,6 +44,8 @@ RADMAN SILVER 925: [Phase 0: DONE] ──> [Phase 1: DONE] ──> [Phase 2: CUR
 
 ### Phase 3: WordPress/WooCommerce Deployment (NEXT ⏳)
 - [ ] **Next Step:** Staging configuration hardening + agent runtime prep (Currency Safety Gate verification, Redis configuration, Wordfence hardening, UpdraftPlus cloud backup destination, LiteSpeed Cache tuning).
+- [ ] **Currency Safety Gate (BLOCKER):** Currency Safety Gate (IRR observed vs Toman selected in UI) must be verified before product import, pricing sync, or payment testing.
+- [ ] **Payment Gateway Configuration (PENDING):** Configure Gateland 2.4.5 / Zarinpal payment gateway (PENDING; Gateland installed only).
 - [ ] Deploy and customize **Blocksy Child Theme** (`#0B0B0E` matte black background, `#FAF7F2` ivory typography).
 - [ ] Install and configure essential free production plugins (RankMath SEO wizard, UpdraftPlus cloud destination, Wordfence firewall rules, Redis Object Cache).
 - [ ] Apply for Enamad trust badge, connect Zarinpal sandbox, connect Kavenegar SMS sandbox, and configure `[RADMAN_TELEGRAM_BOT_USERNAME: TBD]`.

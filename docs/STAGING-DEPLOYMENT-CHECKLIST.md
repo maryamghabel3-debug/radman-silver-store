@@ -38,7 +38,7 @@
 - [x] DONE : تنظیم زبان روی فارسی (`fa_IR`) و ساختار پیوند یکتا روی `/%postname%/`.
 - [x] DONE : نصب و فعال‌سازی افزونه فروشگاه‌ساز **WooCommerce** (تأییدشده: نسخه **`11.0.1`**).
 - [x] DONE : تنظیم واحد پول روی **`IRR` (ریال)**، موقعیت راست (`right`) و صفر اعشار (`0 decimals`).
-- [ ] PENDING : **دروازه امنیتی واحد پول (`Currency Safety Gate`):** بررسی و تست تبدیل تومان به ریال (ضریب ۱۰) پیش از هرگونه عملیات ایمپورت کاتالوگ یا قیمت‌گذاری.
+- [ ] PENDING : **دروازه امنیتی واحد پول (`Currency Safety Gate` - BLOCKER):** Terminal-observed currency: IRR; owner-selected WooCommerce UI currency: Toman. Actual WooCommerce storage/display/schema behavior must be verified in the Currency Safety Gate before product import, pricing sync, or payment testing.
 
 ---
 
@@ -47,7 +47,8 @@
 - [x] DONE : **Persian WooCommerce (`ووکامرس فارسی`)** — فعال و تأییدشده (نسخه `10.0.4`).
 - [x] DONE : **Blocksy Theme (`blocksy 2.1.52`) & Blocksy Companion (`2.1.52`)** — قالب مینیمال رادمان نصب و فعال شد.
 - [ ] PENDING : **Blocksy Child Theme** — استقرار قالب فرزند تا زمان بررسی بسته نهایی در وضعیت `PENDING` است.
-- [ ] PENDING : **Zarinpal Payment Gateway (`درگاه پرداخت زرین‌پال`)** — اتصال به درگاه پرداخت در وضعیت `PENDING` است.
+- [x] DONE : **Gateland Payment Gateway (`gateland 2.4.5`)** — نصب‌شده روی استیجینگ (`Gateland 2.4.5 installed on staging`).
+- [ ] PENDING : **Gateland & Zarinpal Payment Gateway Configuration** — پیکربندی درگاه پرداخت و هرگونه پرداخت زنده در وضعیت `PENDING` است.
 - [ ] PENDING : **Kavenegar SMS Gateway (`کاوه‌نگار`)** — یکپارچه‌سازی وب‌سرویس پیامک در وضعیت `PENDING` است.
 - [x] DONE : **RankMath SEO (`seo-by-rank-math 1.0.275`)** — نصب و فعال شد (اجرای ویزارد تنظیمات اولیه به مأموریت آتی موکول شد: `PENDING`).
 - [x] DONE : **Wordfence Security (`wordfence 9.0.0`)** — نصب و فعال شد (تنظیمات سخت‌گیرانه فایروال: `PENDING`).
@@ -67,16 +68,18 @@
 
 ## 6. Admin Account Hardening & Security (`مقاوم‌سازی امنیتی مدیریت`)
 
-- [x] DONE : صحت کارکرد ورود به پیشخوان مدیریت وردپرس (`wp-admin login verified working by owner` با شناسه امن `radmanadmin`).
-- [x] DONE : چرخش رمزهای عبور پس از نصب اولیه — مالک بلافاصله پس از نصب، رمز عبور دیتابیس و مدیریت وردپرس را تغییر داد (هیچ رمزی در مخزن ذخیره نشده است).
-- [x] DONE : ذخیره‌سازی امن متغیرهای حساس خارج از ریشه وب — رمز عبور دیتابیس در `wp-config.php` (`chmod 664`) و در مسیر خصوصی `/home/radmansi/.config/radman/staging.env` (`chmod 600` خارج از پوشه وب) نگهداری می‌شود.
+- [x] DONE : صحت کارکرد ورود به پیشخوان مدیریت وردپرس (`wp-admin login verified by owner` با شناسه امن `radmanadmin`).
+- [x] DONE : چرخش رمزهای عبور پس از نصب اولیه (`passwords rotated after initial install`؛ هیچ رمزی در مخزن ذخیره نشده است).
+- [x] DONE : ایجاد فایل محیطی امن خارج از ریشه وب (`private staging.env exists outside web root with chmod 600`).
+- [ ] PENDING : مهاجرت کامل به لودر محیطی در `wp-config.php` و حذف رمز عبور دیتابیس از `wp-config.php` (`full wp-config env-loader migration / removal of DB password from wp-config.php`).
 - [ ] PENDING : فعال‌سازی احراز هویت دو مرحله‌ای (`2FA`) و قوانین سخت‌گیرانه Wordfence.
 
 ---
 
 ## 7. Configuration Separation: `wp-config.php` vs `.env` (`جداسازی اطلاعات حساس`)
 
-- [x] DONE : تأیید نگهداری اطلاعات حساس دیتابیس در مسیر خصوصی خارج از پوشه وب (`/home/radmansi/.config/radman/staging.env` با دسترسی `chmod 600`).
+- [x] DONE : تأیید نگهداری اطلاعات حساس در مسیر خصوصی خارج از پوشه وب (`/home/radmansi/.config/radman/staging.env` با دسترسی `chmod 600`).
+- [ ] PENDING : مهاجرت کامل `wp-config.php` به لودر محیطی `.env` و حذف ثابت‌های پسورد دیتابیس از `wp-config.php` (`PENDING hardening`).
 
 ---
 

@@ -22,23 +22,27 @@
 - **Locale:** `fa_IR`
 - **Permalink structure:** `/%postname%/`
 - **Active theme:** `blocksy 2.1.52`
-- **Active plugins (7):**
+- **Installed/Active plugins (8):**
   - `blocksy-companion 2.1.52`
+  - `gateland 2.4.5` *(installed only; payment configuration PENDING)*
   - `litespeed-cache 7.9`
   - `seo-by-rank-math 1.0.275`
   - `updraftplus 1.26.6`
   - `woocommerce 11.0.1`
   - `wordfence 9.0.0`
   - `persian-woocommerce 10.0.4`
-- **WooCommerce currency:** `IRR`
-- **WooCommerce currency position:** `right`
-- **WooCommerce decimals:** `0`
+- **WooCommerce currency & Currency Safety Gate:**
+  - **Terminal-observed currency: IRR. Owner selected Toman in WooCommerce UI. Currency Safety Gate remains PENDING to verify storage/display/schema conversion before product import, pricing sync, or payment testing.**
+  - WooCommerce currency position: `right`
+  - WooCommerce decimals: `0`
+- **Payment Gateway Tooling:**
+  - **Gateland is installed but payment configuration is PENDING. No live payment is configured.**
 - **Database check:** `Success` (one informational note on `wp_wfls_role_counts` storage engine — non-blocking)
 - **SSL:** Let's Encrypt certificate active on `staging.radmansilver.ir`
 - **HTTPS check:** `HTTP/2 200`, LiteSpeed server, `x-litespeed-cache hit`
-- **wp-admin login:** verified working by owner (using safe documented identifier `radmanadmin`)
+- **wp-admin login:** **wp-admin login verified by owner; admin credentials rotated; no admin password stored in repository.** (verified using safe documented identifier `radmanadmin`)
 - **Post-install security:** database password and WordPress admin password were rotated by owner AFTER initial install
-- **Secret storage:** `DB_PASSWORD` stored in `wp-config.php` (`chmod 664`) and in `/home/radmansi/.config/radman/staging.env` (`chmod 600`, private path outside web root)
+- **Secret storage & env-loader state:** **Current DB credential state: standard WordPress wp-config.php DB constants are in use for staging compatibility. Private staging.env also exists outside web root with chmod 600. Full env-loader migration remains PENDING hardening.**
 - **Redis:** NOT YET CONFIGURED — remains `PENDING HOST REDIS CONFIGURATION`
 
 ---
@@ -53,6 +57,7 @@
 - **No Python agent deployed yet**
 - **Passwords rotated post-installation; not stored in repository**
 - **Currency safety gate remains a blocker for any product/price operation**
+- **Gateland is installed but payment configuration is PENDING. No live payment is configured.**
 
 ---
 
@@ -60,10 +65,11 @@
 
 The following items remain strictly **PENDING** across all repository documentation:
 - **Redis object cache activation (`PENDING HOST REDIS CONFIGURATION`)**
-- **Currency safety gate verification (Toman vs IRR conversion test)**
+- **Currency Safety Gate verification (`Terminal-observed currency: IRR; owner selected Toman in WooCommerce UI; storage/display/schema behavior must be verified before product import, pricing sync, or payment testing`)**
+- **Full env-loader migration / removal of DB password from `wp-config.php` (`PENDING hardening`)**
 - **Product import**
 - **Pricing agent activation**
-- **Live payment gateway configuration (`Zarinpal`)**
+- **Live payment gateway configuration (`Gateland / Zarinpal configuration PENDING`)**
 - **Live SMS sending to customers (`Kavenegar`)**
 - **Python agent deployment**
 - **Production deployment (`public_html` untouched)**
