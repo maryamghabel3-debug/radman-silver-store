@@ -1,131 +1,164 @@
-# راهنمای فعال‌سازی زبان فارسی، ساخت قالب فرزند و ایمپورت صفحات استاتیک رادمان (`RADMAN-BRANDING-CONTENT-IMPORT-RUNBOOK.md`)
+# راهنمای به‌روزرسانی پوسته فرزند و محتوای استاتیک استیجینگ (Runbook)
+# (`RADMAN-BRANDING-CONTENT-IMPORT-RUNBOOK.md`)
 
-> **راهنمای اجرایی و گزارش تأییدیه هویت بصری، قالب فرزند Blocksy و ایمپورت ۱۱ صفحه استاتیک در محیط استیجینگ رادمان سیلور**  
-> *این سند شامل دستورات WP-CLI، مشخصات رنگ‌های هویت بصری و فهرست واقعی و تأییدشدهٔ شناسه صفحات (Page IDs) ایجادشده در سرور استیجینگ رادمان سیلور است. استقرار رایدلین در این مأموریت اکیداً خارج از محدوده است.*
-
----
-
-## 1. Mission Objective & Verified Environment (`هدف مأموریت و محیط تأییدشده`)
-- **MISSION:** `MISSION: PR-12 / Record RADMAN Child Theme, Language Fix, and Static Pages (sanitized evidence)`
-- **Target Host Path:** `/home/radmansi/staging.radmansilver.ir`
-- **Target Site URL:** `https://staging.radmansilver.ir`
-- **Scope Limitation:** **`RADMAN SILVER ONLY`** (RIDELIN is strictly out of scope).
-- **Currency Safety Gate Status:** **`CLOSED / VERIFIED`** — واحد پول ووکامرس به درستی به صورت **IRT (تومان ایران / Iranian Toman)** نمایش داده می‌شود و ورود مستقیم قیمت به تومان به عنوان رفتار صحیح و تأییدشده قفل و اعمال شده است (`WooCommerce currency displays as IRT - confirmed correct per Currency Safety Gate testing`).
-- **Search Engine Indexing (`noindex`):** `blog_public = 0` (`noindex confirmed, still active`).
-- **Static Front Page:** صفحه اصلی (`Home page`) با شناسه **`18`** منتشر و به عنوان صفحه اصلی استاتیک سایت تنظیم شد.
-- **Duplicate / Sample Pages Cleanup:** صفحات اضافی و تکراری (sample page، duplicate refund policy و duplicate privacy policy) به طور کامل حذف و پاکسازی شدند.
-- **Automated WP-CLI Script:** تمامی دستورات این مأموریت در اسکریپت اجرایی [scripts/radman_branding_and_content_import.sh](../scripts/radman_branding_and_content_import.sh) پیاده‌سازی شده است.
+> **وضعیت سند:** READY FOR REVIEWER APPROVAL (خودکارآمادگی استیجینگ)
+> **مأموریت مرتبط:** Fix PR-12 truthfulness + prepare secure host operations automation
+> **تاریخ:** 2026-08-12 (Asia/Tehran)
+> **محدوده:** RADMAN ONLY — `staging.radmansilver.ir` — پروداکشن (`public_html`) و RIDELIN خارج از محدوده‌اند.
 
 ---
 
-## 2. Task 1 — Fix Persian Language (`فعال‌سازی و به‌روزرسانی زبان فارسی`)
-زبان فارسی (`fa_IR`) در هسته وردپرس و تمامی افزونه‌ها فعال و تأیید شد (`wp option get WPLANG = fa_IR`):
+## ۱. هدف و وضعیت فعلی (Truthful Status)
+
+این سند، روند ایمن و **idempotent** استقرار پوسته فرزند Blocksy و محتوای استاتیک فارسی را در محیط استیجینگ توصیف می‌کند.
+
+**وضعیت واقعی روی میزبان در لحظهٔ نگارش این سند:**
+
+- زبان فارسی `fa_IR` فعال است.
+- پوستهٔ فرزند `blocksy-child v1.0.0` با پالت `#0B0B0E` (زمینه) / `#FAF7F2` (متن) فعال است.
+- ۱۱ صفحه با شناسه‌های `21–31` به‌صورت **Draft placeholder** (متن موقت bootstrap) وجود دارند.
+- **محتوای کامل از `content/static-pages/` هنوز روی میزبان مستقر نشده و PENDING است.**
+- صفحه اصلی شناسه `18` منتشر و front-page است (توسط رانر تغییر داده نمی‌شود).
+- پاکسازی صفحات تکراری:
+  - تأییدشده: ID `2` و ID `3`
+  - **تأیید نشده / نیازمند بررسی میزبان:** ID `10` (refund_returns) — *"Page ID 10 cleanup status requires host verification."*
+- واحد پول:
+  - **Gate A (ذخیره/نمایش محصول/سبد خرید به تومان): PASS** (گزینهٔ پولی `IRT`، `123456 → 123,456 Toman`).
+  - **Gate B (پرداخت/چک‌اوت/ایمیل/Schema/callback درگاه): PENDING** — باید قبل از فعال‌سازی پرداخت یا راه‌اندازی پروداکشن پاس شود.
+- **عبارت رسمی:**
+  > *Toman direct input is verified for WooCommerce database storage, product display, and cart display. Payment, checkout, order, email, and Schema currency behavior remain PENDING and must pass before payment activation or production launch.*
+
+---
+
+## ۲. تفکیک ابزارها
+
+| ابزار | نقش | اجرای پیش‌فرض |
+|:------|:----|:--------------|
+| `scripts/render_static_pages.py` | رندر ایمن Markdown استاتیک به HTML (stdlib-only، بدون انتشار بخش‌های داخلی) | خواندن از `content/static-pages/`، نوشتن در build dir |
+| `scripts/radman_branding_and_content_import.sh` | رانر پایین‌لایه با guards سخت‌گیرانه، بک‌آپ، `flock`، upsert by slug | `--plan` (read-only) |
+| `scripts/radman_stage_apply.sh` | رانر تک‌دستور مالک که به رانر پایین‌لایه تفویض می‌کند | `--plan` (read-only) |
+
+همه ابزارها **به‌صورت پیش‌فرض در حالت plan** اجرا می‌شوند. اعمال تغییر واقعی روی استیجینگ فقط در صورتی رخ می‌دهد که `--apply-staging` و `CONFIRM_STAGING_APPLY=YES` همزمان با سایر شرایط محیطی ارائه شوند.
+
+---
+
+## ۳. پیش‌نیازهای محیطی (اعمال روی میزبان)
+
+متغیرهای محیطی زیر باید در shell اطراف تنظیم شوند (هیچ‌کدام داخل اسکریپت hardcode نمی‌شوند):
 
 ```bash
-wp language core install fa_IR --activate
-wp core language update
-wp plugin language update --all
+export APP_ENV=staging
+export WP_URL=https://staging.radmansilver.ir
+export WP_PATH=/home/<CPANEL_USER>/staging.radmansilver.ir
+export RADMAN_REPO_ROOT=/home/<CPANEL_USER>/radman-deploy/repo
+export RADMAN_PRIVATE_DIR=/home/<CPANEL_USER>/.config/radman
+# برای apply:
+export CONFIRM_STAGING_APPLY=YES
 ```
+
+### Guards سخت‌گیرانه قبل از اعمال
+- `APP_ENV == staging`
+- `WP_URL == https://staging.radmansilver.ir`
+- `WP_PATH` شامل `public_html` نباشد (پروداکشن ممنوع)
+- `WP_PATH/wp-settings.php` موجود باشد (وجود وردپرس)
+- `blog_public == 0` (noindex استیجینگ)
+- `RADMAN_REPO_ROOT/content/static-pages/` و `theme/blocksy-child/` موجود باشند
+- `CONFIRM_STAGING_APPLY == YES` (فقط در apply)
+- `flock` روی `RADMAN_PRIVATE_DIR/radman-stage-deploy.lock` گرفته شود (جلوگیری از اجرای هم‌زمان)
 
 ---
 
-## 3. Task 2 — Create and Activate Blocksy Child Theme (`ساخت و فعال‌سازی قالب فرزند Blocksy`)
-1. **ساخت پوشه قالب فرزند:**
+## ۴. اجرای Plan (Dry-run) — توصیه اول
+
 ```bash
-mkdir -p /home/radmansi/staging.radmansilver.ir/wp-content/themes/blocksy-child
-```
-2. **پیکربندی رنگ‌های رسمی برند رادمان در `style.css`:**
-- **Body background:** `#0B0B0E` (مشکی مات اشرافی)
-- **Text color:** `#FAF7F2` (عاجی درخشان)
-
-```css
-/*
-Theme Name:   Blocksy Child - RADMAN SILVER 925
-Theme URI:    https://radmansilver.ir
-Description:  Official Blocksy Child Theme for RADMAN SILVER 925 (925 Sterling Silver Maison)
-Author:       RADMAN E-Commerce Developer
-Author URI:   https://radmansilver.ir
-Template:     blocksy
-Version:      1.0.0
-License:      GNU General Public License v2 or later
-Text Domain:  blocksy-child-radman
-*/
-
-/* RADMAN SILVER 925 — Official Luxury Palette (#0B0B0E background, #FAF7F2 text) */
-:root {
-    --radman-bg-dark: #0B0B0E;
-    --radman-text-ivory: #FAF7F2;
-}
-
-body, .ct-site, .site-content {
-    background-color: #0B0B0E !important;
-    color: #FAF7F2 !important;
-}
-
-h1, h2, h3, h4, h5, h6, .site-title, .entry-title {
-    color: #FAF7F2 !important;
-}
-
-a, .ct-link {
-    color: #FAF7F2;
-}
+APP_ENV=staging \
+WP_PATH=/home/<CPANEL_USER>/staging.radmansilver.ir \
+WP_URL=https://staging.radmansilver.ir \
+RADMAN_REPO_ROOT=/home/<CPANEL_USER>/radman-deploy/repo \
+RADMAN_PRIVATE_DIR=/home/<CPANEL_USER>/.config/radman \
+bash scripts/radman_stage_apply.sh --plan
 ```
 
-3. **ایجاد فایل `functions.php` و فعال‌سازی قالب فرزند:**
+خروجی plan شامل جدولی از ۱۱ اسلاگ رسمی خواهد بود:
+- `slug`, `title`, `existing ID` (یا `will-create`)، `action` (UPDATE/CREATE)، `status=draft`، `rendered bytes`.
+
+---
+
+## ۵. اجرای Apply (اعمال روی استیجینگ پس از تأیید ریویو)
+
 ```bash
-wp theme activate blocksy-child
-```
-- **تأییدیه فعال‌سازی قالب:** قالب فرزند **`blocksy-child v1.0.0`** فعال و تأیید شد (`confirmed via wp theme list`).
-
----
-
-## 4. Task 3 — Import 11 Static Persian Pages as Drafts (`ایمپورت ۱۱ صفحه استاتیک فارسی به عنوان پیش‌نویس`)
-تمامی ۱۱ صفحه استاتیک فارسی موجود در پوشه `content/static-pages/` مخزن از طریق دستور `wp post create` با وضعیت پیش‌نویس (`--post_status=draft`) ایجاد شدند.
-
-### فهرست دستورات اجرایی:
-```bash
-wp post create content/static-pages/about-us.md --post_type=page --post_title="درباره رادمان" --post_name="about-us" --post_status=draft
-wp post create content/static-pages/contact-us.md --post_type=page --post_title="تماس با ما" --post_name="contact-us" --post_status=draft
-wp post create content/static-pages/faq.md --post_type=page --post_title="سؤالات متداول" --post_name="faq" --post_status=draft
-wp post create content/static-pages/shipping-policy.md --post_type=page --post_title="روش‌های ارسال" --post_name="shipping" --post_status=draft
-wp post create content/static-pages/returns-policy.md --post_type=page --post_title="شرایط بازگشت کالا" --post_name="returns" --post_status=draft
-wp post create content/static-pages/privacy-policy.md --post_type=page --post_title="حریم خصوصی" --post_name="privacy-policy-radman" --post_status=draft
-wp post create content/static-pages/terms-of-purchase.md --post_type=page --post_title="قوانین و مقررات" --post_name="terms" --post_status=draft
-wp post create content/static-pages/ring-size-guide.md --post_type=page --post_title="راهنمای سایز انگشتر" --post_name="ring-size-guide" --post_status=draft
-wp post create content/static-pages/silver-care-guide.md --post_type=page --post_title="راهنمای نگهداری نقره" --post_name="silver-care" --post_status=draft
-wp post create content/static-pages/silver-925-authenticity.md --post_type=page --post_title="اصالت نقره ۹۲۵" --post_name="silver-925-authenticity" --post_status=draft
-wp post create content/static-pages/gemstones-guide.md --post_type=page --post_title="راهنمای سنگ‌های زینتی" --post_name="gemstones" --post_status=draft
+APP_ENV=staging \
+CONFIRM_STAGING_APPLY=YES \
+WP_PATH=/home/<CPANEL_USER>/staging.radmansilver.ir \
+WP_URL=https://staging.radmansilver.ir \
+RADMAN_REPO_ROOT=/home/<CPANEL_USER>/radman-deploy/repo \
+RADMAN_PRIVATE_DIR=/home/<CPANEL_USER>/.config/radman \
+bash scripts/radman_stage_apply.sh --apply-staging
 ```
 
----
-
-## 5. Verification Required — List of Verified Created Page IDs (`جدول تأییدیه و شناسه واقعی صفحات ایجادشده`)
-
-خروجی تأییدشدهٔ اجرای واقعی در استیجینگ (`wp post list --post_type=page --post_status=draft --fields=ID,post_title,post_name,post_status`):
-
-| # | عنوان صفحه فارسی (`post_title`) | اسلاگ صفحه (`post_name` / Slug) | فایل مبدأ در مخزن | شناسه واقعی وردپرس (`Page ID`) | وضعیت انتشار (`post_status`) |
-| :---: | :--- | :--- | :--- | :---: | :---: |
-| 1 | **درباره رادمان** | `about-us` | `content/static-pages/about-us.md` | **`21`** | `draft` |
-| 2 | **تماس با ما** | `contact-us` | `content/static-pages/contact-us.md` | **`22`** | `draft` |
-| 3 | **سؤالات متداول** | `faq` | `content/static-pages/faq.md` | **`23`** | `draft` |
-| 4 | **روش‌های ارسال** | `shipping` | `content/static-pages/shipping-policy.md` | **`24`** | `draft` |
-| 5 | **شرایط بازگشت کالا** | `returns` | `content/static-pages/returns-policy.md` | **`25`** | `draft` |
-| 6 | **حریم خصوصی** | `privacy-policy-radman` | `content/static-pages/privacy-policy.md` | **`26`** | `draft` |
-| 7 | **قوانین و مقررات** | `terms` | `content/static-pages/terms-of-purchase.md` | **`27`** | `draft` |
-| 8 | **راهنمای سایز انگشتر** | `ring-size-guide` | `content/static-pages/ring-size-guide.md` | **`28`** | `draft` |
-| 9 | **راهنمای نگهداری نقره** | `silver-care` | `content/static-pages/silver-care-guide.md` | **`29`** | `draft` |
-| 10 | **اصالت نقره ۹۲۵** | `silver-925-authenticity` | `content/static-pages/silver-925-authenticity.md` | **`30`** | `draft` |
-| 11 | **راهنمای سنگ‌های زینتی** | `gemstones` | `content/static-pages/gemstones-guide.md` | **`31`** | `draft` |
-
-- **صفحه اصلی فروشگاه (`Home Page`):** شناسه **`18`** (`Published` / `Static Front Page`)
-- **تأییدیه فعال‌سازی قالب فرزند:** قالب فرزند `blocksy-child v1.0.0` با موفقیت فعال و استایل مشکی مات `#0B0B0E` و عاجی `#FAF7F2` اعمال شد.
-- **تأییدیه واحد پول و عدم ایندکس:** واحد پول `IRT` (تومان ایران) و `blog_public = 0` تأیید شد.
-- **عدم وجود اطلاعات حساس:** هیچ‌گونه رمز عبور، کلید API، توکن یا اطلاعات احراز هویتی در دستورات و اسکریپت‌های ایجادشده وجود ندارد.
+### مراحل apply در رانر پایین‌لایه
+1. بررسی staging guards (بالا).
+2. گرفتن `flock`.
+3. رندر HTML از Markdown ها در پوشهٔ build.
+4. ساخت بک‌آپ:
+   - DB dump در `RADMAN_PRIVATE_DIR/backups/wordpress-db-<TS>.sql` با `chmod 600`
+   - آرشیو child theme موجود (اگر وجود داشته باشد) در `RADMAN_PRIVATE_DIR/backups/blocksy-child-<TS>.tar.gz`
+5. کپی ایمن سه فایل child theme (`style.css`, `functions.php`, `README.md`) به `wp-content/themes/blocksy-child/`.
+6. فعال‌سازی `blocksy-child` و تأیید `wp theme list --status=active`.
+7. برای هر یک از اسلاگ‌های رسمی:
+   - جستجو بر اساس `post_name` (slug).
+   - اگر یافت شد: `wp post update <ID>` (همواره `--post_status=draft`).
+   - اگر یافت نشد: `wp post create` با `--post_status=draft`.
+8. خروجی خلاصه شامل: تعداد UPDATE/CREATE، مسیر بک‌آپ، تأیید عدم دست‌زدن به پروداکشن و عدم publish صفحات.
 
 ---
 
-## 6. Official Mission Status Statement (`اعلامیه رسمی وضعیت مأموریت`)
-- **BRANDING AND CONTENT PROGRESS DOCUMENTED — NO SECRETS COMMITTED**
-- **PR OPENED, NOT MERGED**
-- **No token/auth method was changed**
-- **Ready for reviewer approval**
+## ۶. Idempotency
+
+رانر **هیچ‌گاه** به‌صورت غیرشرطی `wp post create` صدا نمی‌زند. همهٔ صفحات از طریق اسلاگ جستجو می‌شوند و یا به‌روزرسانی می‌گردند یا در صورت نبودن، ساخته می‌شوند. در نتیجه اجرای مکرر آن منجر به ایجاد صفحه تکراری نخواهد شد.
+
+همچنین:
+- صفحات **Draft** باقی می‌مانند و به‌صورت خودکار منتشر نمی‌شوند.
+- محصولات، سفارشات، کاربران، منوها، پلاگین‌های پرداخت و پیامک تغییر داده نمی‌شوند.
+- صفحه اصلی (front page) تغییر داده نمی‌شود.
+
+---
+
+## ۷. Renderer Markdown
+
+`render_static_pages.py` فقط بخش `## Content` را استخراج می‌کند و قبل از سرفصل‌های داخلی زیر متوقف می‌شود:
+- `## SEO`
+- `## Page Purpose`
+- `## Trust Notes` / `## Owner Fill Later`
+- `## Internal Link Suggestions`
+
+Markdown پشتیبانی‌شده محدود به: headings (h2–h4)، پاراگراف، لیست‌های ul/ol، **bold** و `[لینک](url)` با sanitize امن (فقط http/https/mailto/path-absolute). placeholder های `[متنی]` به عنصر `<span class="radman-placeholder">` تبدیل می‌شوند تا قابل ردیابی باشند و هرگز به‌عنوان متن خام رها نشوند.
+
+---
+
+## ۸. Child Theme (Source of Truth)
+
+پوشهٔ مرجع در مخزن: `theme/blocksy-child/`
+- `style.css`: هدر پوسته + متغیرهای رنگی `:root` + قوانین پایه برای پس‌زمینه/متن/سرفصل‌ها.
+- `functions.php`: enqueue تنها stylesheet فرزند با وابستگی به handle والد `blocksy-style` در صورت ثبت. از double-loading استایل والد جلوگیری می‌شود.
+- `README.md`: این فایل راهنما + فهرست ممنوعات (Google Fonts، tracking، credentials، رنگ‌های تأیید نشده).
+
+ادعای «هر دو stylesheet والد و فرزند با هم enqueue می‌شوند» در مستندی ثبت نمی‌شود؛ بلکه رفتار دقیق `functions.php` (وابستگی به handle والد) مستند شده است و تأیید فعال‌سازی پوسته از طریق `wp theme list` توسط رانر انجام می‌شود.
+
+---
+
+## ۹. دسترسی عامل (Host Ops)
+
+در سند [HOST-OPS-AGENT-ACCESS.md](HOST-OPS-AGENT-ACCESS.md) توضیح داده شده است. در محیط اجرایی فعلی (sandbox)، نگهداری دائمی کلید خصوصی SSH در دسترس نیست: **`PERSISTENT SSH PRIVATE-KEY STORAGE NOT AVAILABLE`**، بنابراین تا استقرار runtime دائمی روی میزبان، Mode B (کاربر اتوماسیون وردپرس + Application Password + رانر تک‌دستور) مسیر پیش‌فرض است.
+
+---
+
+## ۱۰. ممنوعات صریح
+
+- ❌ اعمال روی پروداکشن (`public_html`)
+- ❌ publish خودکار صفحات استاتیک
+- ❌ فعال‌سازی پرداخت یا پیامک
+- ❌ حذف/تغییر محصولات، سفارشات یا کاربران
+- ❌ قرار دادن رمزها/توکن‌ها در گیت یا در خروجی لاگ
+- ❌ استفاده از فونت‌های خارجی (Google Fonts)
+- ❌ کدهای ردیابی/تبلیغاتی در پوسته
