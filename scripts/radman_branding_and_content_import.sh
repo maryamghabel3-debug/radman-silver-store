@@ -97,37 +97,37 @@ echo "Step 3: Import 11 Static Persian Pages as Drafts"
 echo "============================================================================"
 echo "[INFO] Creating static pages as Drafts..."
 
-id_about=$(wp post create content/static-pages/about-us.md --post_type=page --post_title="درباره رادمان" --post_status=draft --porcelain)
+id_about=$(wp post create content/static-pages/about-us.md --post_type=page --post_title="درباره رادمان" --post_name="about-us" --post_status=draft --porcelain)
 echo "  - Created 'درباره رادمان' (ID: ${id_about})"
 
-id_contact=$(wp post create content/static-pages/contact-us.md --post_type=page --post_title="تماس با ما" --post_status=draft --porcelain)
+id_contact=$(wp post create content/static-pages/contact-us.md --post_type=page --post_title="تماس با ما" --post_name="contact-us" --post_status=draft --porcelain)
 echo "  - Created 'تماس با ما' (ID: ${id_contact})"
 
-id_faq=$(wp post create content/static-pages/faq.md --post_type=page --post_title="سؤالات متداول" --post_status=draft --porcelain)
+id_faq=$(wp post create content/static-pages/faq.md --post_type=page --post_title="سؤالات متداول" --post_name="faq" --post_status=draft --porcelain)
 echo "  - Created 'سؤالات متداول' (ID: ${id_faq})"
 
-id_shipping=$(wp post create content/static-pages/shipping-policy.md --post_type=page --post_title="روش‌های ارسال" --post_status=draft --porcelain)
+id_shipping=$(wp post create content/static-pages/shipping-policy.md --post_type=page --post_title="روش‌های ارسال" --post_name="shipping" --post_status=draft --porcelain)
 echo "  - Created 'روش‌های ارسال' (ID: ${id_shipping})"
 
-id_returns=$(wp post create content/static-pages/returns-policy.md --post_type=page --post_title="شرایط بازگشت کالا" --post_status=draft --porcelain)
+id_returns=$(wp post create content/static-pages/returns-policy.md --post_type=page --post_title="شرایط بازگشت کالا" --post_name="returns" --post_status=draft --porcelain)
 echo "  - Created 'شرایط بازگشت کالا' (ID: ${id_returns})"
 
-id_privacy=$(wp post create content/static-pages/privacy-policy.md --post_type=page --post_title="حریم خصوصی" --post_status=draft --porcelain)
+id_privacy=$(wp post create content/static-pages/privacy-policy.md --post_type=page --post_title="حریم خصوصی" --post_name="privacy-policy-radman" --post_status=draft --porcelain)
 echo "  - Created 'حریم خصوصی' (ID: ${id_privacy})"
 
-id_terms=$(wp post create content/static-pages/terms-of-purchase.md --post_type=page --post_title="قوانین و مقررات" --post_status=draft --porcelain)
+id_terms=$(wp post create content/static-pages/terms-of-purchase.md --post_type=page --post_title="قوانین و مقررات" --post_name="terms" --post_status=draft --porcelain)
 echo "  - Created 'قوانین و مقررات' (ID: ${id_terms})"
 
-id_ring=$(wp post create content/static-pages/ring-size-guide.md --post_type=page --post_title="راهنمای سایز انگشتر" --post_status=draft --porcelain)
+id_ring=$(wp post create content/static-pages/ring-size-guide.md --post_type=page --post_title="راهنمای سایز انگشتر" --post_name="ring-size-guide" --post_status=draft --porcelain)
 echo "  - Created 'راهنمای سایز انگشتر' (ID: ${id_ring})"
 
-id_care=$(wp post create content/static-pages/silver-care-guide.md --post_type=page --post_title="راهنمای نگهداری نقره" --post_status=draft --porcelain)
+id_care=$(wp post create content/static-pages/silver-care-guide.md --post_type=page --post_title="راهنمای نگهداری نقره" --post_name="silver-care" --post_status=draft --porcelain)
 echo "  - Created 'راهنمای نگهداری نقره' (ID: ${id_care})"
 
-id_auth=$(wp post create content/static-pages/silver-925-authenticity.md --post_type=page --post_title="اصالت نقره ۹۲۵" --post_status=draft --porcelain)
+id_auth=$(wp post create content/static-pages/silver-925-authenticity.md --post_type=page --post_title="اصالت نقره ۹۲۵" --post_name="silver-925-authenticity" --post_status=draft --porcelain)
 echo "  - Created 'اصالت نقره ۹۲۵' (ID: ${id_auth})"
 
-id_gem=$(wp post create content/static-pages/gemstones-guide.md --post_type=page --post_title="راهنمای سنگ‌های زینتی" --post_status=draft --porcelain)
+id_gem=$(wp post create content/static-pages/gemstones-guide.md --post_type=page --post_title="راهنمای سنگ‌های زینتی" --post_name="gemstones" --post_status=draft --porcelain)
 echo "  - Created 'راهنمای سنگ‌های زینتی' (ID: ${id_gem})"
 
 echo ""

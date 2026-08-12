@@ -53,6 +53,7 @@
 
 - [docs/STAGING-EXECUTION-EVIDENCE-2026-08-12.md](docs/STAGING-EXECUTION-EVIDENCE-2026-08-12.md) — Verified evidence report of successful WordPress/WooCommerce staging deployment on MizbanFa Mars plan.
 - [docs/RADMAN-BRANDING-CONTENT-IMPORT-RUNBOOK.md](docs/RADMAN-BRANDING-CONTENT-IMPORT-RUNBOOK.md) — Step-by-step WP-CLI runbook and verification report for Persian language activation, Blocksy Child Theme, and 11 static pages import.
+- [docs/STATIC-PAGES-REGISTRY.md](docs/STATIC-PAGES-REGISTRY.md) — Official registry of 11 static Persian pages (Page IDs 21-31), slugs, and staging progress.
 - [docs/STAGING-DEPLOYMENT-CHECKLIST.md](docs/STAGING-DEPLOYMENT-CHECKLIST.md) — Step-by-step staging deployment checklist for WordPress/WooCommerce setup.
 - [docs/PRODUCTION-CUTOVER-CHECKLIST.md](docs/PRODUCTION-CUTOVER-CHECKLIST.md) — Production go-live and cutover checklist after staging sign-off.
 - [docs/SOFT-LAUNCH-GO-NO-GO.md](docs/SOFT-LAUNCH-GO-NO-GO.md) — Managerial Go/No-Go decision sheet and critical blockers audit for RADMAN soft launch.

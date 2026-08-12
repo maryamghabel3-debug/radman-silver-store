@@ -39,7 +39,7 @@
 - [x] DONE : نصب و فعال‌سازی افزونه فروشگاه‌ساز **WooCommerce** (تأییدشده: نسخه **`11.0.1`**).
 - [x] DONE : تنظیم واحد پول روی **`IRR` (ریال)**، موقعیت راست (`right`) و صفر اعشار (`0 decimals`).
 - [x] DONE : **دروازه امنیتی واحد پول (`Currency Safety Gate` - CLOSED / VERIFIED):** ورود مستقیم قیمت به **تومان (Toman)** به عنوان رفتار صحیح و تأییدشده قفل و اعمال شده است (`Toman direct input is verified as correct`).
-- [x] DONE : **Static pages creation:** ایجاد ۱۱ صفحه استاتیک فارسی به عنوان پیش‌نویس (`Draft`) با شناسه‌های ۱۰۱ تا ۱۱۱ در وردپرس استیجینگ تأیید شد.
+- [x] DONE : **Static pages creation:** ایجاد ۱۱ صفحه استاتیک فارسی به عنوان پیش‌نویس (`Draft`) با شناسه‌های واقعی ۲۱ تا ۳۱ در وردپرس استیجینگ تأیید شد (`Page IDs 21 to 31 drafted`). همچنین صفحه اصلی با شناسه ۱۸ منتشر و تنظیم شد.
 
 ---
 
@@ -47,7 +47,7 @@
 
 - [x] DONE : **Persian WooCommerce (`ووکامرس فارسی`)** — فعال و تأییدشده (نسخه `10.0.4`).
 - [x] DONE : **Blocksy Theme (`blocksy 2.1.52`) & Blocksy Companion (`2.1.52`)** — قالب مینیمال رادمان نصب و فعال شد.
-- [x] DONE : **Blocksy Child Theme** — قالب فرزند با استایل‌های مشکی مات `#0B0B0E` و عاجی `#FAF7F2` روی استیجینگ نصب و فعال شد (`Theme installation DONE`).
+- [x] DONE : **Blocksy Child Theme** — قالب فرزند با استایل‌های مشکی مات `#0B0B0E` و عاجی `#FAF7F2` روی استیجینگ ایجاد و فعال شد (`blocksy-child v1.0.0 active`).
 - [x] DONE : **Gateland Payment Gateway (`gateland 2.4.5`)** — نصب‌شده روی استیجینگ (`Gateland 2.4.5 installed on staging`).
 - [ ] PENDING : **Gateland & Zarinpal Payment Gateway Configuration** — پیکربندی درگاه پرداخت و هرگونه پرداخت زنده در وضعیت `PENDING` است.
 - [ ] PENDING : **Kavenegar SMS Gateway (`کاوه‌نگار`)** — یکپارچه‌سازی وب‌سرویس پیامک در وضعیت `PENDING` است.
@@ -103,7 +103,7 @@
 | :--- | :---: | :---: | :--- |
 | **Server & Hosting Provisioning** | Technical Lead / Hosting Admin | `DONE` | Verified on MizbanFa Mars plan (`cPanel: radmansi`, LiteSpeed server, `staging.radmansilver.ir`) |
 | **PHP 8.2+ & MariaDB Verification** | DevOps Lead | `DONE` | Verified `PHP 8.2.31`, `MariaDB 11.4.12`, `WP-CLI 2.12.0`, `Python 3.11.15` |
-| **WordPress & WooCommerce Setup** | E-Commerce Developer | `DONE` | Verified `WP 7.0.3`, `WooCommerce 11.0.1`, `Blocksy Child Theme active`, 11 static pages created as Drafts |
+| **WordPress & WooCommerce Setup** | E-Commerce Developer | `DONE` | Verified `WP 7.0.3`, `WooCommerce 11.0.1`, `blocksy-child v1.0.0 active`, 11 static pages drafted (IDs 21-31), Home page (ID 18) static front page |
 | **Staging noindex Enforcement** | SEO Strategist | `DONE` | Verified `blog_public = 0` (`noindex confirmed`) |
 | **Security Hardening & .env Separation** | Security Lead | `DONE` | Passwords rotated post-install; secret stored at `/home/radmansi/.config/radman/staging.env` (`chmod 600`) |
 | **REST API, Webhook & Agent Runtime** | Automation Agent Lead | `PENDING` | Python agent deployment, SMS/Zarinpal integrations remain PENDING (Currency Safety Gate CLOSED / VERIFIED) |
