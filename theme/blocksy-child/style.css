@@ -1,0 +1,30 @@
+/*
+Theme Name:   Blocksy Child - RADMAN SILVER 925
+Theme URI:    https://radmansilver.ir
+Description:  Official Blocksy Child Theme for RADMAN SILVER 925 (925 Sterling Silver Maison)
+Author:       RADMAN E-Commerce Developer
+Author URI:   https://radmansilver.ir
+Template:     blocksy
+Version:      1.0.0
+License:      GNU General Public License v2 or later
+Text Domain:  blocksy-child-radman
+*/
+
+/* RADMAN SILVER 925 — Official Luxury Palette (#0B0B0E background, #FAF7F2 text) */
+:root {
+    --radman-bg-dark: #0B0B0E;
+    --radman-text-ivory: #FAF7F2;
+}
+
+body, .ct-site, .site-content {
+    background-color: #0B0B0E !important;
+    color: #FAF7F2 !important;
+}
+
+h1, h2, h3, h4, h5, h6, .site-title, .entry-title {
+    color: #FAF7F2 !important;
+}
+
+a, .ct-link {
+    color: #FAF7F2;
+}
