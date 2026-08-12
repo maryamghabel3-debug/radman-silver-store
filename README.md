@@ -12,6 +12,7 @@
 - **Primary Domain:** [radmansilver.ir](http://radmansilver.ir) | **Secondary Domain:** [radman925.ir](http://radman925.ir)
 - **Product Category:** 925 Sterling Silver Jewelry (`انگشتر نقره ۹۲۵` Rings, `گردنبند` Necklaces, `دستبند` Bracelets)
 - **Technology Stack:** WordPress 6.x + WooCommerce + Blocksy Child Theme + Python 3.11+ Automation Agents (`MizbanFa Mars Plan — APPROVED FOR INITIAL TRIAL; NOT YET PURCHASED; RADMAN ONLY`) + Telegram Bot Interface (`[RADMAN_TELEGRAM_BOT_USERNAME: TBD]`)
+- **Current Deployment Status:** **Staging live for RADMAN — Production pending** (`staging.radmansilver.ir` verified on MizbanFa Mars plan; `public_html` production untouched). See [docs/STAGING-EXECUTION-EVIDENCE-2026-08-12.md](docs/STAGING-EXECUTION-EVIDENCE-2026-08-12.md).
 - **Official Brand Assets Repository:** [github.com/maryamghabel3-debug/brand-assets](https://github.com/maryamghabel3-debug/brand-assets)
   - English Canonical Logo Suite: `APPROVED/` (Didot serif, Shamsa crest)
   - Persian Final Approved Logo Suite: `APPROVED-FA/` (`Estedad Bold`, `S2` sizing, `T2` tagline / `T0` minimal header logo)
@@ -48,6 +49,7 @@
 - [docs/WORDPRESS-INSTALLATION-MARS-RUNBOOK.md](docs/WORDPRESS-INSTALLATION-MARS-RUNBOOK.md) — Detailed 11-Step WP-CLI installation runbook for WordPress 6.6, WooCommerce (IRR/Persian), and required plugins on MizbanFa Mars plan (RADMAN only).
 - [docs/HOSTING-QUESTIONS-CHECKLIST.md](docs/HOSTING-QUESTIONS-CHECKLIST.md) — Pre-purchase questions checklist for hosting support and payment gateway support (6 tickets + Red Flags).
 
+- [docs/STAGING-EXECUTION-EVIDENCE-2026-08-12.md](docs/STAGING-EXECUTION-EVIDENCE-2026-08-12.md) — Verified evidence report of successful WordPress/WooCommerce staging deployment on MizbanFa Mars plan.
 - [docs/STAGING-DEPLOYMENT-CHECKLIST.md](docs/STAGING-DEPLOYMENT-CHECKLIST.md) — Step-by-step staging deployment checklist for WordPress/WooCommerce setup.
 - [docs/PRODUCTION-CUTOVER-CHECKLIST.md](docs/PRODUCTION-CUTOVER-CHECKLIST.md) — Production go-live and cutover checklist after staging sign-off.
 - [docs/SOFT-LAUNCH-GO-NO-GO.md](docs/SOFT-LAUNCH-GO-NO-GO.md) — Managerial Go/No-Go decision sheet and critical blockers audit for RADMAN soft launch.
