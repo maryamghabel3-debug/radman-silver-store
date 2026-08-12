@@ -42,11 +42,12 @@ RADMAN SILVER 925: [Phase 0: DONE] ──> [Phase 1: DONE] ──> [Phase 2: CUR
 - [x] Verify DNS propagation and SSL certificate for `staging.radmansilver.ir`.
 - [ ] Verify DNS propagation and SSL certificate for production domain `radmansilver.ir` (Production untouched).
 
-### Phase 3: WordPress/WooCommerce Deployment (NEXT ⏳)
-- [ ] **Next Step:** Staging configuration hardening + agent runtime prep (Currency Safety Gate verification, Redis configuration, Wordfence hardening, UpdraftPlus cloud backup destination, LiteSpeed Cache tuning).
-- [ ] **Currency Safety Gate (BLOCKER):** Currency Safety Gate (IRR observed vs Toman selected in UI) must be verified before product import, pricing sync, or payment testing.
+### Phase 3: WordPress/WooCommerce Deployment (CURRENT ⏭)
+- [x] **Child Theme, Language & Content Progress:** Child theme active (`blocksy-child v1.0.0`), 11 static pages drafted (Page IDs 21 to 31), language verified (`fa_IR`), Home page (ID 18) static front page, duplicate pages removed. See [docs/STATIC-PAGES-REGISTRY.md](STATIC-PAGES-REGISTRY.md) and [docs/RADMAN-BRANDING-CONTENT-IMPORT-RUNBOOK.md](RADMAN-BRANDING-CONTENT-IMPORT-RUNBOOK.md).
+- [x] **Currency Safety Gate (CLOSED / VERIFIED):** Toman direct input in WooCommerce UI is verified as correct (`IRT` Toman displays correctly).
+- [x] Deploy and customize **Blocksy Child Theme** (`#0B0B0E` matte black background, `#FAF7F2` ivory typography — `blocksy-child v1.0.0` active on staging).
+- [ ] **Next Step:** Staging configuration hardening + agent runtime prep (Redis configuration, Wordfence hardening, UpdraftPlus cloud backup destination, LiteSpeed Cache tuning).
 - [ ] **Payment Gateway Configuration (PENDING):** Configure Gateland 2.4.5 / Zarinpal payment gateway (PENDING; Gateland installed only).
-- [ ] Deploy and customize **Blocksy Child Theme** (`#0B0B0E` matte black background, `#FAF7F2` ivory typography).
 - [ ] Install and configure essential free production plugins (RankMath SEO wizard, UpdraftPlus cloud destination, Wordfence firewall rules, Redis Object Cache).
 - [ ] Apply for Enamad trust badge, connect Zarinpal sandbox, connect Kavenegar SMS sandbox, and configure `[RADMAN_TELEGRAM_BOT_USERNAME: TBD]`.
 - [ ] Production Deployment (`public_html` untouched — PENDING QA sign-off).
