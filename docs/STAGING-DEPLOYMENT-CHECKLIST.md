@@ -1,109 +1,105 @@
 # چک‌لیست استقرار و پیکربندی محیط آزمایشی (`STAGING-DEPLOYMENT-CHECKLIST.md`)
 
-> **راهنمای اجرایی استقرار وردپرس و ووکامرس در محیط استیجینگ (Staging Setup Checklist)**  
-> *این چک‌لیست مراحل گام‌به‌گام نصب، مقاوم‌سازی، تست و پیکربندی فروشگاه رادمان سیلور (`radman-silver-store`) را قبل از ورود به سرور پروداکشن پوشش می‌دهد.*
+> **راهنمای اجرایی استقرار وردپرس و ووکامرس در محیط استیجینگ (Staging Setup Checklist)**
+> *این چک‌لیست مراحل گام‌به‌گام نصب، مقاوم‌سازی، تست و پیکربندی فروشگاه رادمان سیلور (`radman-silver-store`) را قبل از ورود به سرور پروداکشن پوشش می‌دهد. تمام ادعاهای این چک‌لیست به دو دسته «تأییدشده با evidence» و «PENDING» تقسیم شده‌اند تا اغراق صورت نگیرد.*
 
-> **راهنمای وضعیت‌های چک‌لیست (Status Definitions):**  
-> - **`CONFIRMED`**: تأییدشده و نهایی  
-> - **`PENDING VENDOR ANSWER`**: در انتظار پاسخ فنی پشتیبانی هاستینگ (میزبان‌فا / پارس‌پک)  
-> - **`PENDING OWNER DECISION`**: در انتظار تصمیم یا تأیید مالک برند  
-> - **`NOT YET TESTED`**: هنوز تست نشده (آماده برای تست در استیجینگ/پروداکشن)  
-> - **`NOT APPLICABLE`**: غیرقابل اعمال / بلاموضوع  
+> **راهنمای وضعیت‌ها:**
+> - **`DONE (verified)`** — روی میزبان واقعاً انجام و تأیید شده است
+> - **`PENDING`** — هنوز انجام یا به‌طور کامل تست نشده است
+> - **`NOT APPLICABLE`** — غیرقابل اعمال / بلاموضوع
 
 ---
 
-## 1. Server Access Prerequisites (`پیش‌نیازهای دسترسی سرور`)
+## ۱. پیش‌نیازهای دسترسی سرور
 
-- [x] DONE : دسترسی به پنل مدیریت سرور (`cPanel / DirectAdmin / SSH / SFTP`) — وضعیت: `DONE` (تأییدشده روی پلن مارس میزبان‌فا، کاربر cPanel: `radmansi`، سرور LiteSpeed).
-- [x] DONE : تأیید رکوردهای DNS برای ساب‌دامنه استیجینگ (`staging.radmansilver.ir`) و دامنه اصلی (`radmansilver.ir`).
-- [x] DONE : صدور و نصب گواهینامه امنیتی SSL (`Let's Encrypt` فعال روی `staging.radmansilver.ir`، بررسی HTTPS: `HTTP/2 200`، هدر `x-litespeed-cache hit`).
-- [x] DONE : ایجاد پایگاه داده اختصاصی MySQL / MariaDB و نام کاربری مستقل (`radmansi_staging_wp` / `radmansi_staging_user` با دسترسی کامل؛ صحت اتصال تأیید شد).
+- [x] `DONE (verified)` : دسترسی به پنل مدیریت سرور (cPanel `radmansi` روی پلن مارس میزبان‌فا، LiteSpeed).
+- [x] `DONE (verified)` : رکوردهای DNS ساب‌دامنهٔ استیجینگ (`staging.radmansilver.ir`) و SSL از نوع Let's Encrypt (`HTTP/2 200`).
+- [x] `DONE (verified)` : ایجاد پایگاه داده اختصاصی و کاربر مستقل با دسترسی کامل؛ اتصال موفق بود.
+
+## ۲. محیط PHP / DB / ابزارها
+
+- [x] `DONE (verified)` : PHP `8.2.31`
+- [x] `DONE (verified)` : MariaDB `11.4.12-MariaDB`
+- [x] `DONE (verified)` : WP-CLI `2.12.0`، Python `3.11.15` در `/opt/alt/python311/bin/python3.11`
+- [x] `DONE (verified)` : `wp db check: Success` (یک نکتهٔ اطلاعاتی غیرمسدودکننده روی `wp_wfls_role_counts`)
+
+## ۳. نصب وردپرس و ووکامرس
+
+- [x] `DONE (verified)` : هسته وردپرس `7.0.3` روی `https://staging.radmansilver.ir`
+- [x] `DONE (verified)` : تایم‌زون `Asia/Tehran`، زبان `fa_IR`، permalink `/%postname%/`
+- [x] `DONE (verified)` : WooCommerce `11.0.1`
+- [x] `DONE (verified)` : Persian WooCommerce `10.0.4`
+- [x] `DONE (verified)` : گزینه پول `IRT` (تومان) — **فقط برای ذخیره‌سازی دیتابیس، نمایش محصول و نمایش سبد خرید** تأیید شده است (Gate A پاس شده).
+- [ ] `PENDING` : دروازهٔ امنیتی ارز، بخش B (Payment/Schema Gate):
+  - [ ] مجموع سبد در صفحهٔ checkout
+  - [ ] callback درگاه (Gateland/Zarinpal)
+  - [ ] خروجی JSON-LD/Schema
+  - [ ] خروجی پول در سفارش، فاکتور و ایمیل
+- [x] `DONE (verified — placeholder state)` : صفحات استاتیک ۱۱‌گانه با شناسه‌های `21–31` به‌صورت **Draft placeholder** ایجاد شده‌اند (متن موقت bootstrap).
+- [ ] `PENDING (full content deployment)` : **ایمپورت محتوای کامل** `content/static-pages/` به صفحات `21–31` از طریق رانر `scripts/radman_stage_apply.sh` (idempotent، پیش‌فرض `--plan`، بدون publish).
+- [x] `DONE (verified)` : صفحه اصلی شناسه `18` منتشر و به‌عنوان `static front page` تنظیم شده است.
+
+## ۴. پوسته و قالب فرزند
+
+- [x] `DONE (verified)` : قالب والد Blocksy `2.1.52` و Blocksy Companion `2.1.52`
+- [x] `DONE (verified)` : قالب فرزند `blocksy-child v1.0.0` با پالت مصوب (`#0B0B0E` پس‌زمینه، `#FAF7F2` متن) فعال است.
+- [x] `DONE (verified)` : فایل‌های `style.css`، `functions.php` و `README.md` در مخزن (`theme/blocksy-child/`) و در استیجینگ وجود دارند.
+- [ ] `PENDING` : به‌روزرسانی و تطبیق‌سنجی (diff) child theme از طریق رانر و بک‌آپ خودکار قبل از اعمال.
+
+## ۵. افزونه‌های مصوب (وضعیت نصب/پیکربندی)
+
+- [x] `DONE (verified)` : Gateland `2.4.5` — فقط نصب شده؛ پیکربندی درگاه **PENDING** است.
+- [ ] `PENDING` : پیکربندی Gateland/Zarinpal (فقط در استیجینگ/سندباکس تا مأموریت صریح).
+- [ ] `PENDING` : Kavenegar SMS — نصب/پیکربندی و تست سندباکس.
+- [x] `DONE (verified)` : RankMath SEO `1.0.275` نصب شد؛ اجرای ویزارد **PENDING**.
+- [x] `DONE (verified)` : Wordfence `9.0.0` نصب شد؛ سخت‌گیرانه کردن فایروال **PENDING**.
+- [x] `DONE (verified)` : UpdraftPlus `1.26.6` نصب شد؛ تنظیم مقصد بک‌آپ ابری **PENDING**.
+- [x] `DONE (verified)` : LiteSpeed Cache `7.9` نصب شد؛ تنظیمات پیشرفتهٔ کش **PENDING**.
+- [ ] `PENDING HOST REDIS CONFIGURATION` : Redis Object Cache.
+- [ ] `PENDING` : اجرای ویزارد راه‌اندازی اولیه ووکامرس.
+
+## ۶. محیط استیجینگ و noindex
+
+- [x] `DONE (verified)` : ساب‌دامنهٔ مستقل `https://staging.radmansilver.ir`، جدا از دامنه اصلی.
+- [x] `DONE (verified)` : `blog_public = 0` (noindex) فعال باقی می‌ماند. رانر پیش از اعمال این شرط را بررسی می‌کند و در غیر این صورت abort می‌کند.
+
+## ۷. مدیریت و امنیت
+
+- [x] `DONE (verified)` : ورود به wp-admin با شناسه امن `radmanadmin` توسط مالک؛ رمزها بعد از نصب چرخش شده‌اند.
+- [x] `DONE (verified)` : فایل محیطی خصوصی (`/home/radmansi/.config/radman/staging.env`) خارج از وب‌روت با `chmod 600`.
+- [ ] `PENDING hardening` : مهاجرت کامل `wp-config.php` به env-loader و حذف رمز دیتابیس از آن.
+- [ ] `PENDING` : فعال‌سازی 2FA و قوانین سخت‌گیرانه Wordfence.
+
+## ۸. پاکسازی صفحات پیش‌فرض/تکراری
+
+- [x] `DONE (verified)` : Page ID `2` (Sample Page) حذف شده است.
+- [x] `DONE (verified)` : Page ID `3` حذف شده است.
+- [ ] `PENDING host verification` : Page ID `10` (با محتوای `refund_returns`) — وضعیت حذف نیاز به بررسی روی میزبان دارد. ادعای حذف آن **ثبت نمی‌شود**.
+
+## ۹. ابزارهای خودکارسازی استیجینگ (reviewed runners)
+
+- [x] `DONE (repo)` : اسکریپت رندر `scripts/render_static_pages.py` (فقط stdlib، بدون وابستگی پایتون).
+- [x] `DONE (repo)` : رانر پایین‌لایه `scripts/radman_branding_and_content_import.sh` با قفل `flock`، بک‌آپ پیش از تغییر، و guards سخت‌گیرانه استیجینگ.
+- [x] `DONE (repo)` : رانر مالک با یک دستور `scripts/radman_stage_apply.sh` (پیش‌فرض `--plan`، `--apply-staging` فقط با `CONFIRM_STAGING_APPLY=YES`).
+- [ ] `PENDING host execution` : اجرای `--plan` روی میزبان توسط مالک/عامل و بررسی خروجی.
+- [ ] `PENDING reviewer approval` : اجرای `--apply-staging` پس از تأیید صریح.
+
+## ۱۰. تست‌های آتی / باقی‌مانده
+
+- [ ] `PENDING` : تست آپلود رسانه و تبدیل WebP.
+- [ ] `PENDING` : تست REST API (`/wp-json/wc/v3/products`).
+- [ ] `PENDING` : تست Webhook/Telegram notification.
+- [ ] `PENDING` : تست مقصد بک‌آپ UpdraftPlus.
+- [ ] `PENDING` : استقرار runtime عامل‌های پایتون (`agents/`).
+- [ ] `PENDING` : ایمپورت محصولات و فعال‌سازی عامل قیمت‌گذاری.
+- [ ] `PENDING` : استقرار پروداکشن (`public_html` دست‌نخورده باقی می‌ماند تا مأموریت صریح).
 
 ---
 
-## 2. PHP & Database Environment Checks (`بررسی نسخه‌ها و اکوسیستم سرور`)
+## ۱۱. بیانیه رسمی وضعیت ارز
 
-- [x] DONE : بررسی نسخه PHP (تأییدشده: **`PHP 8.2.31`**).
-- [x] DONE : بررسی نسخه دیتابیس (تأییدشده: **`MariaDB 11.4.12-MariaDB`**).
-- [x] DONE : بررسی ابزارهای خط فرمان و پایتون (تأییدشده: `WP-CLI 2.12.0`، `Python 3.11.15` در `/opt/alt/python311/bin/python3.11` و `pip 21.3.1`).
-- [x] DONE : بررسی صحت عملکرد دیتابیس (`wp db check: Success` — یک یادداشت اطلاعاتی غیرمسدودکننده درباره موتور ذخیره‌سازی `wp_wfls_role_counts`).
+> *Toman direct input is verified for WooCommerce database storage, product display, and cart display. Payment, checkout, order, email, and Schema currency behavior remain PENDING and must pass before payment activation or production launch.*
 
----
+## ۱۲. بیانیه رسمی دسترسی عامل
 
-## 3. WordPress & WooCommerce Installation (`نصب وردپرس و ووکامرس`)
-> **مستندات تأییدشده استقرار استیجینگ:** گزارش کامل شواهد تأییدشده استقرار استیجینگ رادمان سیلور در سند [STAGING-EXECUTION-EVIDENCE-2026-08-12.md](STAGING-EXECUTION-EVIDENCE-2026-08-12.md) ثبت شده است.
-
-- [x] DONE : نصب هسته وردپرس روی ساب‌دامنه استیجینگ (تأییدشده: نسخه **`WordPress 7.0.3`** روی `https://staging.radmansilver.ir`).
-- [x] DONE : تنظیم زمان سرور روی منطقه زمانی ایران (`Asia/Tehran`).
-- [x] DONE : تنظیم زبان روی فارسی (`fa_IR`) و ساختار پیوند یکتا روی `/%postname%/`.
-- [x] DONE : نصب و فعال‌سازی افزونه فروشگاه‌ساز **WooCommerce** (تأییدشده: نسخه **`11.0.1`**).
-- [x] DONE : تنظیم واحد پول روی **`IRR` (ریال)**، موقعیت راست (`right`) و صفر اعشار (`0 decimals`).
-- [x] DONE : **دروازه امنیتی واحد پول (`Currency Safety Gate` - CLOSED / VERIFIED):** ورود مستقیم قیمت به **تومان (Toman)** به عنوان رفتار صحیح و تأییدشده قفل و اعمال شده است (`Toman direct input is verified as correct`).
-- [x] DONE : **Static pages creation:** ایجاد ۱۱ صفحه استاتیک فارسی به عنوان پیش‌نویس (`Draft`) با شناسه‌های واقعی ۲۱ تا ۳۱ در وردپرس استیجینگ تأیید شد (`Page IDs 21 to 31 drafted`). همچنین صفحه اصلی با شناسه ۱۸ منتشر و تنظیم شد.
-
----
-
-## 4. Required Production Plugins List (`افزونه‌های ضروری مصوب`)
-
-- [x] DONE : **Persian WooCommerce (`ووکامرس فارسی`)** — فعال و تأییدشده (نسخه `10.0.4`).
-- [x] DONE : **Blocksy Theme (`blocksy 2.1.52`) & Blocksy Companion (`2.1.52`)** — قالب مینیمال رادمان نصب و فعال شد.
-- [x] DONE : **Blocksy Child Theme** — قالب فرزند با استایل‌های مشکی مات `#0B0B0E` و عاجی `#FAF7F2` روی استیجینگ ایجاد و فعال شد (`blocksy-child v1.0.0 active`).
-- [x] DONE : **Gateland Payment Gateway (`gateland 2.4.5`)** — نصب‌شده روی استیجینگ (`Gateland 2.4.5 installed on staging`).
-- [ ] PENDING : **Gateland & Zarinpal Payment Gateway Configuration** — پیکربندی درگاه پرداخت و هرگونه پرداخت زنده در وضعیت `PENDING` است.
-- [ ] PENDING : **Kavenegar SMS Gateway (`کاوه‌نگار`)** — یکپارچه‌سازی وب‌سرویس پیامک در وضعیت `PENDING` است.
-- [x] DONE : **RankMath SEO (`seo-by-rank-math 1.0.275`)** — نصب و فعال شد (اجرای ویزارد تنظیمات اولیه به مأموریت آتی موکول شد: `PENDING`).
-- [x] DONE : **Wordfence Security (`wordfence 9.0.0`)** — نصب و فعال شد (تنظیمات سخت‌گیرانه فایروال: `PENDING`).
-- [x] DONE : **UpdraftPlus Backup (`updraftplus 1.26.6`)** — نصب و فعال شد (تنظیم مقصد فضای ابری بک‌آپ: `PENDING`).
-- [x] DONE : **LiteSpeed Cache (`litespeed-cache 7.9`)** — نصب و فعال شد (تنظیمات پیشرفته کش: `PENDING`).
-- [ ] PENDING : **Redis Object Cache** — فعال‌سازی کش آبجکت در وضعیت `PENDING HOST REDIS CONFIGURATION` قرار دارد.
-- [ ] PENDING : **WooCommerce Onboarding Wizard** — ویزارد راه‌اندازی اولیه ووکامرس به مأموریت آتی موکول شد (`PENDING`).
-
----
-
-## 5. Staging Domain & Indexing Rules (`محیط استیجینگ و عدم ایندکس`)
-
-- [x] DONE : استقرار روی ساب‌دامنه مستقل `https://staging.radmansilver.ir` (ایزوله از دامنه اصلی و پروداکشن).
-- [x] DONE : **الزام اکید `noindex`:** تأیید فعال بودن گزینه عدم ایندکس روی استیجینگ (`blog_public = 0` / `noindex confirmed`).
-
----
-
-## 6. Admin Account Hardening & Security (`مقاوم‌سازی امنیتی مدیریت`)
-
-- [x] DONE : صحت کارکرد ورود به پیشخوان مدیریت وردپرس (`wp-admin login verified by owner` با شناسه امن `radmanadmin`).
-- [x] DONE : چرخش رمزهای عبور پس از نصب اولیه (`passwords rotated after initial install`؛ هیچ رمزی در مخزن ذخیره نشده است).
-- [x] DONE : ایجاد فایل محیطی امن خارج از ریشه وب (`private staging.env exists outside web root with chmod 600`).
-- [ ] PENDING : مهاجرت کامل به لودر محیطی در `wp-config.php` و حذف رمز عبور دیتابیس از `wp-config.php` (`full wp-config env-loader migration / removal of DB password from wp-config.php`).
-- [ ] PENDING : فعال‌سازی احراز هویت دو مرحله‌ای (`2FA`) و قوانین سخت‌گیرانه Wordfence.
-
----
-
-## 7. Configuration Separation: `wp-config.php` vs `.env` (`جداسازی اطلاعات حساس`)
-
-- [x] DONE : تأیید نگهداری اطلاعات حساس در مسیر خصوصی خارج از پوشه وب (`/home/radmansi/.config/radman/staging.env` با دسترسی `chmod 600`).
-- [ ] PENDING : مهاجرت کامل `wp-config.php` به لودر محیطی `.env` و حذف ثابت‌های پسورد دیتابیس از `wp-config.php` (`PENDING hardening`).
-
----
-
-## 8. Technical Verification & Integration Tests (`آزمون‌های فنی زیرساخت`)
-
-- [x] DONE : **Database & Server Verification:** صحت عملکرد دیتابیس (`wp db check: Success`) و وب‌سرویس `HTTPS HTTP/2 200` با کش LiteSpeed تأیید شد.
-- [ ] PENDING : **Media Upload Test & WebP Conversion**
-- [ ] PENDING : **REST API Test (`/wp-json/wc/v3/products`)**
-- [ ] PENDING : **WooCommerce Webhook & Telegram Notification Test**
-- [ ] PENDING : **Backup Destination Test**
-- [ ] PENDING : **Python Agent Runtime Deployment (`agents/` scripts)**
-- [ ] PENDING : **Product Import & Pricing Agent Activation**
-- [ ] PENDING : **Production Deployment (`public_html` untouched)**
-
----
-
-## 9. Staging Deployment Sign-Off Table (`جدول تأییدیه استقرار آزمایشی`)
-
-| Item | Owner | Status | Notes |
-| :--- | :---: | :---: | :--- |
-| **Server & Hosting Provisioning** | Technical Lead / Hosting Admin | `DONE` | Verified on MizbanFa Mars plan (`cPanel: radmansi`, LiteSpeed server, `staging.radmansilver.ir`) |
-| **PHP 8.2+ & MariaDB Verification** | DevOps Lead | `DONE` | Verified `PHP 8.2.31`, `MariaDB 11.4.12`, `WP-CLI 2.12.0`, `Python 3.11.15` |
-| **WordPress & WooCommerce Setup** | E-Commerce Developer | `DONE` | Verified `WP 7.0.3`, `WooCommerce 11.0.1`, `blocksy-child v1.0.0 active`, 11 static pages drafted (IDs 21-31), Home page (ID 18) static front page |
-| **Staging noindex Enforcement** | SEO Strategist | `DONE` | Verified `blog_public = 0` (`noindex confirmed`) |
-| **Security Hardening & .env Separation** | Security Lead | `DONE` | Passwords rotated post-install; secret stored at `/home/radmansi/.config/radman/staging.env` (`chmod 600`) |
-| **REST API, Webhook & Agent Runtime** | Automation Agent Lead | `PENDING` | Python agent deployment, SMS/Zarinpal integrations remain PENDING (Currency Safety Gate CLOSED / VERIFIED) |
+راه دسترسی مصوب به میزبان در سند [HOST-OPS-AGENT-ACCESS.md](HOST-OPS-AGENT-ACCESS.md) ثبت شده است. در محیط sandbox فعلی نگهداری دائمی کلید خصوصی در دسترس نیست (`PERSISTENT SSH PRIVATE-KEY STORAGE NOT AVAILABLE`)؛ تا راه‌اندازی runtime دائمی روی میزبان، عملیات از طریق Mode B (WordPress Application Password + رانر تک‌دستور) پشتیبانی می‌شود.

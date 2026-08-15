@@ -14,7 +14,13 @@
 - **Technology Stack:** WordPress 6.x + WooCommerce + Blocksy Child Theme + Python 3.11+ Automation Agents (`MizbanFa Mars Plan — APPROVED FOR INITIAL TRIAL; NOT YET PURCHASED; RADMAN ONLY`) + Telegram Bot Interface (`[RADMAN_TELEGRAM_BOT_USERNAME: TBD]`)
 - **Current Deployment Status:** **Staging live for RADMAN — Production pending** (`staging.radmansilver.ir` verified on MizbanFa Mars plan; `public_html` production untouched). See [docs/STAGING-EXECUTION-EVIDENCE-2026-08-12.md](docs/STAGING-EXECUTION-EVIDENCE-2026-08-12.md).
 - **Payment Gateway Status:** **Gateland 2.4.5 installed on staging; payment configuration remains pending.**
-- **Currency Safety Status:** **CLOSED / VERIFIED — Toman direct input in WooCommerce UI is verified as correct.**
+- **Currency Safety Status (split):**
+  - **Gate A (storage/product/cart display):** ✅ `IRT` Toman direct input verified for DB storage, product display and cart display.
+  - **Gate B (checkout/order/email/Schema/payment callback):** ⏳ **PENDING** — must pass before payment activation or production launch.
+  - Official status sentence: *"Toman direct input is verified for WooCommerce database storage, product display, and cart display. Payment, checkout, order, email, and Schema currency behavior remain PENDING and must pass before payment activation or production launch."*
+- **Static Content Status:** 11 pages (IDs `21–31`) currently exist as **Draft placeholders** created during manual bootstrap. Full content deployment from `content/static-pages/` is **PENDING** and will be performed through the reviewed idempotent runner (`scripts/radman_stage_apply.sh`, default `--plan`, staging only, never publish automatically). See [docs/STATIC-PAGES-REGISTRY.md](docs/STATIC-PAGES-REGISTRY.md) and [docs/RADMAN-BRANDING-CONTENT-IMPORT-RUNBOOK.md](docs/RADMAN-BRANDING-CONTENT-IMPORT-RUNBOOK.md).
+- **Duplicate Page Cleanup:** IDs `2` and `3` confirmed deleted. ID `10` (`refund_returns`) status **requires host verification** — it is not claimed deleted.
+- **Host Operations Access:** Mode A (Ed25519 SSH key) requires persistent private-key storage; current sandbox reports **`PERSISTENT SSH PRIVATE-KEY STORAGE NOT AVAILABLE`**. Until the agent runtime lands on the host, Mode B (WordPress Application Password + one-command runner) is the fallback. See [docs/HOST-OPS-AGENT-ACCESS.md](docs/HOST-OPS-AGENT-ACCESS.md).
 - **Official Brand Assets Repository:** [github.com/maryamghabel3-debug/brand-assets](https://github.com/maryamghabel3-debug/brand-assets)
   - English Canonical Logo Suite: `APPROVED/` (Didot serif, Shamsa crest)
   - Persian Final Approved Logo Suite: `APPROVED-FA/` (`Estedad Bold`, `S2` sizing, `T2` tagline / `T0` minimal header logo)
@@ -52,9 +58,10 @@
 - [docs/HOSTING-QUESTIONS-CHECKLIST.md](docs/HOSTING-QUESTIONS-CHECKLIST.md) — Pre-purchase questions checklist for hosting support and payment gateway support (6 tickets + Red Flags).
 
 - [docs/STAGING-EXECUTION-EVIDENCE-2026-08-12.md](docs/STAGING-EXECUTION-EVIDENCE-2026-08-12.md) — Verified evidence report of successful WordPress/WooCommerce staging deployment on MizbanFa Mars plan.
-- [docs/RADMAN-BRANDING-CONTENT-IMPORT-RUNBOOK.md](docs/RADMAN-BRANDING-CONTENT-IMPORT-RUNBOOK.md) — Step-by-step WP-CLI runbook and verification report for Persian language activation, Blocksy Child Theme, and 11 static pages import.
-- [docs/STATIC-PAGES-REGISTRY.md](docs/STATIC-PAGES-REGISTRY.md) — Official registry of 11 static Persian pages (Page IDs 21-31), slugs, and staging progress.
-- [docs/STAGING-DEPLOYMENT-CHECKLIST.md](docs/STAGING-DEPLOYMENT-CHECKLIST.md) — Step-by-step staging deployment checklist for WordPress/WooCommerce setup.
+- [docs/RADMAN-BRANDING-CONTENT-IMPORT-RUNBOOK.md](docs/RADMAN-BRANDING-CONTENT-IMPORT-RUNBOOK.md) — Truthful runbook for the idempotent staging runner that deploys the Blocksy child theme and upserts static-page content (default `--plan`, staging-only, no auto-publish).
+- [docs/STATIC-PAGES-REGISTRY.md](docs/STATIC-PAGES-REGISTRY.md) — Official registry of 11 static Persian pages (slugs, initial Page IDs, and truthful deployment status: Draft placeholders pending full content import).
+- [docs/HOST-OPS-AGENT-ACCESS.md](docs/HOST-OPS-AGENT-ACCESS.md) — Approved host access modes for the automation agent (SSH Ed25519 key preferred; Application Password + one-command runner fallback).
+- [docs/STAGING-DEPLOYMENT-CHECKLIST.md](docs/STAGING-DEPLOYMENT-CHECKLIST.md) — Step-by-step staging deployment checklist (truthful split of DONE vs PENDING items, Currency Gate A vs B).
 - [docs/PRODUCTION-CUTOVER-CHECKLIST.md](docs/PRODUCTION-CUTOVER-CHECKLIST.md) — Production go-live and cutover checklist after staging sign-off.
 - [docs/SOFT-LAUNCH-GO-NO-GO.md](docs/SOFT-LAUNCH-GO-NO-GO.md) — Managerial Go/No-Go decision sheet and critical blockers audit for RADMAN soft launch.
 - [docs/TEST-SCENARIOS-RADMAN.md](docs/TEST-SCENARIOS-RADMAN.md) — Comprehensive 20+ operational QA test scenarios for staging and pre-launch validation.

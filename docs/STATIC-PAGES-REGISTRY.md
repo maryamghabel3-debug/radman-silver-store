@@ -1,61 +1,94 @@
-# رجیستری صفحات استاتیک و پیش‌نویس‌های استیجینگ رادمان سیلور (`STATIC-PAGES-REGISTRY.md`)
+# رجیستری صفحات استاتیک و وضعیت استقرار آن‌ها (`STATIC-PAGES-REGISTRY.md`)
 
-> **رجیستری رسمی شناسه‌ها (Page IDs) و اسلاگ‌های صفحات استاتیک رادمان سیلور ۹۲۵ در وردپرس استیجینگ**  
-> *این سند مشخصات واقعی و تأییدشدهٔ ۱۱ صفحه استاتیک پیش‌نویس (`Draft`)، صفحه اصلی زنده (`Front Page` ID 18) و وضعیت فعال‌سازی قالب فرزند `blocksy-child` و زبان فارسی `fa_IR` در سرور استیجینگ (`https://staging.radmansilver.ir`) را جهت استفاده در ساخت منوی اصلی ثبت می‌کند. استقرار رایدلین اکیداً خارج از محدوده است.*
-
----
-
-## 1. Verified Real Results (from Owner's Actual Staging Terminal Execution)
-
-- **Date:** `2026-08-12` (`Asia/Tehran` timezone)
-- **Host / Environment:** MizbanFa Mars plan staging (`https://staging.radmansilver.ir`)
-- **Persian Language (`fa_IR`):** Active and confirmed (`wp option get WPLANG = fa_IR`)
-- **Child Theme:** Created and activated: **`blocksy-child v1.0.0`** (confirmed via `wp theme list`)
-- **Child Theme Brand Colors:**
-  - `style.css`: Body background `#0B0B0E` (مشکی مات اشرافی), Text color `#FAF7F2` (عاجی درخشان)
-  - `functions.php`: Enqueues parent (`blocksy`) + child (`blocksy-child`) styles correctly
-- **Static Front Page (Home Page):**
-  - Published and set as static front page: **Home page (ID `18`)** (`https://staging.radmansilver.ir`)
-- **Duplicate / Sample Pages Cleanup:**
-  - Duplicate/default pages removed by owner: `sample page`, `duplicate refund policy`, `duplicate privacy policy`
-- **Search Engine Indexing (`noindex`):**
-  - `blog_public = 0` (`noindex confirmed, still active`)
-- **WooCommerce Currency & Safety Gate:**
-  - **`IRT` (Iranian Toman / تومان ایران):** WooCommerce currency displays as `IRT` — confirmed correct per **Currency Safety Gate** testing (`Toman direct input is verified as correct; Currency Safety Gate CLOSED`).
+> **رجیستری رسمی اسلاگ‌ها، شناسه‌های اولیه و وضعیت استقرار ۱۱ صفحه استاتیک رادمان سیلور ۹۲۵**
+> *این سند بین «وضعیت فعلی واقعی در استیجینگ» و «وضعیت مطلوب پس از اجرای رانر ایمپورت» تمایز دقیق قائل می‌شود تا ادعای نادرستی در مورد ایمپورت کامل یا پاکسازی کامل ثبت نشود.*
 
 ---
 
-## 2. Official Registry of 11 Static Persian Pages (`جدول شناسه‌ها و اسلاگ‌های ۱۱ صفحه استاتیک`)
+## ۱. وضعیت فعلی واقعی در استیجینگ (2026-08-12)
 
-تمامی ۱۱ صفحه استاتیک زیر از روی فایل‌های محتوایی پوشه `content/static-pages/` با وضعیت پیش‌نویس (`Draft`) در وردپرس استیجینگ رادمان سیلور ایجاد شده‌اند:
+- **محیط:** `https://staging.radmansilver.ir` (MizbanFa Mars plan, `blog_public = 0` / noindex).
+- **زبان:** فارسی `fa_IR` فعال است.
+- **پوسته:** `blocksy-child v1.0.0` با رنگ‌های مصوب `#0B0B0E` و `#FAF7F2` فعال است.
+- **صفحه اصلی:** شناسه `18` به‌عنوان `static front page` تنظیم شده است.
+- **صفحات ۲۱ تا ۳۱:** در حال حاضر صفحات **Draft placeholder** با عناوین موقت هستند که در حین bootstrap دستی اولیه ایجاد شده‌اند.
+  - **این صفحات هنوز حاوی محتوای کامل پوشه `content/static-pages/` نیستند.**
+  - متن فعلی آن‌ها خلاصه/متن موقت (placeholder summary) از مرحله bootstrap است.
+  - **استقرار کامل محتوای مخزن (full content deployment) هنوز انجام نشده و PENDING است.**
+  - استقرار نهایی از طریق رانر بازبینی‌شده و **idempotent** زیر انجام خواهد شد:
+    - `scripts/radman_stage_apply.sh --plan` (حالت پیش‌فرض: dry-run)
+    - `scripts/radman_stage_apply.sh --apply-staging` (فقط روی استیجینگ، با `CONFIRM_STAGING_APPLY=YES`)
 
-| # | عنوان صفحه فارسی (`post_title`) | اسلاگ صفحه (`post_name` / Slug) | فایل مبدأ در مخزن | شناسه واقعی وردپرس (`Page ID`) | وضعیت انتشار (`post_status`) |
-| :---: | :--- | :--- | :--- | :---: | :---: |
-| 1 | **درباره رادمان** | `about-us` | `content/static-pages/about-us.md` | **`21`** | `draft` |
-| 2 | **تماس با ما** | `contact-us` | `content/static-pages/contact-us.md` | **`22`** | `draft` |
-| 3 | **سؤالات متداول** | `faq` | `content/static-pages/faq.md` | **`23`** | `draft` |
-| 4 | **روش‌های ارسال** | `shipping` | `content/static-pages/shipping-policy.md` | **`24`** | `draft` |
-| 5 | **شرایط بازگشت کالا** | `returns` | `content/static-pages/returns-policy.md` | **`25`** | `draft` |
-| 6 | **حریم خصوصی** | `privacy-policy-radman` | `content/static-pages/privacy-policy.md` | **`26`** | `draft` |
-| 7 | **قوانین و مقررات** | `terms` | `content/static-pages/terms-of-purchase.md` | **`27`** | `draft` |
-| 8 | **راهنمای سایز انگشتر** | `ring-size-guide` | `content/static-pages/ring-size-guide.md` | **`28`** | `draft` |
-| 9 | **راهنمای نگهداری نقره** | `silver-care` | `content/static-pages/silver-care-guide.md` | **`29`** | `draft` |
-| 10 | **اصالت نقره ۹۲۵** | `silver-925-authenticity` | `content/static-pages/silver-925-authenticity.md` | **`30`** | `draft` |
-| 11 | **راهنمای سنگ‌های زینتی** | `gemstones` | `content/static-pages/gemstones-guide.md` | **`31`** | `draft` |
+### ۱.۱ Currency Safety Gate — دو وضعیت مجزا
+برای اجتناب از ادعای نادرست، دروازهٔ ارز به دو گیت مستقل تقسیم شده است:
+
+**A) Toman Core Storage/Display Gate — ✅ PASS**
+- گزینهٔ پولی ووکامرس برابر `IRT` (تومان) مشاهده شده است.
+- ورودی عددی `123456` در متاباکس قیمت به همان صورت `123456` ذخیره شده است.
+- صفحهٔ محصول مقدار `123,456 Toman` را نمایش داده است.
+- سبد خرید (cart) مقدار صحیح تومان را نمایش داده است.
+
+**B) Payment/Schema Currency Gate — ⏳ PENDING**
+- مجموع سبد در صفحهٔ checkout هنوز به‌صورت رسمی evidence نشده است.
+- بازگشت (callback) درگاه پرداخت Gateland/Zarinpal تست نشده است.
+- خروجی structured data / JSON-LD (Schema) برای واحد پول تست نشده است.
+- خروجی واحد پول در فاکتور، سفارش و ایمیل‌ها تست نشده است.
+
+**عبارت رسمی مورد استفاده در تمام اسناد:**
+> *Toman direct input is verified for WooCommerce database storage, product display, and cart display. Payment, checkout, order, email, and Schema currency behavior remain PENDING and must pass before payment activation or production launch.*
+
+### ۱.۲ پاکسازی صفحات تکراری — وضعیت واقعی
+- **تأیید شده حذف شده:**
+  - Page ID `2` (Sample Page پیش‌فرض وردپرس)
+  - Page ID `3` (صفحه پیش‌فرض دیگر)
+- **تأیید نشده / نیاز به بررسی روی میزبان:**
+  - Page ID `10` با اسلاگ/محتوای `refund_returns`
+  - **ثبت رسمی:** *"Page ID 10 cleanup status requires host verification."*
+- ادعای «همهٔ صفحات تکراری پاکسازی شدند» در هیچ مستندی وجود ندارد.
 
 ---
 
-## 3. Summary of Verified Core Pages & Menu Structure (`خلاصه صفحات اصلی سایت`)
+## ۲. جدول رسمی اسلاگ‌ها و شناسه‌های اولیه
 
-- **صفحه اصلی فروشگاه (`Home Page`):** شناسه **`18`** (`Published` / `Static Front Page`)
-- **صفحات راهنمای خرید و قوانین (پیش‌نویس):** شناسه‌های **`21` تا `31`** (مطابق جدول فوق جهت افزودن به منوی اصلی هدر و فوتر پس از انتشار نهایی)
-- **پاکسازی صفحات اضافی:** تمامی صفحات پیش‌فرض وردپرس و نسخه‌های تکراری (Sample Page، Refund Policy تکراری و Privacy Policy تکراری) حذف شدند.
-- **امنیت و محرمانگی:** هیچ‌گونه رمز عبور، کلید API، توکن یا اطلاعات احراز هویتی در این سند و مخزن نگهداری نمی‌شود.
+شناسه‌های زیر **در bootstrap دستی اولیه** ایجاد شده‌اند. در اجرای آتی رانر، رانر بر اساس **slug lookup** عمل می‌کند (update-by-slug) و هیچ‌گاه صفحه‌ای با اسلاگ تکراری ایجاد نخواهد کرد؛ اگر در زمان اجرا، صفحه‌ای با اسلاگ مشخص یافت نشود (مثلاً اگر حذف شده باشد)، آن را به‌صورت Draft ایجاد می‌کند.
+
+| # | اسلاگ رسمی (`post_name`) | عنوان فارسی | فایل مبدأ Markdown | شناسه اولیه استیجینگ | وضعیت فعلی | وضعیت انتشار |
+|:-:|:------------------------|:------------|:-------------------|:--------------------|:-----------|:------------|
+| 1 | `about-us`               | درباره رادمان            | `content/static-pages/about-us.md`              | `21` | Draft placeholder (bootstrap) | `draft` |
+| 2 | `contact-us`             | تماس با ما               | `content/static-pages/contact-us.md`            | `22` | Draft placeholder (bootstrap) | `draft` |
+| 3 | `faq`                    | سؤالات متداول            | `content/static-pages/faq.md`                   | `23` | Draft placeholder (bootstrap) | `draft` |
+| 4 | `shipping`               | روش‌های ارسال            | `content/static-pages/shipping-policy.md`       | `24` | Draft placeholder (bootstrap) | `draft` |
+| 5 | `returns`                | شرایط بازگشت کالا        | `content/static-pages/returns-policy.md`        | `25` | Draft placeholder (bootstrap) | `draft` |
+| 6 | `privacy-policy-radman`  | حریم خصوصی              | `content/static-pages/privacy-policy.md`        | `26` | Draft placeholder (bootstrap) | `draft` |
+| 7 | `terms`                  | قوانین و مقررات          | `content/static-pages/terms-of-purchase.md`     | `27` | Draft placeholder (bootstrap) | `draft` |
+| 8 | `ring-size-guide`        | راهنمای سایز انگشتر      | `content/static-pages/ring-size-guide.md`       | `28` | Draft placeholder (bootstrap) | `draft` |
+| 9 | `silver-care`            | راهنمای نگهداری نقره     | `content/static-pages/silver-care-guide.md`     | `29` | Draft placeholder (bootstrap) | `draft` |
+| 10| `silver-925-authenticity`| اصالت نقره ۹۲۵           | `content/static-pages/silver-925-authenticity.md`| `30` | Draft placeholder (bootstrap) | `draft` |
+| 11| `gemstones`              | راهنمای سنگ‌های زینتی    | `content/static-pages/gemstones-guide.md`       | `31` | Draft placeholder (bootstrap) | `draft` |
+
+**صفحه اصلی (Home):** شناسه `18` — منتشر شده و به‌عنوان `front page` تنظیم است (توسط رانر ایمپورت تغییر داده نمی‌شود).
 
 ---
 
-## 4. Official Mission Status Statement (`اعلامیه رسمی وضعیت مأموریت`)
-- **BRANDING AND CONTENT PROGRESS DOCUMENTED — NO SECRETS COMMITTED**
-- **PR OPENED, NOT MERGED**
-- **No token/auth method was changed**
-- **Ready for reviewer approval**
+## ۳. Idempotency Strategy برای ایمپورت آتی
+
+1. رانر `scripts/render_static_pages.py` فقط بخش `## Content` هر فایل Markdown را به HTML امن تبدیل می‌کند و بخش‌های داخلی (`SEO`, `Page Purpose`, `Trust Notes`, `Owner Fill Later`, `Internal Link Suggestions`) را **هرگز** در محتوای صفحه قرار نمی‌دهد.
+2. برای هر اسلاگ رسمی، رانر با `wp post list --post_name__in=<slug>` صفحهٔ موجود را پیدا می‌کند:
+   - **اگر موجود بود:** `wp post update <ID>` روی همان شناسه (همواره `--post_status=draft`).
+   - **اگر موجود نبود:** `wp post create` با همان اسلاگ (همواره `--post_status=draft`).
+3. قبل از هر تغییر، بک‌آپ DB و پوشهٔ child theme در `RADMAN_PRIVATE_DIR/backups/` (خارج از وب‌روت، `chmod 600`) گرفته می‌شود.
+4. قفل `flock` از اجرای هم‌زمان دو استقرار جلوگیری می‌کند.
+5. **هیچ صفحه‌ای به‌صورت خودکار publish نمی‌شود. همه صفحات Draft باقی می‌مانند تا مأموریت انتشار جداگانه‌ای مصوب شود.**
+
+---
+
+## ۴. خلاصه وضعیت رسمی
+
+- ✅ زبان فارسی `fa_IR` فعال.
+- ✅ `blocksy-child` فعال روی استیجینگ.
+- ⏳ شناسه‌های `21–31` موجود هستند اما **placeholder** اند؛ استقرار محتوای کامل مخزن **PENDING** است.
+- ⚠️ شناسه‌های `2` و `3` تأیید شده حذف شده‌اند؛ شناسه `10` نیازمند بررسی روی میزبان است.
+- ✅ گیت A ارز (ذخیره‌سازی/نمایش محصول/سبد خرید بر حسب تومان) **PASS**.
+- ⏳ گیت B ارز (پرداخت/چک‌اوت/ایمیل/Schema) **PENDING**.
+- ⏳ راه‌اندازی Host Operations Agent Access **PENDING** (مراجعه شود به [HOST-OPS-AGENT-ACCESS.md](HOST-OPS-AGENT-ACCESS.md)).
+- 🔒 پروداکشن (`public_html`) دست‌نخورده باقی مانده است.

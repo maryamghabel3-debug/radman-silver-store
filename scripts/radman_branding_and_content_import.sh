@@ -1,142 +1,332 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# RADMAN SILVER 925 — Branding, Child Theme, and Static Content Import (v2)
-# Host Target: MizbanFa Mars Plan Staging (/home/radmansi/staging.radmansilver.ir)
-# Scope: RADMAN SILVER ONLY (RIDELIN strictly out of scope)
-# Currency Safety Gate: CLOSED (Toman direct input verified as correct)
-# ==============================================================================
-# MISSION: PR-12 / RADMAN Branding, Child Theme, and Static Content Import (v2)
+# RADMAN SILVER 925 — Safe Staging Branding & Static Content Deploy Runner
+# ------------------------------------------------------------------------------
+# Idempotent, staging-only, plan-by-default runner that:
+#   1. Verifies it is running against staging.radmansilver.ir (NOT production).
+#   2. Validates required environment variables and locks via flock.
+#   3. Creates a sanitized DB + child-theme backup in RADMAN_PRIVATE_DIR/backups/.
+#   4. Renders static pages from content/static-pages/ via render_static_pages.py.
+#   5. Deploys the reviewed Blocksy child theme (idempotent file sync).
+#   6. Upserts each official static page by slug (create Draft if missing,
+#      never publish, never duplicate).
+#
+# MODES:
+#   --plan            (default) Read-only dry run; prints intent, touches nothing.
+#   --check           Read-only verification pass against staging (WP-CLI status).
+#   --apply-staging   Execute mutating operations (requires CONFIRM_STAGING_APPLY=YES).
+#
+# PRODUCTION IS PROHIBITED BY DESIGN. There is no --apply-production flag.
+#
+# REQUIRED ENVIRONMENT VARIABLES (apply mode):
+#   APP_ENV                 must equal 'staging'
+#   WP_URL                  must equal 'https://staging.radmansilver.ir'
+#   WP_PATH                 must contain a WordPress install AND must NOT be
+#                           the production 'public_html' (must be staging path)
+#   RADMAN_REPO_ROOT        must contain content/static-pages/ and theme/blocksy-child/
+#   RADMAN_PRIVATE_DIR      private account directory (outside web root); backups
+#                           and lockfile live here; chmod 700 ensured.
+#   CONFIRM_STAGING_APPLY   must equal 'YES' only for --apply-staging
 # ==============================================================================
 
 set -Eeuo pipefail
+# NO 'set -x' here — we never want to leak environment / credentials.
 
-trap 'echo "[ERROR] Script failed at line $LINENO" >&2' ERR
+# -----------------------------------------------------------------------------
+# Constants
+# -----------------------------------------------------------------------------
+readonly EXPECTED_WP_URL="https://staging.radmansilver.ir"
+readonly EXPECTED_APP_ENV="staging"
+readonly EXPECTED_BLOG_PUBLIC=0
+readonly CHILD_THEME_SOURCE_RELPATH="theme/blocksy-child"
+readonly RENDERER_RELPATH="scripts/render_static_pages.py"
+readonly LOCK_NAME="radman-stage-deploy.lock"
+readonly SCRIPT_NAME="$(basename "$0")"
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly REPO_ROOT_FALLBACK="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-echo "============================================================================"
-echo "Step 1: Fix Persian Language"
-echo "============================================================================"
-echo "[INFO] Installing and activating Persian language fa_IR..."
-wp language core install fa_IR --activate
-wp core language update
-wp plugin language update --all
+MODE="plan"
+DRY_RUN=1
+CHECK_ONLY=0
 
-echo ""
-echo "============================================================================"
-echo "Step 2: Create and Activate Blocksy Child Theme (RADMAN SILVER 925)"
-echo "============================================================================"
-echo "[INFO] Installing Blocksy parent theme if not already installed..."
-wp theme install blocksy --activate || true
+# -----------------------------------------------------------------------------
+# Logging helpers (never echo env wholesale; never echo credentials)
+# -----------------------------------------------------------------------------
+log()  { printf '[INFO]  %s\n' "$*"; }
+warn() { printf '[WARN]  %s\n' "$*" >&2; }
+err()  { printf '[ERROR] %s\n' "$*" >&2; }
+die()  { err "$*"; exit 1; }
 
-echo "[INFO] Creating Blocksy child theme directory..."
-mkdir -p wp-content/themes/blocksy-child
+on_error() {
+    local exit_code=$?
+    local line=$1
+    err "Script aborted (line ${line}, exit=${exit_code})."
+    err "NO HOST MUTATION WAS PERFORMED unless [APPLY] messages above indicate otherwise."
+    exit "$exit_code"
+}
+trap 'on_error $LINENO' ERR
 
-echo "[INFO] Writing style.css (#0B0B0E background, #FAF7F2 text)..."
-cat << 'EOF' > wp-content/themes/blocksy-child/style.css
-/*
-Theme Name:   Blocksy Child - RADMAN SILVER 925
-Theme URI:    https://radmansilver.ir
-Description:  Official Blocksy Child Theme for RADMAN SILVER 925 (925 Sterling Silver Maison)
-Author:       RADMAN E-Commerce Developer
-Author URI:   https://radmansilver.ir
-Template:     blocksy
-Version:      1.0.0
-License:      GNU General Public License v2 or later
-Text Domain:  blocksy-child-radman
-*/
+usage() {
+    cat <<'USAGE'
+Usage:
+  bash scripts/radman_branding_and_content_import.sh --plan            # dry run (default)
+  bash scripts/radman_branding_and_content_import.sh --check           # read-only check
+  bash scripts/radman_branding_and_content_import.sh --apply-staging   # mutate staging
 
-/* RADMAN SILVER 925 — Official Luxury Palette (#0B0B0E background, #FAF7F2 text) */
-:root {
-    --radman-bg-dark: #0B0B0E;
-    --radman-text-ivory: #FAF7F2;
+Required env for --apply-staging:
+  APP_ENV=staging
+  WP_URL=https://staging.radmansilver.ir
+  WP_PATH=/home/<CPANEL_USER>/staging.radmansilver.ir
+  RADMAN_REPO_ROOT=/home/<CPANEL_USER>/radman-deploy/repo
+  RADMAN_PRIVATE_DIR=/home/<CPANEL_USER>/.config/radman
+  CONFIRM_STAGING_APPLY=YES
+
+Production execution is explicitly prohibited by this script.
+USAGE
 }
 
-body, .ct-site, .site-content {
-    background-color: #0B0B0E !important;
-    color: #FAF7F2 !important;
+# -----------------------------------------------------------------------------
+# Argument parsing
+# -----------------------------------------------------------------------------
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --plan)            MODE="plan";      DRY_RUN=1; CHECK_ONLY=0; shift ;;
+        --check)           MODE="check";     DRY_RUN=1; CHECK_ONLY=1; shift ;;
+        --apply-staging)   MODE="apply";     DRY_RUN=0; CHECK_ONLY=0; shift ;;
+        -h|--help)         usage; exit 0 ;;
+        *)                 usage; die "Unknown argument: $1" ;;
+    esac
+done
+
+# Allow defaults when running inside a fresh clone on the agent sandbox
+# (local plan/check only — never apply in sandbox).
+RADMAN_REPO_ROOT="${RADMAN_REPO_ROOT:-$REPO_ROOT_FALLBACK}"
+APP_ENV="${APP_ENV:-}"
+WP_URL="${WP_URL:-}"
+WP_PATH="${WP_PATH:-}"
+RADMAN_PRIVATE_DIR="${RADMAN_PRIVATE_DIR:-}"
+CONFIRM_STAGING_APPLY="${CONFIRM_STAGING_APPLY:-}"
+
+log "RADMAN SILVER 925 — Staging Deploy Runner"
+log "Mode: ${MODE}    (dry_run=${DRY_RUN})"
+log "RADMAN_REPO_ROOT = ${RADMAN_REPO_ROOT}"
+
+# -----------------------------------------------------------------------------
+# Production & staging guards (run even in --plan so reviewers see intent)
+# -----------------------------------------------------------------------------
+[[ -d "$RADMAN_REPO_ROOT/content/static-pages" ]] \
+    || die "RADMAN_REPO_ROOT does not contain content/static-pages/: ${RADMAN_REPO_ROOT}"
+[[ -f "$RADMAN_REPO_ROOT/$RENDERER_RELPATH" ]] \
+    || die "Renderer not found at ${RADMAN_REPO_ROOT}/${RENDERER_RELPATH}"
+[[ -d "$RADMAN_REPO_ROOT/$CHILD_THEME_SOURCE_RELPATH" ]] \
+    || die "Child theme source missing at ${RADMAN_REPO_ROOT}/${CHILD_THEME_SOURCE_RELPATH}"
+
+if [[ "$MODE" == "apply" || "$MODE" == "check" ]]; then
+    [[ -n "$WP_PATH" ]]           || die "WP_PATH is required in ${MODE} mode."
+    [[ -n "$WP_URL" ]]            || die "WP_URL is required in ${MODE} mode."
+    [[ -n "$RADMAN_PRIVATE_DIR" ]]|| die "RADMAN_PRIVATE_DIR is required in ${MODE} mode."
+    [[ "$APP_ENV" == "$EXPECTED_APP_ENV" ]] \
+        || die "APP_ENV must equal '${EXPECTED_APP_ENV}' (got: '${APP_ENV}'). Production is PROHIBITED."
+    [[ "$WP_URL" == "$EXPECTED_WP_URL" ]] \
+        || die "WP_URL must equal '${EXPECTED_WP_URL}' (got: '${WP_URL}'). Production is PROHIBITED."
+    [[ "$WP_PATH" != *"public_html"* ]] \
+        || die "WP_PATH contains 'public_html' — PRODUCTION PATH PROHIBITED."
+    [[ -f "$WP_PATH/wp-settings.php" ]] \
+        || die "WP_PATH does not look like a WordPress install (missing wp-settings.php): ${WP_PATH}"
+fi
+
+if [[ "$MODE" == "apply" ]]; then
+    [[ "$CONFIRM_STAGING_APPLY" == "YES" ]] \
+        || die "CONFIRM_STAGING_APPLY must equal 'YES' for --apply-staging."
+fi
+
+# -----------------------------------------------------------------------------
+# WP-CLI wrapper (forces --path and avoids leaking credentials via process env)
+# -----------------------------------------------------------------------------
+wp() {
+    command wp --path="$WP_PATH" --no-color "$@"
 }
 
-h1, h2, h3, h4, h5, h6, .site-title, .entry-title {
-    color: #FAF7F2 !important;
+# -----------------------------------------------------------------------------
+# Private directory / lockfile / backup location (apply & check only)
+# -----------------------------------------------------------------------------
+LOCK_FD=""
+if [[ "$MODE" == "apply" || "$MODE" == "check" ]]; then
+    mkdir -p "$RADMAN_PRIVATE_DIR"
+    chmod 700 "$RADMAN_PRIVATE_DIR"
+    BACKUP_DIR="$RADMAN_PRIVATE_DIR/backups"
+    mkdir -p "$BACKUP_DIR"
+    chmod 700 "$BACKUP_DIR"
+    LOCKFILE="$RADMAN_PRIVATE_DIR/${LOCK_NAME}"
+    log "Opening flock on ${LOCKFILE}"
+    exec {LOCK_FD}>"$LOCKFILE"
+    if [[ "$DRY_RUN" -eq 0 ]]; then
+        flock -n "$LOCK_FD" || die "Another deployment appears to be running (lock held)."
+    else
+        # In check mode we do non-blocking probe but don't hold the lock.
+        flock -n "$LOCK_FD" || warn "Lock currently held by another process."
+    fi
+fi
+
+# -----------------------------------------------------------------------------
+# Local-only render (always safe, no host mutation)
+# -----------------------------------------------------------------------------
+TS="$(date +%Y%m%d-%H%M%S)"
+if [[ "$MODE" == "apply" ]]; then
+    BUILD_DIR="$RADMAN_PRIVATE_DIR/build-${TS}"
+else
+    BUILD_DIR="${TMPDIR:-/tmp}/radman-plan-${TS}"
+fi
+mkdir -p "$BUILD_DIR"
+log "Rendering static pages → ${BUILD_DIR}"
+python3 "$RADMAN_REPO_ROOT/$RENDERER_RELPATH" \
+    --repo-root "$RADMAN_REPO_ROOT" \
+    --build-dir "$BUILD_DIR"
+
+# -----------------------------------------------------------------------------
+# Verify blog_public = 0 (noindex) on staging
+# -----------------------------------------------------------------------------
+if [[ "$MODE" == "apply" || "$MODE" == "check" ]]; then
+    log "Verifying staging noindex (blog_public = ${EXPECTED_BLOG_PUBLIC})..."
+    BLOG_PUBLIC="$(wp option get blog_public --format=trim 2>/dev/null || echo 'unknown')"
+    if [[ "$BLOG_PUBLIC" != "$EXPECTED_BLOG_PUBLIC" ]]; then
+        die "blog_public is '${BLOG_PUBLIC}' (expected '${EXPECTED_BLOG_PUBLIC}'). Refusing to proceed."
+    fi
+    ACTIVE_THEME="$(wp theme list --status=active --field=name --format=trim 2>/dev/null || echo unknown)"
+    WPLANG="$(wp option get WPLANG --format=trim 2>/dev/null || echo unknown)"
+    CURRENCY="$(wp option get woocommerce_currency --format=trim 2>/dev/null || echo unknown)"
+    log "Staging status → theme=${ACTIVE_THEME}  WPLANG=${WPLANG}  currency=${CURRENCY}  blog_public=${BLOG_PUBLIC}"
+fi
+
+# -----------------------------------------------------------------------------
+# Static page registry — official slug/title/source mapping
+# -----------------------------------------------------------------------------
+page_entry() {
+    # echo "slug|title|rendered_html"
+    echo "about-us|درباره رادمان|${BUILD_DIR}/about-us.html"
+    echo "contact-us|تماس با ما|${BUILD_DIR}/contact-us.html"
+    echo "faq|سؤالات متداول|${BUILD_DIR}/faq.html"
+    echo "shipping|روش‌های ارسال|${BUILD_DIR}/shipping.html"
+    echo "returns|شرایط بازگشت کالا|${BUILD_DIR}/returns.html"
+    echo "privacy-policy-radman|حریم خصوصی|${BUILD_DIR}/privacy-policy-radman.html"
+    echo "terms|قوانین و مقررات|${BUILD_DIR}/terms.html"
+    echo "ring-size-guide|راهنمای سایز انگشتر|${BUILD_DIR}/ring-size-guide.html"
+    echo "silver-care|راهنمای نگهداری نقره|${BUILD_DIR}/silver-care.html"
+    echo "silver-925-authenticity|اصالت نقره ۹۲۵|${BUILD_DIR}/silver-925-authenticity.html"
+    echo "gemstones|راهنمای سنگ‌های زینتی|${BUILD_DIR}/gemstones.html"
 }
 
-a, .ct-link {
-    color: #FAF7F2;
-}
-EOF
-
-echo "[INFO] Writing functions.php..."
-cat << 'EOF' > wp-content/themes/blocksy-child/functions.php
-<?php
-/**
- * Blocksy Child - RADMAN SILVER 925
- * Functions and definitions
- */
-
-if (!defined('ABSPATH')) {
-    exit;
+find_existing_page_id() {
+    local slug="$1"
+    wp post list \
+        --post_type=page \
+        --post_name__in="$slug" \
+        --fields=ID \
+        --format=ids \
+        --allow-root 2>/dev/null | tr -d '[:space:]' | head -c 20 || true
 }
 
-add_action('wp_enqueue_scripts', 'radman_blocksy_child_enqueue_styles', 20);
-function radman_blocksy_child_enqueue_styles() {
-    wp_enqueue_style(
-        'radman-blocksy-child-style',
-        get_stylesheet_uri(),
-        array(),
-        wp_get_theme()->get('Version')
-    );
-}
-EOF
+# -----------------------------------------------------------------------------
+# Dry-run plan print
+# -----------------------------------------------------------------------------
+log ""
+log "==================== DEPLOY PLAN ===================="
+printf '%-4s %-28s %-12s %-10s %-10s\n' "#" "SLUG" "EXISTING_ID" "ACTION" "STATUS"
+i=0
+while IFS='|' read -r slug title rendered; do
+    i=$((i+1))
+    existing="will-create"
+    if [[ "$MODE" == "apply" || "$MODE" == "check" ]]; then
+        pid="$(find_existing_page_id "$slug")"
+        [[ -n "$pid" ]] && existing="$pid"
+    fi
+    action="UPDATE"
+    [[ "$existing" == "will-create" ]] && action="CREATE"
+    size="?"
+    [[ -f "$rendered" ]] && size="$(wc -c < "$rendered")"
+    printf '%-4s %-28s %-12s %-10s %-10s  %s bytes\n' "$i" "$slug" "$existing" "$action" "draft" "$size"
+done < <(page_entry)
+log "====================================================="
+log ""
 
-echo "[INFO] Activating Blocksy Child Theme..."
-wp theme activate blocksy-child
-echo "  - Current active theme: $(wp theme list --status=active --field=name)"
+if [[ "$MODE" != "apply" ]]; then
+    log "Dry-run (--${MODE}) complete. No WordPress content was modified."
+    log "Run with --apply-staging and CONFIRM_STAGING_APPLY=YES after reviewer approval."
+    exit 0
+fi
 
-echo ""
-echo "============================================================================"
-echo "Step 3: Import 11 Static Persian Pages as Drafts"
-echo "============================================================================"
-echo "[INFO] Creating static pages as Drafts..."
+# -----------------------------------------------------------------------------
+# APPLY MODE (only reachable with all staging guards satisfied)
+# -----------------------------------------------------------------------------
+log "[APPLY] Creating timestamped backups..."
+TS_LONG="$(date +%Y%m%d-%H%M%S)"
+DB_BACKUP="${BACKUP_DIR}/wordpress-db-${TS_LONG}.sql"
+# Sanitized DB export: no credentials printed; wp db uses wp-config.php auth.
+wp db export "$DB_BACKUP" >/dev/null
+chmod 600 "$DB_BACKUP"
+log "[APPLY] DB backup written: ${DB_BACKUP}"
 
-id_about=$(wp post create content/static-pages/about-us.md --post_type=page --post_title="درباره رادمان" --post_name="about-us" --post_status=draft --porcelain)
-echo "  - Created 'درباره رادمان' (ID: ${id_about})"
+THEME_TARGET="${WP_PATH}/wp-content/themes/blocksy-child"
+if [[ -d "$THEME_TARGET" ]]; then
+    THEME_BACKUP="${BACKUP_DIR}/blocksy-child-${TS_LONG}.tar.gz"
+    tar -C "$(dirname "$THEME_TARGET")" -czf "$THEME_BACKUP" "$(basename "$THEME_TARGET")"
+    chmod 600 "$THEME_BACKUP"
+    log "[APPLY] Existing child theme backed up: ${THEME_BACKUP}"
+fi
 
-id_contact=$(wp post create content/static-pages/contact-us.md --post_type=page --post_title="تماس با ما" --post_name="contact-us" --post_status=draft --porcelain)
-echo "  - Created 'تماس با ما' (ID: ${id_contact})"
+log "[APPLY] Deploying Blocksy child theme (idempotent sync)..."
+mkdir -p "$THEME_TARGET"
+# Sync only the reviewed files (no stray build artifacts).
+install -m 644 "$RADMAN_REPO_ROOT/$CHILD_THEME_SOURCE_RELPATH/style.css"     "$THEME_TARGET/style.css"
+install -m 644 "$RADMAN_REPO_ROOT/$CHILD_THEME_SOURCE_RELPATH/functions.php" "$THEME_TARGET/functions.php"
+install -m 644 "$RADMAN_REPO_ROOT/$CHILD_THEME_SOURCE_RELPATH/README.md"     "$THEME_TARGET/README.md"
 
-id_faq=$(wp post create content/static-pages/faq.md --post_type=page --post_title="سؤالات متداول" --post_name="faq" --post_status=draft --porcelain)
-echo "  - Created 'سؤالات متداول' (ID: ${id_faq})"
+log "[APPLY] Activating blocksy-child theme..."
+wp theme activate blocksy-child >/dev/null
+POST_THEME="$(wp theme list --status=active --field=name --format=trim)"
+if [[ "$POST_THEME" != "blocksy-child" ]]; then
+    die "Expected active theme 'blocksy-child' after activation, got '${POST_THEME}'."
+fi
+log "[APPLY] Active theme verified: ${POST_THEME}"
 
-id_shipping=$(wp post create content/static-pages/shipping-policy.md --post_type=page --post_title="روش‌های ارسال" --post_name="shipping" --post_status=draft --porcelain)
-echo "  - Created 'روش‌های ارسال' (ID: ${id_shipping})"
+log "[APPLY] Upserting static pages (idempotent by slug; status = draft)..."
+UPSERTED=0
+CREATED=0
+while IFS='|' read -r slug title rendered; do
+    [[ -f "$rendered" ]] || die "Rendered HTML missing for ${slug}: ${rendered}"
+    existing_id="$(find_existing_page_id "$slug")"
+    if [[ -n "$existing_id" ]]; then
+        # Update existing; ensure draft status; do NOT publish.
+        wp post update "$existing_id" \
+            --post_title="$title" \
+            --post_name="$slug" \
+            --post_status=draft \
+            --post_content="$(cat "$rendered")" >/dev/null
+        log "[APPLY] UPDATE slug=${slug}  ID=${existing_id}  status=draft"
+        UPSERTED=$((UPSERTED+1))
+    else
+        new_id="$(wp post create \
+            --post_type=page \
+            --post_title="$title" \
+            --post_name="$slug" \
+            --post_status=draft \
+            --post_content="$(cat "$rendered")" \
+            --porcelain)"
+        log "[APPLY] CREATE slug=${slug}  ID=${new_id}  status=draft"
+        CREATED=$((CREATED+1))
+    fi
+done < <(page_entry)
 
-id_returns=$(wp post create content/static-pages/returns-policy.md --post_type=page --post_title="شرایط بازگشت کالا" --post_name="returns" --post_status=draft --porcelain)
-echo "  - Created 'شرایط بازگشت کالا' (ID: ${id_returns})"
-
-id_privacy=$(wp post create content/static-pages/privacy-policy.md --post_type=page --post_title="حریم خصوصی" --post_name="privacy-policy-radman" --post_status=draft --porcelain)
-echo "  - Created 'حریم خصوصی' (ID: ${id_privacy})"
-
-id_terms=$(wp post create content/static-pages/terms-of-purchase.md --post_type=page --post_title="قوانین و مقررات" --post_name="terms" --post_status=draft --porcelain)
-echo "  - Created 'قوانین و مقررات' (ID: ${id_terms})"
-
-id_ring=$(wp post create content/static-pages/ring-size-guide.md --post_type=page --post_title="راهنمای سایز انگشتر" --post_name="ring-size-guide" --post_status=draft --porcelain)
-echo "  - Created 'راهنمای سایز انگشتر' (ID: ${id_ring})"
-
-id_care=$(wp post create content/static-pages/silver-care-guide.md --post_type=page --post_title="راهنمای نگهداری نقره" --post_name="silver-care" --post_status=draft --porcelain)
-echo "  - Created 'راهنمای نگهداری نقره' (ID: ${id_care})"
-
-id_auth=$(wp post create content/static-pages/silver-925-authenticity.md --post_type=page --post_title="اصالت نقره ۹۲۵" --post_name="silver-925-authenticity" --post_status=draft --porcelain)
-echo "  - Created 'اصالت نقره ۹۲۵' (ID: ${id_auth})"
-
-id_gem=$(wp post create content/static-pages/gemstones-guide.md --post_type=page --post_title="راهنمای سنگ‌های زینتی" --post_name="gemstones" --post_status=draft --porcelain)
-echo "  - Created 'راهنمای سنگ‌های زینتی' (ID: ${id_gem})"
-
-echo ""
-echo "============================================================================"
-echo "Step 4: Verification Summary"
-echo "============================================================================"
-wp theme list --status=active
-wp post list --post_type=page --post_status=draft --fields=ID,post_title,post_status
-
-echo "============================================================================"
-echo "CHILD THEME AND STATIC CONTENT IMPORTED SUCCESSFULLY"
-echo "============================================================================"
+log "[APPLY] Done. updated=${UPSERTED} created=${CREATED}"
+log "[APPLY] Static pages remain Draft — no publish occurred."
+log "[APPLY] Home page / menus / plugins / payments / SMS are intentionally untouched."
+log ""
+log "================================================================================"
+log "DEPLOY APPLIED TO STAGING (${WP_URL})"
+log "  Active theme : ${POST_THEME}"
+log "  DB backup    : ${DB_BACKUP}"
+log "  Theme backup : ${THEME_BACKUP:-${THEME_TARGET} (did not previously exist)}"
+log "  Build dir    : ${BUILD_DIR}"
+log "  Pages        : updated=${UPSERTED} created=${CREATED} (all draft)"
+log "PRODUCTION (public_html) WAS NOT TOUCHED."
+log "================================================================================"
