@@ -76,13 +76,18 @@ INTERNAL_SECTION_HEADINGS: Tuple[str, ...] = (
     "page purpose",
 )
 
-PLACEHOLDER_PATTERN = re.compile(r"\[[^\]\n]{1,80}\]")
+# Placeholder pattern: bracketed owner-fill tokens like [شماره تماس] or
+# [لینک اینستاگرام]. We EXCLUDE markdown links (text followed immediately by
+# "(url)") so that in-page links like [راهنمای سایز](/ring-size-guide) are not
+# mistaken for placeholders.
+PLACEHOLDER_PATTERN = re.compile(r"\[([^\]\n]{1,80})\](?!\()")
 HEADING_PATTERN = re.compile(r"^(#{2,4})\s+(.+?)\s*#*\s*$")
 UL_BULLET_PATTERN = re.compile(r"^\s*[-*+]\s+(.*)$")
 OL_BULLET_PATTERN = re.compile(r"^\s*\d+[.)]\s+(.*)$")
 
 BOLD_PATTERN = re.compile(r"\*\*(.+?)\*\*")
-LINK_PATTERN = re.compile(r"\[([^\]]+)\]\(([^)\s]+)\)")
+# Link text may contain Persian (non-ASCII); allow any non-] character.
+LINK_PATTERN = re.compile(r"\[([^\]]{1,200})\]\(([^)\s<>\"']{1,500})\)", re.UNICODE)
 
 
 class RenderError(Exception):
@@ -265,7 +270,7 @@ def render_markdown_to_html(public_body: str, source_label: str) -> Tuple[str, b
             item = _list_item(line, ordered)
             if item:
                 list_items.append(item)
-                if "[…]" in item or "radman-placeholder" in item:
+                if "…" in item or "radman-placeholder" in item:
                     has_placeholders = True
             continue
 
@@ -300,7 +305,7 @@ def render_markdown_to_html(public_body: str, source_label: str) -> Tuple[str, b
     out.append(_flush_paragraph(para))
 
     html_out = "\n".join(x for x in out if x).strip()
-    if "radman-placeholder" in html_out:
+    if "radman-placeholder" in html_out or "…" in html_out:
         has_placeholders = True
     return html_out, has_placeholders
 

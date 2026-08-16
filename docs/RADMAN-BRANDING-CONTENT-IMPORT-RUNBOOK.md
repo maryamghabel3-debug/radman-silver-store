@@ -34,11 +34,26 @@
 
 | ابزار | نقش | اجرای پیش‌فرض |
 |:------|:----|:--------------|
-| `scripts/render_static_pages.py` | رندر ایمن Markdown استاتیک به HTML (stdlib-only، بدون انتشار بخش‌های داخلی) | خواندن از `content/static-pages/`، نوشتن در build dir |
-| `scripts/radman_branding_and_content_import.sh` | رانر پایین‌لایه با guards سخت‌گیرانه، بک‌آپ، `flock`، upsert by slug | `--plan` (read-only) |
+| `scripts/render_static_pages.py` | رندر ایمن Markdown استاتیک به HTML (stdlib-only، بدون انتشار بخش‌های داخلی)، با به‌رسمیت شناختن لینک‌های مارک‌داون فارسی | خواندن از `content/static-pages/`، نوشتن در build dir |
+| `scripts/radman_branding_and_content_import.sh` | رانر پایین‌لایه با guards سخت‌گیرانه، بک‌آپ، `flock`، upsert by slug، **بدون process substitution** (سازگار با jailshell/cPanel)؛ build dir با `mktemp -d` ساخته می‌شود | `--plan` (read-only) |
 | `scripts/radman_stage_apply.sh` | رانر تک‌دستور مالک که به رانر پایین‌لایه تفویض می‌کند | `--plan` (read-only) |
+| `scripts/check_no_placeholders.py` | gate پس از رندر: اگر هر `[…]` یا `radman-placeholder` در HTML خروجی باقی‌مانده باشد، با کد خطای تمیز خاتمه می‌دهد | در هر اجرا (حتی plan) |
+| `scripts/test_plan_runner.sh` | self-test محلی: `--plan` را روی محتوای واقعی اجرا می‌کند، جدول DEPLOY PLAN و عدم وجود placeholder را تست می‌کند | محلی، بدون میزبان |
 
 همه ابزارها **به‌صورت پیش‌فرض در حالت plan** اجرا می‌شوند. اعمال تغییر واقعی روی استیجینگ فقط در صورتی رخ می‌دهد که `--apply-staging` و `CONFIRM_STAGING_APPLY=YES` همزمان با سایر شرایط محیطی ارائه شوند.
+
+### نکته رفع باگ جیل‌شل (cPanel/CloudLinux)
+نسخه اولیه رانر از process substitution (الگوی `done < <(cmd)`) استفاده می‌کرد که در jailshell برخی سرویس‌های میزبانی به‌علت محدودبودن `/dev/fd` با خطای زیر می‌شکست:
+
+```
+line 248: /dev/fd/62: No such file or directory
+```
+
+این باگ در نسخه فعلی رفع شده است:
+- حلقه‌های `while read` با فراخوانی مستقیم تابع جایگزین شده‌اند (نه `< <(page_entry)`).
+- build dir در حالت plan با `mktemp -d` زیر `TMPDIR` ساخته می‌شود (در دسترس حتی در جیل).
+- gate جدید `check_no_placeholders.py` اطمینان می‌دهد که اگر محتوای ناقص/جای‌دار (placeholder) رندر شده باشد، plan با خطای واضح متوقف می‌شود.
+- self-test محلی `bash scripts/test_plan_runner.sh` روی لپ‌تاپ/سرور بدون دسترسی به وردپرس اجرا می‌شود.
 
 ---
 

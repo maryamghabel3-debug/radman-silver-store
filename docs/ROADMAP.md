@@ -45,9 +45,13 @@
 - ✅ **Currency Gate A** (ذخیره/نمایش تومان در محصول و سبد خرید) پاس شده است (`IRT`، ذخیره ۱۲۳۴۵۶ = ۱۲۳۴۵۶، نمایش 123,456 Toman).
 - ⏳ **Currency Gate B** (checkout/order/email/Schema/payment callback) **PENDING** و قبل از فعال‌سازی پرداخت یا راه‌اندازی پروداکشن باید پاس شود.
 - ✅ رانرهای ایمن و idempotent استیجینگ در مخزن آماده شده‌اند:
-  - `scripts/render_static_pages.py` (رندر امن Markdown → HTML، stdlib only، بدون انتشار یادداشت‌های داخلی).
-  - `scripts/radman_branding_and_content_import.sh` (guards استیجینگ، `flock`، بک‌آپ DB/child-theme، upsert by slug، عدم publish خودکار).
+  - `scripts/render_static_pages.py` (رندر امن Markdown → HTML، stdlib only، بدون انتشار یادداشت‌های داخلی، پشتیبانی صحیح از لینک‌های مارک‌داون فارسی).
+  - `scripts/radman_branding_and_content_import.sh` (guards استیجینگ، `flock`، بک‌آپ DB/child-theme، upsert by slug، عدم publish خودکار، سازگاری با جیل‌شل cPanel/CloudLinux بدون process substitution).
   - `scripts/radman_stage_apply.sh` (رانر تک‌دستور مالک، پیش‌فرض `--plan`).
+  - `scripts/check_no_placeholders.py` (gate پس از رندر؛ خطا در صورت وجود `[…]` در HTML خروجی).
+  - `scripts/test_plan_runner.sh` (self-test محلی برای اجرای plan و اطمینان از چاپ جدول DEPLOY PLAN و نبود placeholder).
+- ✅ **Plan runs cleanly:** `bash scripts/radman_stage_apply.sh --plan` با موفقیت اجرا می‌شود، جدول `DEPLOY PLAN` را چاپ می‌کند، و همه ۱۱ صفحه با `placeholders = no` رندر می‌شوند.
+- ⚠️ **مهم:** محتوا **روی میزبان** هنوز deploy نشده (همچنان Draft placeholder هستند) — deploy واقعی روی استیجینگ در مأموریت آتی با `--apply-staging` انجام می‌شود.
 - ⏳ تنظیمات هاردنینگ باقی‌مانده (Wordfence, LiteSpeed Cache, UpdraftPlus cloud, RankMath wizard, Redis).
 - ⏳ راه‌اندازی Host Operations Agent Access (مراجعه شود به [HOST-OPS-AGENT-ACCESS.md](HOST-OPS-AGENT-ACCESS.md)).
 

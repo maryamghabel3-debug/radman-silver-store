@@ -80,8 +80,10 @@
 
 - [x] `DONE (repo)` : اسکریپت رندر `scripts/render_static_pages.py` (فقط stdlib، بدون وابستگی پایتون).
 - [x] `DONE (repo)` : رانر پایین‌لایه `scripts/radman_branding_and_content_import.sh` با قفل `flock`، بک‌آپ پیش از تغییر، و guards سخت‌گیرانه استیجینگ.
-- [x] `DONE (repo)` : رانر مالک با یک دستور `scripts/radman_stage_apply.sh` (پیش‌فرض `--plan`، `--apply-staging` فقط با `CONFIRM_STAGING_APPLY=YES`).
-- [ ] `PENDING host execution` : اجرای `--plan` روی میزبان توسط مالک/عامل و بررسی خروجی.
+- [x] `DONE (repo)` : رانر مالک با یک دستور `scripts/radman_stage_apply.sh` (پیش‌فرض `--plan`، `--apply-staging` فقط با `CONFIRM_STAGING_APPLY=YES`)؛ باگ `/dev/fd` جیل‌شل رفع شده (بدون process substitution، build dir با `mktemp -d`).
+- [x] `DONE (repo)` : gate محتوای کامل (بدون placeholder) با `scripts/check_no_placeholders.py` در هر اجرای plan اعمال می‌شود.
+- [x] `DONE (repo)` : self-test محلی `scripts/test_plan_runner.sh` اجرای plan، چاپ جدول DEPLOY PLAN و عدم وجود placeholder را تضمین می‌کند.
+- [ ] `PENDING host execution` : اجرای `bash scripts/radman_stage_apply.sh --plan` روی میزبان توسط مالک/عامل و بررسی خروجی (پس از آن می‌توان به مرحله apply رفت).
 - [ ] `PENDING reviewer approval` : اجرای `--apply-staging` پس از تأیید صریح.
 
 ## ۱۰. تست‌های آتی / باقی‌مانده

@@ -62,6 +62,8 @@
 - [docs/STATIC-PAGES-REGISTRY.md](docs/STATIC-PAGES-REGISTRY.md) — Official registry of 11 static Persian pages (slugs, initial Page IDs, and truthful deployment status: Draft placeholders pending full content import).
 - [docs/HOST-OPS-AGENT-ACCESS.md](docs/HOST-OPS-AGENT-ACCESS.md) — Approved host access modes for the automation agent (SSH Ed25519 key preferred; Application Password + one-command runner fallback).
 - [docs/STAGING-DEPLOYMENT-CHECKLIST.md](docs/STAGING-DEPLOYMENT-CHECKLIST.md) — Step-by-step staging deployment checklist (truthful split of DONE vs PENDING items, Currency Gate A vs B).
+- [scripts/test_plan_runner.sh](scripts/test_plan_runner.sh) — Local self-test that runs the staging runner in `--plan` mode, asserts the DEPLOY PLAN table prints, and confirms all 11 rendered pages are placeholder-free.
+- [scripts/check_no_placeholders.py](scripts/check_no_placeholders.py) — Rendered-HTML placeholder gate (fail-fast if any `[…]` markers remain).
 - [docs/PRODUCTION-CUTOVER-CHECKLIST.md](docs/PRODUCTION-CUTOVER-CHECKLIST.md) — Production go-live and cutover checklist after staging sign-off.
 - [docs/SOFT-LAUNCH-GO-NO-GO.md](docs/SOFT-LAUNCH-GO-NO-GO.md) — Managerial Go/No-Go decision sheet and critical blockers audit for RADMAN soft launch.
 - [docs/TEST-SCENARIOS-RADMAN.md](docs/TEST-SCENARIOS-RADMAN.md) — Comprehensive 20+ operational QA test scenarios for staging and pre-launch validation.

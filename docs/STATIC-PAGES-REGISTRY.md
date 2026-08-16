@@ -12,9 +12,9 @@
 - **پوسته:** `blocksy-child v1.0.0` با رنگ‌های مصوب `#0B0B0E` و `#FAF7F2` فعال است.
 - **صفحه اصلی:** شناسه `18` به‌عنوان `static front page` تنظیم شده است.
 - **صفحات ۲۱ تا ۳۱:** در حال حاضر صفحات **Draft placeholder** با عناوین موقت هستند که در حین bootstrap دستی اولیه ایجاد شده‌اند.
-  - **این صفحات هنوز حاوی محتوای کامل پوشه `content/static-pages/` نیستند.**
-  - متن فعلی آن‌ها خلاصه/متن موقت (placeholder summary) از مرحله bootstrap است.
-  - **استقرار کامل محتوای مخزن (full content deployment) هنوز انجام نشده و PENDING است.**
+  - **متن روی میزبان (placeholder summary) هنوز با محتوای نهایی مخزن جایگزین نشده است.**
+  - **متن منبع در مخزن (فایل‌های `content/static-pages/*.md`) کامل و بازبینی‌شده است و در خودِ مخزن صفر placeholder باقی مانده است** (تأییدشده با `scripts/check_no_placeholders.py` و `scripts/test_plan_runner.sh`).
+  - **استقرار کامل محتوای مخزن به روی استیجینگ (full content deployment) هنوز انجام نشده و PENDING است** و از طریق `scripts/radman_stage_apply.sh --apply-staging` پس از تأیید میزبان انجام می‌شود.
   - استقرار نهایی از طریق رانر بازبینی‌شده و **idempotent** زیر انجام خواهد شد:
     - `scripts/radman_stage_apply.sh --plan` (حالت پیش‌فرض: dry-run)
     - `scripts/radman_stage_apply.sh --apply-staging` (فقط روی استیجینگ، با `CONFIRM_STAGING_APPLY=YES`)
@@ -86,7 +86,8 @@
 
 - ✅ زبان فارسی `fa_IR` فعال.
 - ✅ `blocksy-child` فعال روی استیجینگ.
-- ⏳ شناسه‌های `21–31` موجود هستند اما **placeholder** اند؛ استقرار محتوای کامل مخزن **PENDING** است.
+- ⏳ شناسه‌های `21–31` روی میزبان **placeholder** باقی مانده‌اند و استقرار محتوای کامل مخزن **PENDING** است.
+- ✅ **Plan runs cleanly:** رانر `scripts/radman_stage_apply.sh --plan` (باگ `/dev/fd` جیل‌شل قبلی رفع شده) جدول DEPLOY PLAN را چاپ می‌کند و روی همه ۱۱ صفحه placeholder = no گزارش می‌دهد.
 - ⚠️ شناسه‌های `2` و `3` تأیید شده حذف شده‌اند؛ شناسه `10` نیازمند بررسی روی میزبان است.
 - ✅ گیت A ارز (ذخیره‌سازی/نمایش محصول/سبد خرید بر حسب تومان) **PASS**.
 - ⏳ گیت B ارز (پرداخت/چک‌اوت/ایمیل/Schema) **PENDING**.
