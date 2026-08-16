@@ -51,6 +51,16 @@
 - ⏳ تنظیمات هاردنینگ باقی‌مانده (Wordfence, LiteSpeed Cache, UpdraftPlus cloud, RankMath wizard, Redis).
 - ⏳ راه‌اندازی Host Operations Agent Access (مراجعه شود به [HOST-OPS-AGENT-ACCESS.md](HOST-OPS-AGENT-ACCESS.md)).
 
+### Phase 3.5 — Strategy & Content Engine Setup (DOCUMENTED, READY FOR EXECUTION)
+مستندسازی master strategy برای تبدیل، سئو، دیده‌شدن در AI/GEO، وفاداری، نگهداشت مشتری، و سیاست ضدتقلب تکمیل شده و به‌عنوان Source of Truth در مخزن ثبت است. هیچ پلاگین یا تغییری در این مأموریت روی میزبان اعمال نشده است؛ پیاده‌سازی در مأموریت‌های آتی و به‌صورت فازبه‌فاز (Phased) انجام می‌گیرد.
+
+اسناد استراتژی:
+- [STRATEGY-CONVERSION-UX.md](STRATEGY-CONVERSION-UX.md) — آناتومی صفحه محصول، CTAها، بودجه عملکرد، میکرو-تعاملات، exit intent، استراتژی پلاگین (Perfmatters / ASE و لیست «نباید نصب شود»).
+- [STRATEGY-SEO-AI-VISIBILITY.md](STRATEGY-SEO-AI-VISIBILITY.md) — سئو فنی پایه، پیاده‌سازی Schema (Product IRR، Organization، BreadcrumbList، FAQPage، HowTo، WebSite)، تنظیمات RankMath، استراتژی GEO/AI، Topic Clusters، چارچوب تحلیل رقبا و تقویم محتوای ماهانه.
+- [STRATEGY-RETENTION-GROWTH.md](STRATEGY-RETENTION-GROWTH.md) — وفاداری فازبه‌فاز (VIP15 → discount دوم → points → referral)، استراتژی SMS (Kavenegar) و ایمیل آینده، UGC/نظرات، گیمیفیکیشن مرحله‌ای، و سیاست بازگشت شفاف.
+- [STRATEGY-ANTI-FRAUD-KYC.md](STRATEGY-ANTI-FRAUD-KYC.md) — مدل KYC سه لایه (Tier 1/2/3)، سیگنال‌های تقلب، ملاحظات قانونی/حریم خصوصی، و SOP بررسی دستی سفارش‌ها.
+- [STRATEGY-CONTENT-WRITING-GUIDELINES.md](STRATEGY-CONTENT-WRITING-GUIDELINES.md) — صدای برند، قواعد زبان فارسی، چک‌لیست بازبینی، و قالب‌های (templates) صفحه محصول/دسته/مقاله/FAQ.
+
 ### Phase 4 — Agent Integration & Testing (NEXT)
 - استقرار `Agent-LegacySync` (مشروط به تأیید اتصال و Python/Cron).
 - ایمپورت دسته اول محصولات به‌صورت Draft (۵۰ محصول).

@@ -65,3 +65,11 @@
 - [docs/PRODUCTION-CUTOVER-CHECKLIST.md](docs/PRODUCTION-CUTOVER-CHECKLIST.md) — Production go-live and cutover checklist after staging sign-off.
 - [docs/SOFT-LAUNCH-GO-NO-GO.md](docs/SOFT-LAUNCH-GO-NO-GO.md) — Managerial Go/No-Go decision sheet and critical blockers audit for RADMAN soft launch.
 - [docs/TEST-SCENARIOS-RADMAN.md](docs/TEST-SCENARIOS-RADMAN.md) — Comprehensive 20+ operational QA test scenarios for staging and pre-launch validation.
+
+### Strategy & Growth Documentation (Phase 3.5)
+
+- [docs/STRATEGY-CONVERSION-UX.md](docs/STRATEGY-CONVERSION-UX.md) — RADMAN Conversion & UX Strategy (product page anatomy, category/cart/checkout UX, micro-interactions, exit intent, homepage architecture, performance budget, and a curated plugin list with Perfmatters/ASE recommendations and an explicit "do NOT install" list).
+- [docs/STRATEGY-SEO-AI-VISIBILITY.md](docs/STRATEGY-SEO-AI-VISIBILITY.md) — RADMAN SEO & AI Visibility Strategy (technical SEO baseline, Schema.org plan — Product with IRR for schema, Organization, BreadcrumbList, FAQPage, HowTo, WebSite — RankMath title/meta templates, AI/GEO content guidance, topic clusters, competitor analysis framework, monthly content calendar template).
+- [docs/STRATEGY-RETENTION-GROWTH.md](docs/STRATEGY-RETENTION-GROWTH.md) — RADMAN Customer Retention & Growth Strategy (phased loyalty program, Kavenegar SMS flows, future email plan, UGC/social proof, phased gamification, and the 7-day return/refund policy design).
+- [docs/STRATEGY-ANTI-FRAUD-KYC.md](docs/STRATEGY-ANTI-FRAUD-KYC.md) — RADMAN Anti-Fraud & Customer Verification Policy (three-tier KYC model, fraud signals, legal/privacy notes, phased implementation from OTP-only Soft Launch to Shahkar-backed Scale).
+- [docs/STRATEGY-CONTENT-WRITING-GUIDELINES.md](docs/STRATEGY-CONTENT-WRITING-GUIDELINES.md) — RADMAN Content Writing Standards (tone of voice, Persian language rules, content review checklist, and templates for product/category/article/FAQ content).
