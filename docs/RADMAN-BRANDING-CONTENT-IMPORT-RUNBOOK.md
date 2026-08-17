@@ -17,7 +17,9 @@
 - زبان فارسی `fa_IR` فعال است.
 - پوستهٔ فرزند `blocksy-child v1.0.0` با پالت `#0B0B0E` (زمینه) / `#FAF7F2` (متن) فعال است.
 - ۱۱ صفحه با شناسه‌های `21–31` به‌صورت **Draft placeholder** (متن موقت bootstrap) وجود دارند.
-- **محتوای کامل از `content/static-pages/` هنوز روی میزبان مستقر نشده و PENDING است.**
+- **محتوای کامل ۱۱ صفحه در `content/static-pages/` آماده و placeholder-free است (در ریپو).**
+- **محتوا هنوز روی میزبان مستقر نشده و میزبان-استقرار PENDING است (نیازمند مأموریت مصوب میزبانی).**
+- **انتشار عمومی (Publish) برای همهٔ ۱۱ صفحه BLOCKED است تا تأیید نهایی مالک و (در صورت نیاز) بازبینی حقوقی.** رجوع شود به [STATIC-CONTENT-APPROVAL-REGISTRY.md](STATIC-CONTENT-APPROVAL-REGISTRY.md).
 - صفحه اصلی شناسه `18` منتشر و front-page است (توسط رانر تغییر داده نمی‌شود).
 - پاکسازی صفحات تکراری:
   - تأییدشده: ID `2` و ID `3`
@@ -37,7 +39,7 @@
 | `scripts/render_static_pages.py` | رندر ایمن Markdown استاتیک به HTML (stdlib-only، بدون انتشار بخش‌های داخلی)، با به‌رسمیت شناختن لینک‌های مارک‌داون فارسی | خواندن از `content/static-pages/`، نوشتن در build dir |
 | `scripts/radman_branding_and_content_import.sh` | رانر پایین‌لایه با guards سخت‌گیرانه، بک‌آپ، `flock`، upsert by slug، **بدون process substitution** (سازگار با jailshell/cPanel)؛ build dir با `mktemp -d` ساخته می‌شود | `--plan` (read-only) |
 | `scripts/radman_stage_apply.sh` | رانر تک‌دستور مالک که به رانر پایین‌لایه تفویض می‌کند | `--plan` (read-only) |
-| `scripts/check_no_placeholders.py` | gate پس از رندر: اگر هر `[…]` یا `radman-placeholder` در HTML خروجی باقی‌مانده باشد، با کد خطای تمیز خاتمه می‌دهد | در هر اجرا (حتی plan) |
+| `scripts/check_no_placeholders.py` | gate پس از رندر: اگر `[…]` (بایدد سه کاراکتر: براکت باز + U+2026 بیضی + براکت بسته = نشانهٔ owner-fill-later) یا کلاس CSS `radman-placeholder` در HTML خروجی باقی‌مانده باشد، با کد خطای تمیز خاتمه می‌دهد. بیضی عادی/مستقل `…` در نثر فارسی **مجاز** است و fail نمی‌کند | در هر اجرا (حتی plan) |
 | `scripts/test_plan_runner.sh` | self-test محلی: `--plan` را روی محتوای واقعی اجرا می‌کند، جدول DEPLOY PLAN و عدم وجود placeholder را تست می‌کند | محلی، بدون میزبان |
 
 همه ابزارها **به‌صورت پیش‌فرض در حالت plan** اجرا می‌شوند. اعمال تغییر واقعی روی استیجینگ فقط در صورتی رخ می‌دهد که `--apply-staging` و `CONFIRM_STAGING_APPLY=YES` همزمان با سایر شرایط محیطی ارائه شوند.
@@ -147,7 +149,18 @@ bash scripts/radman_stage_apply.sh --apply-staging
 - `## Trust Notes` / `## Owner Fill Later`
 - `## Internal Link Suggestions`
 
-Markdown پشتیبانی‌شده محدود به: headings (h2–h4)، پاراگراف، لیست‌های ul/ol، **bold** و `[لینک](url)` با sanitize امن (فقط http/https/mailto/path-absolute). placeholder های `[متنی]` به عنصر `<span class="radman-placeholder">` تبدیل می‌شوند تا قابل ردیابی باشند و هرگز به‌عنوان متن خام رها نشوند.
+Markdown پشتیبانی‌شده محدود به: headings (h2–h4)، پاراگراف، لیست‌های ul/ol، **bold** و `[لینک](url)` با sanitize امن (فقط http/https/mailto/path-absolute). ترتیب پردازش در رندرر: ابتدا لینک‌های Markdown و **bold** با جای‌گذارهای امن (token stash) محافظت می‌شوند و بعد از HTML-escape، placeholder های `[متنی]` (که لینک Markdown نیستند — به لطف negative lookahead برای `(`) به عنصر `<span class="radman-placeholder">` تبدیل می‌شوند تا قابل ردیابی باشند. بیضی عادی فارسی `…` در متن به‌هیچ‌وجه placeholder محسوب نمی‌شود و همان‌طور که هست از رندر عبور می‌کند.
+
+### اجرای Self-Test (بدون نیاز به میزبان/وردپرس)
+```bash
+bash scripts/test_plan_runner.sh
+```
+خروجی باید با `[PASS] plan runner self-test succeeded.` خاتمه یابد و بخش‌های زیر را شامل شود:
+- اجرای کامل `--plan` در برابر ۱۱ صفحه واقعی ریپو.
+- تست رگرسیون B1: بیضی عادی `…` → PASS.
+- تست رگرسیون B2: نشانهٔ `[…]` (براکت+بیضی) → FAIL.
+- تست رگرسیون B3: کلاس `radman-placeholder` → FAIL.
+- تست رگرسیون B4: لینک‌های Markdown فارسی و بیضی در متن placeholder تولید نمی‌کنند.
 
 ---
 

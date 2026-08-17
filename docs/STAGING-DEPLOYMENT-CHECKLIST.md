@@ -36,7 +36,8 @@
   - [ ] خروجی JSON-LD/Schema
   - [ ] خروجی پول در سفارش، فاکتور و ایمیل
 - [x] `DONE (verified — placeholder state)` : صفحات استاتیک ۱۱‌گانه با شناسه‌های `21–31` به‌صورت **Draft placeholder** ایجاد شده‌اند (متن موقت bootstrap).
-- [ ] `PENDING (full content deployment)` : **ایمپورت محتوای کامل** `content/static-pages/` به صفحات `21–31` از طریق رانر `scripts/radman_stage_apply.sh` (idempotent، پیش‌فرض `--plan`، بدون publish).
+- [x] `DONE (repo)` : **محتوای کامل ۱۱ صفحه** در `content/static-pages/` نوشته شده و با `scripts/check_no_placeholders.py` تأیید شده که placeholder-free است (همهٔ تعهدهای عملیاتی تأییدنشده حذف و به‌صورت مشروط/پیش‌نویس بازنویسی شده‌اند).
+- [ ] `PENDING (host execution)` : **ایمپورت Draft روی استیجینگ** از طریق `scripts/radman_stage_apply.sh --apply-staging` (نیازمند مأموریت مصوب میزبانی با `CONFIRM_STAGING_APPLY=YES`؛ پیش‌فرض `--plan`، بدون publish).
 - [x] `DONE (verified)` : صفحه اصلی شناسه `18` منتشر و به‌عنوان `static front page` تنظیم شده است.
 
 ## ۴. پوسته و قالب فرزند
@@ -81,10 +82,14 @@
 - [x] `DONE (repo)` : اسکریپت رندر `scripts/render_static_pages.py` (فقط stdlib، بدون وابستگی پایتون).
 - [x] `DONE (repo)` : رانر پایین‌لایه `scripts/radman_branding_and_content_import.sh` با قفل `flock`، بک‌آپ پیش از تغییر، و guards سخت‌گیرانه استیجینگ.
 - [x] `DONE (repo)` : رانر مالک با یک دستور `scripts/radman_stage_apply.sh` (پیش‌فرض `--plan`، `--apply-staging` فقط با `CONFIRM_STAGING_APPLY=YES`)؛ باگ `/dev/fd` جیل‌شل رفع شده (بدون process substitution، build dir با `mktemp -d`).
-- [x] `DONE (repo)` : gate محتوای کامل (بدون placeholder) با `scripts/check_no_placeholders.py` در هر اجرای plan اعمال می‌شود.
-- [x] `DONE (repo)` : self-test محلی `scripts/test_plan_runner.sh` اجرای plan، چاپ جدول DEPLOY PLAN و عدم وجود placeholder را تضمین می‌کند.
+- [x] `DONE (repo)` : gate محتوای کامل (بدون placeholder) با `scripts/check_no_placeholders.py` در هر اجرای plan اعمال می‌شود. gate فقط روی `[…]` (براکت+بیضی) و کلاس `radman-placeholder` fail می‌کند؛ بیضی عادی `…` در نثر فارسی مجاز است.
+- [x] `DONE (repo)` : self-test محلی `scripts/test_plan_runner.sh` اجرای plan، چاپ جدول DEPLOY PLAN، عدم وجود placeholder، و تست‌های رگرسیون بیضی/`[…]`/کلاس/لینک فارسی را شامل می‌شود.
+- [x] `DONE (repo)` : رجیستری تأیید محتوا در [docs/STATIC-CONTENT-APPROVAL-REGISTRY.md](STATIC-CONTENT-APPROVAL-REGISTRY.md) ایجاد شد (همه ۱۱ صفحه: Draft deploy YES، Publish BLOCKED).
 - [ ] `PENDING host execution` : اجرای `bash scripts/radman_stage_apply.sh --plan` روی میزبان توسط مالک/عامل و بررسی خروجی (پس از آن می‌توان به مرحله apply رفت).
-- [ ] `PENDING reviewer approval` : اجرای `--apply-staging` پس از تأیید صریح.
+- [ ] `PENDING reviewer approval` : اجرای `--apply-staging` (فقط Draft روی استیجینگ) پس از تأیید صریح.
+- [ ] `PENDING OWNER OPERATIONAL APPROVAL` : تأیید نهایی مالک برای محتوای تمام ۱۱ صفحه (اطلاعات تماس/ساعت، روش‌های ارسال، بسته‌بندی، SLA، قیمت‌گذاری، سنگ‌های موجود و ...).
+- [ ] `PENDING LEGAL REVIEW` : بازبینی حقوقی برای صفحات `returns`، `privacy-policy-radman` و `terms` قبل از هرگونه انتشار عمومی.
+- [ ] `BLOCKED` : انتشار عمومی (Publish) هر یک از ۱۱ صفحه تا زمانی که Owner approval = APPROVED و (در صورت نیاز) Legal review = APPROVED باشد.
 
 ## ۱۰. تست‌های آتی / باقی‌مانده
 

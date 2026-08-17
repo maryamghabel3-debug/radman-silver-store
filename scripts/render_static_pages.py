@@ -15,9 +15,11 @@ renders the public-only page body into safe HTML fragments.
     - unordered and ordered lists (single level; nested lists flattened)
     - bold / strong emphasis (``**text**``)
     - inline links (``[text](url)`` — URL must be http(s) or path-absolute)
-* Refuses to emit owner checklists, SEO planning notes, or bracketed
-  placeholders (``[...]``) which are replaced with a neutral marker to
-  remind reviewers they must not ship placeholders.
+* Refuses to emit owner checklists, SEO planning notes, or unresolved
+  bracketed placeholders (``[owner-fill]`` or the literal ``[...]`` sentinel),
+  which are replaced with a neutral ``<span class="radman-placeholder">``
+  marker so reviewers can spot them. A normal Persian ellipsis "…" in prose
+  is NOT treated as a placeholder and is rendered as-is.
 * Writes rendered HTML fragments into a private build directory.
 * Fails loudly if any source file or ``## Content`` section is missing.
 
@@ -76,10 +78,12 @@ INTERNAL_SECTION_HEADINGS: Tuple[str, ...] = (
     "page purpose",
 )
 
-# Placeholder pattern: bracketed owner-fill tokens like [شماره تماس] or
-# [لینک اینستاگرام]. We EXCLUDE markdown links (text followed immediately by
-# "(url)") so that in-page links like [راهنمای سایز](/ring-size-guide) are not
-# mistaken for placeholders.
+# Placeholder pattern: bracketed owner-fill tokens like [شماره تماس] or the
+# literal bracketed ellipsis "[...]" (U+2026 HORIZONTAL ELLIPSIS between brackets).
+# We EXCLUDE markdown links ("](" immediately after the closing bracket) so that
+# in-page links like [راهنمای سایز](/ring-size-guide) are never mistaken for
+# placeholders. A normal/standalone ellipsis "..." in Persian prose is NOT a
+# placeholder and is intentionally left untouched.
 PLACEHOLDER_PATTERN = re.compile(r"\[([^\]\n]{1,80})\](?!\()")
 HEADING_PATTERN = re.compile(r"^(#{2,4})\s+(.+?)\s*#*\s*$")
 UL_BULLET_PATTERN = re.compile(r"^\s*[-*+]\s+(.*)$")
@@ -155,15 +159,20 @@ def extract_public_body(markdown_text: str, source_label: str) -> str:
 # Inline formatting (XSS-safe)
 # -----------------------------------------------------------------------------
 def render_inline(text: str) -> str:
-    """Render inline bold and links; escape everything else."""
-    # Placeholders become neutral <span class="radman-placeholder"> markers.
-    def _placeholder_sub(match: re.Match[str]) -> str:
-        ph = html.escape(match.group(0))
-        return f'<span class="radman-placeholder" data-placeholder="{ph}">[…]</span>'
+    """Render inline bold and links; escape everything else.
 
-    out = PLACEHOLDER_PATTERN.sub(_placeholder_sub, text)
-
-    # Protect links and bold before html.escape by using token placeholders.
+    Processing order matters here:
+      1. Stash Markdown links [text](url) FIRST so their bracket syntax is
+         never examined by the placeholder regex (defense-in-depth beyond
+         the negative lookahead for a following open-paren in PLACEHOLDER_PATTERN).
+      2. Stash bold **text** next.
+      3. HTML-escape the remaining plain text.
+      4. Replace any unresolved [owner-fill] or literal "[...]" sentinel in
+         the escaped plain text with a neutral <span class="radman-placeholder">
+         marker. A normal/standalone ellipsis "..." (U+2026) used in Persian
+         prose is left alone and passes through as-is; it is NOT a placeholder.
+      5. Restore the stashed links/bold tokens.
+    """
     tokens: List[str] = []
 
     def _stash(s: str) -> str:
@@ -181,9 +190,18 @@ def render_inline(text: str) -> str:
     def _bold_sub(m: re.Match[str]) -> str:
         return _stash(f"<strong>{html.escape(m.group(1))}</strong>")
 
+    out = text
     out = LINK_PATTERN.sub(_link_sub, out)
     out = BOLD_PATTERN.sub(_bold_sub, out)
     out = html.escape(out, quote=False)
+
+    # Replace unresolved [owner-fill] / "[...]" sentinels in the remaining
+    # plain (escaped) text with a neutral placeholder span.
+    def _placeholder_sub(match: re.Match[str]) -> str:
+        ph = html.escape(match.group(0))
+        return f'<span class="radman-placeholder" data-placeholder="{ph}">[…]</span>'
+
+    out = PLACEHOLDER_PATTERN.sub(_placeholder_sub, out)
 
     for i, tok in enumerate(tokens):
         out = out.replace(f"\x00TOK{i}\x00", tok)
@@ -270,7 +288,7 @@ def render_markdown_to_html(public_body: str, source_label: str) -> Tuple[str, b
             item = _list_item(line, ordered)
             if item:
                 list_items.append(item)
-                if "…" in item or "radman-placeholder" in item:
+                if "radman-placeholder" in item:
                     has_placeholders = True
             continue
 
@@ -305,7 +323,10 @@ def render_markdown_to_html(public_body: str, source_label: str) -> Tuple[str, b
     out.append(_flush_paragraph(para))
 
     html_out = "\n".join(x for x in out if x).strip()
-    if "radman-placeholder" in html_out or "…" in html_out:
+    # A page contains placeholders ONLY if the renderer emitted a
+    # radman-placeholder span (unresolved [owner-fill-later] token).
+    # Normal/standalone ellipsis "..." in Persian prose is NOT a placeholder.
+    if "radman-placeholder" in html_out:
         has_placeholders = True
     return html_out, has_placeholders
 
@@ -421,8 +442,11 @@ def main(argv: List[str] | None = None) -> int:
     if any_placeholder:
         print(
             "\n[NOTE] Pages marked 'YES' in placeholders column still contain "
-            "owner-fill-later tokens ([…]). The deploy runner refuses to apply "
-            "when --strict-no-placeholders is set; plan mode allows them for review.",
+            "owner-fill-later tokens ([...] / bracketed text) rendered as "
+            "<span class=\"radman-placeholder\">. The deploy runner refuses to "
+            "apply when --strict-no-placeholders is set; plan mode allows them "
+            "for review. A normal/standalone ellipsis '…' in Persian prose is "
+            "NOT a placeholder and does not block rendering.",
             file=sys.stderr,
         )
         if args.strict_no_placeholders:
