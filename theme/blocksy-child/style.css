@@ -5,15 +5,22 @@ Description:  Official Blocksy Child Theme for RADMAN SILVER 925 (925 Sterling S
 Author:       RADMAN E-Commerce Developer
 Author URI:   https://radmansilver.ir
 Template:     blocksy
-Version:      1.0.0
+Version:      1.0.1
 License:      GNU General Public License v2 or later
 Text Domain:  blocksy-child-radman
 */
 
-/* RADMAN SILVER 925 — Official Luxury Palette (#0B0B0E background, #FAF7F2 text) */
+/* RADMAN SILVER 925 — Official Luxury Palette
+   Default site surface is matte black (#0B0B0E) with ivory text (#FAF7F2).
+   Content sections may override with light backgrounds via inline styles
+   (e.g. white / ivory category rows) — those sections carry their own
+   color, so we only set defaults at the body level. */
 :root {
     --radman-bg-dark: #0B0B0E;
     --radman-text-ivory: #FAF7F2;
+    --radman-accent-gold: #BFA67A;
+    --radman-ivory-muted: #E5DFD3;
+    --radman-border-soft: #E0D8C8;
 }
 
 body, .ct-site, .site-content {
@@ -22,9 +29,63 @@ body, .ct-site, .site-content {
 }
 
 h1, h2, h3, h4, h5, h6, .site-title, .entry-title {
-    color: #FAF7F2 !important;
+    color: inherit;
 }
 
 a, .ct-link {
-    color: #FAF7F2;
+    color: var(--radman-accent-gold);
+}
+
+/* Ensure Gutenberg groups using inline light backgrounds render correctly
+   against the dark body default. */
+.wp-block-group.has-background {
+    color: inherit;
+}
+
+/* Homepage sections */
+.radman-hero h1,
+.radman-hero .wp-block-heading {
+    color: #FAF7F2 !important;
+}
+
+.radman-categories h2,
+.radman-categories h3,
+.radman-categories .wp-block-heading,
+.radman-brand-intro h2,
+.radman-brand-intro p {
+    color: inherit;
+}
+
+.radman-shop-cta h2,
+.radman-shop-cta p {
+    color: #FAF7F2 !important;
+}
+
+.radman-staging-notice p {
+    color: #7A5E1F !important;
+    margin: 0;
+}
+
+/* Category card hover polish (subtle, no animation libs) */
+.radman-categories .wp-block-group[style*="#0B0B0E"]:hover {
+    outline: 1px solid var(--radman-accent-gold);
+    outline-offset: -1px;
+}
+
+/* Mobile-first tightening */
+@media (max-width: 600px) {
+    .radman-hero,
+    .radman-categories,
+    .radman-brand-intro,
+    .radman-shop-cta {
+        padding-top: 48px !important;
+        padding-bottom: 48px !important;
+    }
+    .radman-trust-row {
+        padding-top: 20px !important;
+        padding-bottom: 20px !important;
+    }
+    .radman-trust-row .wp-block-group {
+        gap: 8px !important;
+    }
 }

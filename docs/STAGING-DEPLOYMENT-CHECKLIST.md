@@ -37,7 +37,18 @@
   - [ ] خروجی پول در سفارش، فاکتور و ایمیل
 - [x] `DONE (verified — placeholder state)` : صفحات استاتیک ۱۱‌گانه با شناسه‌های `21–31` به‌صورت **Draft placeholder** ایجاد شده‌اند (متن موقت bootstrap).
 - [x] `DONE (repo)` : **محتوای کامل ۱۱ صفحه** در `content/static-pages/` نوشته شده و با `scripts/check_no_placeholders.py` تأیید شده که placeholder-free است (همهٔ تعهدهای عملیاتی تأییدنشده حذف و به‌صورت مشروط/پیش‌نویس بازنویسی شده‌اند).
-- [ ] `PENDING (host execution)` : **ایمپورت Draft روی استیجینگ** از طریق `scripts/radman_stage_apply.sh --apply-staging` (نیازمند مأموریت مصوب میزبانی با `CONFIRM_STAGING_APPLY=YES`؛ پیش‌فرض `--plan`، بدون publish).
+- [x] `DONE (repo)` : **ابزار یک‌دستوری پایه فروشگاه** (`scripts/build_staging_storefront.sh`) آماده است: بک‌آپ + child theme sync + ۱۱ صفحه Draft + homepage Gutenberg foundation + ۳ دسته‌بندی محصول + منوی اصلی + گزارش وضعیت WooCommerce/LiteSpeed. همگی `--plan` پیش‌فرض، idempotent، و فاقد هرگونه فعال‌سازی پرداخت/پیامک/ردیس/انتشار هستند.
+- [ ] `PENDING (host execution)` : **اجرای یک دستور نهایی روی میزبان** (توسط مالک از داخل ایران) — مطابق [FINAL-STAGING-STOREFRONT-BATCH-RUNBOOK.md](FINAL-STAGING-STOREFRONT-BATCH-RUNBOOK.md):
+  ```bash
+  export PATH="$HOME/bin:$PATH"
+  APP_ENV=staging \
+  CONFIRM_STAGING_APPLY=YES \
+  WP_PATH=/home/radmansi/staging.radmansilver.ir \
+  WP_URL=https://staging.radmansilver.ir \
+  RADMAN_REPO_ROOT=/home/radmansi/radman-deploy/repo \
+  RADMAN_PRIVATE_DIR=/home/radmansi/.config/radman \
+  bash /home/radmansi/radman-deploy/repo/scripts/build_staging_storefront.sh --apply-staging
+  ```
 - [x] `DONE (verified)` : صفحه اصلی شناسه `18` منتشر و به‌عنوان `static front page` تنظیم شده است.
 
 ## ۴. پوسته و قالب فرزند
@@ -85,8 +96,9 @@
 - [x] `DONE (repo)` : gate محتوای کامل (بدون placeholder) با `scripts/check_no_placeholders.py` در هر اجرای plan اعمال می‌شود. gate فقط روی `[…]` (براکت+بیضی) و کلاس `radman-placeholder` fail می‌کند؛ بیضی عادی `…` در نثر فارسی مجاز است.
 - [x] `DONE (repo)` : self-test محلی `scripts/test_plan_runner.sh` اجرای plan، چاپ جدول DEPLOY PLAN، عدم وجود placeholder، و تست‌های رگرسیون بیضی/`[…]`/کلاس/لینک فارسی را شامل می‌شود.
 - [x] `DONE (repo)` : رجیستری تأیید محتوا در [docs/STATIC-CONTENT-APPROVAL-REGISTRY.md](STATIC-CONTENT-APPROVAL-REGISTRY.md) ایجاد شد (همه ۱۱ صفحه: Draft deploy YES، Publish BLOCKED).
-- [ ] `PENDING host execution` : اجرای `bash scripts/radman_stage_apply.sh --plan` روی میزبان توسط مالک/عامل و بررسی خروجی (پس از آن می‌توان به مرحله apply رفت).
-- [ ] `PENDING reviewer approval` : اجرای `--apply-staging` (فقط Draft روی استیجینگ) پس از تأیید صریح.
+- [x] `DONE (repo)` : self-test نهایی `scripts/test_storefront_batch.sh` شامل 83 تست پاس می‌شود (نگهبانی پیش‌فرض plan، لزوم CONFIRM، رد public_html، DRAFT ماندن همه صفحات، صفحه اصلی = ID 18، دسته‌بندی‌ها rings/necklaces/bracelets، منوی مصوب، عدم فعال‌سازی پرداخت/پیامک/ردیس، عدم نشت secret، اعتبارسنجی Gutenberg و رگرسیون بیضی فارسی).
+- [ ] `PENDING host execution` : اجرای **یک دستور نهایی** `bash scripts/build_staging_storefront.sh --plan` (dry run) روی میزبان توسط مالک و بررسی خروجی.
+- [ ] `PENDING host execution` : اجرای **یک دستور نهایی** `bash scripts/build_staging_storefront.sh --apply-staging` با `CONFIRM_STAGING_APPLY=YES` (بک‌آپ خودکار + child theme sync + ۱۱ صفحه Draft + homepage + دسته‌بندی‌ها + منو + گزارش WooCommerce/LiteSpeed).
 - [ ] `PENDING OWNER OPERATIONAL APPROVAL` : تأیید نهایی مالک برای محتوای تمام ۱۱ صفحه (اطلاعات تماس/ساعت، روش‌های ارسال، بسته‌بندی، SLA، قیمت‌گذاری، سنگ‌های موجود و ...).
 - [ ] `PENDING LEGAL REVIEW` : بازبینی حقوقی برای صفحات `returns`، `privacy-policy-radman` و `terms` قبل از هرگونه انتشار عمومی.
 - [ ] `BLOCKED` : انتشار عمومی (Publish) هر یک از ۱۱ صفحه تا زمانی که Owner approval = APPROVED و (در صورت نیاز) Legal review = APPROVED باشد.

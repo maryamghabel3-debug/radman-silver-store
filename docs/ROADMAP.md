@@ -47,17 +47,20 @@
 - ✅ رانرهای ایمن و idempotent استیجینگ در مخزن آماده شده‌اند:
   - `scripts/render_static_pages.py` (رندر امن Markdown → HTML، stdlib only، بدون انتشار یادداشت‌های داخلی، پشتیبانی صحیح از لینک‌های مارک‌داون فارسی).
   - `scripts/radman_branding_and_content_import.sh` (guards استیجینگ، `flock`، بک‌آپ DB/child-theme، upsert by slug، عدم publish خودکار، سازگاری با جیل‌شل cPanel/CloudLinux بدون process substitution).
-  - `scripts/radman_stage_apply.sh` (رانر تک‌دستور مالک، پیش‌فرض `--plan`).
+  - `scripts/radman_stage_apply.sh` (رانر تک‌دستور مالک برای محتوا/پوسته، پیش‌فرض `--plan`).
+  - **`scripts/build_staging_storefront.sh`** (**رانر نهایی یک‌دستوری پایه فروشگاه**: بک‌آپ + child theme + ۱۱ صفحه Draft + صفحه اصلی Gutenberg + ۳ دسته‌بندی محصول + منوی اصلی + گزارش پایه WooCommerce/LiteSpeed).
   - `scripts/check_no_placeholders.py` (gate پس از رندر؛ خطا در صورت وجود `[…]` براکت‌دار یا کلاس `radman-placeholder` در HTML خروجی. بیضی عادی `…` در نثر فارسی مجاز است).
   - `scripts/test_plan_runner.sh` (self-test محلی برای اجرای plan، چاپ جدول DEPLOY PLAN، نبود placeholder، و تست‌های رگرسیون بیضی/`[…]`/کلاس/لینک فارسی).
+  - `scripts/test_storefront_batch.sh` (self-test جامع رانر نهایی: 83 مورد شامل syntax، guards، Draft enforcement، ID 18 homepage، دسته‌بندی‌ها، whitelist منو، عدم وجود secrets، اعتبارسنجی Gutenberg، و رگرسیون بیضی فارسی).
+- ✅ **One-command batch tooling READY:** `bash scripts/build_staging_storefront.sh --plan` به‌صورت محلی (بدون میزبان) اجرا می‌شود و جدول کامل DEPLOY PLAN را چاپ می‌کند؛ همه 83 تست self-test پاس می‌شوند.
 - ✅ **Plan runs cleanly:** `bash scripts/radman_stage_apply.sh --plan` با موفقیت اجرا می‌شود، جدول `DEPLOY PLAN` را چاپ می‌کند، و همه ۱۱ صفحه با `placeholders = no` رندر می‌شوند.
 - ✅ **Repo content placeholder-free:** همه ۱۱ صفحه Markdown در ریپو از gate عبور می‌کنند و تعهدهای عملیاتی تأییدنشده از محتوای عمومی حذف شده‌اند.
-- ✅ **Draft deployment readiness:** محتوا آماده استقرار به‌صورت Draft روی استیجینگ است.
-- ⏳ **Host deployment PENDING:** محتوا **روی میزبان** هنوز deploy نشده (صفحات همچنان Draft placeholder هستند) — deploy واقعی روی استیجینگ در یک مأموریت مصوب میزبانی آتی با `--apply-staging` و `CONFIRM_STAGING_APPLY=YES` انجام می‌شود.
+- ✅ **Draft deployment readiness:** محتوا + قالب Gutenberg صفحه اصلی + دسته‌بندی‌ها + منو همگی آماده استقرار به‌صورت Draft روی استیجینگ هستند.
+- ⏳ **Host deployment PENDING:** اجرای **یک دستور نهایی** `bash scripts/build_staging_storefront.sh --apply-staging` (با `CONFIRM_STAGING_APPLY=YES`) روی میزبان توسط مالک از داخل ایران — مطابق [FINAL-STAGING-STOREFRONT-BATCH-RUNBOOK.md](FINAL-STAGING-STOREFRONT-BATCH-RUNBOOK.md).
 - ⏳ **Owner approval PENDING:** تأیید نهایی مالک برای همه ۱۱ صفحه.
 - ⏳ **Legal approval PENDING:** بازبینی حقوقی برای returns/privacy/terms.
 - 🚫 **Publication BLOCKED:** انتشار عمومی هیچ‌یک از صفحات تا دریافت تأییدهای نهایی انجام نخواهد شد.
-- ⏳ تنظیمات هاردنینگ باقی‌مانده (Wordfence, LiteSpeed Cache, UpdraftPlus cloud, RankMath wizard, Redis).
+- ⏳ تنظیمات هاردنینگ باقی‌مانده (Wordfence, LiteSpeed Cache, UpdraftPlus cloud, RankMath wizard, Redis) — بدون فعال‌سازی گسترده در این مأموریت.
 - ⏳ راه‌اندازی Host Operations Agent Access (مراجعه شود به [HOST-OPS-AGENT-ACCESS.md](HOST-OPS-AGENT-ACCESS.md)).
 
 ### Phase 3.5 — Strategy & Content Engine Setup (DOCUMENTED, READY FOR EXECUTION)
