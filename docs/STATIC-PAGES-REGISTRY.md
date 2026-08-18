@@ -14,11 +14,14 @@
 - **صفحات ۲۱ تا ۳۱:** در حال حاضر صفحات **Draft placeholder** با عناوین موقت هستند که در حین bootstrap دستی اولیه ایجاد شده‌اند.
   - **متن روی میزبان (placeholder summary) هنوز با محتوای نهایی مخزن جایگزین نشده است.**
   - **متن منبع در مخزن (فایل‌های `content/static-pages/*.md`) کامل، بازبینی‌شده و placeholder-free است** (تأییدشده با `scripts/check_no_placeholders.py` و `scripts/test_plan_runner.sh`). همه تعهدهای عملیاتی تأییدنشده (ساعت کاری ثابت، پیک فعال تهران، پست/تیپاکس نهایی، SMS خودکار رهگیری، اقلام قطعی بسته، SLA ثابت بازپرداخت، پرداخت فعال، درگاه کاملاً تأییدشده) حذف و به‌صورت مشروط/پیش‌نویس بازنویسی شده‌اند.
-  - **استقرار محتوا به‌صورت Draft روی استیجینگ PENDING است** (نیازمند مأموریت مصوب میزبانی) و از طریق `scripts/radman_stage_apply.sh --apply-staging` با `CONFIRM_STAGING_APPLY=YES` انجام می‌شود.
-  - **انتشار عمومی (Publish) برای همه ۱۱ صفحه BLOCKED است** تا تأیید نهایی مالک (Owner approval) و بازبینی حقوقی (برای returns/privacy/terms). برای وضعیت لحظه‌ای تأییدها به [docs/STATIC-CONTENT-APPROVAL-REGISTRY.md](STATIC-CONTENT-APPROVAL-REGISTRY.md) مراجعه کنید.
-  - استقرار نهایی از طریق رانر بازبینی‌شده و **idempotent** زیر انجام خواهد شد:
-    - `scripts/radman_stage_apply.sh --plan` (حالت پیش‌فرض: dry-run)
-    - `scripts/radman_stage_apply.sh --apply-staging` (فقط روی استیجینگ، با `CONFIRM_STAGING_APPLY=YES`)
+  - **استقرار کل پایه فروشگاه استیجینگ (صفحات ۱۱‌گانه + صفحه اصلی + دسته‌بندی‌ها + منوی اصلی + گزارش پایه) PENDING است** و با **یک دستور واحد** `scripts/build_staging_storefront.sh --apply-staging` با `CONFIRM_STAGING_APPLY=YES` روی میزبان (توسط مالک از داخل ایران) انجام می‌شود — مطابق راهنمای [docs/FINAL-STAGING-STOREFRONT-BATCH-RUNBOOK.md](FINAL-STAGING-STOREFRONT-BATCH-RUNBOOK.md).
+  - **انتشار عمومی (Publish) برای ۱۱ صفحه استاتیک BLOCKED است** تا تأیید نهایی مالک (Owner approval) و بازبینی حقوقی (برای returns/privacy/terms). برای وضعیت لحظه‌ای تأییدها به [docs/STATIC-CONTENT-APPROVAL-REGISTRY.md](STATIC-CONTENT-APPROVAL-REGISTRY.md) مراجعه کنید.
+  - **صفحه اصلی (Homepage) شناسه ۱۸** با قالب Gutenberg تمیز (`templates/home-page-gutenberg.html` — hero, trust, categories, brand, staging notice) به‌روزرسانی خواهد شد.
+  - ابزار استقرار نهایی، **idempotent** و دارای guards سخت‌گیرانه و بک‌آپ پیش از تغییر است:
+    - `scripts/build_staging_storefront.sh --plan` (پیش‌فرض: dry-run، بدون نیاز به میزبان)
+    - `scripts/build_staging_storefront.sh --check` (بررسی read-only روی میزبان)
+    - `scripts/build_staging_storefront.sh --apply-staging` (اعمال روی استیجینگ، با `CONFIRM_STAGING_APPLY=YES`)
+    - این رانر به‌صورت داخلی `scripts/radman_stage_apply.sh` را برای همگام‌سازی پوسته فرزند و صفحات استاتیک صدا می‌زند.
 
 ### ۱.۱ Currency Safety Gate — دو وضعیت مجزا
 برای اجتناب از ادعای نادرست، دروازهٔ ارز به دو گیت مستقل تقسیم شده است:
@@ -87,14 +90,15 @@
 
 - ✅ زبان فارسی `fa_IR` فعال.
 - ✅ `blocksy-child` فعال روی استیجینگ.
-- ⏳ شناسه‌های `21–31` روی میزبان **placeholder** باقی مانده‌اند و استقرار محتوای کامل مخزن **PENDING** است.
+- ⏳ شناسه‌های `21–31` روی میزبان **placeholder** باقی مانده‌اند و استقرار محتوا + پایه فروشگاه **PENDING (host execution)** است.
 - ✅ **Plan runs cleanly:** رانر `scripts/radman_stage_apply.sh --plan` (باگ `/dev/fd` جیل‌شل قبلی رفع شده) جدول DEPLOY PLAN را چاپ می‌کند و روی همه ۱۱ صفحه placeholder = no گزارش می‌دهد.
 - ✅ **Repo content placeholder-free:** همه ۱۱ فایل Markdown در `content/static-pages/` از نظر gate عبور می‌کنند (تست رگرسیون برای بیضی عادی `…` PASS، برای `[…]` و کلاس `radman-placeholder` FAIL).
+- ✅ **One-command batch tooling READY:** `scripts/build_staging_storefront.sh` با یک دستور کل پایه فروشگاه استیجینگ را به‌صورت idempotent مستقر می‌کند (بک‌آپ + child theme + ۱۱ صفحه Draft + homepage + ۳ دسته‌بندی + منوی اصلی + گزارش پایه).
 - ✅ **Draft deployment readiness:** محتوا از نظر فنی آمادهٔ استقرار به‌صورت Draft روی استیجینگ است.
-- ⏳ **Host deployment:** اجرای `--apply-staging` روی میزبان PENDING (نیازمند مأموریت مصوب میزبانی).
+- ⏳ **Host deployment PENDING:** اجرای **یک دستور نهایی** روی میزبان (توسط مالک از داخل ایران) مطابق [FINAL-STAGING-STOREFRONT-BATCH-RUNBOOK.md](FINAL-STAGING-STOREFRONT-BATCH-RUNBOOK.md).
 - ⏳ **Owner approval:** تأیید نهایی مالک برای محتوای تمام ۱۱ صفحه PENDING است.
 - ⏳ **Legal approval:** بازبینی حقوقی برای صفحات `returns`، `privacy-policy-radman` و `terms` PENDING است.
-- 🚫 **Publication BLOCKED:** هیچ‌یک از صفحات تا تأیید نهایی مالک/حقوقی منتشر نخواهند شد.
+- 🚫 **Publication BLOCKED:** هیچ‌یک از ۱۱ صفحه استاتیک تا تأیید نهایی مالک/حقوقی منتشر نخواهند شد.
 - ⚠️ شناسه‌های `2` و `3` تأیید شده حذف شده‌اند؛ شناسه `10` نیازمند بررسی روی میزبان است.
 - ✅ گیت A ارز (ذخیره‌سازی/نمایش محصول/سبد خرید بر حسب تومان) **PASS**.
 - ⏳ گیت B ارز (پرداخت/چک‌اوت/ایمیل/Schema) **PENDING**.

@@ -1,9 +1,8 @@
 # راهنمای به‌روزرسانی پوسته فرزند و محتوای استاتیک استیجینگ (Runbook)
 # (`RADMAN-BRANDING-CONTENT-IMPORT-RUNBOOK.md`)
 
-> **وضعیت سند:** READY FOR REVIEWER APPROVAL (خودکارآمادگی استیجینگ)
-> **مأموریت مرتبط:** Fix PR-12 truthfulness + prepare secure host operations automation
-> **تاریخ:** 2026-08-12 (Asia/Tehran)
+> **وضعیت سند:** READY — زیرساخت رانر تأیید شده. برای اجرای نهایی روی میزبان از رانر واحد `scripts/build_staging_storefront.sh` استفاده شود (رجوع به [FINAL-STAGING-STOREFRONT-BATCH-RUNBOOK.md](FINAL-STAGING-STOREFRONT-BATCH-RUNBOOK.md)).
+> **تاریخ:** 2026-08-18 (Asia/Tehran)
 > **محدوده:** RADMAN ONLY — `staging.radmansilver.ir` — پروداکشن (`public_html`) و RIDELIN خارج از محدوده‌اند.
 
 ---
