@@ -40,14 +40,23 @@
 
 - ✅ زبان فارسی `fa_IR` فعال.
 - ✅ Blocksy Child Theme (`blocksy-child v1.0.0`) روی استیجینگ فعال است (فایل‌های پالت و enqueue در `theme/blocksy-child/`).
-- ⚠️ صفحات استاتیک با شناسه‌های `21–31` به‌صورت **Draft placeholder** وجود دارند. متن کامل `content/static-pages/` هنوز از طریق رانر اعمال نشده و **PENDING** است.
+- ⚠️ صفحات استاتیک با شناسه‌های `21–31` به‌صورت **Draft placeholder** روی میزبان باقی مانده‌اند. متن کامل `content/static-pages/` در **ریپو** کامل و placeholder-free است (تعهدهای عملیاتی تأییدنشده حذف، گیت تأیید مالک/حقوقی اضافه شده) اما هنوز از طریق رانر روی میزبان اعمال نشده و **host deployment PENDING** است. انتشار عمومی **BLOCKED** تا تأیید مالک (همه صفحات) و بازبینی حقوقی (returns/privacy/terms) — مراجعه به [STATIC-CONTENT-APPROVAL-REGISTRY.md](STATIC-CONTENT-APPROVAL-REGISTRY.md).
 - ⚠️ پاکسازی صفحات تکراری: ID `2` و ID `3` تأیید شده حذف شده‌اند. وضعیت ID `10` (refund_returns) نیازمند بررسی میزبان است.
 - ✅ **Currency Gate A** (ذخیره/نمایش تومان در محصول و سبد خرید) پاس شده است (`IRT`، ذخیره ۱۲۳۴۵۶ = ۱۲۳۴۵۶، نمایش 123,456 Toman).
 - ⏳ **Currency Gate B** (checkout/order/email/Schema/payment callback) **PENDING** و قبل از فعال‌سازی پرداخت یا راه‌اندازی پروداکشن باید پاس شود.
 - ✅ رانرهای ایمن و idempotent استیجینگ در مخزن آماده شده‌اند:
-  - `scripts/render_static_pages.py` (رندر امن Markdown → HTML، stdlib only، بدون انتشار یادداشت‌های داخلی).
-  - `scripts/radman_branding_and_content_import.sh` (guards استیجینگ، `flock`، بک‌آپ DB/child-theme، upsert by slug، عدم publish خودکار).
+  - `scripts/render_static_pages.py` (رندر امن Markdown → HTML، stdlib only، بدون انتشار یادداشت‌های داخلی، پشتیبانی صحیح از لینک‌های مارک‌داون فارسی).
+  - `scripts/radman_branding_and_content_import.sh` (guards استیجینگ، `flock`، بک‌آپ DB/child-theme، upsert by slug، عدم publish خودکار، سازگاری با جیل‌شل cPanel/CloudLinux بدون process substitution).
   - `scripts/radman_stage_apply.sh` (رانر تک‌دستور مالک، پیش‌فرض `--plan`).
+  - `scripts/check_no_placeholders.py` (gate پس از رندر؛ خطا در صورت وجود `[…]` براکت‌دار یا کلاس `radman-placeholder` در HTML خروجی. بیضی عادی `…` در نثر فارسی مجاز است).
+  - `scripts/test_plan_runner.sh` (self-test محلی برای اجرای plan، چاپ جدول DEPLOY PLAN، نبود placeholder، و تست‌های رگرسیون بیضی/`[…]`/کلاس/لینک فارسی).
+- ✅ **Plan runs cleanly:** `bash scripts/radman_stage_apply.sh --plan` با موفقیت اجرا می‌شود، جدول `DEPLOY PLAN` را چاپ می‌کند، و همه ۱۱ صفحه با `placeholders = no` رندر می‌شوند.
+- ✅ **Repo content placeholder-free:** همه ۱۱ صفحه Markdown در ریپو از gate عبور می‌کنند و تعهدهای عملیاتی تأییدنشده از محتوای عمومی حذف شده‌اند.
+- ✅ **Draft deployment readiness:** محتوا آماده استقرار به‌صورت Draft روی استیجینگ است.
+- ⏳ **Host deployment PENDING:** محتوا **روی میزبان** هنوز deploy نشده (صفحات همچنان Draft placeholder هستند) — deploy واقعی روی استیجینگ در یک مأموریت مصوب میزبانی آتی با `--apply-staging` و `CONFIRM_STAGING_APPLY=YES` انجام می‌شود.
+- ⏳ **Owner approval PENDING:** تأیید نهایی مالک برای همه ۱۱ صفحه.
+- ⏳ **Legal approval PENDING:** بازبینی حقوقی برای returns/privacy/terms.
+- 🚫 **Publication BLOCKED:** انتشار عمومی هیچ‌یک از صفحات تا دریافت تأییدهای نهایی انجام نخواهد شد.
 - ⏳ تنظیمات هاردنینگ باقی‌مانده (Wordfence, LiteSpeed Cache, UpdraftPlus cloud, RankMath wizard, Redis).
 - ⏳ راه‌اندازی Host Operations Agent Access (مراجعه شود به [HOST-OPS-AGENT-ACCESS.md](HOST-OPS-AGENT-ACCESS.md)).
 

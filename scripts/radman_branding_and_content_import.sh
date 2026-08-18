@@ -174,14 +174,28 @@ fi
 TS="$(date +%Y%m%d-%H%M%S)"
 if [[ "$MODE" == "apply" ]]; then
     BUILD_DIR="$RADMAN_PRIVATE_DIR/build-${TS}"
+    mkdir -p "$BUILD_DIR"
 else
-    BUILD_DIR="${TMPDIR:-/tmp}/radman-plan-${TS}"
+    # Portable temp dir: prefer mktemp (works on jailshell/LiteSpeed/cPanel);
+    # fall back to /tmp if TMPDIR is unavailable.
+    if command -v mktemp >/dev/null 2>&1; then
+        BUILD_DIR="$(mktemp -d "${TMPDIR:-/tmp}/radman-plan-${TS}-XXXX")"
+    else
+        BUILD_DIR="${TMPDIR:-/tmp}/radman-plan-${TS}-$$"
+        mkdir -p "$BUILD_DIR"
+    fi
 fi
-mkdir -p "$BUILD_DIR"
 log "Rendering static pages → ${BUILD_DIR}"
 python3 "$RADMAN_REPO_ROOT/$RENDERER_RELPATH" \
     --repo-root "$RADMAN_REPO_ROOT" \
     --build-dir "$BUILD_DIR"
+
+# Enforce placeholder-free output even in plan mode so reviewers see problems
+# before approving an --apply-staging run. If any "[…]" markers or
+# radman-placeholder spans remain, fail cleanly with a message listing the
+# offending files. This gate does not touch the host.
+log "Running placeholder gate on rendered HTML..."
+python3 "$RADMAN_REPO_ROOT/scripts/check_no_placeholders.py" "$BUILD_DIR"
 
 # -----------------------------------------------------------------------------
 # Verify blog_public = 0 (noindex) on staging
@@ -227,25 +241,38 @@ find_existing_page_id() {
 }
 
 # -----------------------------------------------------------------------------
-# Dry-run plan print
+# Dry-run plan print (portable — no process substitution / <() for jailshell)
 # -----------------------------------------------------------------------------
 log ""
 log "==================== DEPLOY PLAN ===================="
 printf '%-4s %-28s %-12s %-10s %-10s\n' "#" "SLUG" "EXISTING_ID" "ACTION" "STATUS"
 i=0
-while IFS='|' read -r slug title rendered; do
+print_plan_row() {
+    local slug="$1" title="$2" rendered="$3"
     i=$((i+1))
-    existing="will-create"
+    local existing="will-create"
     if [[ "$MODE" == "apply" || "$MODE" == "check" ]]; then
+        local pid
         pid="$(find_existing_page_id "$slug")"
         [[ -n "$pid" ]] && existing="$pid"
     fi
-    action="UPDATE"
+    local action="UPDATE"
     [[ "$existing" == "will-create" ]] && action="CREATE"
-    size="?"
+    local size="?"
     [[ -f "$rendered" ]] && size="$(wc -c < "$rendered")"
     printf '%-4s %-28s %-12s %-10s %-10s  %s bytes\n' "$i" "$slug" "$existing" "$action" "draft" "$size"
-done < <(page_entry)
+}
+print_plan_row "about-us"               "درباره رادمان"         "${BUILD_DIR}/about-us.html"
+print_plan_row "contact-us"             "تماس با ما"            "${BUILD_DIR}/contact-us.html"
+print_plan_row "faq"                    "سؤالات متداول"        "${BUILD_DIR}/faq.html"
+print_plan_row "shipping"               "روش‌های ارسال"        "${BUILD_DIR}/shipping.html"
+print_plan_row "returns"                "شرایط بازگشت کالا"    "${BUILD_DIR}/returns.html"
+print_plan_row "privacy-policy-radman"  "حریم خصوصی"          "${BUILD_DIR}/privacy-policy-radman.html"
+print_plan_row "terms"                  "قوانین و مقررات"      "${BUILD_DIR}/terms.html"
+print_plan_row "ring-size-guide"        "راهنمای سایز انگشتر"  "${BUILD_DIR}/ring-size-guide.html"
+print_plan_row "silver-care"            "راهنمای نگهداری نقره" "${BUILD_DIR}/silver-care.html"
+print_plan_row "silver-925-authenticity" "اصالت نقره ۹۲۵"     "${BUILD_DIR}/silver-925-authenticity.html"
+print_plan_row "gemstones"              "راهنمای سنگ‌های زینتی" "${BUILD_DIR}/gemstones.html"
 log "====================================================="
 log ""
 
@@ -292,8 +319,10 @@ log "[APPLY] Active theme verified: ${POST_THEME}"
 log "[APPLY] Upserting static pages (idempotent by slug; status = draft)..."
 UPSERTED=0
 CREATED=0
-while IFS='|' read -r slug title rendered; do
+apply_page() {
+    local slug="$1" title="$2" rendered="$3"
     [[ -f "$rendered" ]] || die "Rendered HTML missing for ${slug}: ${rendered}"
+    local existing_id
     existing_id="$(find_existing_page_id "$slug")"
     if [[ -n "$existing_id" ]]; then
         # Update existing; ensure draft status; do NOT publish.
@@ -305,6 +334,7 @@ while IFS='|' read -r slug title rendered; do
         log "[APPLY] UPDATE slug=${slug}  ID=${existing_id}  status=draft"
         UPSERTED=$((UPSERTED+1))
     else
+        local new_id
         new_id="$(wp post create \
             --post_type=page \
             --post_title="$title" \
@@ -315,7 +345,18 @@ while IFS='|' read -r slug title rendered; do
         log "[APPLY] CREATE slug=${slug}  ID=${new_id}  status=draft"
         CREATED=$((CREATED+1))
     fi
-done < <(page_entry)
+}
+apply_page "about-us"               "درباره رادمان"         "${BUILD_DIR}/about-us.html"
+apply_page "contact-us"             "تماس با ما"            "${BUILD_DIR}/contact-us.html"
+apply_page "faq"                    "سؤالات متداول"        "${BUILD_DIR}/faq.html"
+apply_page "shipping"               "روش‌های ارسال"        "${BUILD_DIR}/shipping.html"
+apply_page "returns"                "شرایط بازگشت کالا"    "${BUILD_DIR}/returns.html"
+apply_page "privacy-policy-radman"  "حریم خصوصی"          "${BUILD_DIR}/privacy-policy-radman.html"
+apply_page "terms"                  "قوانین و مقررات"      "${BUILD_DIR}/terms.html"
+apply_page "ring-size-guide"        "راهنمای سایز انگشتر"  "${BUILD_DIR}/ring-size-guide.html"
+apply_page "silver-care"            "راهنمای نگهداری نقره" "${BUILD_DIR}/silver-care.html"
+apply_page "silver-925-authenticity" "اصالت نقره ۹۲۵"     "${BUILD_DIR}/silver-925-authenticity.html"
+apply_page "gemstones"              "راهنمای سنگ‌های زینتی" "${BUILD_DIR}/gemstones.html"
 
 log "[APPLY] Done. updated=${UPSERTED} created=${CREATED}"
 log "[APPLY] Static pages remain Draft — no publish occurred."

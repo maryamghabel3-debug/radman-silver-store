@@ -12,9 +12,10 @@
 - **پوسته:** `blocksy-child v1.0.0` با رنگ‌های مصوب `#0B0B0E` و `#FAF7F2` فعال است.
 - **صفحه اصلی:** شناسه `18` به‌عنوان `static front page` تنظیم شده است.
 - **صفحات ۲۱ تا ۳۱:** در حال حاضر صفحات **Draft placeholder** با عناوین موقت هستند که در حین bootstrap دستی اولیه ایجاد شده‌اند.
-  - **این صفحات هنوز حاوی محتوای کامل پوشه `content/static-pages/` نیستند.**
-  - متن فعلی آن‌ها خلاصه/متن موقت (placeholder summary) از مرحله bootstrap است.
-  - **استقرار کامل محتوای مخزن (full content deployment) هنوز انجام نشده و PENDING است.**
+  - **متن روی میزبان (placeholder summary) هنوز با محتوای نهایی مخزن جایگزین نشده است.**
+  - **متن منبع در مخزن (فایل‌های `content/static-pages/*.md`) کامل، بازبینی‌شده و placeholder-free است** (تأییدشده با `scripts/check_no_placeholders.py` و `scripts/test_plan_runner.sh`). همه تعهدهای عملیاتی تأییدنشده (ساعت کاری ثابت، پیک فعال تهران، پست/تیپاکس نهایی، SMS خودکار رهگیری، اقلام قطعی بسته، SLA ثابت بازپرداخت، پرداخت فعال، درگاه کاملاً تأییدشده) حذف و به‌صورت مشروط/پیش‌نویس بازنویسی شده‌اند.
+  - **استقرار محتوا به‌صورت Draft روی استیجینگ PENDING است** (نیازمند مأموریت مصوب میزبانی) و از طریق `scripts/radman_stage_apply.sh --apply-staging` با `CONFIRM_STAGING_APPLY=YES` انجام می‌شود.
+  - **انتشار عمومی (Publish) برای همه ۱۱ صفحه BLOCKED است** تا تأیید نهایی مالک (Owner approval) و بازبینی حقوقی (برای returns/privacy/terms). برای وضعیت لحظه‌ای تأییدها به [docs/STATIC-CONTENT-APPROVAL-REGISTRY.md](STATIC-CONTENT-APPROVAL-REGISTRY.md) مراجعه کنید.
   - استقرار نهایی از طریق رانر بازبینی‌شده و **idempotent** زیر انجام خواهد شد:
     - `scripts/radman_stage_apply.sh --plan` (حالت پیش‌فرض: dry-run)
     - `scripts/radman_stage_apply.sh --apply-staging` (فقط روی استیجینگ، با `CONFIRM_STAGING_APPLY=YES`)
@@ -86,7 +87,14 @@
 
 - ✅ زبان فارسی `fa_IR` فعال.
 - ✅ `blocksy-child` فعال روی استیجینگ.
-- ⏳ شناسه‌های `21–31` موجود هستند اما **placeholder** اند؛ استقرار محتوای کامل مخزن **PENDING** است.
+- ⏳ شناسه‌های `21–31` روی میزبان **placeholder** باقی مانده‌اند و استقرار محتوای کامل مخزن **PENDING** است.
+- ✅ **Plan runs cleanly:** رانر `scripts/radman_stage_apply.sh --plan` (باگ `/dev/fd` جیل‌شل قبلی رفع شده) جدول DEPLOY PLAN را چاپ می‌کند و روی همه ۱۱ صفحه placeholder = no گزارش می‌دهد.
+- ✅ **Repo content placeholder-free:** همه ۱۱ فایل Markdown در `content/static-pages/` از نظر gate عبور می‌کنند (تست رگرسیون برای بیضی عادی `…` PASS، برای `[…]` و کلاس `radman-placeholder` FAIL).
+- ✅ **Draft deployment readiness:** محتوا از نظر فنی آمادهٔ استقرار به‌صورت Draft روی استیجینگ است.
+- ⏳ **Host deployment:** اجرای `--apply-staging` روی میزبان PENDING (نیازمند مأموریت مصوب میزبانی).
+- ⏳ **Owner approval:** تأیید نهایی مالک برای محتوای تمام ۱۱ صفحه PENDING است.
+- ⏳ **Legal approval:** بازبینی حقوقی برای صفحات `returns`، `privacy-policy-radman` و `terms` PENDING است.
+- 🚫 **Publication BLOCKED:** هیچ‌یک از صفحات تا تأیید نهایی مالک/حقوقی منتشر نخواهند شد.
 - ⚠️ شناسه‌های `2` و `3` تأیید شده حذف شده‌اند؛ شناسه `10` نیازمند بررسی روی میزبان است.
 - ✅ گیت A ارز (ذخیره‌سازی/نمایش محصول/سبد خرید بر حسب تومان) **PASS**.
 - ⏳ گیت B ارز (پرداخت/چک‌اوت/ایمیل/Schema) **PENDING**.
