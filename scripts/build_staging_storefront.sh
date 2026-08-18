@@ -238,7 +238,10 @@ LOCKFILE=""
 if [[ "$MODE" == "apply" || "$MODE" == "check" ]]; then
     mkdir -p "$RADMAN_PRIVATE_DIR"
     chmod 700 "$RADMAN_PRIVATE_DIR"
-    local locks_dir="$RADMAN_PRIVATE_DIR/locks"
+    # NOTE: do NOT use 'local' here — this block runs at top-level script scope
+    # (outside any function). 'local' is only valid inside bash functions and
+    # cPanel/CloudLinux jailshell aborts with: "local: can only be used in a function".
+    locks_dir="$RADMAN_PRIVATE_DIR/locks"
     mkdir -p "$locks_dir"
     chmod 700 "$locks_dir"
     LOCKFILE="$locks_dir/${LOCK_NAME}"
