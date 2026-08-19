@@ -4,11 +4,14 @@
  *
  * Minimal child theme functions. Intentionally does NOT hard-enqueue the
  * parent stylesheet by hand: Blocksy's parent theme registers and enqueues
- * its own styles via its own asset pipeline. We only register the child
+ * its own styles via its own asset pipeline. We register the child
  * stylesheet with the parent style as a dependency so that:
  *   - the child stylesheet loads AFTER the parent,
  *   - we avoid double-loading the parent stylesheet,
  *   - we do NOT introduce external Google Fonts, tracking, or credentials.
+ *
+ * The Radman design system CSS and local webfont CSS are enqueued AFTER the
+ * parent + child style.css so they can reliably override Blocksy defaults.
  *
  * Activation / correct ordering is verified by the staging deploy runner
  * (wp theme list + active-theme check), not by a static claim here.
@@ -27,10 +30,27 @@ function radman_blocksy_child_enqueue_styles() {
         $parent_handle = array();
     }
 
+    // 1) Base child stylesheet (palette tokens, homepage tweaks)
     wp_enqueue_style(
         'radman-blocksy-child-style',
         get_stylesheet_uri(),
         (array) $parent_handle,
+        wp_get_theme()->get('Version')
+    );
+
+    // 2) Local webfonts @font-face declarations (Estedad + Vazirmatn, NO remote fonts)
+    wp_enqueue_style(
+        'radman-local-fonts',
+        get_stylesheet_directory_uri() . '/assets/radman-fonts.css',
+        array('radman-blocksy-child-style'),
+        wp_get_theme()->get('Version')
+    );
+
+    // 3) Design system (typography scale, components, responsive polish)
+    wp_enqueue_style(
+        'radman-design-system',
+        get_stylesheet_directory_uri() . '/assets/radman-design-system.css',
+        array('radman-local-fonts'),
         wp_get_theme()->get('Version')
     );
 }

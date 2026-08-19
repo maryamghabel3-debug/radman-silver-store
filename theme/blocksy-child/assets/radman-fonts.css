@@ -1,0 +1,97 @@
+/* ==========================================================================
+   RADMAN SILVER 925 — Local Webfont Declarations
+   --------------------------------------------------------------------------
+   Estedad  : Display/headings (official brand logotype font, Estedad Bold)
+   Vazirmatn: Body/UI text
+   Both are bundled locally under assets/fonts/ (WOFF2 only).
+   License  : SIL Open Font License 1.1 (see assets/fonts/license/)
+   NO remote Google Fonts, no external resources, no tracking.
+   ========================================================================== */
+
+/* ---- Estedad (display / headings / logo-adjacent text) ---- */
+@font-face {
+    font-family: "Radman Estedad";
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url("../fonts/Estedad-Light.woff2") format("woff2");
+}
+@font-face {
+    font-family: "Radman Estedad";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("../fonts/Estedad-Regular.woff2") format("woff2");
+}
+@font-face {
+    font-family: "Radman Estedad";
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url("../fonts/Estedad-Medium.woff2") format("woff2");
+}
+@font-face {
+    font-family: "Radman Estedad";
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url("../fonts/Estedad-SemiBold.woff2") format("woff2");
+}
+@font-face {
+    font-family: "Radman Estedad";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url("../fonts/Estedad-Bold.woff2") format("woff2");
+}
+@font-face {
+    font-family: "Radman Estedad";
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url("../fonts/Estedad-Black.woff2") format("woff2");
+}
+
+/* ---- Vazirmatn (body / UI / navigation) ---- */
+@font-face {
+    font-family: "Radman Vazirmatn";
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url("../fonts/Vazirmatn-Light.woff2") format("woff2");
+}
+@font-face {
+    font-family: "Radman Vazirmatn";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("../fonts/Vazirmatn-Regular.woff2") format("woff2");
+}
+@font-face {
+    font-family: "Radman Vazirmatn";
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url("../fonts/Vazirmatn-Medium.woff2") format("woff2");
+}
+@font-face {
+    font-family: "Radman Vazirmatn";
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url("../fonts/Vazirmatn-SemiBold.woff2") format("woff2");
+}
+@font-face {
+    font-family: "Radman Vazirmatn";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url("../fonts/Vazirmatn-Bold.woff2") format("woff2");
+}
+@font-face {
+    font-family: "Radman Vazirmatn";
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url("../fonts/Vazirmatn-Black.woff2") format("woff2");
+}
