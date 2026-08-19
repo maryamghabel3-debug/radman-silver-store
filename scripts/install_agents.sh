@@ -174,6 +174,16 @@ fi
 # Install mode
 # -----------------------------------------------------------------------------
 log ""
+log "===================================================================="
+log "[INSTALL] SAFETY PRE-FLIGHT:"
+log "[INSTALL]   - Existing staging.env will be PRESERVED (never overwritten)."
+log "[INSTALL]   - Existing DB credentials and other secrets remain unchanged."
+log "[INSTALL]   - Only MISSING directories/files are created."
+log "[INSTALL]   - Smoke tests run with DRY_RUN=1 (no SMS, no price writes)."
+log "[INSTALL]   - Cron jobs are PRINTED ONLY — NOT registered automatically."
+log "[INSTALL]   - No order status is changed."
+log "===================================================================="
+log ""
 log "[INSTALL] Creating private directories (chmod 700)..."
 mkdir -p "$RADMAN_PRIVATE_DIR"
 chmod 700 "$RADMAN_PRIVATE_DIR"

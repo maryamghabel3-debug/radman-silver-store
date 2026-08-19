@@ -260,10 +260,52 @@ fi
 TS="$(date +%Y%m%d-%H%M%S)"
 
 # -----------------------------------------------------------------------------
-# Helper: read WP option safely
+# Helper: read WP option safely (jailshell-robust; no --format=trim)
 # -----------------------------------------------------------------------------
 wp_opt() {
-    wp option get "$1" --format=trim 2>/dev/null || echo "__MISSING__"
+    local v
+    v="$(wp option get "$1" 2>/dev/null | tr -d '[:space:]' || true)"
+    echo "${v:-__MISSING__}"
+}
+
+# -----------------------------------------------------------------------------
+# Portable whitespace trim (strips leading/trailing CR/LF/space/tab only,
+# preserving internal spaces — used for titles/status values).
+# -----------------------------------------------------------------------------
+trim() {
+    # Portable across bash 3+ on jailshell; no external process required.
+    local s="$1"
+    s="${s#"${s%%[![:space:]]*}"}"
+    s="${s%"${s##*[![:space:]]}"}"
+    printf '%s' "$s"
+}
+
+# -----------------------------------------------------------------------------
+# Robust active-theme detection (same 3-tier fallback as apply_design_system.sh)
+#   1. wp option get stylesheet — canonical single value
+#   2. wp theme list --status=active --format=csv parsed
+#   3. filesystem check for wp-content/themes/blocksy-child
+# Avoids `wp theme list ... --field=name --format=trim` which returns empty on
+# MizbanFa CloudLinux jailshell (the PR-18 root cause).
+# -----------------------------------------------------------------------------
+get_active_theme() {
+    local t=""
+    if wp_available; then
+        t="$(wp option get stylesheet 2>/dev/null | tr -d '[:space:]' || true)"
+        if [[ -z "$t" ]]; then
+            t="$(wp theme list --status=active --format=csv 2>/dev/null \
+                | tail -n +2 | head -n 1 | cut -d',' -f1 | tr -d '[:space:]' || true)"
+        fi
+    fi
+    if [[ -z "$t" && -d "$WP_PATH/wp-content/themes/blocksy-child" ]]; then
+        echo "blocksy-child (detected-by-dir)"
+        return 0
+    fi
+    if [[ -z "$t" && -d "$WP_PATH/wp-content/themes/blocksy" ]]; then
+        echo "blocksy (detected-by-dir)"
+        return 0
+    fi
+    echo "${t:-unknown}"
 }
 
 # -----------------------------------------------------------------------------
@@ -291,8 +333,9 @@ if [[ "$MODE" == "apply" || "$MODE" == "check" ]]; then
     [[ "$SITE_URL" == "$EXPECTED_WP_URL" ]] \
         || die "WordPress siteurl option is '${SITE_URL}' (expected '${EXPECTED_WP_URL}')."
 
-    ACTIVE_THEME="$(wp theme list --status=active --field=name --format=trim 2>/dev/null || echo unknown)"
-    if [[ "$ACTIVE_THEME" != "blocksy-child" && "$ACTIVE_THEME" != "blocksy" ]]; then
+    ACTIVE_THEME="$(get_active_theme)"
+    _active_base="${ACTIVE_THEME%% *}"
+    if [[ "$_active_base" != "blocksy-child" && "$_active_base" != "blocksy" ]]; then
         die "Active theme '${ACTIVE_THEME}' is not Blocksy-compatible. Refusing to proceed."
     fi
 
@@ -301,8 +344,8 @@ if [[ "$MODE" == "apply" || "$MODE" == "check" ]]; then
     SHOW_ON_FRONT="$(wp_opt show_on_front)"
     PAGE_ON_FRONT="$(wp_opt page_on_front)"
 
-    # Verify page 18 exists
-    if ! wp post get "$HOMEPAGE_ID" --format=ids >/dev/null 2>&1; then
+    # Verify page 18 exists (use wp post exists — wp post get does NOT support --format=ids)
+    if ! wp post exists "$HOMEPAGE_ID" >/dev/null 2>&1; then
         die "Homepage ID ${HOMEPAGE_ID} does not exist. Refusing to create a new homepage outside of plan."
     fi
 fi
@@ -363,8 +406,10 @@ HOMEPAGE_BACKUP_PATH="${BACKUP_DIR:-__PLAN__}/home-page-${HOMEPAGE_ID}-${TS}.htm
 apply_homepage() {
     log ">>>>>>>>>> Phase 2: Homepage foundation (page ID ${HOMEPAGE_ID})"
     local current_title current_status
-    current_title="$(wp post get "$HOMEPAGE_ID" --field=post_title --format=trim 2>/dev/null || echo __MISSING__)"
-    current_status="$(wp post get "$HOMEPAGE_ID" --field=post_status --format=trim 2>/dev/null || echo __MISSING__)"
+    current_title_raw="$(wp post get "$HOMEPAGE_ID" --field=post_title 2>/dev/null || echo __MISSING__)"
+    current_title="$(trim "$current_title_raw")"
+    current_status_raw="$(wp post get "$HOMEPAGE_ID" --field=post_status 2>/dev/null || echo __MISSING__)"
+    current_status="$(trim "$current_status_raw")"
     log "Current page ${HOMEPAGE_ID}: title='${current_title}' status='${current_status}'"
 
     if [[ "$DRY_RUN" -eq 1 ]]; then
@@ -540,8 +585,9 @@ apply_menu() {
 
         # Safety: if target is a page, verify it's NOT Draft before linking
         if [[ "$otype" == "page" ]]; then
-            local pstatus
-            pstatus="$(wp post get "$oid" --field=post_status --format=trim 2>/dev/null || echo __MISSING__)"
+            local pstatus_raw pstatus
+            pstatus_raw="$(wp post get "$oid" --field=post_status 2>/dev/null || echo __MISSING__)"
+            pstatus="$(trim "$pstatus_raw")"
             if [[ "$pstatus" == "draft" || "$pstatus" == "__MISSING__" ]]; then
                 warn "Skipping menu item '${label}' → page ID ${oid} (status=${pstatus}); Draft pages are never linked."
                 continue
@@ -716,7 +762,8 @@ verify_static_pages_draft() {
                 bad=$((bad+1))
                 continue
             fi
-            status="$(wp post get "$pid" --field=post_status --format=trim 2>/dev/null || echo unknown)"
+            _status_raw="$(wp post get "$pid" --field=post_status 2>/dev/null || echo unknown)"
+            status="$(trim "$_status_raw")"
             printf '  %-28s ID=%-8s status=%s\n' "$slug" "$pid" "$status"
             if [[ "$status" != "draft" ]]; then
                 err "Static page '${slug}' (ID ${pid}) has status '${status}' — expected 'draft'."

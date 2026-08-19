@@ -12,9 +12,11 @@
 #      local WOFF2 webfonts (Estedad + Vazirmatn), @font-face CSS, and the
 #      design-system stylesheet that covers header/nav/hero/trust/cards/
 #      shop/product/buttons/footer/forms/tabs/pagination/static pages.
-#   5. Imports approved Persian T0 logo (radman-logo-header-black.png) into
-#      the WP media library and sets it as the site custom_logo. Sets a
-#      monogram favicon (logo-icon-512.png) as site_icon.
+#   5. Imports approved Persian ivory header logo (radman-logo-header-ivory.png)
+#      into the WP media library and sets it as the site custom_logo, BUT ONLY
+#      if no valid existing custom_logo is already configured (preserves the
+#      owner-configured ivory logo on the dark/matte-black header). Same
+#      idempotent-preservation rule applies to site_icon (favicon).
 #   6. Updates page ID 18 (homepage) with the refined Gutenberg template.
 #   7. Applies a curated set of safe theme_mod values (sticky header off,
 #      dark header surface, logo max-height). Everything else is left to
@@ -63,7 +65,7 @@ DRY_RUN=1
 # -----------------------------------------------------------------------------
 # Branding assets (relative to RADMAN_REPO_ROOT/assets/branding/)
 # -----------------------------------------------------------------------------
-readonly LOGO_HEADER_FILE="radman-logo-header-black.png"
+readonly LOGO_HEADER_FILE="radman-logo-header-ivory.png"
 readonly FAVICON_FILE="logo-icon-512.png"
 
 # -----------------------------------------------------------------------------
@@ -232,8 +234,10 @@ wp_available() {
 #   2. wp theme list --status=active --format=csv (trimmed)
 #   3. filesystem check of $WP_PATH/wp-content/themes/blocksy-child
 # Falls back to "blocksy-child (detected-by-dir)" when wp-cli returns empty so
-# we never hit "Active theme 'unknown'" on hosts where --field/--format=trim
-# produces an empty string (MizbanFa CloudLinux jailshell quirk).
+# we never hit "Active theme 'unknown'" on hosts where `wp theme list
+# --field=name --format=trim` produces an empty string (MizbanFa CloudLinux
+# jailshell quirk). All `wp post get` calls use --field=<key> only (never the
+# unsupported --format=ids / --format=trim with `wp post get`).
 # -----------------------------------------------------------------------------
 get_active_theme() {
     local t=""
@@ -409,14 +413,14 @@ backup_all() {
             log "[APPLY] Existing child theme backed up: ${THEME_BACKUP}"
         fi
 
-        if wp post get "$HOMEPAGE_ID" --format=ids >/dev/null 2>&1; then
+        if wp post exists "$HOMEPAGE_ID" >/dev/null 2>&1; then
             HOMEPAGE_BACKUP_PATH="${BACKUP_DIR}/home-page-${HOMEPAGE_ID}-${TS}.html"
             wp post get "$HOMEPAGE_ID" --field=post_content > "$HOMEPAGE_BACKUP_PATH"
             chmod 600 "$HOMEPAGE_BACKUP_PATH"
             log "[APPLY] Homepage (ID ${HOMEPAGE_ID}) content backed up: ${HOMEPAGE_BACKUP_PATH}"
         else
             warn "Homepage ID ${HOMEPAGE_ID} does not yet exist — will be created? Refusing to create outside the storefront batch runner. Aborting before mutation."
-            die "Homepage ID ${HOMEPAGE_ID} is missing on this host. Run scripts/build_staging_storefront.sh --apply-staging first."
+            die "Homepage ID ${HOMEPAGE_ID} is missing on this host. Run scripts/build_staging_storefront.sh --check first to verify foundation."
         fi
     fi
     log "<<<<<<<<<< Phase 1 complete"
@@ -483,10 +487,11 @@ set_branding() {
     local favicon_src="$RADMAN_REPO_ROOT/assets/branding/${FAVICON_FILE}"
 
     if [[ "$DRY_RUN" -eq 1 ]]; then
-        log "[PLAN] Would import logo media: ${LOGO_HEADER_FILE}"
-        log "[PLAN] Would set theme_mod custom_logo → imported attachment ID"
-        log "[PLAN] Would import favicon media: ${FAVICON_FILE}"
-        log "[PLAN] Would set option site_icon → imported attachment ID"
+        log "[PLAN] Would check existing custom_logo / site_icon and PRESERVE them if already set."
+        log "[PLAN] Would import logo media (only if missing): ${LOGO_HEADER_FILE}"
+        log "[PLAN] Would set theme_mod custom_logo → imported attachment ID (only if no existing logo)"
+        log "[PLAN] Would import favicon media (only if missing): ${FAVICON_FILE}"
+        log "[PLAN] Would set option site_icon → imported attachment ID (only if no existing icon)"
         log "[PLAN] Would apply safe theme_mod defaults:"
         log "[PLAN]   - header background  : #0B0B0E (matte black)"
         log "[PLAN]   - header sticky       : off"
@@ -514,19 +519,31 @@ set_branding() {
             echo "$out"
         }
 
-        # Import header logo
-        local logo_id
-        logo_id="$(import_media "$logo_src" "radman-logo-header")"
-        log "[APPLY] Logo imported / found as attachment ID: ${logo_id}"
-        wp theme mod set custom_logo "$logo_id" >/dev/null
-        log "[APPLY] theme_mod custom_logo set to ${logo_id}."
+        # --- Header logo: PRESERVE existing if already a valid numeric attachment ID ---
+        local existing_logo_raw
+        existing_logo_raw="$(wp theme mod get custom_logo --format=csv 2>/dev/null | tail -n +2 | head -n 1 | cut -d',' -f2- | tr -d '[:space:]' || true)"
+        if [[ "$existing_logo_raw" =~ ^[0-9]+$ ]] && wp post exists "$existing_logo_raw" >/dev/null 2>&1; then
+            log "[APPLY] Existing custom logo preserved: attachment ID ${existing_logo_raw}"
+        else
+            local logo_id
+            logo_id="$(import_media "$logo_src" "radman-logo-header-ivory")"
+            log "[APPLY] Ivory logo imported / found as attachment ID: ${logo_id}"
+            wp theme mod set custom_logo "$logo_id" >/dev/null
+            log "[APPLY] theme_mod custom_logo set to ${logo_id} (ivory on dark header)."
+        fi
 
-        # Import favicon (site_icon)
-        local icon_id
-        icon_id="$(import_media "$favicon_src" "radman-site-icon")"
-        log "[APPLY] Favicon imported / found as attachment ID: ${icon_id}"
-        wp option update site_icon "$icon_id" >/dev/null
-        log "[APPLY] option site_icon set to ${icon_id}."
+        # --- Site icon (favicon): PRESERVE existing if already a valid numeric attachment ID ---
+        local existing_icon_raw
+        existing_icon_raw="$(wp option get site_icon 2>/dev/null | tr -d '[:space:]' || true)"
+        if [[ "$existing_icon_raw" =~ ^[0-9]+$ ]] && wp post exists "$existing_icon_raw" >/dev/null 2>&1; then
+            log "[APPLY] Existing site_icon preserved: attachment ID ${existing_icon_raw}"
+        else
+            local icon_id
+            icon_id="$(import_media "$favicon_src" "radman-site-icon")"
+            log "[APPLY] Favicon imported / found as attachment ID: ${icon_id}"
+            wp option update site_icon "$icon_id" >/dev/null
+            log "[APPLY] option site_icon set to ${icon_id}."
+        fi
 
         # Safe theme_mod defaults for the luxury dark look. Keys are Blocksy's
         # theme_mod names; values chosen to match the design system palette.
@@ -626,8 +643,9 @@ if [[ "$DRY_RUN" -eq 1 ]]; then
     log "       assets/radman-fonts.css  (local @font-face, NO Google Fonts)"
     log "       assets/radman-design-system.css (luxury typography + components)"
     log "       fonts/*.woff2  (Estedad + Vazirmatn, 14 files)"
-    log "  3. Logo  (${LOGO_HEADER_FILE}) imported + set as custom_logo."
-    log "     Favicon (${FAVICON_FILE}) imported + set as site_icon."
+    log "  3. Logo  (${LOGO_HEADER_FILE}) imported + set as custom_logo ONLY if no valid logo exists."
+    log "     Existing custom_logo / site_icon are PRESERVED (not overwritten)."
+    log "     Favicon (${FAVICON_FILE}) imported + set as site_icon ONLY if missing."
     log "  4. Safe dark-luxury theme_mods applied (header bg, sticky=off, logo size)."
     log "  5. Homepage (ID 18) updated with refined Gutenberg template (55 blocks, balanced)."
     log "  6. Object + LiteSpeed caches flushed (best-effort)."
@@ -644,8 +662,7 @@ log ""
 log "=================== MANUAL VISUAL CHECKLIST ==================="
 log "After applying, the owner should open https://staging.radmansilver.ir in a"
 log "private/incognito window and verify:"
-log "  [ ] Persian Radman logo appears in the header (black logo on ivory"
-log "      surface; or ivory-on-black if header is dark)."
+log "  [ ] Persian Radman logo appears in the header (ivory logo on the dark/matte-black header)."
 log "  [ ] Site uses the new local Persian font (Estedad for headings,"
 log "      Vazirmatn for body) — NOT the default Blocksy system font."
 log "  [ ] Hero H1 ('نقره ۹۲۵؛ اصالت در جزئیات') is large, bold, ivory,"

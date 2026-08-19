@@ -2,18 +2,23 @@
 # ==============================================================================
 # RADMAN SILVER 925 — ONE-COMMAND STAGING DEPLOY
 # ------------------------------------------------------------------------------
-# Master runner that chains:
-#   1. scripts/build_staging_storefront.sh --apply-staging
-#        (WordPress bootstrap guard, child-theme sync + 11 Draft pages,
-#         homepage Gutenberg template, categories, approved primary menu,
-#         Woo/LiteSpeed baseline report)
+# Master runner that chains (safe idempotent flow for already-installed staging):
+#   1. scripts/build_staging_storefront.sh --check
+#        (READ-ONLY verification of existing WordPress/woocommerce/child-theme/
+#         pages/categories/menu state. Does NOT re-apply foundation; does NOT
+#         overwrite existing static-page content; does NOT reset published
+#         pages back to Draft; does NOT recreate menu items or categories.)
 #   2. scripts/apply_design_system.sh --apply-staging
-#        (PR-18 design system: local webfonts, CSS design system, logo +
-#         favicon import, refined homepage, safe theme_mods)
+#        (PR-18/PR-20 design system: local webfonts, CSS design system,
+#         idempotent logo/favicon that PRESERVES an existing owner-configured
+#         ivory custom_logo or site_icon, refined homepage template, safe
+#         theme_mods, auto-heal blog_public=0.)
 #   3. scripts/install_agents.sh --install
 #        (PR-19 on-host cron agents: order watcher, price engine, stock
-#         guard, staging.env template, outbox/state/log dirs, cron-line
-#         hints; DRY_RUN=1 by default — no real SMS until owner flips it)
+#         guard. Existing staging.env is NEVER overwritten (DB creds/secrets
+#         preserved). Only missing directories/files are created. Smoke
+#         tests run with DRY_RUN=1. Cron lines are PRINTED ONLY — never
+#         auto-registered. No SMS, no price writes, no order-status changes.)
 #
 # MODES:
 #   --plan           (default) dry-run of every stage; prints intent only.
@@ -77,10 +82,10 @@ Required env for --apply-staging:
   RADMAN_REPO_ROOT=/home/radmansi/radman-deploy/repo
   RADMAN_PRIVATE_DIR=/home/radmansi/.config/radman
 
-Stages:
-  1. build_staging_storefront.sh  — foundation (theme/pages/home/categories/menu)
-  2. apply_design_system.sh       — PR-18 design system (fonts/CSS/logo/homepage polish)
-  3. install_agents.sh            — PR-19 on-host cron agents (DRY_RUN default)
+Stages (safe idempotent order — does NOT re-apply the foundation on already-installed staging):
+  1. build_staging_storefront.sh --check  — Foundation verification (READ-ONLY)
+  2. apply_design_system.sh --apply-staging — Design system (fonts/CSS/logo/homepage polish)
+  3. install_agents.sh --install           — PR-19 agents (DRY_RUN=1; cron lines PRINTED only, never registered)
 USAGE
 }
 
@@ -172,15 +177,24 @@ run_stage() {
     log "<<<<<<<<<< Stage '${label}' completed."
 }
 
-run_stage "Foundation (pages/theme/menu/home/categories)" \
+log ""
+log "[IMPORTANT] Stage 1 runs in READ-ONLY verification mode."
+log "[IMPORTANT] The storefront foundation (pages/menu/categories/home content) is NOT re-applied."
+log "[IMPORTANT] Existing static-page publication statuses are preserved."
+log "[IMPORTANT] Existing ivory custom_logo and site_icon are preserved by Stage 2."
+log "[IMPORTANT] Existing staging.env is NEVER overwritten; agents stay DRY_RUN=1."
+log "[IMPORTANT] Cron lines are PRINTED for the owner and are NOT auto-registered."
+log ""
+
+run_stage "Foundation verification — read-only" \
     "scripts/build_staging_storefront.sh" \
-    "$( [[ "$DRY_RUN" -eq 1 ]] && echo --plan || echo --apply-staging )"
+    "$( [[ "$DRY_RUN" -eq 1 ]] && echo --check || echo --check )"
 
 run_stage "Design system (fonts/CSS/logo/favicon/theme_mods)" \
     "scripts/apply_design_system.sh" \
     "$( [[ "$DRY_RUN" -eq 1 ]] && echo --plan || echo --apply-staging )"
 
-run_stage "On-host cron agents (installer; DRY_RUN default)" \
+run_stage "On-host cron agents (installer; DRY_RUN=1, cron lines printed only)" \
     "scripts/install_agents.sh" \
     "$( [[ "$DRY_RUN" -eq 1 ]] && echo --plan || echo --install )"
 
