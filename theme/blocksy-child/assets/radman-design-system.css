@@ -1,0 +1,999 @@
+/* ==========================================================================
+   RADMAN SILVER 925 — Professional Luxury Design System (v1.1.0)
+   --------------------------------------------------------------------------
+   Palette  : matte-black #0B0B0E / ivory #FAF7F2 / gold #BFA67A / ivory-muted
+   Type     : Radman Estedad (display) / Radman Vazirmatn (body) — both LOCAL
+   Approach : mobile-first, RTL, luxury spacing, refined borders, subtle
+              gold accents, performance-safe transitions (no heavy anim).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. DESIGN TOKENS
+   -------------------------------------------------------------------------- */
+:root {
+    /* Brand palette */
+    --radman-bg-dark:        #0B0B0E;
+    --radman-bg-dark-soft:   #151418;
+    --radman-bg-dark-elev:   #1C1A1E;
+    --radman-text-ivory:     #FAF7F2;
+    --radman-ivory-muted:    #E5DFD3;
+    --radman-ivory-dim:      #BCB3A4;
+    --radman-accent-gold:    #BFA67A;
+    --radman-gold-dim:       #A1895E;
+    --radman-gold-bright:    #D4BE92;
+    --radman-border-soft:    #E0D8C8;
+    --radman-border-dark:    #2A2830;
+    --radman-text-dark:      #0B0B0E;
+    --radman-text-dark-soft: #3A3630;
+    --radman-text-dark-dim:  #5A554E;
+
+    /* Typography */
+    --radman-font-display: "Radman Estedad", "Vazirmatn", "IRANSans", "Tahoma", sans-serif;
+    --radman-font-body:    "Radman Vazirmatn", "Estedad", "IRANSans", "Tahoma", sans-serif;
+
+    /* Modular type scale (14 / 16 / 18 / 22 / 28 / 36 / 48 / 64) */
+    --radman-fs-xs:   12px;
+    --radman-fs-sm:   14px;
+    --radman-fs-base: 16px;
+    --radman-fs-md:   18px;
+    --radman-fs-lg:   22px;
+    --radman-fs-xl:   28px;
+    --radman-fs-2xl:  36px;
+    --radman-fs-3xl:  48px;
+    --radman-fs-hero: clamp(38px, 6.5vw, 64px);
+
+    /* Line heights tuned for Perso-Arabic */
+    --radman-lh-tight:   1.3;
+    --radman-lh-snug:    1.6;
+    --radman-lh-normal:  1.85;
+    --radman-lh-relaxed: 2.1;
+
+    /* Spacing rhythm */
+    --radman-space-1: 4px;
+    --radman-space-2: 8px;
+    --radman-space-3: 12px;
+    --radman-space-4: 16px;
+    --radman-space-5: 24px;
+    --radman-space-6: 32px;
+    --radman-space-7: 48px;
+    --radman-space-8: 64px;
+    --radman-space-9: 96px;
+
+    /* Radius — luxury is mostly sharp; micro radius only for touch targets */
+    --radman-radius-none: 0;
+    --radman-radius-sm:   2px;
+
+    /* Transitions — performance-safe (no transform/opacity spamming) */
+    --radman-trans: 180ms ease;
+}
+
+/* --------------------------------------------------------------------------
+   2. GLOBAL BASE
+   -------------------------------------------------------------------------- */
+html {
+    font-size: var(--radman-fs-base);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body,
+.ct-site,
+.site-content {
+    font-family: var(--radman-font-body) !important;
+    background-color: var(--radman-bg-dark) !important;
+    color: var(--radman-text-ivory) !important;
+    font-size: var(--radman-fs-base);
+    line-height: var(--radman-lh-normal);
+    letter-spacing: 0;
+    -webkit-font-feature-settings: "ss01", "ss02";
+    font-feature-settings: "ss01", "ss02";
+}
+
+/* Persian numerals preference (system support permitting) */
+body:lang(fa),
+html:lang(fa) {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Typographic hierarchy */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3,
+.wp-block-heading,
+.site-title,
+.entry-title,
+.product_title,
+.woocommerce-loop-product__title {
+    font-family: var(--radman-font-display) !important;
+    font-weight: 700 !important;
+    color: inherit;
+    line-height: var(--radman-lh-tight);
+    letter-spacing: -0.01em;
+    margin-top: 0;
+}
+
+h1, .h1 { font-size: var(--radman-fs-hero); font-weight: 900 !important; }
+h2, .h2 { font-size: clamp(26px, 3.8vw, 40px); }
+h3, .h3 { font-size: var(--radman-fs-lg); }
+h4, .h4 { font-size: var(--radman-fs-md); }
+h5, .h5 { font-size: var(--radman-fs-base); font-weight: 600 !important; }
+h6, .h6 { font-size: var(--radman-fs-sm); font-weight: 600 !important; text-transform: uppercase; letter-spacing: 0.08em; }
+
+p {
+    margin: 0 0 var(--radman-space-4);
+    line-height: var(--radman-lh-normal);
+}
+
+small, .text-small { font-size: var(--radman-fs-sm); }
+
+/* Gold divider utility */
+.radman-gold-divider {
+    display: inline-block;
+    width: 48px;
+    height: 1px;
+    background: var(--radman-accent-gold);
+    margin: var(--radman-space-4) auto;
+}
+
+/* Eyebrow label (small caps label above headings) */
+.radman-eyebrow {
+    font-family: var(--radman-font-body);
+    font-size: var(--radman-fs-xs);
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--radman-accent-gold);
+    margin-bottom: var(--radman-space-3);
+}
+
+/* Links */
+a, .ct-link,
+.woocommerce-loop-product__link {
+    color: var(--radman-accent-gold);
+    text-decoration: none;
+    transition: color var(--radman-trans);
+}
+a:hover, .ct-link:hover {
+    color: var(--radman-gold-bright);
+}
+
+/* Selection */
+::selection {
+    background: var(--radman-accent-gold);
+    color: var(--radman-text-dark);
+}
+
+/* Ensure Gutenberg groups using inline light backgrounds render correctly */
+.wp-block-group.has-background {
+    color: inherit;
+}
+
+/* --------------------------------------------------------------------------
+   3. HEADER & NAVIGATION
+   -------------------------------------------------------------------------- */
+/* Sticky / transparent-friendly header */
+.ct-header,
+.site-header,
+header#header {
+    background-color: var(--radman-bg-dark) !important;
+    border-bottom: 1px solid var(--radman-border-dark);
+    font-family: var(--radman-font-body);
+}
+
+.ct-header .site-title,
+.ct-header .site-title a,
+.ct-header .site-description {
+    font-family: var(--radman-font-display) !important;
+    color: var(--radman-text-ivory);
+}
+
+/* Custom logo sizing for luxury feel */
+.custom-logo,
+.ct-header .custom-logo,
+.site-header .custom-logo,
+.ct-image-container img.custom-logo {
+    max-height: 52px !important;
+    width: auto !important;
+    height: auto !important;
+    transition: opacity var(--radman-trans);
+}
+.custom-logo:hover { opacity: 0.85; }
+@media (max-width: 768px) {
+    .custom-logo { max-height: 42px !important; }
+}
+
+/* Primary menu */
+.main-navigation,
+#main-menu,
+.ct-menu-mobile,
+.ct-header-actions {
+    font-family: var(--radman-font-body);
+}
+.main-navigation a,
+.ct-header .menu li > a,
+.ct-header .ct-menu li > a {
+    color: var(--radman-text-ivory) !important;
+    font-size: var(--radman-fs-sm);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    padding: var(--radman-space-3) var(--radman-space-4) !important;
+    position: relative;
+    transition: color var(--radman-trans);
+}
+.main-navigation a:hover,
+.ct-header .menu li > a:hover {
+    color: var(--radman-accent-gold) !important;
+}
+/* Gold underline for hover/active */
+.main-navigation .current-menu-item > a::after,
+.main-navigation li > a::after {
+    content: "";
+    position: absolute;
+    right: var(--radman-space-4);
+    left: var(--radman-space-4);
+    bottom: 8px;
+    height: 1px;
+    background: var(--radman-accent-gold);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform var(--radman-trans);
+}
+.main-navigation .current-menu-item > a::after,
+.main-navigation li > a:hover::after {
+    transform: scaleX(1);
+    transform-origin: right;
+}
+
+/* Header icons (cart, my-account, search) */
+.ct-header-actions .ct-header-button,
+.ct-actions-list a,
+.ct-cart,
+.ct-header-actions .ct-icon-container {
+    color: var(--radman-text-ivory) !important;
+    transition: color var(--radman-trans);
+}
+.ct-header-actions a:hover,
+.ct-actions-list a:hover,
+.ct-cart:hover {
+    color: var(--radman-accent-gold) !important;
+}
+
+/* Mobile menu drawer */
+.ct-slideout,
+.ct-offcanvas {
+    background: var(--radman-bg-dark-soft) !important;
+    color: var(--radman-text-ivory) !important;
+}
+.ct-slideout a,
+.ct-offcanvas a {
+    color: var(--radman-text-ivory) !important;
+}
+.ct-slideout a:hover { color: var(--radman-accent-gold) !important; }
+
+/* Top bar (if enabled) */
+.ct-top-bar {
+    background: var(--radman-bg-dark-soft) !important;
+    border-bottom: 1px solid var(--radman-border-dark);
+    font-size: var(--radman-fs-xs);
+    color: var(--radman-ivory-dim);
+    letter-spacing: 0.04em;
+}
+
+/* --------------------------------------------------------------------------
+   4. BUTTONS
+   -------------------------------------------------------------------------- */
+.wp-block-button__link,
+.wp-element-button,
+button,
+.button,
+.add_to_cart_button,
+.single_add_to_cart_button,
+.woocommerce a.button,
+.woocommerce button.button,
+.woocommerce input.button,
+.woocommerce #respond input#submit,
+.ct-button {
+    font-family: var(--radman-font-body) !important;
+    font-size: var(--radman-fs-sm) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: 0 !important;
+    padding: 14px 28px !important;
+    border: 1px solid transparent !important;
+    min-height: 48px;
+    line-height: 1.2 !important;
+    transition: background-color var(--radman-trans),
+                color var(--radman-trans),
+                border-color var(--radman-trans),
+                box-shadow var(--radman-trans) !important;
+    text-decoration: none !important;
+}
+
+/* Primary: gold on black -> gold bg, dark text */
+.wp-block-button__link.has-background[style*="#BFA67A"],
+.wp-block-button__link[style*="background-color:#BFA67A"],
+.wc-block-components-button:not(.is-link).contained,
+.single_add_to_cart_button,
+.woocommerce button.button.alt,
+.woocommerce a.button.alt,
+.woocommerce input.button.alt {
+    background-color: var(--radman-accent-gold) !important;
+    color: var(--radman-text-dark) !important;
+    border-color: var(--radman-accent-gold) !important;
+}
+.wp-block-button__link.has-background[style*="#BFA67A"]:hover,
+.single_add_to_cart_button:hover,
+.woocommerce button.button.alt:hover,
+.woocommerce a.button.alt:hover,
+.woocommerce input.button.alt:hover {
+    background-color: var(--radman-gold-bright) !important;
+    border-color: var(--radman-gold-bright) !important;
+    color: var(--radman-text-dark) !important;
+    box-shadow: 0 4px 20px rgba(191,166,122,0.25);
+}
+
+/* Outline / secondary: transparent, gold border, ivory text */
+.is-style-outline .wp-block-button__link,
+.wp-block-button.is-style-outline a,
+.woocommerce a.button:not(.alt),
+.woocommerce button.button:not(.alt),
+.button.is-secondary,
+.is-style-outline > .wp-block-button__link {
+    background-color: transparent !important;
+    color: var(--radman-text-ivory) !important;
+    border: 1px solid var(--radman-accent-gold) !important;
+}
+.is-style-outline .wp-block-button__link:hover,
+.woocommerce a.button:not(.alt):hover,
+.woocommerce button.button:not(.alt):hover {
+    background-color: var(--radman-accent-gold) !important;
+    color: var(--radman-text-dark) !important;
+}
+
+/* Buttons on light sections */
+.has-background[style*="#FAF7F2"] .wp-block-button__link,
+.has-background[style*="#FFFFFF"] .wp-block-button__link,
+.has-background:not([style*="#0B0B0E"]) .button,
+.has-background:not([style*="#0B0B0E"]) .is-style-outline .wp-block-button__link,
+.woocommerce .product .button {
+    /* default dark-outline on light sections (primary remains gold) */
+}
+.has-background[style*="#FAF7F2"] .is-style-outline .wp-block-button__link,
+.has-background[style*="#FFFFFF"] .is-style-outline .wp-block-button__link {
+    color: var(--radman-text-dark) !important;
+    border-color: var(--radman-text-dark) !important;
+}
+.has-background[style*="#FAF7F2"] .is-style-outline .wp-block-button__link:hover,
+.has-background[style*="#FFFFFF"] .is-style-outline .wp-block-button__link:hover {
+    background-color: var(--radman-text-dark) !important;
+    color: var(--radman-accent-gold) !important;
+}
+
+/* Buttons alignment inside blocks */
+.wp-block-buttons { gap: 12px; }
+
+/* --------------------------------------------------------------------------
+   5. HOMEPAGE SECTIONS
+   -------------------------------------------------------------------------- */
+/* Hero */
+.radman-hero {
+    background:
+        radial-gradient(ellipse at 80% 20%, rgba(191,166,122,0.08), transparent 60%),
+        var(--radman-bg-dark) !important;
+    padding-top: clamp(64px, 10vw, 120px) !important;
+    padding-bottom: clamp(64px, 10vw, 120px) !important;
+    position: relative;
+}
+.radman-hero::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    height: 1px;
+    background: linear-gradient(to left, transparent, var(--radman-border-dark), transparent);
+}
+.radman-hero .wp-block-heading,
+.radman-hero h1 {
+    color: var(--radman-text-ivory) !important;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--radman-space-5);
+}
+.radman-hero p:not(.radman-eyebrow) {
+    font-size: var(--radman-fs-md);
+    color: var(--radman-ivory-muted);
+    line-height: var(--radman-lh-relaxed);
+    max-width: 58ch;
+}
+.radman-hero .wp-block-buttons { margin-top: var(--radman-space-7); }
+
+/* Trust strip */
+.radman-trust-row {
+    background-color: var(--radman-text-ivory) !important;
+    color: var(--radman-text-dark) !important;
+    border-top: 1px solid var(--radman-border-soft);
+    border-bottom: 1px solid var(--radman-border-soft);
+    padding-top: var(--radman-space-5) !important;
+    padding-bottom: var(--radman-space-5) !important;
+    font-size: var(--radman-fs-sm);
+    letter-spacing: 0.04em;
+}
+.radman-trust-row p,
+.radman-trust-row .wp-block-heading {
+    color: var(--radman-text-dark) !important;
+    margin: 0 !important;
+    font-family: var(--radman-font-body) !important;
+    font-weight: 500 !important;
+    font-size: var(--radman-fs-sm) !important;
+}
+.radman-trust-row p::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--radman-accent-gold);
+    margin-left: 10px;
+    vertical-align: middle;
+    transform: rotate(45deg);
+}
+
+/* Category cards */
+.radman-categories {
+    background-color: var(--radman-text-ivory) !important;
+    color: var(--radman-text-dark) !important;
+    padding-top: var(--radman-space-9) !important;
+    padding-bottom: var(--radman-space-9) !important;
+}
+.radman-categories h2,
+.radman-categories h3,
+.radman-categories .wp-block-heading {
+    color: var(--radman-text-dark) !important;
+}
+.radman-categories .wp-block-columns {
+    gap: 24px !important;
+}
+.radman-categories .wp-block-group[style*="#0B0B0E"],
+.radman-categories .wp-block-group.has-background[style*="0B0B0E"] {
+    background-color: var(--radman-bg-dark) !important;
+    border: 1px solid var(--radman-border-dark);
+    padding: 56px 28px !important;
+    position: relative;
+    overflow: hidden;
+    transition: border-color var(--radman-trans), transform var(--radman-trans);
+}
+.radman-categories .wp-block-group[style*="#0B0B0E"]::before {
+    content: "";
+    position: absolute;
+    top: 0; right: 0; left: 0;
+    height: 2px;
+    background: var(--radman-accent-gold);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform var(--radman-trans);
+}
+.radman-categories .wp-block-group[style*="#0B0B0E"]:hover {
+    border-color: var(--radman-accent-gold);
+    transform: translateY(-2px);
+}
+.radman-categories .wp-block-group[style*="#0B0B0E"]:hover::before {
+    transform: scaleX(1);
+}
+.radman-categories .wp-block-group[style*="#0B0B0E"] p:first-child {
+    /* Emoji icon area */
+    font-size: 40px;
+    margin-bottom: var(--radman-space-4);
+    opacity: 0.9;
+}
+.radman-categories .wp-block-group[style*="#0B0B0E"] h3 {
+    color: var(--radman-text-ivory) !important;
+    font-family: var(--radman-font-display) !important;
+    font-size: var(--radman-fs-lg) !important;
+    letter-spacing: 0;
+    margin-bottom: 0 !important;
+}
+
+/* Shop CTA */
+.radman-shop-cta {
+    background-color: var(--radman-bg-dark) !important;
+    color: var(--radman-text-ivory) !important;
+    padding-top: var(--radman-space-9) !important;
+    padding-bottom: var(--radman-space-9) !important;
+    position: relative;
+}
+.radman-shop-cta::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 50%;
+    transform: translateX(50%);
+    width: 60px;
+    height: 1px;
+    background: var(--radman-accent-gold);
+}
+.radman-shop-cta h2 { color: var(--radman-text-ivory) !important; }
+.radman-shop-cta p  { color: var(--radman-ivory-muted) !important; font-size: var(--radman-fs-base); }
+
+/* Brand intro */
+.radman-brand-intro {
+    background-color: var(--radman-text-ivory) !important;
+    color: var(--radman-text-dark) !important;
+    padding-top: var(--radman-space-9) !important;
+    padding-bottom: var(--radman-space-9) !important;
+}
+.radman-brand-intro h2 {
+    color: var(--radman-text-dark) !important;
+    position: relative;
+    display: inline-block;
+}
+.radman-brand-intro h2::after {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 2px;
+    background: var(--radman-accent-gold);
+    margin: var(--radman-space-3) auto 0;
+}
+.radman-brand-intro p {
+    color: var(--radman-text-dark-soft) !important;
+    font-size: var(--radman-fs-md);
+    line-height: var(--radman-lh-relaxed);
+    max-width: 64ch;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Staging notice */
+.radman-staging-notice {
+    background: #2A2318 !important;
+    color: var(--radman-accent-gold) !important;
+    border-top: 1px solid var(--radman-gold-dim);
+}
+.radman-staging-notice p {
+    color: var(--radman-accent-gold) !important;
+    font-size: var(--radman-fs-xs) !important;
+    letter-spacing: 0.06em;
+    margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   6. WOOCOMMERCE / PRODUCT CARDS / SHOP
+   -------------------------------------------------------------------------- */
+.woocommerce ul.products li.product,
+.wc-block-grid__product,
+.wc-block-grid__products li {
+    background: var(--radman-bg-dark-soft);
+    border: 1px solid var(--radman-border-dark);
+    border-radius: 0 !important;
+    padding: 0 !important;
+    transition: border-color var(--radman-trans), transform var(--radman-trans);
+}
+.woocommerce ul.products li.product:hover,
+.wc-block-grid__product:hover {
+    border-color: var(--radman-accent-gold);
+    transform: translateY(-2px);
+}
+.woocommerce ul.products li.product .woocommerce-loop-product__title,
+.wc-block-grid__product-title {
+    font-family: var(--radman-font-display) !important;
+    font-size: var(--radman-fs-base) !important;
+    font-weight: 600 !important;
+    color: var(--radman-text-ivory) !important;
+    padding: var(--radman-space-4) var(--radman-space-4) var(--radman-space-2);
+    margin: 0;
+}
+.woocommerce ul.products li.product .price,
+.wc-block-grid__product-price {
+    color: var(--radman-accent-gold) !important;
+    font-family: var(--radman-font-body);
+    font-weight: 600;
+    padding: 0 var(--radman-space-4) var(--radman-space-4);
+    font-size: var(--radman-fs-sm);
+}
+.woocommerce ul.products li.product .price ins { color: var(--radman-gold-bright); text-decoration: none; }
+.woocommerce ul.products li.product .price del { color: var(--radman-ivory-dim); opacity: 0.6; }
+.woocommerce ul.products li.product a img {
+    border-radius: 0 !important;
+    display: block;
+    transition: opacity var(--radman-trans);
+}
+.woocommerce ul.products li.product a:hover img { opacity: 0.9; }
+.woocommerce ul.products li.product .button,
+.wc-block-grid__products .wp-block-button__link {
+    margin: 0 var(--radman-space-4) var(--radman-space-4) !important;
+    width: calc(100% - 32px);
+    text-align: center;
+}
+
+/* Single product */
+.single-product .product_title,
+.product .product_title {
+    color: var(--radman-text-ivory) !important;
+    font-family: var(--radman-font-display) !important;
+}
+.single-product .summary .price,
+.woocommerce div.product p.price {
+    color: var(--radman-accent-gold) !important;
+    font-size: var(--radman-fs-lg);
+    font-weight: 700;
+}
+.woocommerce div.product div.images img,
+.woocommerce-product-gallery__image img {
+    border: 1px solid var(--radman-border-dark);
+    border-radius: 0 !important;
+}
+
+/* --------------------------------------------------------------------------
+   7. CART / CHECKOUT / FORMS
+   -------------------------------------------------------------------------- */
+.woocommerce-cart-form,
+.woocommerce-checkout,
+.woocommerce form .form-row,
+.woocommerce-page form .form-row,
+.woocommerce form input,
+.woocommerce form textarea,
+.woocommerce form select,
+select,
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+textarea {
+    font-family: var(--radman-font-body) !important;
+}
+.woocommerce form input,
+.woocommerce form textarea,
+.woocommerce form select,
+input[type="text"], input[type="email"], input[type="tel"],
+input[type="password"], input[type="number"], input[type="search"],
+textarea, select {
+    background: var(--radman-bg-dark-elev) !important;
+    border: 1px solid var(--radman-border-dark) !important;
+    color: var(--radman-text-ivory) !important;
+    border-radius: 0 !important;
+    padding: 12px 14px !important;
+    font-size: var(--radman-fs-sm);
+    transition: border-color var(--radman-trans);
+}
+.woocommerce form input:focus,
+input:focus, textarea:focus, select:focus {
+    border-color: var(--radman-accent-gold) !important;
+    outline: none !important;
+    box-shadow: 0 0 0 1px var(--radman-accent-gold) !important;
+}
+.woocommerce form label,
+label {
+    font-family: var(--radman-font-body);
+    font-size: var(--radman-fs-sm);
+    font-weight: 500;
+    color: var(--radman-ivory-muted);
+}
+
+/* Cart / Checkout tables */
+.woocommerce table.shop_table,
+.woocommerce table.shop_table td,
+.woocommerce table.shop_table th {
+    background: var(--radman-bg-dark-soft) !important;
+    color: var(--radman-text-ivory) !important;
+    border-color: var(--radman-border-dark) !important;
+    border-radius: 0 !important;
+}
+.woocommerce table.shop_table th {
+    font-family: var(--radman-font-display) !important;
+    font-weight: 600;
+    border-bottom: 2px solid var(--radman-accent-gold) !important;
+}
+
+/* Notices */
+.woocommerce-message,
+.woocommerce-info,
+.woocommerce-error,
+.woocommerce-notice {
+    background: var(--radman-bg-dark-elev) !important;
+    border: 1px solid var(--radman-border-dark) !important;
+    border-radius: 0 !important;
+    color: var(--radman-text-ivory) !important;
+    border-right-width: 3px !important;
+}
+.woocommerce-message, .woocommerce-info { border-right-color: var(--radman-accent-gold) !important; }
+.woocommerce-error { border-right-color: #B85C5C !important; }
+
+/* --------------------------------------------------------------------------
+   8. PAGINATION, BREADCRUMBS, TABS
+   -------------------------------------------------------------------------- */
+.woocommerce-pagination ul,
+.pagination .page-numbers,
+.nav-links {
+    font-family: var(--radman-font-body);
+}
+.woocommerce-pagination .page-numbers li .page-numbers,
+.page-numbers a,
+.page-numbers.current {
+    background: transparent !important;
+    border: 1px solid var(--radman-border-dark) !important;
+    color: var(--radman-ivory-muted) !important;
+    border-radius: 0 !important;
+    padding: 8px 14px;
+    margin: 0 2px;
+    transition: all var(--radman-trans);
+}
+.woocommerce-pagination .page-numbers li .page-numbers.current,
+.page-numbers.current,
+.page-numbers:hover {
+    background: var(--radman-accent-gold) !important;
+    border-color: var(--radman-accent-gold) !important;
+    color: var(--radman-text-dark) !important;
+}
+
+/* Breadcrumbs */
+.woocommerce-breadcrumb,
+.breadcrumbs,
+.ct-breadcrumbs,
+.entry-header .breadcrumbs {
+    font-family: var(--radman-font-body);
+    font-size: var(--radman-fs-xs);
+    color: var(--radman-ivory-dim) !important;
+    letter-spacing: 0.04em;
+    padding: var(--radman-space-4) 0;
+    border-bottom: 1px solid var(--radman-border-dark);
+}
+.woocommerce-breadcrumb a,
+.breadcrumbs a { color: var(--radman-accent-gold); }
+
+/* Tabs (description/reviews) */
+.woocommerce-tabs ul.tabs li a,
+.ct-tabs .ct-tab {
+    font-family: var(--radman-font-body) !important;
+    font-size: var(--radman-fs-sm);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--radman-ivory-muted) !important;
+}
+.woocommerce-tabs ul.tabs li.active a {
+    color: var(--radman-accent-gold) !important;
+    border-bottom-color: var(--radman-accent-gold) !important;
+}
+.woocommerce-tabs .panel { color: var(--radman-text-ivory); }
+
+/* --------------------------------------------------------------------------
+   9. FOOTER
+   -------------------------------------------------------------------------- */
+.site-footer,
+.ct-footer,
+footer#footer {
+    background-color: var(--radman-bg-dark-soft) !important;
+    color: var(--radman-ivory-muted) !important;
+    border-top: 1px solid var(--radman-border-dark);
+    font-family: var(--radman-font-body);
+    padding-top: var(--radman-space-8) !important;
+    padding-bottom: var(--radman-space-5) !important;
+}
+.site-footer a,
+.ct-footer a,
+footer a {
+    color: var(--radman-ivory-muted);
+    transition: color var(--radman-trans);
+}
+.site-footer a:hover,
+.ct-footer a:hover {
+    color: var(--radman-accent-gold);
+}
+.site-footer .widget-title,
+.ct-footer .widget-title,
+footer .widget-title,
+.ct-footer h1, .ct-footer h2, .ct-footer h3, .ct-footer h4 {
+    font-family: var(--radman-font-display) !important;
+    font-size: var(--radman-fs-base) !important;
+    color: var(--radman-text-ivory) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: var(--radman-space-4);
+}
+.site-footer p,
+.ct-footer p,
+footer p {
+    font-size: var(--radman-fs-sm);
+    line-height: var(--radman-lh-snug);
+    color: var(--radman-ivory-dim);
+}
+/* Copyright bar */
+.ct-footer-bottom,
+.site-info,
+.footer-copyright {
+    border-top: 1px solid var(--radman-border-dark);
+    padding-top: var(--radman-space-5);
+    margin-top: var(--radman-space-6);
+    font-size: var(--radman-fs-xs);
+    color: var(--radman-ivory-dim);
+    letter-spacing: 0.04em;
+}
+
+/* --------------------------------------------------------------------------
+   10. STATIC PAGES (legal / about / guides) — long-form reading typography
+   -------------------------------------------------------------------------- */
+.site-content .entry-content,
+.single .entry-content,
+.page .entry-content,
+.post-type-page .entry-content {
+    font-size: var(--radman-fs-base);
+    line-height: var(--radman-lh-relaxed);
+    max-width: 75ch;
+    color: inherit;
+}
+.site-content .entry-content h2 {
+    font-size: var(--radman-fs-xl);
+    margin-top: var(--radman-space-7);
+    margin-bottom: var(--radman-space-4);
+    padding-bottom: var(--radman-space-2);
+    border-bottom: 1px solid var(--radman-border-dark);
+}
+.site-content .entry-content h3 {
+    font-size: var(--radman-fs-lg);
+    margin-top: var(--radman-space-6);
+    margin-bottom: var(--radman-space-3);
+    color: var(--radman-accent-gold);
+}
+.site-content .entry-content h4 {
+    font-size: var(--radman-fs-md);
+    margin-top: var(--radman-space-5);
+}
+.site-content .entry-content ul,
+.site-content .entry-content ol {
+    padding-right: var(--radman-space-5);
+    line-height: var(--radman-lh-relaxed);
+}
+.site-content .entry-content ul li,
+.site-content .entry-content ol li {
+    margin-bottom: var(--radman-space-2);
+}
+.site-content .entry-content ul li::marker {
+    color: var(--radman-accent-gold);
+}
+.site-content .entry-content blockquote {
+    border-right: 3px solid var(--radman-accent-gold);
+    background: var(--radman-bg-dark-soft);
+    padding: var(--radman-space-5);
+    margin: var(--radman-space-5) 0;
+    color: var(--radman-ivory-muted);
+    font-style: normal;
+}
+.site-content .entry-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--radman-space-5) 0;
+    font-size: var(--radman-fs-sm);
+}
+.site-content .entry-content table th {
+    background: var(--radman-bg-dark-elev);
+    border-bottom: 2px solid var(--radman-accent-gold);
+    text-align: right;
+    padding: var(--radman-space-3);
+    font-family: var(--radman-font-display);
+    font-weight: 600;
+}
+.site-content .entry-content table td {
+    border-bottom: 1px solid var(--radman-border-dark);
+    padding: var(--radman-space-3);
+}
+
+/* Placeholder styling (pending owner fill) */
+.radman-placeholder {
+    background: rgba(191,166,122,0.12);
+    border: 1px dashed var(--radman-accent-gold);
+    padding: 0 6px;
+    border-radius: 2px;
+    color: var(--radman-gold-bright);
+}
+
+/* --------------------------------------------------------------------------
+   11. MISC UI POLISH
+   -------------------------------------------------------------------------- */
+/* Sale badge */
+.woocommerce span.onsale,
+.onsale {
+    background: var(--radman-accent-gold) !important;
+    color: var(--radman-text-dark) !important;
+    font-family: var(--radman-font-body) !important;
+    font-weight: 700 !important;
+    border-radius: 0 !important;
+    font-size: 11px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 6px 10px !important;
+    min-height: auto !important;
+    min-width: auto !important;
+    line-height: 1 !important;
+}
+
+/* Quantity input */
+.quantity input.qty {
+    background: var(--radman-bg-dark-elev) !important;
+    border: 1px solid var(--radman-border-dark) !important;
+    color: var(--radman-text-ivory) !important;
+    border-radius: 0 !important;
+}
+
+/* Back to top / scroll-to-top */
+.ct-back-to-top,
+.back-to-top {
+    background: var(--radman-accent-gold) !important;
+    color: var(--radman-text-dark) !important;
+    border-radius: 0 !important;
+}
+
+/* Remove woo default heavy box-shadows */
+* {
+    box-shadow: none !important;
+}
+/* Buttons keep a subtle gold hover shadow; override blanket none */
+.wp-block-button__link:hover,
+.button:hover,
+.single_add_to_cart_button:hover,
+.woocommerce a.button.alt:hover,
+.woocommerce button.button.alt:hover {
+    box-shadow: 0 4px 20px rgba(191,166,122,0.20) !important;
+}
+
+/* --------------------------------------------------------------------------
+   12. RESPONSIVE BREAKPOINTS (mobile-first)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+    .radman-hero,
+    .radman-categories,
+    .radman-brand-intro,
+    .radman-shop-cta {
+        padding-left: var(--radman-space-5) !important;
+        padding-right: var(--radman-space-5) !important;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --radman-space-9: 64px;
+        --radman-space-8: 48px;
+    }
+    .main-navigation a,
+    .ct-header .menu li > a {
+        font-size: var(--radman-fs-xs);
+        padding: var(--radman-space-2) var(--radman-space-3) !important;
+    }
+    .radman-trust-row .wp-block-group {
+        gap: 8px !important;
+    }
+    .radman-trust-row p { font-size: var(--radman-fs-xs) !important; }
+    .radman-categories .wp-block-group[style*="#0B0B0E"] {
+        padding: 40px 20px !important;
+    }
+    .wp-block-button__link,
+    .button,
+    .single_add_to_cart_button,
+    .woocommerce a.button {
+        padding: 12px 22px !important;
+        font-size: 13px !important;
+        width: 100%;
+        text-align: center;
+    }
+    .wp-block-buttons { flex-direction: column; }
+    .wp-block-buttons > .wp-block-button { width: 100%; }
+}
+
+@media (max-width: 480px) {
+    .radman-hero {
+        padding-top: 48px !important;
+        padding-bottom: 48px !important;
+    }
+    .radman-hero p:not(.radman-eyebrow) { font-size: var(--radman-fs-base); }
+}
+
+/* --------------------------------------------------------------------------
+   13. REDUCED MOTION (accessibility)
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
