@@ -42,7 +42,12 @@
 - [docs/INVENTORY-REGISTRY.md](docs/INVENTORY-REGISTRY.md) — Radman Silver's own Inventory Registry (`inventory_registry` SQLite table), 1:1 stock mapping, and Telegram order verification.
 - [docs/PRICING-RULES.md](docs/PRICING-RULES.md) — Simplified daily silver gram rate pricing (`price = weight * daily_rate`), 4 official pricing modes, and Telegram rate confirmation.
 - [docs/LEGACY-API-ACCESS-STRATEGY.md](docs/LEGACY-API-ACCESS-STRATEGY.md) — Admin Panel API architecture, Iranian hosting server requirement (`[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]`), and read-only field audit workflow.
+- [docs/LEGACY-CATALOG-ANALYSIS.md](docs/LEGACY-CATALOG-ANALYSIS.md) — Public-only legacy catalog structure, category mapping, field coverage, quality risks, and owner-review extraction approach.
 - [docs/PRODUCT-DATA-MODEL.md](docs/PRODUCT-DATA-MODEL.md) — Standardized `SKU` taxonomy (`RAD-[CAT]-[GENDER]-[ID]`) and WooCommerce attribute schema.
+- [docs/PRODUCT-IMPORT-SCHEMA.md](docs/PRODUCT-IMPORT-SCHEMA.md) — Validated owner CSV/JSON contract for the four pricing modes and local image filenames.
+- [docs/PRODUCT-IMPORT-RUNBOOK.md](docs/PRODUCT-IMPORT-RUNBOOK.md) — Persian cPanel guide for CSV/image upload, dry-run preview, staging apply, Draft review, and rollback.
+- [scripts/import_products.sh](scripts/import_products.sh) — Staging-only, plan-by-default, backup-first product importer (idempotent by SKU; new products Draft only).
+- [templates/product-import-sample.csv](templates/product-import-sample.csv) — Three deliberately non-importable SAMPLE rows for owner replacement.
 - [docs/ORDER-WORKFLOW.md](docs/ORDER-WORKFLOW.md) — Order lifecycle states, hybrid SMS-primary / Telegram-optional notification model, WooCommerce Admin fallback approval, and out-of-stock exception handling.
 - [docs/MEDIA-PROCESSING.md](docs/MEDIA-PROCESSING.md) — 1:1 square product images, 4:5 lifestyle images, WebP standard, and subtle logo watermarking.
 - [docs/SEO-STRATEGY.md](docs/SEO-STRATEGY.md) — RankMath SEO title format, JSON-LD Product/Review Schema, and Persian URL slug rules.
