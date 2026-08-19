@@ -8,8 +8,10 @@
 # exact Cron Job lines the owner must paste into cPanel → Cron Jobs.
 #
 # MODES:
-#   --plan      (default) Print intended actions; do not create dirs or run tests
-#   --install   Create dirs + env template + smoke-test agents in DRY_RUN mode
+#   --plan            (default) Print intended actions; do not create dirs/tests
+#   --apply-staging   Back up existing config/state, create dirs + env template,
+#                     and smoke-test agents in DRY_RUN mode. Requires
+#                     CONFIRM_STAGING_APPLY=YES.
 #
 # This installer NEVER:
 #   - touches production/public_html
@@ -47,10 +49,13 @@ trap 'on_error $LINENO' ERR
 usage() {
     cat <<'USAGE'
 Usage:
-  bash scripts/install_agents.sh --plan       # dry run (default)
-  bash scripts/install_agents.sh --install    # create dirs + smoke test
+  bash scripts/install_agents.sh --plan            # dry run (default)
+  bash scripts/install_agents.sh --apply-staging   # backup + install + smoke test
 
-Required env (can be set before running or answered interactively):
+--apply-staging requires CONFIRM_STAGING_APPLY=YES.
+There is no production mode.
+
+Required env:
   RADMAN_REPO_ROOT    defaults to parent dir of this script
   RADMAN_PRIVATE_DIR  defaults to ~/.config/radman
   WP_PATH             defaults to /home/radmansi/staging.radmansilver.ir
@@ -60,7 +65,7 @@ USAGE
 
 # -----------------------------------------------------------------------------
 # Print the exact Cron Job lines for the owner
-# NOTE: defined EARLY so it is available in both --plan and --install.
+# NOTE: defined EARLY so it is available in both --plan and --apply-staging.
 # -----------------------------------------------------------------------------
 print_cron_lines() {
     local tag="$1"
@@ -72,17 +77,17 @@ print_cron_lines() {
     log "1) Order Watch — every 5 minutes:"
     log "   Schedule: */5 * * * *"
     log "   Command:"
-    log "   ${COMMON_ENV} ${PY} ${RADMAN_REPO_ROOT}/agents/agent_order_watch.py >> ${RADMAN_PRIVATE_DIR}/logs/order_watch.cron.log 2>&1"
+    log "   ${COMMON_ENV} ${PY} ${RADMAN_REPO_ROOT}/agents/agent_order_watch.py >/dev/null 2>&1"
     log ""
     log "2) Stock Guard — once per hour (at minute 7):"
     log "   Schedule: 7 * * * *"
     log "   Command:"
-    log "   ${COMMON_ENV} ${PY} ${RADMAN_REPO_ROOT}/agents/agent_stock_guard.py >> ${RADMAN_PRIVATE_DIR}/logs/stock_guard.cron.log 2>&1"
+    log "   ${COMMON_ENV} ${PY} ${RADMAN_REPO_ROOT}/agents/agent_stock_guard.py >/dev/null 2>&1"
     log ""
     log "3) Price Engine — once per day at 09:07 (after owner updates daily rate):"
     log "   Schedule: 7 9 * * *"
     log "   Command (preview only — writes price_preview_*.txt into outbox/):"
-    log "   ${COMMON_ENV} ${PY} ${RADMAN_REPO_ROOT}/agents/agent_price_engine.py >> ${RADMAN_PRIVATE_DIR}/logs/price_engine.cron.log 2>&1"
+    log "   ${COMMON_ENV} ${PY} ${RADMAN_REPO_ROOT}/agents/agent_price_engine.py >/dev/null 2>&1"
     log ""
     log "To APPLY price changes (after manual owner review of preview):"
     log "   Run manually in SSH, NOT on cron, after confirming the preview:"
@@ -96,10 +101,10 @@ print_cron_lines() {
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        --plan)     MODE="plan";    shift ;;
-        --install)  MODE="install"; shift ;;
-        -h|--help)  usage; exit 0 ;;
-        *)          usage; die "Unknown argument: $1" ;;
+        --plan)            MODE="plan";  shift ;;
+        --apply-staging)   MODE="apply"; shift ;;
+        -h|--help)         usage; exit 0 ;;
+        *)                 usage; die "Unknown argument: $1" ;;
     esac
 done
 
@@ -108,6 +113,7 @@ RADMAN_PRIVATE_DIR="${RADMAN_PRIVATE_DIR:-$HOME/.config/radman}"
 WP_PATH="${WP_PATH:-$EXPECTED_WP_PATH}"
 WP_URL="${WP_URL:-$EXPECTED_WP_URL}"
 APP_ENV="${APP_ENV:-staging}"
+CONFIRM_STAGING_APPLY="${CONFIRM_STAGING_APPLY:-}"
 
 # -----------------------------------------------------------------------------
 # Guards
@@ -118,8 +124,16 @@ APP_ENV="${APP_ENV:-staging}"
     || die "APP_ENV must equal '${EXPECTED_APP_ENV}' (got '${APP_ENV}')."
 [[ "$WP_URL" == "$EXPECTED_WP_URL" ]] \
     || die "WP_URL must equal '${EXPECTED_WP_URL}' (got '${WP_URL}')."
+[[ "$WP_PATH" == "$EXPECTED_WP_PATH" ]] \
+    || die "WP_PATH must equal '${EXPECTED_WP_PATH}' (got '${WP_PATH}')."
 [[ "$WP_PATH" != *"public_html"* ]] \
     || die "WP_PATH contains 'public_html' — production path PROHIBITED."
+[[ "$RADMAN_PRIVATE_DIR" != *"public_html"* ]] \
+    || die "RADMAN_PRIVATE_DIR contains 'public_html' — private data must stay outside web roots."
+if [[ "$MODE" == "apply" ]]; then
+    [[ "$CONFIRM_STAGING_APPLY" == "YES" ]] \
+        || die "CONFIRM_STAGING_APPLY must equal 'YES' for --apply-staging."
+fi
 
 log "===================================================================="
 log "RADMAN SILVER 925 — On-Host Agent Installer"
@@ -134,16 +148,22 @@ log "===================================================================="
 # Python discovery
 # -----------------------------------------------------------------------------
 PYTHON_BIN=""
-for cand in python3.11 /opt/alt/python311/bin/python3.11 python3 python; do
+PY_VER=""
+for cand in "$HOME/bin/python3" /opt/alt/python311/bin/python3.11 python3.11 python3; do
     if command -v "$cand" >/dev/null 2>&1; then
-        PYTHON_BIN="$cand"
-        break
+        candidate_ver="$("$cand" -c 'import sys; print("%d.%d" % sys.version_info[:2])' 2>/dev/null || true)"
+        candidate_major="${candidate_ver%%.*}"
+        candidate_minor="${candidate_ver##*.}"
+        if [[ "$candidate_major" =~ ^[0-9]+$ && "$candidate_minor" =~ ^[0-9]+$ \
+              && "$candidate_major" -eq 3 && "$candidate_minor" -ge 11 ]]; then
+            PYTHON_BIN="$cand"
+            PY_VER="$candidate_ver"
+            break
+        fi
     fi
 done
-if [[ -z "$PYTHON_BIN" ]]; then
-    die "Python 3.11+ is required but no python3/python3.11 was found in PATH."
-fi
-PY_VER="$("$PYTHON_BIN" -c 'import sys; print("%d.%d" % sys.version_info[:2])')"
+[[ -n "$PYTHON_BIN" ]] \
+    || die "Python >= 3.11 is required. Expected ~/bin/python3 or /opt/alt/python311/bin/python3.11."
 log "Python binary: ${PYTHON_BIN} (${PY_VER})"
 
 # -----------------------------------------------------------------------------
@@ -158,6 +178,7 @@ if [[ "$MODE" == "plan" ]]; then
         log "  - ${RADMAN_PRIVATE_DIR}/${d}/   (chmod 700)"
     done
     ENV_TARGET="${RADMAN_PRIVATE_DIR}/staging.env"
+    log "[PLAN] Would create a timestamped pre-install backup under: ${RADMAN_PRIVATE_DIR}/backups/"
     log "[PLAN] Would install (if missing) env template at: ${ENV_TARGET}"
     log "[PLAN] Would smoke-test all 3 agents in DRY_RUN=1:"
     log "  1. ${RADMAN_REPO_ROOT}/agents/agent_order_watch.py --dry-run"
@@ -166,17 +187,35 @@ if [[ "$MODE" == "plan" ]]; then
     log ""
     print_cron_lines "PLAN"
     log ""
-    log "Re-run with --install to execute the above."
+    log "Re-run with CONFIRM_STAGING_APPLY=YES and --apply-staging to execute the above."
     exit 0
 fi
 
 # -----------------------------------------------------------------------------
-# Install mode
+# Apply-staging mode: backup first, then install
 # -----------------------------------------------------------------------------
 log ""
-log "[INSTALL] Creating private directories (chmod 700)..."
-mkdir -p "$RADMAN_PRIVATE_DIR"
-chmod 700 "$RADMAN_PRIVATE_DIR"
+log "[APPLY] Preparing private backup directory..."
+mkdir -p "$RADMAN_PRIVATE_DIR/backups"
+chmod 700 "$RADMAN_PRIVATE_DIR" "$RADMAN_PRIVATE_DIR/backups"
+BACKUP_TS="$(date +%Y%m%d-%H%M%S)"
+PREINSTALL_BACKUP="$RADMAN_PRIVATE_DIR/backups/agents-preinstall-${BACKUP_TS}.tar.gz"
+backup_sources=()
+for item in staging.env state outbox logs locks; do
+    [[ -e "$RADMAN_PRIVATE_DIR/$item" ]] && backup_sources+=("$item")
+done
+if [[ ${#backup_sources[@]} -gt 0 ]]; then
+    tar -C "$RADMAN_PRIVATE_DIR" -czf "$PREINSTALL_BACKUP" "${backup_sources[@]}"
+else
+    empty_list="$(mktemp "${TMPDIR:-/tmp}/radman-empty-backup.XXXXXX")"
+    : > "$empty_list"
+    tar -C "$RADMAN_PRIVATE_DIR" -czf "$PREINSTALL_BACKUP" --files-from "$empty_list"
+    rm -f "$empty_list"
+fi
+chmod 600 "$PREINSTALL_BACKUP"
+log "[APPLY] Pre-install backup written: ${PREINSTALL_BACKUP}"
+
+log "[APPLY] Creating private directories (chmod 700)..."
 for d in "${PRIVATE_SUBDIRS[@]}"; do
     mkdir -p "${RADMAN_PRIVATE_DIR}/${d}"
     chmod 700 "${RADMAN_PRIVATE_DIR}/${d}"
@@ -187,7 +226,7 @@ RATE_FILE="${RADMAN_PRIVATE_DIR}/state/daily_rate.txt"
 if [[ ! -s "$RATE_FILE" ]]; then
     echo "# Write a single integer = Toman per gram (e.g. 85000). Remove this comment line." > "$RATE_FILE"
     chmod 600 "$RATE_FILE"
-    log "[INSTALL] Created rate placeholder (with comment): ${RATE_FILE}"
+    log "[APPLY] Created rate placeholder (with comment): ${RATE_FILE}"
 fi
 
 # Seed env template (chmod 600). DO NOT overwrite existing values.
@@ -213,16 +252,16 @@ OWNER_MOBILE=
 KAVENEGAR_SENDER=10008445
 EOF
     chmod 600 "$ENV_TARGET"
-    log "[INSTALL] Wrote env template: ${ENV_TARGET} (chmod 600; please edit OWNER_MOBILE / API key when ready)."
+    log "[APPLY] Wrote env template: ${ENV_TARGET} (chmod 600; please edit OWNER_MOBILE / API key when ready)."
 else
-    log "[INSTALL] Env file already exists, leaving untouched: ${ENV_TARGET}"
+    log "[APPLY] Env file already exists, leaving untouched: ${ENV_TARGET}"
 fi
 
 # -----------------------------------------------------------------------------
 # Smoke tests (DRY_RUN=1 always here so nothing is sent/changed)
 # -----------------------------------------------------------------------------
 log ""
-log "[INSTALL] Smoke-testing agents in DRY_RUN mode..."
+log "[APPLY] Smoke-testing agents in DRY_RUN mode..."
 
 run_smoke() {
     local label="$1"; shift
@@ -247,10 +286,10 @@ run_smoke "Stock Guard (read-only)" \
     "$AGENTS_DIR/agent_stock_guard.py"
 
 log ""
-log "[INSTALL] Smoke tests completed. Outbox files should appear under:"
+log "[APPLY] Smoke tests completed. Outbox files should appear under:"
 log "         ${RADMAN_PRIVATE_DIR}/outbox/"
 log ""
-print_cron_lines "INSTALL"
+print_cron_lines "APPLY"
 log ""
 log "Next steps:"
 log "  1. Edit ${RADMAN_PRIVATE_DIR}/staging.env and fill OWNER_MOBILE."

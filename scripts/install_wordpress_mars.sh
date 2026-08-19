@@ -178,7 +178,8 @@ validate_staging_guards() {
 
 resolve_versions() {
     echo "[RESOLVE] Resolving latest stable versions..."
-    wp core check-update --field=version 2>/dev/null | head -n 1 || echo "Latest Stable"
+    latest_version="$(wp core check-update --field=version | head -n 1 || true)"
+    echo "${latest_version:-Latest Stable}"
 }
 
 install_wordpress_staging() {
@@ -226,7 +227,7 @@ install_theme_and_plugins() {
     wp plugin install blocksy-companion --activate
     echo "  - [INFO] Blocksy Child Theme deployment PENDING PACKAGE CREATION AND REVIEW."
 
-    if wp redis status >/dev/null 2>&1; then
+    if wp redis status >/dev/null; then
         wp plugin install redis-cache --activate
         wp redis enable || true
         echo "  - [SUCCESS] Persistent Redis Object Cache activated."

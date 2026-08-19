@@ -6,7 +6,7 @@ Read-only agent that audits WooCommerce inventory integrity and writes a
 human-readable report to RADMAN_PRIVATE_DIR/outbox/stock_report_<ts>.txt.
 
 Checks performed (pure read, never mutates):
-  1. Products with stock_quantity=0 but stock_status='instock' (visible but sold out).
+  1. Published/catalog-visible products with managed stock_quantity=0.
   2. Products with stock_quantity<0 (oversell anomaly).
   3. Products in weight-based pricing modes (silver_weight_only /
      silver_weight_plus_stone) that are missing silver_weight_grams meta.
@@ -45,47 +45,65 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
 
 
 def fetch_products(env: rc.Env, limit: int, logger) -> List[Dict[str, Any]]:
+    """Read products through one `wp eval` subprocess (never REST)."""
+    scan_limit = max(1, min(int(limit), 5000))
+    meta_keys = sorted(set(
+        rc.META_PRICING_MODE_KEYS + rc.META_WEIGHT_G_KEYS + rc.META_STONE_VALUE_KEYS
+    ))
+    php_keys = ",".join("'" + key.replace("'", "\\'") + "'" for key in meta_keys)
+    php_code = f'''
+if (!function_exists('wc_get_products')) {{ fwrite(STDERR, "WooCommerce unavailable\\n"); exit(3); }}
+$keys = array({php_keys});
+$products = wc_get_products(array('status' => 'publish', 'limit' => {scan_limit}, 'return' => 'objects'));
+$out = array();
+foreach ($products as $product) {{
+  $meta = array();
+  foreach ($keys as $key) {{
+    $value = $product->get_meta($key, true, 'edit');
+    if ($value !== '' && $value !== null) {{ $meta[$key] = $value; }}
+  }}
+  $out[] = array(
+    'id' => $product->get_id(),
+    'name' => $product->get_name('edit'),
+    'sku' => $product->get_sku('edit'),
+    'manage_stock' => $product->managing_stock(),
+    'stock_quantity' => $product->get_stock_quantity('edit'),
+    'stock_status' => $product->get_stock_status('edit'),
+    'catalog_visibility' => $product->get_catalog_visibility('edit'),
+    'type' => $product->get_type(),
+    'meta' => $meta,
+  );
+}}
+echo wp_json_encode($out, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+'''
     try:
-        rows = rc.wp_json(env, [
-            "wc", "product", "list",
-            "--status=publish",
-            f"--limit={limit}",
-            "--fields=id,name,sku,manage_stock,stock_quantity,stock_status,status,type",
-        ])
+        rows = rc.wp_eval_json(env, php_code, timeout=300)
     except rc.WPCliError as e:
-        logger.error("wc product list failed: %s", rc.redact(str(e), env))
-        return []
+        logger.error("WooCommerce product query failed: %s", rc.redact(str(e), env))
+        raise
     if not isinstance(rows, list):
         return []
     products: List[Dict[str, Any]] = []
-    for r in rows:
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
         try:
-            pid = int(r.get("id", 0))
+            pid = int(row.get("id", 0))
         except (TypeError, ValueError):
             continue
         if pid <= 0:
             continue
-        meta = {}
-        try:
-            meta_raw = rc.wp_json(env, ["post", "meta", "list", str(pid)])
-            if isinstance(meta_raw, list):
-                for m in meta_raw:
-                    k = str(m.get("meta_key", ""))
-                    if k.startswith("_") and k not in ("_stock", "_stock_status", "_manage_stock"):
-                        continue
-                    meta[k] = m.get("meta_value", "")
-        except rc.WPCliError:
-            # If a meta fetch fails for one product, continue with empty meta.
-            pass
+        raw_qty = row.get("stock_quantity")
         products.append({
             "id": pid,
-            "name": str(r.get("name", "")),
-            "sku": str(r.get("sku", "")),
-            "manage_stock": bool(r.get("manage_stock", False)),
-            "stock_quantity": _safe_int(r.get("stock_quantity")),
-            "stock_status": str(r.get("stock_status", "")),
-            "type": str(r.get("type", "")),
-            "meta": meta,
+            "name": str(row.get("name", "")),
+            "sku": str(row.get("sku", "")),
+            "manage_stock": row.get("manage_stock") is True or str(row.get("manage_stock", "")).lower() in ("1", "true", "yes"),
+            "stock_quantity": _safe_int(raw_qty) if raw_qty not in (None, "") else None,
+            "stock_status": str(row.get("stock_status", "")),
+            "catalog_visibility": str(row.get("catalog_visibility", "visible")),
+            "type": str(row.get("type", "")),
+            "meta": row.get("meta") if isinstance(row.get("meta"), dict) else {},
         })
     return products
 
@@ -106,20 +124,22 @@ def scan(products: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
     for p in products:
         pid = p["id"]
         sku = p.get("sku", "") or f"<no-sku>#{pid}"
-        qty = p.get("stock_quantity", 0)
+        qty = p.get("stock_quantity")
         status = p.get("stock_status", "")
+        visibility = p.get("catalog_visibility", "visible")
         meta = p.get("meta", p.get("_meta", {}))
-        mode = str(meta.get(rc.META_PRICING_MODE, "")).strip()
+        mode = str(rc.meta_get(meta, rc.META_PRICING_MODE_KEYS, "")).strip()
 
-        # 1. stock=0 but instock (still visible)
-        if qty <= 0 and status == "instock":
-            buckets["zero_but_instock"].append(p)
+        # 1. managed stock=0 while product remains catalog-visible. This is an
+        # anomaly report only; no visibility/stock status is changed.
+        if p.get("manage_stock") and qty == 0 and visibility != "hidden":
+            buckets["zero_visible"].append(p)
         # 2. negative stock
-        if qty < 0:
+        if qty is not None and qty < 0:
             buckets["negative_stock"].append(p)
         # 3. weight-based but missing weight meta
         if mode in (rc.MODE_WEIGHT_ONLY, rc.MODE_WEIGHT_PLUS_STONE):
-            w = meta.get(rc.META_WEIGHT_G)
+            w = rc.meta_get(meta, rc.META_WEIGHT_G_KEYS, "")
             try:
                 wf = float(str(w).replace(",", "")) if w not in (None, "") else 0.0
             except (TypeError, ValueError):
@@ -128,12 +148,12 @@ def scan(products: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
                 buckets["missing_weight_meta"].append(p)
             # 4. weight+stone mode missing stone value
             if mode == rc.MODE_WEIGHT_PLUS_STONE:
-                s = meta.get(rc.META_STONE_VALUE)
+                s = rc.meta_get(meta, rc.META_STONE_VALUE_KEYS, "")
                 try:
                     sv = int(float(str(s).replace(",", "") or "0"))
                 except (TypeError, ValueError):
                     sv = -1
-                if sv < 0:
+                if sv <= 0:
                     buckets["missing_stone_value"].append(p)
             # 5. mode set but manage_stock not enabled (oversell risk)
             if not p["manage_stock"]:
@@ -158,8 +178,8 @@ def render_report(buckets: Dict[str, List[Dict[str, Any]]], rate_note: str) -> s
     lines.append("=" * 78)
 
     SECTIONS = [
-        ("zero_but_instock",
-         "⚠  محصولات با موجودی صفر اما وضعیت instock (قابل‌مشاهده/خرید):"),
+        ("zero_visible",
+         "⚠  محصولات منتشرشده/قابل‌مشاهده با موجودی مدیریت‌شده صفر:"),
         ("negative_stock",
          "⚠  محصولات با موجودی منفی (oversell anomaly):"),
         ("missing_weight_meta",
@@ -183,10 +203,11 @@ def render_report(buckets: Dict[str, List[Dict[str, Any]]], rate_note: str) -> s
         lines.append(f"  {'ID':<8}{'SKU':<22} {'QTY':>5}  NAME")
         for p in items[:50]:
             qty = p["stock_quantity"]
+            qty_label = "—" if qty is None else str(qty)
             pid = p["id"]
             sku = p["sku"] or f"#{pid}"
             name = (p["name"] or "")[:40]
-            lines.append(f"  {pid:<8}{sku[:22]:<22} {qty:>5}  {name}")
+            lines.append(f"  {pid:<8}{sku[:22]:<22} {qty_label:>5}  {name}")
         if len(items) > 50:
             lines.append(f"  ... and {len(items) - 50} more")
     if not any_issue:
@@ -220,7 +241,10 @@ def run(argv: Optional[List[str]] = None) -> int:
         return 0
 
     try:
-        products = fetch_products(env, args.limit, logger)
+        try:
+            products = fetch_products(env, args.limit, logger)
+        except rc.WPCliError:
+            return 4
         logger.info("Scanned %d products.", len(products))
         buckets = scan(products)
         rate_note = ""
@@ -235,10 +259,9 @@ def run(argv: Optional[List[str]] = None) -> int:
                 pass
         report = render_report(buckets, rate_note)
         print(report)
-        ts = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
+        ts = dt.datetime.now().strftime("%Y%m%d-%H%M%S-%f")
         outbox = Path(env.RADMAN_PRIVATE_DIR) / "outbox" / f"stock_report_{ts}.txt"
-        outbox.write_text(report + "\n", encoding="utf-8")
-        os.chmod(outbox, 0o600)
+        rc.write_text_atomic(outbox, report + "\n")
         logger.info("Report written to %s", outbox)
         return 0
     finally:

@@ -74,9 +74,15 @@ class MockWP:
         return []
 
     def cli(self, args: List[str], timeout: int = 120, check: bool = True) -> str:
-        if args[:3] == ["wc", "product", "update"]:
-            self.update_calls.append(args)
-            return ""
+        if args and args[0] == "eval" and "set_regular_price" in args[1]:
+            import re
+            pid_match = re.search(r"wc_get_product\((\d+)\)", args[1])
+            price_match = re.search(r"set_regular_price\('(\d+)'\)", args[1])
+            assert pid_match and price_match, args[1]
+            pid = int(pid_match.group(1))
+            price = price_match.group(1)
+            self.update_calls.append(["wc", "product", "update", str(pid), f"--regular_price={price}"])
+            return str(pid)
         return ""
 
 
@@ -86,8 +92,8 @@ def install_mock(mock: MockWP):
 
 
 def test_rounding():
-    assert rc.round_to_step(6.80 * 85000) == 580_000
-    assert rc.round_to_step(5.0 * 85000 + 200_000) == 620_000
+    assert rc.round_to_step("578000") == 580_000
+    assert rc.round_to_step("425000") == 430_000  # half-up, not banker's rounding
     assert rc.round_to_step(0) == 0
     print("OK: rounding to nearest 10,000 works.")
 
@@ -96,6 +102,26 @@ def test_toman_format():
     s = rc.toman_str(2490000)
     assert "۲" in s and "۴۹۰" in s, s
     print(f"OK: toman_str(2490000) = {s}")
+
+
+def test_stable_order_outbox(tmp_path):
+    workdir = tmp_path / "outbox-contract"
+    env = make_env(workdir)
+    logger = rc.get_logger(env, "outbox_contract")
+    rotating = [h for h in logger.handlers if hasattr(h, "maxBytes")]
+    assert rotating and rotating[0].maxBytes == 1_048_576
+    result = rc.send_sms(
+        env,
+        to_override=None,
+        text="سفارش آزمایشی",
+        logger=logger,
+        outbox_name="order_123.txt",
+    )
+    expected = workdir / "outbox" / "order_123.txt"
+    assert result["outbox"] == str(expected)
+    assert expected.read_text(encoding="utf-8") == "سفارش آزمایشی"
+    assert (expected.stat().st_mode & 0o777) == 0o600
+    print("OK: dry-run order notification uses atomic outbox/order_<ID>.txt contract.")
 
 
 def test_secret_redaction_and_staging_guards(tmp_path):
@@ -139,12 +165,13 @@ def test_new_order_detection_and_sms(tmp_path):
     rc.write_json_atomic(env_path / "state" / "order_watch.json", {"last_seen_id": 99})
 
     sent: List[str] = []
-    def fake_send(env, to_override=None, text="", logger=None):
+    def fake_send(env, to_override=None, text="", logger=None, outbox_name=None):
         sent.append(text)
-        return {"dry_run": True, "outbox": str(env_path / "outbox" / f"sms-{len(sent)}.txt"), "sent": False}
+        assert outbox_name and outbox_name.startswith("order_")
+        return {"dry_run": True, "outbox": str(env_path / "outbox" / outbox_name), "sent": False}
     rc.send_sms = fake_send
 
-    ow.fetch_new_orders = lambda e, sid, lg: [o for o in orders if int(o["id"]) > sid]
+    ow.fetch_new_orders = lambda e, sid, lg, initial_lookback=50: [o for o in orders if int(o["id"]) > sid]
     ow.fetch_line_items = lambda e, oid, lg: items.get(oid, [])
     ret = ow.run(["--env-file", str(env_path / "staging.env"), "--dry-run"])
     assert ret == 0, f"order_watch exited {ret}"
@@ -185,6 +212,12 @@ def test_pricing_all_four_modes(tmp_path):
          "manage_stock": True, "stock_quantity": 1, "stock_status": "instock",
          "_meta": {rc.META_PRICING_MODE: rc.MODE_WEIGHT_PLUS_STONE, rc.META_WEIGHT_G: "4"}},
     ]
+    assert pe.compute_new_price(products[0]["_meta"], 85000) == (580000, "calc-weight")
+    assert pe.compute_new_price(products[1]["_meta"], 85000) == (625000, "calc-weight-stone")
+    assert pe.compute_new_price(products[2]["_meta"], 85000) == (None, "skip-manual-locked")
+    assert pe.compute_new_price(products[3]["_meta"], 85000) == (300000, "mirror-legacy")
+    assert pe.compute_new_price({rc.META_WEIGHT_G: "5"}, 85000) == (None, "skip-missing-mode")
+
     mock = MockWP(orders=[], items_by_order={}, products=products)
     install_mock(mock)
 
@@ -225,7 +258,7 @@ def test_pricing_all_four_modes(tmp_path):
     assert upd_pids == {1, 2}, upd_pids
     upd_map = {int(a[3]): a[4] for a in mock.update_calls}
     assert upd_map[1] == "--regular_price=580000", upd_map
-    assert upd_map[2] == "--regular_price=620000", upd_map
+    assert upd_map[2] == "--regular_price=625000", upd_map
     csvs = list((workdir / "backups").glob("prices-*.csv"))
     assert csvs, "CSV backup missing"
     print("OK: pricing engine handles all 4 modes, rounding, skips, and writes apply.")
@@ -255,7 +288,7 @@ def test_stock_guard_detection(tmp_path):
          "stock_quantity": 1, "stock_status": "instock", "type": "simple", "_meta": {}},
     ]
     buckets = sg.scan(products)
-    assert any(p["id"] == 2 for p in buckets["zero_but_instock"])
+    assert any(p["id"] == 2 for p in buckets["zero_visible"])
     assert any(p["id"] == 3 for p in buckets["negative_stock"])
     assert any(p["id"] == 4 for p in buckets["missing_weight_meta"])
     assert any(p["id"] == 5 for p in buckets["missing_stone_value"])
@@ -323,6 +356,7 @@ if __name__ == "__main__":
     try:
         test_rounding()
         test_toman_format()
+        test_stable_order_outbox(tmp)
         test_secret_redaction_and_staging_guards(tmp)
         test_new_order_detection_and_sms(tmp)
         test_pricing_all_four_modes(tmp)
