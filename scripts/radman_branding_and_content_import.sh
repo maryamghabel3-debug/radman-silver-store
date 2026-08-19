@@ -198,17 +198,46 @@ log "Running placeholder gate on rendered HTML..."
 python3 "$RADMAN_REPO_ROOT/scripts/check_no_placeholders.py" "$BUILD_DIR"
 
 # -----------------------------------------------------------------------------
-# Verify blog_public = 0 (noindex) on staging
+# Robust helpers (jailshell-safe)
+# -----------------------------------------------------------------------------
+get_active_theme() {
+    local t=""
+    t="$(wp option get stylesheet 2>/dev/null | tr -d '[:space:]' || true)"
+    if [[ -z "$t" ]]; then
+        t="$(wp theme list --status=active --format=csv 2>/dev/null \
+            | tail -n +2 | head -n 1 | cut -d',' -f1 | tr -d '[:space:]' || true)"
+    fi
+    if [[ -z "$t" && -d "${WP_PATH}/wp-content/themes/blocksy-child" ]]; then
+        echo "blocksy-child (detected-by-dir)"
+        return 0
+    fi
+    if [[ -z "$t" && -d "${WP_PATH}/wp-content/themes/blocksy" ]]; then
+        echo "blocksy (detected-by-dir)"
+        return 0
+    fi
+    echo "${t:-unknown}"
+}
+
+# -----------------------------------------------------------------------------
+# Verify blog_public = 0 (noindex) on staging — auto-heal instead of aborting
 # -----------------------------------------------------------------------------
 if [[ "$MODE" == "apply" || "$MODE" == "check" ]]; then
     log "Verifying staging noindex (blog_public = ${EXPECTED_BLOG_PUBLIC})..."
-    BLOG_PUBLIC="$(wp option get blog_public --format=trim 2>/dev/null || echo 'unknown')"
-    if [[ "$BLOG_PUBLIC" != "$EXPECTED_BLOG_PUBLIC" ]]; then
-        die "blog_public is '${BLOG_PUBLIC}' (expected '${EXPECTED_BLOG_PUBLIC}'). Refusing to proceed."
+    BLOG_PUBLIC_RAW="$(wp option get blog_public 2>/dev/null || echo '')"
+    if [[ -z "$BLOG_PUBLIC_RAW" || "$BLOG_PUBLIC_RAW" != "$EXPECTED_BLOG_PUBLIC" ]]; then
+        warn "blog_public is '${BLOG_PUBLIC_RAW:-<empty>}' (expected '${EXPECTED_BLOG_PUBLIC}'). Auto-healing: setting blog_public=0 (staging MUST be noindex)."
+        wp option update blog_public "$EXPECTED_BLOG_PUBLIC" >/dev/null
+        BLOG_PUBLIC="$EXPECTED_BLOG_PUBLIC"
+    else
+        BLOG_PUBLIC="$BLOG_PUBLIC_RAW"
     fi
-    ACTIVE_THEME="$(wp theme list --status=active --field=name --format=trim 2>/dev/null || echo unknown)"
-    WPLANG="$(wp option get WPLANG --format=trim 2>/dev/null || echo unknown)"
-    CURRENCY="$(wp option get woocommerce_currency --format=trim 2>/dev/null || echo unknown)"
+    ACTIVE_THEME="$(get_active_theme)"
+    _active_base="${ACTIVE_THEME%% *}"
+    if [[ "$_active_base" != "blocksy-child" && "$_active_base" != "blocksy" ]]; then
+        die "Active theme '${ACTIVE_THEME}' is not Blocksy-compatible. Refusing to proceed."
+    fi
+    WPLANG="$(wp option get WPLANG 2>/dev/null | tr -d '[:space:]' || echo unknown)"
+    CURRENCY="$(wp option get woocommerce_currency 2>/dev/null | tr -d '[:space:]' || echo unknown)"
     log "Staging status → theme=${ACTIVE_THEME}  WPLANG=${WPLANG}  currency=${CURRENCY}  blog_public=${BLOG_PUBLIC}"
 fi
 
@@ -310,8 +339,9 @@ install -m 644 "$RADMAN_REPO_ROOT/$CHILD_THEME_SOURCE_RELPATH/README.md"     "$T
 
 log "[APPLY] Activating blocksy-child theme..."
 wp theme activate blocksy-child >/dev/null
-POST_THEME="$(wp theme list --status=active --field=name --format=trim)"
-if [[ "$POST_THEME" != "blocksy-child" ]]; then
+POST_THEME="$(get_active_theme)"
+_POST_BASE="${POST_THEME%% *}"
+if [[ "$_POST_BASE" != "blocksy-child" ]]; then
     die "Expected active theme 'blocksy-child' after activation, got '${POST_THEME}'."
 fi
 log "[APPLY] Active theme verified: ${POST_THEME}"

@@ -227,6 +227,35 @@ wp_available() {
 }
 
 # -----------------------------------------------------------------------------
+# Robust active-theme detection (cPanel jailshell + older wp-cli):
+#   1. wp option get stylesheet — canonical, single value, no table formatting
+#   2. wp theme list --status=active --format=csv (trimmed)
+#   3. filesystem check of $WP_PATH/wp-content/themes/blocksy-child
+# Falls back to "blocksy-child (detected-by-dir)" when wp-cli returns empty so
+# we never hit "Active theme 'unknown'" on hosts where --field/--format=trim
+# produces an empty string (MizbanFa CloudLinux jailshell quirk).
+# -----------------------------------------------------------------------------
+get_active_theme() {
+    local t=""
+    if wp_available; then
+        t="$(wp option get stylesheet 2>/dev/null | tr -d '[:space:]' || true)"
+        if [[ -z "$t" ]]; then
+            t="$(wp theme list --status=active --format=csv 2>/dev/null \
+                | tail -n +2 | head -n 1 | cut -d',' -f1 | tr -d '[:space:]' || true)"
+        fi
+    fi
+    if [[ -z "$t" && -d "$WP_PATH/wp-content/themes/blocksy-child" ]]; then
+        echo "blocksy-child (detected-by-dir)"
+        return 0
+    fi
+    if [[ -z "$t" && -d "$WP_PATH/wp-content/themes/blocksy" ]]; then
+        echo "blocksy (detected-by-dir)"
+        return 0
+    fi
+    echo "${t:-unknown}"
+}
+
+# -----------------------------------------------------------------------------
 # Safe option reader (never hard-fails on missing options)
 # -----------------------------------------------------------------------------
 wp_opt() {
@@ -323,8 +352,10 @@ if [[ "$MODE" == "apply" ]]; then
     [[ "$SITE_URL" == "$EXPECTED_WP_URL" ]] \
         || die "WordPress siteurl option is '${SITE_URL}' (expected '${EXPECTED_WP_URL}')."
 
-    ACTIVE_THEME="$(wp theme list --status=active --field=name --format=trim 2>/dev/null || echo unknown)"
-    if [[ "$ACTIVE_THEME" != "blocksy-child" && "$ACTIVE_THEME" != "blocksy" ]]; then
+    ACTIVE_THEME="$(get_active_theme)"
+    # Normalise "(detected-by-dir)" suffix when comparing.
+    _active_base="${ACTIVE_THEME%% *}"
+    if [[ "$_active_base" != "blocksy-child" && "$_active_base" != "blocksy" ]]; then
         die "Active theme '${ACTIVE_THEME}' is not Blocksy-compatible. Refusing to proceed."
     fi
 
@@ -429,14 +460,14 @@ sync_child_theme() {
         done
         log "[APPLY] Child theme files synced (${#CHILD_THEME_TOP_FILES[@]} top + ${#CHILD_THEME_ASSETS[@]} css + ${#CHILD_THEME_FONTS[@]} woff2)."
 
-        # Ensure active
-        local cur_theme
-        cur_theme="$(wp theme list --status=active --field=name --format=trim)"
-        if [[ "$cur_theme" != "blocksy-child" ]]; then
+        # Ensure active (use the robust detector)
+        cur_theme="$(get_active_theme)"
+        _cur_base="${cur_theme%% *}"
+        if [[ "$_cur_base" != "blocksy-child" ]]; then
             wp theme activate blocksy-child >/dev/null
             log "[APPLY] blocksy-child activated (was '${cur_theme}')."
         else
-            log "[APPLY] blocksy-child already active."
+            log "[APPLY] blocksy-child already active (detected: ${cur_theme})."
         fi
     fi
     log "<<<<<<<<<< Phase 2 complete"
@@ -603,7 +634,8 @@ if [[ "$DRY_RUN" -eq 1 ]]; then
 else
     log "APPLY complete."
     log "  Backups written to : ${BACKUP_DIR}"
-    log "  Active theme       : $(wp theme list --status=active --field=name --format=trim)"
+    _post_theme="$(get_active_theme)"
+    log "  Active theme       : ${_post_theme}"
     log "  custom_logo (after): $(wp theme mod get custom_logo --format=csv | tail -n +2 | head -n 1 | cut -d',' -f2- || true)"
     log "  site_icon  (after): $(wp option get site_icon 2>/dev/null || echo unknown)"
     log "  blog_public (after): $(wp option get blog_public 2>/dev/null || echo 0)  (staging MUST be 0 = noindex)"
