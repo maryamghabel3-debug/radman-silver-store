@@ -181,18 +181,6 @@ for ff in "${CHILD_THEME_FONTS[@]}"; do
 done
 
 # -----------------------------------------------------------------------------
-# Python availability/version gate
-# -----------------------------------------------------------------------------
-PYTHON_BIN=""
-for cand in python3 python; do
-    if command -v "$cand" >/dev/null 2>&1; then
-        PYTHON_BIN="$cand"
-        break
-    fi
-done
-[[ -n "$PYTHON_BIN" ]] || die "Python 3 is required but no python3/python was found in PATH."
-
-# -----------------------------------------------------------------------------
 # Staging guards (only enforced in apply mode — plan mode works locally)
 # -----------------------------------------------------------------------------
 if [[ "$MODE" == "apply" ]]; then
@@ -223,31 +211,14 @@ wp() {
     command wp --path="$WP_PATH" --no-color "$@"
 }
 wp_available() {
-    [[ "$MODE" == "apply" ]] && command -v wp >/dev/null 2>&1
+    [[ "$MODE" == "apply" ]] && type -P wp >/dev/null 2>&1
 }
 
-# -----------------------------------------------------------------------------
-# Safe option reader (never hard-fails on missing options)
-# -----------------------------------------------------------------------------
-wp_opt() {
-    local key="$1"
-    local val
-    val="$(wp option get "$key" 2>/dev/null || true)"
-    # wp option get returns exit 0 with empty output when option is missing
-    # on some wp-cli versions; normalise to __MISSING__ for empty.
-    if [[ -z "$val" ]]; then
-        echo "__MISSING__"
-    else
-        echo "$val"
-    fi
-}
-
-wp_theme_mod() {
-    local key="$1"
-    local val
-    val="$(wp theme mod get "$key" --format=csv 2>/dev/null | tail -n +2 | head -n 1 | cut -d',' -f2- || true)"
-    echo "${val:-__MISSING__}"
-}
+# Jailshell-safe reads: temp-file capture + retry + independent wp-eval fallback.
+readonly WP_CAPTURE_LIB="$RADMAN_REPO_ROOT/scripts/lib/wp_cli_capture.sh"
+[[ -f "$WP_CAPTURE_LIB" ]] || die "WP capture helper missing: ${WP_CAPTURE_LIB}"
+# shellcheck source=scripts/lib/wp_cli_capture.sh
+source "$WP_CAPTURE_LIB"
 
 # -----------------------------------------------------------------------------
 # Private dir / lock / backup locations
@@ -295,7 +266,9 @@ TS="$(date +%Y%m%d-%H%M%S)"
 # -----------------------------------------------------------------------------
 BLOG_PUBLIC_BEFORE="__PLAN__"
 BLOG_PUBLIC_AFTER="__PLAN__"
+BLOG_PUBLIC_HEAL_NEEDED=0
 ACTIVE_THEME="__PLAN__"
+THEME_DETECTION_SOURCE="__PLAN__"
 HOME_URL="__PLAN__"
 SITE_URL="__PLAN__"
 LOGO_BEFORE="__PLAN__"
@@ -304,32 +277,41 @@ SITE_ICON_BEFORE="__PLAN__"
 if [[ "$MODE" == "apply" ]]; then
     log "Verifying staging identity..."
 
-    # blog_public: read robustly; heal if empty/missing/non-zero.
-    blog_public_raw="$(wp option get blog_public 2>/dev/null || echo '')"
-    if [[ -z "$blog_public_raw" || "$blog_public_raw" == "__MISSING__" || "$blog_public_raw" != "0" ]]; then
-        BLOG_PUBLIC_BEFORE="${blog_public_raw:-<empty>}"
-        warn "blog_public is '${BLOG_PUBLIC_BEFORE}' (expected 0). Auto-healing: setting blog_public=0 (staging MUST be noindex)."
-        wp option update blog_public 0 >/dev/null
-        BLOG_PUBLIC_AFTER="$(wp option get blog_public 2>/dev/null || echo 0)"
+    # blog_public: temp-file capture -> retry -> wp-eval fallback. Healing is
+    # intentionally deferred until backup_all() has written the DB backup, so
+    # no WordPress mutation can occur before the mandatory backup.
+    blog_public_raw=""
+    wp_read_option blog_public_raw blog_public || true
+    if [[ "$blog_public_raw" != "0" ]]; then
+        BLOG_PUBLIC_BEFORE="${blog_public_raw:-<empty/unreadable>}"
+        BLOG_PUBLIC_AFTER="<pending post-backup heal to 0>"
+        BLOG_PUBLIC_HEAL_NEEDED=1
+        warn "blog_public is '${BLOG_PUBLIC_BEFORE}' (expected 0). It will be healed only AFTER the pre-mutation backups."
     else
         BLOG_PUBLIC_BEFORE="$blog_public_raw"
         BLOG_PUBLIC_AFTER="$blog_public_raw"
     fi
 
-    HOME_URL="$(wp option get home 2>/dev/null || echo __MISSING__)"
-    SITE_URL="$(wp option get siteurl 2>/dev/null || echo __MISSING__)"
+    wp_read_option HOME_URL home \
+        || die "Could not read WordPress home option after option-get and wp-eval fallbacks."
+    wp_read_option SITE_URL siteurl \
+        || die "Could not read WordPress siteurl option after option-get and wp-eval fallbacks."
     [[ "$HOME_URL" == "$EXPECTED_WP_URL" ]] \
         || die "WordPress home option is '${HOME_URL}' (expected '${EXPECTED_WP_URL}')."
     [[ "$SITE_URL" == "$EXPECTED_WP_URL" ]] \
         || die "WordPress siteurl option is '${SITE_URL}' (expected '${EXPECTED_WP_URL}')."
 
-    ACTIVE_THEME="$(wp theme list --status=active --field=name --format=trim 2>/dev/null || echo unknown)"
+    THEME_DETECTION_SOURCE="none"
+    wp_detect_active_theme ACTIVE_THEME THEME_DETECTION_SOURCE || true
+    if [[ "$THEME_DETECTION_SOURCE" == "directory" ]]; then
+        warn "WP-CLI theme reads were empty; blocksy-child directory exists, accepting directory fallback and continuing."
+    fi
     if [[ "$ACTIVE_THEME" != "blocksy-child" && "$ACTIVE_THEME" != "blocksy" ]]; then
-        die "Active theme '${ACTIVE_THEME}' is not Blocksy-compatible. Refusing to proceed."
+        die "Active theme '${ACTIVE_THEME}' is not Blocksy-compatible and no blocksy-child directory fallback was available."
     fi
 
-    LOGO_BEFORE="$(wp theme mod get custom_logo --format=csv 2>/dev/null | tail -n +2 | head -n 1 | cut -d',' -f2- || echo __MISSING__)"
-    SITE_ICON_BEFORE="$(wp option get site_icon 2>/dev/null || echo __MISSING__)"
+    wp_read_theme_mod LOGO_BEFORE custom_logo || LOGO_BEFORE="__MISSING__"
+    wp_read_option SITE_ICON_BEFORE site_icon || SITE_ICON_BEFORE="__MISSING__"
 fi
 
 print_guard_section() {
@@ -342,6 +324,7 @@ print_guard_section() {
     printf '  %-32s %s\n' "home"                 "$HOME_URL"
     printf '  %-32s %s\n' "siteurl"              "$SITE_URL"
     printf '  %-32s %s\n' "Active theme"         "$ACTIVE_THEME"
+    printf '  %-32s %s\n' "Theme detection source" "$THEME_DETECTION_SOURCE"
     printf '  %-32s %s\n' "custom_logo (before)" "$LOGO_BEFORE"
     printf '  %-32s %s\n' "site_icon (before)"   "$SITE_ICON_BEFORE"
     log "=========================================================="
@@ -378,14 +361,30 @@ backup_all() {
             log "[APPLY] Existing child theme backed up: ${THEME_BACKUP}"
         fi
 
-        if wp post get "$HOMEPAGE_ID" --format=ids >/dev/null 2>&1; then
+        homepage_exists_id=""
+        if wp_post_exists homepage_exists_id "$HOMEPAGE_ID"; then
             HOMEPAGE_BACKUP_PATH="${BACKUP_DIR}/home-page-${HOMEPAGE_ID}-${TS}.html"
-            wp post get "$HOMEPAGE_ID" --field=post_content > "$HOMEPAGE_BACKUP_PATH"
+            homepage_backup_content=""
+            wp_read_post_field homepage_backup_content "$HOMEPAGE_ID" post_content \
+                || die "Could not read homepage content for the mandatory backup."
+            printf '%s' "$homepage_backup_content" > "$HOMEPAGE_BACKUP_PATH"
             chmod 600 "$HOMEPAGE_BACKUP_PATH"
             log "[APPLY] Homepage (ID ${HOMEPAGE_ID}) content backed up: ${HOMEPAGE_BACKUP_PATH}"
         else
             warn "Homepage ID ${HOMEPAGE_ID} does not yet exist — will be created? Refusing to create outside the storefront batch runner. Aborting before mutation."
             die "Homepage ID ${HOMEPAGE_ID} is missing on this host. Run scripts/build_staging_storefront.sh --apply-staging first."
+        fi
+
+        if [[ "$BLOG_PUBLIC_HEAL_NEEDED" -eq 1 ]]; then
+            wp option update blog_public 0 >/dev/null
+            BLOG_PUBLIC_AFTER=""
+            if ! wp_read_option BLOG_PUBLIC_AFTER blog_public; then
+                BLOG_PUBLIC_AFTER="0 (update succeeded; readback unavailable)"
+                warn "blog_public readback stayed empty after both fallbacks; update succeeded, continuing as noindex."
+            elif [[ "$BLOG_PUBLIC_AFTER" != "0" ]]; then
+                die "blog_public readback is '${BLOG_PUBLIC_AFTER}' after update (expected 0)."
+            fi
+            log "[APPLY] blog_public healed to 0 after backups."
         fi
     fi
     log "<<<<<<<<<< Phase 1 complete"
@@ -429,14 +428,17 @@ sync_child_theme() {
         done
         log "[APPLY] Child theme files synced (${#CHILD_THEME_TOP_FILES[@]} top + ${#CHILD_THEME_ASSETS[@]} css + ${#CHILD_THEME_FONTS[@]} woff2)."
 
-        # Ensure active
-        local cur_theme
-        cur_theme="$(wp theme list --status=active --field=name --format=trim)"
-        if [[ "$cur_theme" != "blocksy-child" ]]; then
+        # Ensure active, using the same option -> theme-list -> directory
+        # fallback chain as the preflight guard.
+        local cur_theme cur_theme_source
+        cur_theme="unknown"
+        cur_theme_source="none"
+        wp_detect_active_theme cur_theme cur_theme_source || true
+        if [[ "$cur_theme" != "blocksy-child" || "$cur_theme_source" == "directory" ]]; then
             wp theme activate blocksy-child >/dev/null
-            log "[APPLY] blocksy-child activated (was '${cur_theme}')."
+            log "[APPLY] blocksy-child activation enforced (detected='${cur_theme}', source=${cur_theme_source})."
         else
-            log "[APPLY] blocksy-child already active."
+            log "[APPLY] blocksy-child already active (source=${cur_theme_source})."
         fi
     fi
     log "<<<<<<<<<< Phase 2 complete"
@@ -473,7 +475,8 @@ set_branding() {
             if [[ -z "$out" || ! "$out" =~ ^[0-9]+$ ]]; then
                 # May already exist with same filename; try to find by title slug.
                 local found
-                found="$(wp post list --post_type=attachment --name="$title_slug" --fields=ID --format=ids 2>/dev/null | tr -d '[:space:]' | awk '{print $1}')"
+                found=""
+                wp_find_post_id_by_slug found attachment "$title_slug" || true
                 if [[ -n "$found" ]]; then
                     echo "$found"
                     return 0
@@ -548,7 +551,8 @@ apply_homepage() {
 
         # Verify the H1 hero marker landed.
         local new_content
-        new_content="$(wp post get "$HOMEPAGE_ID" --field=post_content 2>/dev/null || true)"
+        new_content=""
+        wp_read_post_field new_content "$HOMEPAGE_ID" post_content || true
         if [[ "$new_content" != *"نقره ۹۲۵؛"*"اصالت در جزئیات"* ]]; then
             die "Homepage hero H1 not present after update — aborting."
         fi
@@ -601,12 +605,21 @@ if [[ "$DRY_RUN" -eq 1 ]]; then
     log "  5. Homepage (ID 18) updated with refined Gutenberg template (55 blocks, balanced)."
     log "  6. Object + LiteSpeed caches flushed (best-effort)."
 else
+    summary_theme="unknown"
+    summary_theme_source="none"
+    summary_logo="unknown"
+    summary_icon="unknown"
+    summary_blog_public="unknown"
+    wp_detect_active_theme summary_theme summary_theme_source || true
+    wp_read_theme_mod summary_logo custom_logo || true
+    wp_read_option summary_icon site_icon || true
+    wp_read_option summary_blog_public blog_public || true
     log "APPLY complete."
     log "  Backups written to : ${BACKUP_DIR}"
-    log "  Active theme       : $(wp theme list --status=active --field=name --format=trim)"
-    log "  custom_logo (after): $(wp theme mod get custom_logo --format=csv | tail -n +2 | head -n 1 | cut -d',' -f2- || true)"
-    log "  site_icon  (after): $(wp option get site_icon 2>/dev/null || echo unknown)"
-    log "  blog_public (after): $(wp option get blog_public 2>/dev/null || echo 0)  (staging MUST be 0 = noindex)"
+    log "  Active theme       : ${summary_theme} (source=${summary_theme_source})"
+    log "  custom_logo (after): ${summary_logo}"
+    log "  site_icon  (after): ${summary_icon}"
+    log "  blog_public (after): ${summary_blog_public}  (staging MUST be 0 = noindex)"
 fi
 log ""
 log "=================== MANUAL VISUAL CHECKLIST ==================="

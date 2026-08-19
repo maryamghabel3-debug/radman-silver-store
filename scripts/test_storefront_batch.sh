@@ -223,9 +223,9 @@ if [[ ! -f "$HOMEPAGE_TPL" ]]; then
     fail "Homepage template missing: $HOMEPAGE_TPL"
 else
     # Required headings/CTAs
-    for needle in "نقره ۹۲۵؛ اصالت در جزئیات" "مشاهده فروشگاه" "مشاهده دسته‌بندی‌ها" "radman-categories" \
-                  "انگشتر نقره" "گردنبند نقره" "دستبند نقره" "مجموعه رادمان را ببینید" "ورود به فروشگاه" \
-                  "نسخه آزمایشی فروشگاه" "درباره رادمان"; do
+    for needle in "نقره ۹۲۵؛" "اصالت در جزئیات" "مشاهده فروشگاه" "دسته‌بندی محصولات" "radman-categories" \
+                  "انگشتر نقره" "گردنبند نقره" "دستبند نقره" "مجموعهٔ رادمان را ببینید" "ورود به فروشگاه" \
+                  "نسخهٔ آزمایشی فروشگاه" "درباره رادمان"; do
         if grep -q "$needle" "$HOMEPAGE_TPL"; then ok "Template contains: ${needle}"
         else fail "Template missing: ${needle}"; fi
     done

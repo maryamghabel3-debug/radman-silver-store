@@ -36,9 +36,10 @@ import datetime as dt
 import subprocess
 import urllib.parse
 import urllib.request
+from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
-from typing import Dict, List, Optional, Any, Tuple
+from typing import Dict, List, Optional, Any, Tuple, Sequence
 
 # ---------------------------------------------------------------------------
 # Constants (do NOT read from code; all secrets via env)
@@ -60,12 +61,20 @@ SECRET_KEYS = {
 # WooCommerce order statuses we watch for "new orders since last run"
 WATCH_STATUSES = ("processing", "on-hold")
 
-# Meta keys (WooCommerce product meta) used by pricing engine
-META_PRICING_MODE = "radman_pricing_mode"
-META_WEIGHT_G = "silver_weight_grams"           # grams (float)
+# Canonical WooCommerce meta keys from docs/PRODUCT-DATA-MODEL.md. Historical
+# aliases remain readable so the old legacy-sync payload (`_pricing_mode`) and
+# the first PR-19 implementation (`radman_pricing_mode`) do not become silent
+# skips during migration.
+META_PRICING_MODE = "pricing_mode"
+META_PRICING_MODE_KEYS = (META_PRICING_MODE, "radman_pricing_mode", "_pricing_mode")
+META_WEIGHT_G = "silver_weight_grams"           # grams (decimal)
+META_WEIGHT_G_KEYS = (META_WEIGHT_G, "weight_grams", "_silver_weight_grams", "_silver_weight_g")
 META_STONE_VALUE = "stone_fixed_value_toman"    # integer Toman
+META_STONE_VALUE_KEYS = (META_STONE_VALUE, "_stone_fixed_value_toman")
 META_LEGACY_PRICE = "legacy_price_toman"        # integer Toman
+META_LEGACY_PRICE_KEYS = (META_LEGACY_PRICE, "_legacy_price_toman")
 META_MANUAL_PRICE = "manual_price_toman"        # integer Toman
+META_MANUAL_PRICE_KEYS = (META_MANUAL_PRICE, "_manual_price_toman")
 MODE_WEIGHT_ONLY = "silver_weight_only"
 MODE_WEIGHT_PLUS_STONE = "silver_weight_plus_stone"
 MODE_LEGACY_MIRROR = "legacy_mirror"
@@ -158,9 +167,20 @@ class Env:
                 f"WP_URL={self.WP_URL!r} (expected {EXPECTED_WP_URL!r}); "
                 "refusing to run agents against non-staging."
             )
+        if self.WP_PATH != EXPECTED_WP_PATH:
+            raise RuntimeError(
+                f"WP_PATH={self.WP_PATH!r} (expected {EXPECTED_WP_PATH!r}); "
+                "refusing an unknown WordPress path."
+            )
         if "public_html" in self.WP_PATH:
             raise RuntimeError(
                 f"WP_PATH={self.WP_PATH!r} contains 'public_html' — production path PROHIBITED."
+            )
+        private_dir = os.path.abspath(self.RADMAN_PRIVATE_DIR)
+        wp_path = os.path.abspath(self.WP_PATH)
+        if "public_html" in private_dir or private_dir == wp_path or private_dir.startswith(wp_path + os.sep):
+            raise RuntimeError(
+                "RADMAN_PRIVATE_DIR must be outside WP_PATH/public_html."
             )
 
 
@@ -178,13 +198,22 @@ def wp_cli(env: Env, args: List[str], timeout: int = 120, check: bool = True) ->
     PII); callers decide what to log.
     """
     cmd = ["wp", "--path=" + env.WP_PATH, "--no-color"] + list(args)
-    proc = subprocess.run(
-        cmd,
-        capture_output=True,
-        text=True,
-        timeout=timeout,
-        check=False,
-    )
+    try:
+        proc = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            check=False,
+        )
+    except FileNotFoundError as e:
+        raise WPCliError("wp-cli executable was not found in PATH") from e
+    except subprocess.TimeoutExpired as e:
+        raise WPCliError(
+            f"wp {' '.join(shlex.quote(a) for a in args)} timed out after {timeout}s"
+        ) from e
+    except OSError as e:
+        raise WPCliError("wp-cli could not be executed") from e
     if check and proc.returncode != 0:
         # Do NOT include stdout/stderr which may leak PII; caller can inspect.
         raise WPCliError(
@@ -194,7 +223,7 @@ def wp_cli(env: Env, args: List[str], timeout: int = 120, check: bool = True) ->
 
 
 def wp_json(env: Env, args: List[str], timeout: int = 120) -> Any:
-    """Run wp-cli with --format=json and parse.  Returns [] for empty output."""
+    """Run wp-cli with --format=json and parse. Returns [] for empty output."""
     out = wp_cli(env, args + ["--format=json"], timeout=timeout)
     if not out:
         return []
@@ -202,6 +231,33 @@ def wp_json(env: Env, args: List[str], timeout: int = 120) -> Any:
         return json.loads(out)
     except json.JSONDecodeError as e:
         raise WPCliError(f"wp returned non-JSON output: {e}") from e
+
+
+def wp_eval_json(env: Env, php_code: str, timeout: int = 120) -> Any:
+    """Execute PHP through `wp eval` and decode its JSON stdout.
+
+    This is still a wp-cli subprocess (never REST) and is used as the reliable
+    WooCommerce bridge on cPanel, where optional `wp wc` command namespaces and
+    shell captures vary by installed versions.
+    """
+    out = wp_cli(env, ["eval", php_code], timeout=timeout)
+    if not out:
+        return []
+    try:
+        return json.loads(out)
+    except json.JSONDecodeError as e:
+        raise WPCliError(f"wp eval returned non-JSON output: {e}") from e
+
+
+# ---------------------------------------------------------------------------
+# Product-meta helpers
+# ---------------------------------------------------------------------------
+def meta_get(meta: Dict[str, Any], keys: Sequence[str], default: Any = "") -> Any:
+    """Return the first present, non-empty value among canonical/legacy keys."""
+    for key in keys:
+        if key in meta and meta[key] not in (None, ""):
+            return meta[key]
+    return default
 
 
 # ---------------------------------------------------------------------------
@@ -214,12 +270,16 @@ def get_logger(env: Env, name: str) -> logging.Logger:
     logger.setLevel(logging.INFO)
     logs_dir = Path(env.RADMAN_PRIVATE_DIR) / "logs"
     logs_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
+    os.chmod(logs_dir, 0o700)
+    log_path = logs_dir / f"{name}.log"
+    log_path.touch(mode=0o600, exist_ok=True)
+    os.chmod(log_path, 0o600)
     fmt = logging.Formatter(
         "%(asctime)s [%(levelname)s] (%(name)s) %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
     fh = RotatingFileHandler(
-        logs_dir / f"{name}.log",
+        log_path,
         maxBytes=1_048_576,  # 1 MB
         backupCount=5,
         encoding="utf-8",
@@ -302,6 +362,14 @@ def write_json_atomic(path: Path, data: Any) -> None:
     os.replace(tmp, path)
 
 
+def write_text_atomic(path: Path, text: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(text, encoding="utf-8")
+    os.chmod(tmp, 0o600)
+    os.replace(tmp, path)
+
+
 # ---------------------------------------------------------------------------
 # Persian digit helpers (not used for SMS since Toman numerals stay Persian)
 # ---------------------------------------------------------------------------
@@ -322,43 +390,58 @@ def toman_str(amount: int) -> str:
 # ---------------------------------------------------------------------------
 # Rounding
 # ---------------------------------------------------------------------------
-def round_to_step(price: float, step: int = PRICE_ROUND_STEP) -> int:
-    """Round price to the nearest *step* Toman.  Never returns < step."""
+def round_to_step(price: Any, step: int = PRICE_ROUND_STEP) -> int:
+    """Round to nearest *step* Toman using commercial half-up semantics."""
+    try:
+        amount = Decimal(str(price))
+    except (InvalidOperation, ValueError) as e:
+        raise ValueError(f"invalid price: {price!r}") from e
     if step <= 0:
-        return int(round(price))
-    rounded = int(round(price / step) * step)
-    return max(rounded, step) if price > 0 else 0
+        return int(amount.quantize(Decimal("1"), rounding=ROUND_HALF_UP))
+    if amount <= 0:
+        return 0
+    units = (amount / Decimal(step)).quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+    rounded = int(units * Decimal(step))
+    return max(rounded, step)
 
 
 # ---------------------------------------------------------------------------
 # Kavenegar SMS (DRY_RUN aware)
 # ---------------------------------------------------------------------------
-def send_sms(env: Env, to_override: Optional[str], text: str, logger: logging.Logger) -> Dict[str, Any]:
-    """Send SMS via Kavenegar REST (api.kavenegar.com).  Returns a dict:
-        {"dry_run": bool, "outbox": <path>, "sent": bool, "status": ...}
+def send_sms(
+    env: Env,
+    to_override: Optional[str],
+    text: str,
+    logger: logging.Logger,
+    outbox_name: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Send SMS via Kavenegar REST, or atomically persist an outbox file.
 
-    DRY_RUN=1 OR missing key/mobile writes text to outbox/<ts>.txt and returns.
-    Otherwise, performs HTTPS POST to Kavenegar.
+    `outbox_name` lets order-watch meet the stable `order_<ID>.txt` contract.
+    Unsafe/path-containing names are rejected and replaced with a timestamp.
     """
-    ts = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
+    ts = dt.datetime.now().strftime("%Y%m%d-%H%M%S-%f")
     outbox = Path(env.RADMAN_PRIVATE_DIR) / "outbox"
     outbox.mkdir(parents=True, exist_ok=True, mode=0o700)
 
+    safe_name = ""
+    if outbox_name:
+        candidate = Path(outbox_name).name
+        if candidate == outbox_name and candidate.endswith(".txt"):
+            safe_name = candidate
+    base_path = outbox / (safe_name or f"sms-{ts}.txt")
+
     if not env.can_send_sms:
-        # Always write an outbox copy so the owner can see what WOULD have sent
-        path = outbox / f"sms-{ts}.txt"
-        path.write_text(text, encoding="utf-8")
-        os.chmod(path, 0o600)
-        logger.info("DRY_RUN=1 (or missing key/mobile); notification written to %s", path)
-        return {"dry_run": True, "outbox": str(path), "sent": False}
+        # Always write an outbox copy so the owner can see what WOULD have sent.
+        write_text_atomic(base_path, text)
+        logger.info("DRY_RUN=1 (or missing key/mobile); notification written to %s", base_path)
+        return {"dry_run": True, "outbox": str(base_path), "sent": False}
 
     to = (to_override or env.OWNER_MOBILE or "").strip()
     if not to:
-        path = outbox / f"sms-{ts}.txt"
-        path.write_text(text, encoding="utf-8")
-        os.chmod(path, 0o600)
-        logger.warning("No recipient mobile; notification saved to %s", path)
-        return {"dry_run": True, "outbox": str(path), "sent": False}
+        write_text_atomic(base_path, text)
+        logger.warning("No recipient mobile; notification saved to %s", base_path)
+        return {"dry_run": True, "outbox": str(base_path), "sent": False}
 
     api_key = env.KAVENEGAR_API_KEY
     sender = env.KAVENEGAR_SENDER or "10008445"
@@ -376,15 +459,18 @@ def send_sms(env: Env, to_override: Optional[str], text: str, logger: logging.Lo
         with urllib.request.urlopen(req, timeout=20) as resp:
             body = resp.read().decode("utf-8", errors="replace")
         logger.info("SMS sent to %s via Kavenegar (len=%d)", to[:4] + "***", len(text))
-        # Save a sent copy too
-        path = outbox / f"sms-sent-{ts}.txt"
-        path.write_text(text, encoding="utf-8")
-        os.chmod(path, 0o600)
+        # Save a sent copy too (never overwrite the pending dry-run filename).
+        if safe_name:
+            path = outbox / f"{Path(safe_name).stem}.sent.txt"
+        else:
+            path = outbox / f"sms-sent-{ts}.txt"
+        write_text_atomic(path, text)
         return {"dry_run": False, "outbox": str(path), "sent": True, "response": body[:200]}
     except Exception as e:  # network/auth failure
-        path = outbox / f"sms-failed-{ts}.txt"
-        path.write_text(text, encoding="utf-8")
-        os.chmod(path, 0o600)
+        # Keep the stable order_<ID>.txt pending file on failure so the alert is
+        # visible to the owner and a later --force-rescan can retry it.
+        path = base_path if safe_name else outbox / f"sms-failed-{ts}.txt"
+        write_text_atomic(path, text)
         logger.error("Kavenegar send failed: %s (saved to %s)", redact(str(e), env), path)
         return {"dry_run": False, "outbox": str(path), "sent": False, "error": redact(str(e), env)}
 

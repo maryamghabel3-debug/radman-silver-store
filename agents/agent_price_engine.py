@@ -4,11 +4,10 @@ RADMAN SILVER 925 — Pricing Engine Agent
 ----------------------------------------
 Reads daily silver rate (Toman/gram) from
     RADMAN_PRIVATE_DIR/state/daily_rate.txt   (single integer, e.g. 85000)
-and recomputes WooCommerce regular_price for products tagged
-radman_pricing_mode in {silver_weight_only, silver_weight_plus_stone}.
-
-Products in manual_locked or legacy_mirror are SKIPPED.  Products missing
-required meta (silver_weight_grams) are reported but not touched.
+and recomputes WooCommerce regular_price according to all four official
+pricing modes. silver_weight_only and silver_weight_plus_stone are calculated;
+legacy_mirror copies legacy_price_toman; manual_locked is reported and never
+automatically overwritten. Products with missing/unknown metadata are skipped.
 
 Modes:
   DRY_RUN=1 (default):  prints a preview table, saves to
@@ -29,6 +28,7 @@ import sys
 import csv
 import argparse
 import datetime as dt
+from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 
@@ -67,107 +67,129 @@ def read_daily_rate(env: rc.Env, override: int) -> int:
             "Owner must write one integer (Toman/gram) into this file."
         )
     raw = rate_path.read_text(encoding="utf-8").strip().replace(",", "")
-    try:
-        rate = int(float(raw))
-    except ValueError as e:
-        raise ValueError(f"Invalid daily rate in {rate_path!r}: {raw!r}") from e
+    if not raw.isdigit():
+        raise ValueError(f"Invalid daily rate in {rate_path!r}: expected one positive integer")
+    rate = int(raw)
     if rate <= 0:
         raise ValueError(f"Daily rate must be a positive integer (got {rate})")
     return rate
 
 
 def fetch_products(env: rc.Env, logger) -> List[Dict[str, Any]]:
-    """Fetch all published products with their meta.  Uses wc product list with
-    --fields including meta_data via a small wrapper: we list IDs + basic fields
-    and then query meta per product via wp post meta list (wp-cli is the only
-    guaranteed channel on cPanel).
-    """
+    """Fetch all published WooCommerce products and required metadata in one
+    HPOS-safe `wp eval` subprocess (never REST)."""
+    meta_keys = sorted(set(
+        rc.META_PRICING_MODE_KEYS
+        + rc.META_WEIGHT_G_KEYS
+        + rc.META_STONE_VALUE_KEYS
+        + rc.META_LEGACY_PRICE_KEYS
+        + rc.META_MANUAL_PRICE_KEYS
+    ))
+    php_keys = ",".join("'" + key.replace("'", "\\'") + "'" for key in meta_keys)
+    php_code = f'''
+if (!function_exists('wc_get_products')) {{ fwrite(STDERR, "WooCommerce unavailable\\n"); exit(3); }}
+$keys = array({php_keys});
+$products = wc_get_products(array('status' => 'publish', 'limit' => -1, 'return' => 'objects'));
+$out = array();
+foreach ($products as $product) {{
+  $meta = array();
+  foreach ($keys as $key) {{
+    $value = $product->get_meta($key, true, 'edit');
+    if ($value !== '' && $value !== null) {{ $meta[$key] = $value; }}
+  }}
+  $out[] = array(
+    'id' => $product->get_id(),
+    'name' => $product->get_name('edit'),
+    'sku' => $product->get_sku('edit'),
+    'regular_price' => $product->get_regular_price('edit'),
+    'sale_price' => $product->get_sale_price('edit'),
+    'meta' => $meta,
+  );
+}}
+echo wp_json_encode($out, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+'''
     try:
-        rows = rc.wp_json(env, [
-            "wc", "product", "list",
-            "--status=publish",
-            "--limit=500",
-            "--fields=id,name,sku,regular_price,price,status",
-        ])
+        rows = rc.wp_eval_json(env, php_code, timeout=300)
     except rc.WPCliError as e:
-        logger.error("wc product list failed: %s", rc.redact(str(e), env))
-        return []
+        logger.error("WooCommerce product query failed: %s", rc.redact(str(e), env))
+        raise
     if not isinstance(rows, list):
         return []
     products: List[Dict[str, Any]] = []
-    for r in rows:
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
         try:
-            pid = int(r.get("id", 0))
+            pid = int(row.get("id", 0))
         except (TypeError, ValueError):
             continue
         if pid <= 0:
             continue
-        meta = fetch_product_meta(env, pid, logger)
         products.append({
             "id": pid,
-            "name": str(r.get("name", "")),
-            "sku": str(r.get("sku", "")),
-            "regular_price": str(r.get("regular_price") or r.get("price") or "0"),
-            "meta": meta,
+            "name": str(row.get("name", "")),
+            "sku": str(row.get("sku", "")),
+            "regular_price": str(row.get("regular_price") or "0"),
+            "sale_price": str(row.get("sale_price") or ""),
+            "meta": row.get("meta") if isinstance(row.get("meta"), dict) else {},
         })
     return products
 
 
-def fetch_product_meta(env: rc.Env, pid: int, logger) -> Dict[str, Any]:
-    """Return a dict of flattened meta_key -> scalar value for a product,
-    using wp post meta list (--format=json)."""
+def _positive_decimal(value: Any) -> Optional[Decimal]:
     try:
-        raw = rc.wp_json(env, ["post", "meta", "list", str(pid)])
-    except rc.WPCliError as e:
-        logger.warning("post meta list failed for product %s: %s", pid, rc.redact(str(e), env))
-        return {}
-    out: Dict[str, Any] = {}
-    if not isinstance(raw, list):
-        return out
-    for m in raw:
-        k = str(m.get("meta_key", ""))
-        v = m.get("meta_value", "")
-        # Skip hidden/internal keys
-        if k.startswith("_") and k not in ("_regular_price", "_price", "_stock_status"):
-            continue
-        out[k] = v
-    return out
+        parsed = Decimal(str(value).strip().replace(",", ""))
+    except (InvalidOperation, ValueError):
+        return None
+    return parsed if parsed > 0 else None
+
+
+def _nonnegative_toman(value: Any) -> Optional[int]:
+    try:
+        parsed = Decimal(str(value).strip().replace(",", ""))
+    except (InvalidOperation, ValueError):
+        return None
+    if parsed < 0:
+        return None
+    return int(parsed.quantize(Decimal("1"), rounding=ROUND_HALF_UP))
 
 
 def compute_new_price(meta: Dict[str, Any], rate: int) -> Tuple[Optional[int], str]:
-    """Return (new_price_toman, reason) where reason is one of:
-       'calc-weight', 'calc-weight-stone', 'skip-manual', 'skip-legacy',
-       'skip-missing-weight', 'skip-bad-weight', 'skip-bad-stone'.
+    """Return `(new_price_toman, reason)` for the four locked modes.
+
+    Only `silver_weight_only` is rounded to the nearest 10,000 Toman, exactly
+    as specified. Weight-plus-stone preserves the fixed stone valuation and is
+    rounded only to a whole Toman. `legacy_mirror` copies its explicit legacy
+    price. `manual_locked` is never changed.
     """
-    mode = str(meta.get(rc.META_PRICING_MODE, "")).strip()
+    mode = str(rc.meta_get(meta, rc.META_PRICING_MODE_KEYS, "")).strip()
+    if not mode:
+        return None, "skip-missing-mode"
     if mode == rc.MODE_MANUAL_LOCKED:
-        return None, "skip-manual"
+        return None, "skip-manual-locked"
     if mode == rc.MODE_LEGACY_MIRROR:
-        return None, "skip-legacy"
+        legacy_raw = rc.meta_get(meta, rc.META_LEGACY_PRICE_KEYS, "")
+        legacy_price = _nonnegative_toman(legacy_raw)
+        if legacy_price is None or legacy_price <= 0:
+            return None, "skip-missing-legacy-price"
+        return legacy_price, "mirror-legacy"
+    if mode not in (rc.MODE_WEIGHT_ONLY, rc.MODE_WEIGHT_PLUS_STONE):
+        return None, "skip-unknown-mode"
 
-    # Weight-based modes
-    w_raw = meta.get(rc.META_WEIGHT_G)
-    try:
-        weight = float(str(w_raw).strip()) if w_raw not in (None, "", "0") else 0.0
-    except (TypeError, ValueError):
-        return None, "skip-bad-weight"
-    if weight <= 0:
-        return None, "skip-missing-weight"
+    w_raw = rc.meta_get(meta, rc.META_WEIGHT_G_KEYS, "")
+    weight = _positive_decimal(w_raw)
+    if weight is None:
+        return None, "skip-missing-or-bad-weight"
 
-    base = weight * rate
+    base = weight * Decimal(rate)
     if mode == rc.MODE_WEIGHT_PLUS_STONE:
-        s_raw = meta.get(rc.META_STONE_VALUE)
-        if s_raw in (None, "", "0"):
-            return None, "skip-missing-stone"
-        try:
-            stone = int(float(str(s_raw).replace(",", "") or "0"))
-        except (TypeError, ValueError):
-            return None, "skip-bad-stone"
-        if stone < 0:
-            return None, "skip-bad-stone"
-        return rc.round_to_step(base + stone), "calc-weight-stone"
+        s_raw = rc.meta_get(meta, rc.META_STONE_VALUE_KEYS, "")
+        stone = _nonnegative_toman(s_raw)
+        if stone is None or stone <= 0:
+            return None, "skip-missing-or-bad-stone"
+        total = base + Decimal(stone)
+        return int(total.quantize(Decimal("1"), rounding=ROUND_HALF_UP)), "calc-weight-stone"
 
-    # default: silver_weight_only (even if mode not explicitly set but weight present)
     return rc.round_to_step(base), "calc-weight"
 
 
@@ -176,9 +198,14 @@ def format_preview_table(rows: List[Dict[str, Any]], top: int = 20) -> str:
     lines.append("=" * 78)
     lines.append("  RADMAN PRICE ENGINE — PREVIEW")
     lines.append("=" * 78)
-    calc = [r for r in rows if r.get("reason", "").startswith("calc")]
+    calculated = [r for r in rows if r.get("new_price") is not None]
     skips = [r for r in rows if r.get("reason", "").startswith("skip")]
-    lines.append(f"  Weight-based products to update : {len(calc)}")
+    by_mode: Dict[str, int] = {}
+    for r in calculated:
+        by_mode[r["reason"]] = by_mode.get(r["reason"], 0) + 1
+    lines.append(f"  Products with computed/mirrored price : {len(calculated)}")
+    for k, v in sorted(by_mode.items()):
+        lines.append(f"  Eligible ({k}): {v}")
     by_reason: Dict[str, int] = {}
     for r in skips:
         by_reason[r["reason"]] = by_reason.get(r["reason"], 0) + 1
@@ -188,7 +215,7 @@ def format_preview_table(rows: List[Dict[str, Any]], top: int = 20) -> str:
     lines.append(f"{'SKU':<20}{'OLD':>14}{'NEW':>14}{'Δ%':>8}  MODE")
     lines.append("-" * 78)
     shown = 0
-    for r in sorted(calc, key=lambda x: abs(x.get("delta_pct", 0)), reverse=True):
+    for r in sorted(calculated, key=lambda x: abs(x.get("delta_pct", 0)), reverse=True):
         if shown >= top:
             break
         old = r.get("old_price_int") or 0
@@ -208,11 +235,12 @@ def format_preview_table(rows: List[Dict[str, Any]], top: int = 20) -> str:
     return "\n".join(lines)
 
 
-def apply_prices(env: rc.Env, to_update: List[Dict[str, Any]], logger) -> Path:
-    """Apply new prices via wp-cli. Returns CSV backup path."""
+def apply_prices(env: rc.Env, to_update: List[Dict[str, Any]], logger) -> Tuple[Path, int]:
+    """Write a complete pre-change CSV, then save products through WooCommerce
+    objects invoked by wp-cli. Returns `(backup_path, failure_count)`."""
     backups = Path(env.RADMAN_PRIVATE_DIR) / "backups"
     backups.mkdir(parents=True, exist_ok=True, mode=0o700)
-    ts = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
+    ts = dt.datetime.now().strftime("%Y%m%d-%H%M%S-%f")
     csv_path = backups / f"prices-{ts}.csv"
     with csv_path.open("w", encoding="utf-8", newline="") as f:
         w = csv.writer(f)
@@ -222,23 +250,35 @@ def apply_prices(env: rc.Env, to_update: List[Dict[str, Any]], logger) -> Path:
                 r["id"], r["sku"], r.get("old_price_int", 0), r["new_price"],
                 r["reason"], r.get("rate", 0),
             ])
+        f.flush()
+        os.fsync(f.fileno())
     os.chmod(csv_path, 0o600)
     logger.info("Pre-change CSV backup written: %s", csv_path)
 
     applied = 0
+    failures = 0
     for r in to_update:
-        pid = r["id"]
-        new_price = r["new_price"]
+        pid = int(r["id"])
+        new_price = int(r["new_price"])
+        php_code = f'''
+$product = function_exists('wc_get_product') ? wc_get_product({pid}) : false;
+if (!$product) {{ fwrite(STDERR, "Product not found\\n"); exit(4); }}
+$product->set_regular_price('{new_price}');
+if ($product->get_sale_price('edit') === '') {{ $product->set_price('{new_price}'); }}
+$product->save();
+wc_delete_product_transients({pid});
+echo (string) $product->get_id();
+'''
         try:
-            rc.wp_cli(env, [
-                "wc", "product", "update", str(pid),
-                f"--regular_price={new_price}",
-            ])
+            result = rc.wp_cli(env, ["eval", php_code])
+            if result.strip() != str(pid):
+                raise rc.WPCliError(f"price update verification failed for product {pid}")
             applied += 1
         except rc.WPCliError as e:
+            failures += 1
             logger.error("Failed to update product %s: %s", pid, rc.redact(str(e), env))
-    logger.info("Applied price updates to %d/%d products.", applied, len(to_update))
-    return csv_path
+    logger.info("Applied price updates to %d/%d products (failures=%d).", applied, len(to_update), failures)
+    return csv_path, failures
 
 
 def run(argv: Optional[List[str]] = None) -> int:
@@ -277,15 +317,19 @@ def run(argv: Optional[List[str]] = None) -> int:
             return 3
         logger.info("Daily rate loaded: %s Toman/gram (dry_run=%s)", rate, env.DRY_RUN)
 
-        products = fetch_products(env, logger)
+        try:
+            products = fetch_products(env, logger)
+        except rc.WPCliError:
+            return 4
         logger.info("Fetched %d products.", len(products))
 
         rows: List[Dict[str, Any]] = []
         for p in products:
             new_price, reason = compute_new_price(p["meta"], rate)
             try:
-                old = int(float(str(p["regular_price"]).replace(",", "") or "0"))
-            except (TypeError, ValueError):
+                old_decimal = Decimal(str(p["regular_price"]).replace(",", "") or "0")
+                old = int(old_decimal.quantize(Decimal("1"), rounding=ROUND_HALF_UP))
+            except (InvalidOperation, TypeError, ValueError):
                 old = 0
             delta_pct = 0.0
             if old > 0 and new_price is not None:
@@ -307,10 +351,9 @@ def run(argv: Optional[List[str]] = None) -> int:
         print(preview)
 
         # Save preview to outbox always
-        ts = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
+        ts = dt.datetime.now().strftime("%Y%m%d-%H%M%S-%f")
         outbox_path = Path(env.RADMAN_PRIVATE_DIR) / "outbox" / f"price_preview_{ts}.txt"
-        outbox_path.write_text(preview + "\n", encoding="utf-8")
-        os.chmod(outbox_path, 0o600)
+        rc.write_text_atomic(outbox_path, preview + "\n")
         logger.info("Preview written to %s", outbox_path)
 
         will_apply = args.apply and (not env.DRY_RUN)
@@ -318,7 +361,10 @@ def run(argv: Optional[List[str]] = None) -> int:
             if not to_update:
                 logger.info("No price changes needed; nothing to apply.")
             else:
-                backup = apply_prices(env, to_update, logger)
+                backup, failures = apply_prices(env, to_update, logger)
+                if failures:
+                    logger.error("APPLY incomplete: %d product update(s) failed. Backup: %s", failures, backup)
+                    return 5
                 logger.info("APPLY complete. Backup: %s", backup)
         else:
             logger.info("DRY_RUN or no --apply flag; no prices written.")

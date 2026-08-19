@@ -31,6 +31,7 @@
 
 set -Eeuo pipefail
 # NO 'set -x' here — we never want to leak environment / credentials.
+export PATH="$HOME/bin:$PATH"
 
 # -----------------------------------------------------------------------------
 # Constants
@@ -147,6 +148,29 @@ wp() {
     command wp --path="$WP_PATH" --no-color "$@"
 }
 
+readonly WP_CAPTURE_LIB="$RADMAN_REPO_ROOT/scripts/lib/wp_cli_capture.sh"
+[[ -f "$WP_CAPTURE_LIB" ]] || die "WP capture helper missing: ${WP_CAPTURE_LIB}"
+# shellcheck source=scripts/lib/wp_cli_capture.sh
+source "$WP_CAPTURE_LIB"
+
+# -----------------------------------------------------------------------------
+# Python 3.11 selection (CloudLinux default python3 is 3.6.8)
+# -----------------------------------------------------------------------------
+PYTHON_BIN=""
+for cand in "$HOME/bin/python3" /opt/alt/python311/bin/python3.11 python3.11 python3; do
+    if command -v "$cand" >/dev/null 2>&1; then
+        candidate_ver="$("$cand" -c 'import sys; print("%d.%d" % sys.version_info[:2])' 2>/dev/null || true)"
+        candidate_major="${candidate_ver%%.*}"
+        candidate_minor="${candidate_ver##*.}"
+        if [[ "$candidate_major" =~ ^[0-9]+$ && "$candidate_minor" =~ ^[0-9]+$ \
+              && "$candidate_major" -eq 3 && "$candidate_minor" -ge 11 ]]; then
+            PYTHON_BIN="$cand"
+            break
+        fi
+    fi
+done
+[[ -n "$PYTHON_BIN" ]] || die "Python >= 3.11 is required. Expected ~/bin/python3 or /opt/alt/python311/bin/python3.11."
+
 # -----------------------------------------------------------------------------
 # Private directory / lockfile / backup location (apply & check only)
 # -----------------------------------------------------------------------------
@@ -186,7 +210,7 @@ else
     fi
 fi
 log "Rendering static pages → ${BUILD_DIR}"
-python3 "$RADMAN_REPO_ROOT/$RENDERER_RELPATH" \
+"$PYTHON_BIN" "$RADMAN_REPO_ROOT/$RENDERER_RELPATH" \
     --repo-root "$RADMAN_REPO_ROOT" \
     --build-dir "$BUILD_DIR"
 
@@ -195,21 +219,35 @@ python3 "$RADMAN_REPO_ROOT/$RENDERER_RELPATH" \
 # radman-placeholder spans remain, fail cleanly with a message listing the
 # offending files. This gate does not touch the host.
 log "Running placeholder gate on rendered HTML..."
-python3 "$RADMAN_REPO_ROOT/scripts/check_no_placeholders.py" "$BUILD_DIR"
+"$PYTHON_BIN" "$RADMAN_REPO_ROOT/scripts/check_no_placeholders.py" "$BUILD_DIR"
 
 # -----------------------------------------------------------------------------
 # Verify blog_public = 0 (noindex) on staging
 # -----------------------------------------------------------------------------
 if [[ "$MODE" == "apply" || "$MODE" == "check" ]]; then
     log "Verifying staging noindex (blog_public = ${EXPECTED_BLOG_PUBLIC})..."
-    BLOG_PUBLIC="$(wp option get blog_public --format=trim 2>/dev/null || echo 'unknown')"
+    BLOG_PUBLIC="unknown"
+    wp_read_option BLOG_PUBLIC blog_public \
+        || die "Could not read blog_public after option-get and wp-eval fallbacks."
     if [[ "$BLOG_PUBLIC" != "$EXPECTED_BLOG_PUBLIC" ]]; then
         die "blog_public is '${BLOG_PUBLIC}' (expected '${EXPECTED_BLOG_PUBLIC}'). Refusing to proceed."
     fi
-    ACTIVE_THEME="$(wp theme list --status=active --field=name --format=trim 2>/dev/null || echo unknown)"
-    WPLANG="$(wp option get WPLANG --format=trim 2>/dev/null || echo unknown)"
-    CURRENCY="$(wp option get woocommerce_currency --format=trim 2>/dev/null || echo unknown)"
-    log "Staging status → theme=${ACTIVE_THEME}  WPLANG=${WPLANG}  currency=${CURRENCY}  blog_public=${BLOG_PUBLIC}"
+
+    ACTIVE_THEME="unknown"
+    THEME_DETECTION_SOURCE="none"
+    wp_detect_active_theme ACTIVE_THEME THEME_DETECTION_SOURCE || true
+    if [[ "$THEME_DETECTION_SOURCE" == "directory" ]]; then
+        warn "WP-CLI theme reads were empty; blocksy-child directory exists, accepting directory fallback."
+    fi
+    if [[ "$ACTIVE_THEME" != "blocksy-child" && "$ACTIVE_THEME" != "blocksy" ]]; then
+        die "Active theme '${ACTIVE_THEME}' is not Blocksy-compatible."
+    fi
+
+    WPLANG="unknown"
+    CURRENCY="unknown"
+    wp_read_option WPLANG WPLANG || true
+    wp_read_option CURRENCY woocommerce_currency || true
+    log "Staging status → theme=${ACTIVE_THEME} (source=${THEME_DETECTION_SOURCE})  WPLANG=${WPLANG}  currency=${CURRENCY}  blog_public=${BLOG_PUBLIC}"
 fi
 
 # -----------------------------------------------------------------------------
@@ -231,13 +269,9 @@ page_entry() {
 }
 
 find_existing_page_id() {
-    local slug="$1"
-    wp post list \
-        --post_type=page \
-        --post_name__in="$slug" \
-        --fields=ID \
-        --format=ids \
-        --allow-root 2>/dev/null | tr -d '[:space:]' | head -c 20 || true
+    local out_var="$1"
+    local slug="$2"
+    wp_find_post_id_by_slug "$out_var" page "$slug" || true
 }
 
 # -----------------------------------------------------------------------------
@@ -253,7 +287,8 @@ print_plan_row() {
     local existing="will-create"
     if [[ "$MODE" == "apply" || "$MODE" == "check" ]]; then
         local pid
-        pid="$(find_existing_page_id "$slug")"
+        pid=""
+        find_existing_page_id pid "$slug"
         [[ -n "$pid" ]] && existing="$pid"
     fi
     local action="UPDATE"
@@ -310,7 +345,9 @@ install -m 644 "$RADMAN_REPO_ROOT/$CHILD_THEME_SOURCE_RELPATH/README.md"     "$T
 
 log "[APPLY] Activating blocksy-child theme..."
 wp theme activate blocksy-child >/dev/null
-POST_THEME="$(wp theme list --status=active --field=name --format=trim)"
+POST_THEME="unknown"
+POST_THEME_SOURCE="none"
+wp_detect_active_theme POST_THEME POST_THEME_SOURCE || true
 if [[ "$POST_THEME" != "blocksy-child" ]]; then
     die "Expected active theme 'blocksy-child' after activation, got '${POST_THEME}'."
 fi
@@ -323,7 +360,8 @@ apply_page() {
     local slug="$1" title="$2" rendered="$3"
     [[ -f "$rendered" ]] || die "Rendered HTML missing for ${slug}: ${rendered}"
     local existing_id
-    existing_id="$(find_existing_page_id "$slug")"
+    existing_id=""
+    find_existing_page_id existing_id "$slug"
     if [[ -n "$existing_id" ]]; then
         # Update existing; ensure draft status; do NOT publish.
         wp post update "$existing_id" \

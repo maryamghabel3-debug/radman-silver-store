@@ -8,7 +8,8 @@ RADMAN_PRIVATE_DIR/state/order_watch.json.  For each new order it composes a
 concise Persian SMS notification to the owner (order ID, items, total in
 Toman, customer city).
 
-Default mode is DRY_RUN=1: notifications are written to outbox/sms-<ts>.txt.
+Default mode is DRY_RUN=1: each notification is written atomically to
+outbox/order_<ID>.txt.
 If KAVENEGAR_API_KEY and OWNER_MOBILE are set in staging.env AND DRY_RUN=0,
 it sends the SMS via Kavenegar REST API.  Order status is NEVER auto-changed;
 HITL is strictly preserved.
@@ -58,42 +59,86 @@ def get_last_seen_id(state_path: Path) -> int:
         return 0
 
 
-def fetch_new_orders(env: rc.Env, since_id: int, logger) -> List[Dict[str, Any]]:
-    """Return list of order dicts in processing/on-hold with id > since_id,
-    ordered by ID ascending.  Uses wp-cli wc order list."""
-    args = [
-        "wc", "order", "list",
-        "--status=" + ",".join(rc.WATCH_STATUSES),
-        "--orderby=id",
-        "--order=asc",
-        "--limit=200",
-    ]
-    if since_id > 0:
-        args.append("--offset=0")
+def fetch_new_orders(
+    env: rc.Env,
+    since_id: int,
+    logger,
+    initial_lookback: int = 50,
+) -> List[Dict[str, Any]]:
+    """Return processing/on-hold orders with ID > cursor, ascending.
+
+    WooCommerce data is read through a `wp eval` subprocess (never REST). This
+    works with both classic order storage and HPOS and avoids optional/renamed
+    `wp wc order` command namespaces. The latest 200 matching orders are more
+    than enough for a five-minute polling window.
+    """
+    php_code = r'''
+if (!function_exists('wc_get_orders')) { fwrite(STDERR, "WooCommerce unavailable\n"); exit(3); }
+$orders = wc_get_orders(array(
+  'status' => array('processing', 'on-hold'),
+  'limit' => 200,
+  'orderby' => 'ID',
+  'order' => 'DESC',
+  'return' => 'objects',
+));
+$out = array();
+foreach ($orders as $order) {
+  $items = array();
+  foreach ($order->get_items('line_item') as $item) {
+    $items[] = array('name' => $item->get_name(), 'quantity' => $item->get_quantity());
+  }
+  $out[] = array(
+    'id' => $order->get_id(),
+    'status' => $order->get_status(),
+    'total' => $order->get_total(),
+    'currency' => $order->get_currency(),
+    'shipping_city' => $order->get_shipping_city(),
+    'billing_city' => $order->get_billing_city(),
+    'line_items' => $items,
+  );
+}
+echo wp_json_encode($out, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+'''
     try:
-        orders = rc.wp_json(env, args)
+        orders = rc.wp_eval_json(env, php_code)
     except rc.WPCliError as e:
-        logger.error("wp wc order list failed: %s", rc.redact(str(e), env))
+        logger.error("wp-cli WooCommerce order query failed: %s", rc.redact(str(e), env))
+        raise
+    if not isinstance(orders, list):
         return []
+
     out: List[Dict[str, Any]] = []
     for o in orders:
+        if not isinstance(o, dict):
+            continue
         try:
             oid = int(o.get("id") or o.get("order_id") or 0)
         except (TypeError, ValueError):
             continue
-        if oid <= since_id:
-            continue
-        out.append(o)
+        if oid > since_id:
+            out.append(o)
+    out.sort(key=lambda row: int(row.get("id") or 0))
+    if since_id <= 0 and initial_lookback > 0:
+        out = out[-initial_lookback:]
     return out
 
 
 def fetch_line_items(env: rc.Env, order_id: int, logger) -> List[Dict[str, Any]]:
-    """Fetch line items for a single order.  Returns [] on failure."""
-    try:
-        items = rc.wp_json(env, ["wc", "order", "items", str(order_id)])
-        if isinstance(items, list):
-            return items
+    """Fallback line-item query through wp eval for one order."""
+    if order_id <= 0:
         return []
+    php_code = f'''
+$order = function_exists('wc_get_order') ? wc_get_order({int(order_id)}) : false;
+if (!$order) {{ echo '[]'; return; }}
+$out = array();
+foreach ($order->get_items('line_item') as $item) {{
+  $out[] = array('name' => $item->get_name(), 'quantity' => $item->get_quantity());
+}}
+echo wp_json_encode($out, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+'''
+    try:
+        items = rc.wp_eval_json(env, php_code)
+        return items if isinstance(items, list) else []
     except rc.WPCliError as e:
         logger.warning("Failed to fetch items for order %s: %s", order_id, rc.redact(str(e), env))
         return []
@@ -184,7 +229,11 @@ def run(argv: Optional[List[str]] = None) -> int:
         since_id = 0 if args.force_rescan else get_last_seen_id(state_path)
         logger.info("Starting run: last_seen_id=%s, dry_run=%s", since_id, env.DRY_RUN)
 
-        orders = fetch_new_orders(env, since_id, logger)
+        lookback = 200 if args.force_rescan else max(1, min(args.lookback, 200))
+        try:
+            orders = fetch_new_orders(env, since_id, logger, initial_lookback=lookback)
+        except rc.WPCliError:
+            return 4
         logger.info("Found %d new order(s) since ID %s", len(orders), since_id)
 
         max_id = since_id
@@ -193,10 +242,17 @@ def run(argv: Optional[List[str]] = None) -> int:
             oid = int(order.get("id") or 0)
             if oid <= 0:
                 continue
-            items = fetch_line_items(env, oid, logger)
+            embedded_items = order.get("line_items")
+            items = embedded_items if isinstance(embedded_items, list) else fetch_line_items(env, oid, logger)
             text = format_order_sms(order, items)
-            # Send or outbox
-            res = rc.send_sms(env, to_override=None, text=text, logger=logger)
+            # Stable dry-run contract: outbox/order_<ID>.txt
+            res = rc.send_sms(
+                env,
+                to_override=None,
+                text=text,
+                logger=logger,
+                outbox_name=f"order_{oid}.txt",
+            )
             processed += 1
             if oid > max_id:
                 max_id = oid

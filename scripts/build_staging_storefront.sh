@@ -178,18 +178,22 @@ log "RADMAN_REPO_ROOT = ${RADMAN_REPO_ROOT}"
 # Python availability/version gate
 # -----------------------------------------------------------------------------
 PYTHON_BIN=""
-for cand in python3 python; do
+PY_VER=""
+for cand in "$HOME/bin/python3" /opt/alt/python311/bin/python3.11 python3.11 python3; do
     if command -v "$cand" >/dev/null 2>&1; then
-        PYTHON_BIN="$cand"
-        break
+        candidate_ver="$("$cand" -c 'import sys; print("%d.%d" % sys.version_info[:2])' 2>/dev/null || true)"
+        candidate_major="${candidate_ver%%.*}"
+        candidate_minor="${candidate_ver##*.}"
+        if [[ "$candidate_major" =~ ^[0-9]+$ && "$candidate_minor" =~ ^[0-9]+$ \
+              && "$candidate_major" -eq 3 && "$candidate_minor" -ge 11 ]]; then
+            PYTHON_BIN="$cand"
+            PY_VER="$candidate_ver"
+            break
+        fi
     fi
 done
-[[ -n "$PYTHON_BIN" ]] || die "Python 3.11+ is required but no python3/python was found in PATH."
-PY_VER="$($PYTHON_BIN -c 'import sys; print("%d.%d" % sys.version_info[:2])')"
-PY_MAJOR="${PY_VER%%.*}"
-PY_MINOR="${PY_VER##*.}"
-[[ "$PY_MAJOR" -ge 3 && "$PY_MINOR" -ge 11 ]] \
-    || die "Python >= 3.11 required (found: ${PY_VER}). Ensure PATH includes ~/bin (or host-managed python3.11)."
+[[ -n "$PYTHON_BIN" ]] \
+    || die "Python >= 3.11 required. Expected ~/bin/python3 or /opt/alt/python311/bin/python3.11."
 log "Python binary: ${PYTHON_BIN} (${PY_VER}) ✓"
 
 # -----------------------------------------------------------------------------
@@ -227,7 +231,13 @@ wp() {
     command wp --path="$WP_PATH" --no-color "$@"
 }
 
-wp_available() { command -v wp >/dev/null 2>&1; }
+# `command -v wp` sees the wrapper function itself; type -P checks the binary.
+wp_available() { type -P wp >/dev/null 2>&1; }
+
+readonly WP_CAPTURE_LIB="$RADMAN_REPO_ROOT/scripts/lib/wp_cli_capture.sh"
+[[ -f "$WP_CAPTURE_LIB" ]] || die "WP capture helper missing: ${WP_CAPTURE_LIB}"
+# shellcheck source=scripts/lib/wp_cli_capture.sh
+source "$WP_CAPTURE_LIB"
 
 # -----------------------------------------------------------------------------
 # Private dir / lock / backup locations
@@ -260,17 +270,11 @@ fi
 TS="$(date +%Y%m%d-%H%M%S)"
 
 # -----------------------------------------------------------------------------
-# Helper: read WP option safely
-# -----------------------------------------------------------------------------
-wp_opt() {
-    wp option get "$1" --format=trim 2>/dev/null || echo "__MISSING__"
-}
-
-# -----------------------------------------------------------------------------
 # Guard verification (host-facing modes)
 # -----------------------------------------------------------------------------
 BLOG_PUBLIC="__PLAN__"
 ACTIVE_THEME="__PLAN__"
+THEME_DETECTION_SOURCE="__PLAN__"
 CURRENCY="__PLAN__"
 DECIMALS="__PLAN__"
 SHOW_ON_FRONT="__PLAN__"
@@ -280,31 +284,38 @@ SITE_URL="__PLAN__"
 
 if [[ "$MODE" == "apply" || "$MODE" == "check" ]]; then
     log "Verifying staging identity..."
-    BLOG_PUBLIC="$(wp_opt blog_public)"
+    wp_read_option BLOG_PUBLIC blog_public \
+        || die "Could not read blog_public after option-get and wp-eval fallbacks."
     [[ "$BLOG_PUBLIC" == "$EXPECTED_BLOG_PUBLIC" ]] \
         || die "blog_public is '${BLOG_PUBLIC}' (expected '${EXPECTED_BLOG_PUBLIC}'). Staging must remain noindex."
 
-    HOME_URL="$(wp_opt home)"
-    SITE_URL="$(wp_opt siteurl)"
+    wp_read_option HOME_URL home \
+        || die "Could not read WordPress home option after all fallbacks."
+    wp_read_option SITE_URL siteurl \
+        || die "Could not read WordPress siteurl option after all fallbacks."
     [[ "$HOME_URL" == "$EXPECTED_WP_URL" ]] \
         || die "WordPress home option is '${HOME_URL}' (expected '${EXPECTED_WP_URL}')."
     [[ "$SITE_URL" == "$EXPECTED_WP_URL" ]] \
         || die "WordPress siteurl option is '${SITE_URL}' (expected '${EXPECTED_WP_URL}')."
 
-    ACTIVE_THEME="$(wp theme list --status=active --field=name --format=trim 2>/dev/null || echo unknown)"
+    THEME_DETECTION_SOURCE="none"
+    wp_detect_active_theme ACTIVE_THEME THEME_DETECTION_SOURCE || true
+    if [[ "$THEME_DETECTION_SOURCE" == "directory" ]]; then
+        warn "WP-CLI theme reads were empty; blocksy-child directory exists, accepting directory fallback."
+    fi
     if [[ "$ACTIVE_THEME" != "blocksy-child" && "$ACTIVE_THEME" != "blocksy" ]]; then
         die "Active theme '${ACTIVE_THEME}' is not Blocksy-compatible. Refusing to proceed."
     fi
 
-    CURRENCY="$(wp_opt woocommerce_currency)"
-    DECIMALS="$(wp_opt woocommerce_price_num_decimals)"
-    SHOW_ON_FRONT="$(wp_opt show_on_front)"
-    PAGE_ON_FRONT="$(wp_opt page_on_front)"
+    wp_read_option CURRENCY woocommerce_currency || CURRENCY="__MISSING__"
+    wp_read_option DECIMALS woocommerce_price_num_decimals || DECIMALS="__MISSING__"
+    wp_read_option SHOW_ON_FRONT show_on_front || SHOW_ON_FRONT="__MISSING__"
+    wp_read_option PAGE_ON_FRONT page_on_front || PAGE_ON_FRONT="__MISSING__"
 
-    # Verify page 18 exists
-    if ! wp post get "$HOMEPAGE_ID" --format=ids >/dev/null 2>&1; then
-        die "Homepage ID ${HOMEPAGE_ID} does not exist. Refusing to create a new homepage outside of plan."
-    fi
+    # Verify page 18 exists without the invalid `post get --format=ids` form.
+    homepage_exists_id=""
+    wp_post_exists homepage_exists_id "$HOMEPAGE_ID" \
+        || die "Homepage ID ${HOMEPAGE_ID} does not exist. Refusing to create a new homepage outside of plan."
 fi
 
 # -----------------------------------------------------------------------------
@@ -320,6 +331,7 @@ print_guard_section() {
     printf '  %-32s %s\n' "home"             "$HOME_URL"
     printf '  %-32s %s\n' "siteurl"          "$SITE_URL"
     printf '  %-32s %s\n' "Active theme"     "$ACTIVE_THEME"
+    printf '  %-32s %s\n' "Theme detection source" "$THEME_DETECTION_SOURCE"
     printf '  %-32s %s\n' "WooCommerce currency"  "$CURRENCY (expected IRT)"
     printf '  %-32s %s\n' "Price decimals"        "$DECIMALS (expected 0)"
     printf '  %-32s %s\n' "show_on_front"         "$SHOW_ON_FRONT (expected page)"
@@ -363,8 +375,10 @@ HOMEPAGE_BACKUP_PATH="${BACKUP_DIR:-__PLAN__}/home-page-${HOMEPAGE_ID}-${TS}.htm
 apply_homepage() {
     log ">>>>>>>>>> Phase 2: Homepage foundation (page ID ${HOMEPAGE_ID})"
     local current_title current_status
-    current_title="$(wp post get "$HOMEPAGE_ID" --field=post_title --format=trim 2>/dev/null || echo __MISSING__)"
-    current_status="$(wp post get "$HOMEPAGE_ID" --field=post_status --format=trim 2>/dev/null || echo __MISSING__)"
+    current_title="__MISSING__"
+    current_status="__MISSING__"
+    wp_read_post_field current_title "$HOMEPAGE_ID" post_title || true
+    wp_read_post_field current_status "$HOMEPAGE_ID" post_status || true
     log "Current page ${HOMEPAGE_ID}: title='${current_title}' status='${current_status}'"
 
     if [[ "$DRY_RUN" -eq 1 ]]; then
@@ -373,8 +387,11 @@ apply_homepage() {
         log "[PLAN/CHECK] Would set post_title='خانه' post_status (keeps current, target=publish on staging)"
         log "[PLAN/CHECK] Would enforce show_on_front=page page_on_front=${HOMEPAGE_ID}"
     else
-        # Back up current content
-        wp post get "$HOMEPAGE_ID" --field=post_content > "$HOMEPAGE_BACKUP_PATH"
+        # Back up current content through the same robust read chain.
+        local backup_content=""
+        wp_read_post_field backup_content "$HOMEPAGE_ID" post_content \
+            || die "Could not read homepage content for the mandatory backup."
+        printf '%s' "$backup_content" > "$HOMEPAGE_BACKUP_PATH"
         chmod 600 "$HOMEPAGE_BACKUP_PATH"
         log "[APPLY] Current homepage content backed up → ${HOMEPAGE_BACKUP_PATH}"
 
@@ -396,8 +413,9 @@ apply_homepage() {
     # Verify
     if [[ "$MODE" == "apply" ]]; then
         local new_content
-        new_content="$(wp post get "$HOMEPAGE_ID" --field=post_content 2>/dev/null || true)"
-        if [[ "$new_content" != *"نقره ۹۲۵؛ اصالت در جزئیات"* ]]; then
+        new_content=""
+        wp_read_post_field new_content "$HOMEPAGE_ID" post_content || true
+        if [[ "$new_content" != *"نقره ۹۲۵؛"*"اصالت در جزئیات"* ]]; then
             die "Homepage hero title not present after update — aborting."
         fi
         log "[APPLY] Hero H1 verified in rendered homepage content."
@@ -409,10 +427,13 @@ apply_homepage() {
 # Phase 3 — Product categories (idempotent)
 # -----------------------------------------------------------------------------
 find_product_cat_id() {
-    local slug="$1"
-    wp_available || { echo ""; return 0; }
-    wp term list product_cat --slug="$slug" --fields=term_id --format=ids 2>/dev/null \
-        | tr -d '[:space:]' | head -c 20 || true
+    local out_var="$1"
+    local slug="$2"
+    if ! wp_available; then
+        printf -v "$out_var" '%s' ''
+        return 0
+    fi
+    wp_find_term_id_by_slug "$out_var" product_cat "$slug" || true
 }
 
 apply_categories() {
@@ -425,7 +446,8 @@ apply_categories() {
         rest="${spec#*|}"
         name="${rest%%|*}"
         parent="${rest##*|}"
-        cid="$(find_product_cat_id "$slug")"
+        cid=""
+        find_product_cat_id cid "$slug"
         if [[ -n "$cid" ]]; then
             action="EXISTING"
             existing=$((existing+1))
@@ -436,8 +458,9 @@ apply_categories() {
         else
             action="CREATE"
             if [[ "$DRY_RUN" -eq 0 ]]; then
-                cid="$(wp term create product_cat "$name" --slug="$slug" --porcelain 2>/dev/null || echo __FAIL__)"
-                [[ "$cid" != "__FAIL__" ]] || die "Failed to create category slug=${slug}"
+                cid=""
+                wp_capture_to_var cid term create product_cat "$name" --slug="$slug" --porcelain \
+                    || die "Failed to create category slug=${slug}"
             fi
             created=$((created+1))
         fi
@@ -451,65 +474,103 @@ apply_categories() {
 # Phase 4 — Primary navigation menu (idempotent; no Draft pages)
 # -----------------------------------------------------------------------------
 find_menu_id() {
-    # Returns empty string in local/plan mode when wp is unavailable.
-    wp_available || { echo ""; return 0; }
-    wp menu list --fields=term_id,name --format=csv 2>/dev/null \
-        | awk -F',' -v name="$MENU_NAME" '$2 == name {print $1; exit}' || true
+    # Sets OUT_VAR to an existing menu term_id or empty.
+    local out_var="$1"
+    local menu_csv="" found_menu_id="" name_b64 php_code
+    if ! wp_available; then
+        printf -v "$out_var" '%s' ''
+        return 0
+    fi
+    if wp_capture_to_var menu_csv menu list --fields=term_id,name --format=csv; then
+        found_menu_id="$(printf '%s\n' "$menu_csv" | awk -F',' -v name="$MENU_NAME" '$2 == name {print $1; exit}')"
+        if [[ -n "$found_menu_id" ]]; then
+            printf -v "$out_var" '%s' "$found_menu_id"
+            return 0
+        fi
+    fi
+
+    # An empty/mangled CSV lookup must be independently verified before a new
+    # menu is created, otherwise an idempotent run could create duplicates.
+    name_b64="$(printf '%s' "$MENU_NAME" | base64 | tr -d '\n')"
+    php_code="\$m=wp_get_nav_menu_object(base64_decode('${name_b64}')); if (\$m) { echo (string) \$m->term_id; }"
+    wp_capture_to_var found_menu_id eval "$php_code" || true
+    [[ -n "$found_menu_id" ]] && warn "Menu lookup recovered via wp eval fallback."
+    printf -v "$out_var" '%s' "$found_menu_id"
 }
 
 menu_item_exists() {
-    # Returns the db-id of an existing menu item that matches (menu-id, object-type, object-id-or-url)
-    # Uses a temp file (jailshell-safe; no process substitution <()).
-    local menu_id="$1" otype="$2" oid="$3" ourl="${4:-}"
+    # Sets OUT_VAR to the db-id of a matching menu item. Uses wp eval as an
+    # independent fallback, preventing duplicate items when CSV capture is
+    # empty/mangled on jailshell.
+    local out_var="$1" menu_id="$2" otype="$3" oid="$4" ourl="${5:-}"
+    local menu_csv="" line mid mtitle mobject moid murl expected_object
+    local url_b64 php_code found=""
+    printf -v "$out_var" '%s' ''
     wp_available || return 1
-    local tmp_csv
-    tmp_csv="$(mktemp "${TMPDIR:-/tmp}/radman-menu-items.XXXXXX")"
-    wp menu item list "$menu_id" \
-        --fields=db_id,title,object,object_id,url --format=csv 2>/dev/null \
-        | sed '1d' > "$tmp_csv" || true
-    local line mid mtitle mtype moid murl
-    while IFS= read -r line; do
-        [[ -z "$line" ]] && continue
-        IFS=',' read -r mid mtitle mtype moid murl <<<"$line"
-        if [[ "$otype" == "custom" ]]; then
-            if [[ "$mtype" == "custom" && "$murl" == "$ourl" ]]; then
-                rm -f "$tmp_csv"
-                echo "$mid"
+
+    expected_object="$otype"
+    [[ "$otype" == "tax" ]] && expected_object="product_cat"
+    if wp_capture_to_var menu_csv menu item list "$menu_id" \
+        --fields=db_id,title,object,object_id,url --format=csv; then
+        while IFS= read -r line; do
+            [[ -z "$line" || "$line" == db_id,* ]] && continue
+            IFS=',' read -r mid mtitle mobject moid murl <<<"$line"
+            if [[ "$otype" == "custom" ]]; then
+                if [[ "$mobject" == "custom" && "$murl" == "$ourl" ]]; then
+                    printf -v "$out_var" '%s' "$mid"
+                    return 0
+                fi
+            elif [[ "$mobject" == "$expected_object" && "$moid" == "$oid" ]]; then
+                printf -v "$out_var" '%s' "$mid"
                 return 0
             fi
-        else
-            if [[ "$mtype" == "$otype" && "$moid" == "$oid" ]]; then
-                rm -f "$tmp_csv"
-                echo "$mid"
-                return 0
-            fi
-        fi
-    done < "$tmp_csv"
-    rm -f "$tmp_csv"
+        done <<<"$menu_csv"
+    fi
+
+    url_b64="$(printf '%s' "$ourl" | base64 | tr -d '\n')"
+    php_code="\$items=wp_get_nav_menu_items(${menu_id}); foreach ((array) \$items as \$i) { if ('${otype}' === 'custom') { if ('custom' === \$i->object && \$i->url === base64_decode('${url_b64}')) { echo (string) \$i->db_id; break; } } elseif (\$i->object === '${expected_object}' && (string) \$i->object_id === '${oid}') { echo (string) \$i->db_id; break; } }"
+    if wp_capture_to_var found eval "$php_code"; then
+        warn "Menu-item lookup recovered via wp eval fallback."
+        printf -v "$out_var" '%s' "$found"
+        return 0
+    fi
     return 1
 }
 
 detect_primary_menu_location() {
-    # Heuristic: prefer a location whose slug/description contains "primary"
-    # or "header" or "main". Returns empty if ambiguous OR if wp unavailable.
-    wp_available || { echo ""; return 0; }
-    local loc
-    loc="$(wp menu location list --format=csv 2>/dev/null \
-        | awk -F',' 'NR>1 && (tolower($1) ~ /primary|main|header|top/) {print $1; exit}' || true)"
-    echo "$loc"
+    # Sets OUT_VAR. Prefer known Blocksy locations first, then a conservative
+    # primary/main/header/top heuristic. Falls back to registered nav menus.
+    local out_var="$1"
+    local locations_csv="" loc="" php_code
+    printf -v "$out_var" '%s' ''
+    wp_available || return 0
+    if wp_capture_to_var locations_csv menu location list --format=csv; then
+        loc="$(printf '%s\n' "$locations_csv" | awk -F',' 'NR>1 && ($1 == "menu_1" || $1 == "menu_mobile") {print $1; exit}')"
+        if [[ -z "$loc" ]]; then
+            loc="$(printf '%s\n' "$locations_csv" | awk -F',' 'NR>1 && (tolower($1) ~ /primary|main|header|top/) {print $1; exit}')"
+        fi
+    fi
+    if [[ -z "$loc" ]]; then
+        php_code="foreach ((array) get_registered_nav_menus() as \$slug => \$desc) { if (in_array(\$slug, array('menu_1','menu_mobile'), true) || preg_match('/primary|main|header|top/i', \$slug)) { echo \$slug; break; } }"
+        wp_capture_to_var loc eval "$php_code" || true
+        [[ -n "$loc" ]] && warn "Menu-location detection recovered via wp eval fallback."
+    fi
+    printf -v "$out_var" '%s' "$loc"
 }
 
 apply_menu() {
     log ">>>>>>>>>> Phase 4: Primary navigation menu"
     local menu_id
-    menu_id="$(find_menu_id)"
+    menu_id=""
+    find_menu_id menu_id
     if [[ -z "$menu_id" ]]; then
         if [[ "$DRY_RUN" -eq 1 ]]; then
             log "[PLAN/CHECK] Would CREATE menu '${MENU_NAME}'."
             menu_id="__will_create__"
         else
-            menu_id="$(wp menu create "$MENU_NAME" --porcelain 2>/dev/null || echo __FAIL__)"
-            [[ "$menu_id" != "__FAIL__" ]] || die "Failed to create menu '${MENU_NAME}'."
+            menu_id=""
+            wp_capture_to_var menu_id menu create "$MENU_NAME" --porcelain \
+                || die "Failed to create menu '${MENU_NAME}'."
             log "[APPLY] Menu '${MENU_NAME}' created (term_id=${menu_id})."
         fi
     else
@@ -538,18 +599,31 @@ apply_menu() {
             continue
         fi
 
+        # Resolve taxonomy slug to its numeric term_id before matching/adding.
+        # `wp menu item add-term` expects an ID, not the approved slug string.
+        if [[ "$otype" == "tax" ]]; then
+            local tax_term_id=""
+            find_product_cat_id tax_term_id "$oid"
+            if [[ -z "$tax_term_id" ]]; then
+                warn "Skipping menu item '${label}' — product category slug '${oid}' was not found."
+                continue
+            fi
+            oid="$tax_term_id"
+        fi
+
         # Safety: if target is a page, verify it's NOT Draft before linking
         if [[ "$otype" == "page" ]]; then
             local pstatus
-            pstatus="$(wp post get "$oid" --field=post_status --format=trim 2>/dev/null || echo __MISSING__)"
-            if [[ "$pstatus" == "draft" || "$pstatus" == "__MISSING__" ]]; then
+            pstatus="__MISSING__"
+            wp_read_post_field pstatus "$oid" post_status || true
+            if [[ "$pstatus" == "draft" || "$pstatus" == "__MISSING__" || -z "$pstatus" ]]; then
                 warn "Skipping menu item '${label}' → page ID ${oid} (status=${pstatus}); Draft pages are never linked."
                 continue
             fi
         fi
 
         local existing_mid=""
-        existing_mid="$(menu_item_exists "$menu_id" "$otype" "$oid" "$ourl")"
+        menu_item_exists existing_mid "$menu_id" "$otype" "$oid" "$ourl" || true
         if [[ -n "$existing_mid" ]]; then
             # Idempotent: ensure title matches
             wp menu item update "$menu_id" "$existing_mid" --title="$label" >/dev/null 2>&1 || true
@@ -571,7 +645,8 @@ apply_menu() {
 
     # Detect and assign primary location (if unambiguous)
     local location
-    location="$(detect_primary_menu_location)"
+    location=""
+    detect_primary_menu_location location
     if [[ -n "$location" && "$menu_id" != "__will_create__" ]]; then
         if [[ "$DRY_RUN" -eq 1 ]]; then
             log "[PLAN/CHECK] Would assign menu '${MENU_NAME}' to detected location: ${location}"
@@ -608,10 +683,14 @@ verify_woocommerce_baseline() {
         log "[PLAN] Currency Gate B remains PENDING (checkout/order/email/schema/callback)."
     else
         local shop_id cart_id checkout_id myacct_id
-        shop_id="$(wp_opt woocommerce_shop_page_id)"
-        cart_id="$(wp_opt woocommerce_cart_page_id)"
-        checkout_id="$(wp_opt woocommerce_checkout_page_id)"
-        myacct_id="$(wp_opt woocommerce_myaccount_page_id)"
+        shop_id="__MISSING__"
+        cart_id="__MISSING__"
+        checkout_id="__MISSING__"
+        myacct_id="__MISSING__"
+        wp_read_option shop_id woocommerce_shop_page_id || true
+        wp_read_option cart_id woocommerce_cart_page_id || true
+        wp_read_option checkout_id woocommerce_checkout_page_id || true
+        wp_read_option myacct_id woocommerce_myaccount_page_id || true
         printf '  %-32s %s\n' "woocommerce_currency"         "${CURRENCY}"
         printf '  %-32s %s\n' "woocommerce_price_num_decimals" "${DECIMALS}"
         printf '  %-32s %s\n' "woocommerce_shop_page_id"     "${shop_id} (expected ${SHOP_PAGE_ID})"
@@ -628,15 +707,19 @@ verify_woocommerce_baseline() {
         fi
 
         log "--- Shipping (read-only) ---"
-        wp wc shipping zone list --user=1 2>/dev/null \
-            | while IFS= read -r line; do log "  $line"; done \
-            || warn "Could not list shipping zones (WooCommerce may not be fully installed yet)."
+        local shipping_report=""
+        if wp_capture_to_var shipping_report wc shipping zone list --user=1; then
+            while IFS= read -r line; do log "  $line"; done <<<"$shipping_report"
+        else
+            warn "Could not list shipping zones after retry (WooCommerce may not be fully installed yet)."
+        fi
         log "[INFO] Shipping configuration is NOT auto-enabled; PENDING owner decision."
 
         log "--- Payment gateways (read-only) ---"
-        if wp option get woocommerce_gateland_settings >/dev/null 2>&1; then
-            local g_enabled
-            g_enabled="$(wp option get woocommerce_gateland_settings --format=json 2>/dev/null | $PYTHON_BIN -c 'import sys,json; d=json.load(sys.stdin); print(d.get("enabled","__unknown__"))' 2>/dev/null || echo __readerr__)"
+        local gateland_json="" g_enabled="__unknown__"
+        if wp_read_option_json gateland_json woocommerce_gateland_settings; then
+            g_enabled="$("$PYTHON_BIN" -c 'import sys,json; d=json.load(sys.stdin); print(d.get("enabled","__unknown__") if isinstance(d,dict) else "__unknown__")' <<<"$gateland_json" 2>/dev/null || true)"
+            [[ -n "$g_enabled" ]] || g_enabled="__readerr__"
             log "  Gateland settings: enabled=${g_enabled} (expected NOT enabled)."
         else
             log "  Gateland settings option not present (plugin inactive or not yet configured)."
@@ -656,17 +739,21 @@ verify_litespeed_status() {
         log "[PLAN] CSS/JS combine, delayed JS, unused CSS, Guest Mode/Opti, QUIC.cloud, Redis — NOT touched."
     else
         local lscache_active="no"
-        if wp plugin is-active litespeed-cache 2>/dev/null; then
+        if wp plugin is-active litespeed-cache >/dev/null; then
             lscache_active="yes"
         fi
         log "  LiteSpeed Cache plugin active: ${lscache_active}"
         if [[ "$lscache_active" == "yes" ]]; then
             # Attempt to read a couple of key options without modifying
-            local page_cache guest_opt css_combine js_combine
-            page_cache="$(wp eval 'echo get_option("litespeed.conf.cache-page", "__missing__");' 2>/dev/null || echo __readerr__)"
-            guest_opt="$(wp eval 'echo get_option("litespeed.conf.cache-guest", "__missing__");' 2>/dev/null || echo __readerr__)"
-            css_combine="$(wp eval 'echo get_option("litespeed.conf.optm-css-combine", "__missing__");' 2>/dev/null || echo __readerr__)"
-            js_combine="$(wp eval 'echo get_option("litespeed.conf.optm-js-combine", "__missing__");' 2>/dev/null || echo __readerr__)"
+            local page_cache="__readerr__" guest_opt="__readerr__" css_combine="__readerr__" js_combine="__readerr__"
+            wp_capture_to_var page_cache eval 'echo get_option("litespeed.conf.cache-page", "__missing__");' || true
+            wp_capture_to_var guest_opt eval 'echo get_option("litespeed.conf.cache-guest", "__missing__");' || true
+            wp_capture_to_var css_combine eval 'echo get_option("litespeed.conf.optm-css-combine", "__missing__");' || true
+            wp_capture_to_var js_combine eval 'echo get_option("litespeed.conf.optm-js-combine", "__missing__");' || true
+            page_cache="${page_cache:-__readerr__}"
+            guest_opt="${guest_opt:-__readerr__}"
+            css_combine="${css_combine:-__readerr__}"
+            js_combine="${js_combine:-__readerr__}"
             log "  page-cache enabled:   ${page_cache}"
             log "  guest-mode:           ${guest_opt}"
             log "  css-combine:          ${css_combine}"
@@ -710,13 +797,16 @@ verify_static_pages_draft() {
         if [[ "$MODE" == "plan" ]]; then
             printf '  [PLAN] %-28s status=draft (enforced by sub-runner)\n' "$slug"
         else
-            pid="$(wp post list --post_type=page --post_name__in="$slug" --fields=ID --format=ids --allow-root 2>/dev/null | tr -d '[:space:]' | head -c 20 || true)"
+            pid=""
+            wp_find_post_id_by_slug pid page "$slug" || true
             if [[ -z "$pid" ]]; then
                 warn "Slug '${slug}' not found after apply — will be CREATED as draft on next run."
                 bad=$((bad+1))
                 continue
             fi
-            status="$(wp post get "$pid" --field=post_status --format=trim 2>/dev/null || echo unknown)"
+            status="unknown"
+            wp_read_post_field status "$pid" post_status || true
+            status="${status:-unknown}"
             printf '  %-28s ID=%-8s status=%s\n' "$slug" "$pid" "$status"
             if [[ "$status" != "draft" ]]; then
                 err "Static page '${slug}' (ID ${pid}) has status '${status}' — expected 'draft'."
