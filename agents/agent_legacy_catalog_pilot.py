@@ -51,6 +51,43 @@ class PilotError(RuntimeError):
     pass
 
 
+def iri_to_uri(url: str) -> str:
+    """Convert a possibly-Persian IRI to an ASCII-safe URI.
+
+    Existing percent escapes are preserved by keeping ``%`` in each safe set;
+    this prevents already-encoded sitemap links from becoming ``%25D8...``.
+    """
+    parts = urllib.parse.urlsplit(str(url))
+    encoded_path = urllib.parse.quote(parts.path, safe="/%")
+    encoded_query = urllib.parse.quote(parts.query, safe="=&%")
+    encoded_fragment = urllib.parse.quote(parts.fragment, safe="%")
+    return urllib.parse.urlunsplit(
+        (parts.scheme, parts.netloc, encoded_path, encoded_query, encoded_fragment)
+    )
+
+
+def redirect_target_to_uri(base_url: str, target_url: str) -> str:
+    """Resolve and encode redirect targets before urllib builds a new Request."""
+    return iri_to_uri(urllib.parse.urljoin(base_url, target_url))
+
+
+class IRISafeRedirectHandler(urllib.request.HTTPRedirectHandler):
+    def redirect_request(
+        self,
+        req: urllib.request.Request,
+        fp: object,
+        code: int,
+        msg: str,
+        headers: object,
+        newurl: str,
+    ) -> Optional[urllib.request.Request]:
+        encoded_target = redirect_target_to_uri(req.full_url, newurl)
+        return super().redirect_request(req, fp, code, msg, headers, encoded_target)
+
+
+_HTTP_OPENER = urllib.request.build_opener(IRISafeRedirectHandler())
+
+
 def normalize_digits(value: str) -> str:
     """Normalize Persian/Arabic digits to ASCII and Arabic kaf/yeh to Persian."""
     return str(value or "").translate(_DIGIT_TRANSLATION).replace("ي", "ی").replace("ك", "ک")
@@ -107,8 +144,8 @@ class RateLimitedFetcher:
 
     @staticmethod
     def _default_open(request: urllib.request.Request, timeout: int) -> Tuple[bytes, Dict[str, str]]:
-        with urllib.request.urlopen(request, timeout=timeout) as response:
-            RateLimitedFetcher._validate_url(response.geturl())
+        with _HTTP_OPENER.open(request, timeout=timeout) as response:
+            RateLimitedFetcher._validate_url(iri_to_uri(response.geturl()))
             data = response.read(MAX_IMAGE_BYTES + 1)
             headers = {key.lower(): value for key, value in response.headers.items()}
         return data, headers
@@ -133,15 +170,16 @@ class RateLimitedFetcher:
         check_robots: bool = True,
         timeout: int = 45,
     ) -> Tuple[bytes, Dict[str, str]]:
-        self._validate_url(url)
+        request_url = iri_to_uri(url)
+        self._validate_url(request_url)
         if check_robots:
             if self.robots is None:
                 raise PilotError("robots.txt must be loaded before catalog requests")
-            if not self.robots.can_fetch(self.user_agent, url):
-                raise PilotError(f"robots.txt disallows this URL: {url}")
+            if not self.robots.can_fetch(self.user_agent, request_url):
+                raise PilotError(f"robots.txt disallows this URL: {request_url}")
         self._wait()
         request = urllib.request.Request(
-            url,
+            request_url,
             headers={
                 "User-Agent": self.user_agent,
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/*;q=0.8",
