@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /cart/
+Sitemap: https://noghrehmashhad.ir/sitemap.xml

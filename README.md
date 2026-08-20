@@ -50,6 +50,10 @@
 - [templates/product-import-sample.csv](templates/product-import-sample.csv) — Three deliberately non-importable SAMPLE rows for owner replacement.
 - [docs/ORDER-WORKFLOW.md](docs/ORDER-WORKFLOW.md) — Order lifecycle states, hybrid SMS-primary / Telegram-optional notification model, WooCommerce Admin fallback approval, and out-of-stock exception handling.
 - [docs/MEDIA-PROCESSING.md](docs/MEDIA-PROCESSING.md) — 1:1 square product images, 4:5 lifestyle images, WebP standard, and subtle logo watermarking.
+- [docs/PRODUCT-MEDIA-PILOT-RUNBOOK.md](docs/PRODUCT-MEDIA-PILOT-RUNBOOK.md) — Persian owner guide for the license-gated, offline-model, three-product media QA pilot.
+- [docs/PRODUCT-MEDIA-APPROVAL-SCHEMA.md](docs/PRODUCT-MEDIA-APPROVAL-SCHEMA.md) — Owner approval contract for a future, separately approved WordPress import stage.
+- [agents/agent_legacy_catalog_pilot.py](agents/agent_legacy_catalog_pilot.py) / [agents/agent_product_media_processor.py](agents/agent_product_media_processor.py) — Public catalog extraction and non-generative 1600×1600 media/contact-sheet QA tooling.
+- [scripts/run_product_media_pilot.sh](scripts/run_product_media_pilot.sh) — Staging-guarded orchestrator (`--plan`, `--scrape-three`, `--process-three`, `--full-pilot`); no WordPress import.
 - [docs/SEO-STRATEGY.md](docs/SEO-STRATEGY.md) — RankMath SEO title format, JSON-LD Product/Review Schema, and Persian URL slug rules.
 - [docs/MARKETING-PLAN.md](docs/MARKETING-PLAN.md) — Soft launch VIP cohort, Instagram/Telegram content plan, and cart-abandonment SMS rules.
 - [docs/SUPPORT-SYSTEM.md](docs/SUPPORT-SYSTEM.md) — Rule-based FAQ chatbot engine and immediate Telegram human escalation protocol.
