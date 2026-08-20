@@ -7,6 +7,7 @@ import os
 import subprocess
 import sys
 import tempfile
+from email.message import Message
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -23,6 +24,53 @@ import agent_product_media_processor as media  # noqa: E402
 
 def fixture(name: str) -> str:
     return (FIXTURES / name).read_text(encoding="utf-8")
+
+
+def test_persian_iri_to_uri_conversion() -> None:
+    category_iri = "https://example.com/product-category/انگشتر/"
+    category_uri = catalog.iri_to_uri(category_iri)
+    assert category_uri == (
+        "https://example.com/product-category/"
+        "%D8%A7%D9%86%DA%AF%D8%B4%D8%AA%D8%B1/"
+    )
+
+    product_iri = "https://example.com/محصول/انگشتر-نقره-۹۲۵/"
+    product_uri = catalog.iri_to_uri(product_iri)
+    assert product_uri.startswith("https://example.com/%D9%85%D8%AD%D8%B5%D9%88%D9%84/")
+    assert "%DB%B9%DB%B2%DB%B5" in product_uri
+    product_uri.encode("ascii")
+
+    already_encoded = (
+        "https://example.com/product-category/"
+        "%D8%A7%D9%86%DA%AF%D8%B4%D8%AA%D8%B1/?q=%D9%86%D9%82%D8%B1%D9%87"
+    )
+    assert catalog.iri_to_uri(already_encoded) == already_encoded
+    assert "%25D8" not in catalog.iri_to_uri(already_encoded)
+
+    mixed = "https://example.com/search/items?q=انگشتر&sort=new"
+    mixed_uri = catalog.iri_to_uri(mixed)
+    assert mixed_uri == (
+        "https://example.com/search/items?"
+        "q=%D8%A7%D9%86%DA%AF%D8%B4%D8%AA%D8%B1&sort=new"
+    )
+
+    redirect = catalog.redirect_target_to_uri(
+        "https://example.com/old/path", "/محصول/انگشتر-نقره-۹۲۵/"
+    )
+    assert redirect == product_uri
+    handler = catalog.IRISafeRedirectHandler()
+    redirected_request = handler.redirect_request(
+        catalog.urllib.request.Request("https://example.com/old/path"),
+        None,
+        302,
+        "Found",
+        Message(),
+        "/محصول/انگشتر-نقره-۹۲۵/",
+    )
+    assert redirected_request is not None
+    assert redirected_request.full_url == product_uri
+    redirected_request.full_url.encode("ascii")
+    print("PASS: Persian paths/queries and redirects are encoded without double-encoding")
 
 
 def test_three_product_fixtures() -> None:
@@ -101,6 +149,7 @@ def test_sitemap_category_and_limit() -> None:
 def test_rate_limit_and_robots() -> None:
     now = [0.0]
     sleeps = []
+    requested_urls = []
 
     def clock() -> float:
         return now[0]
@@ -111,6 +160,7 @@ def test_rate_limit_and_robots() -> None:
 
     def opener(request, _timeout):
         url = request.full_url
+        requested_urls.append(url)
         if url.endswith("robots.txt"):
             return fixture("robots.txt").encode(), {"content-type": "text/plain; charset=utf-8"}
         return b"<html></html>", {"content-type": "text/html; charset=utf-8"}
@@ -119,8 +169,12 @@ def test_rate_limit_and_robots() -> None:
     fetcher.load_robots()
     fetcher.fetch_text("https://noghrehmashhad.ir/sitemap.xml")
     fetcher.fetch_text("https://noghrehmashhad.ir/product/1001/sample-ring/")
-    assert len(sleeps) == 2
+    fetcher.fetch_text("https://noghrehmashhad.ir/product-category/انگشتر/?q=نقره")
+    assert len(sleeps) == 3
     assert all(seconds >= 2.0 for seconds in sleeps)
+    assert "%D8%A7%D9%86%DA%AF%D8%B4%D8%AA%D8%B1" in requested_urls[-1]
+    assert "%D9%86%D9%82%D8%B1%D9%87" in requested_urls[-1]
+    requested_urls[-1].encode("ascii")
     try:
         fetcher.fetch_text("https://noghrehmashhad.ir/admin/private")
         raise AssertionError("robots-disallowed URL must be blocked")
@@ -313,10 +367,12 @@ def test_static_safety_contract() -> None:
             assert "prohibit" in line.lower() or "die" in line.lower()
     assert "rembg_module.remove(source, session=session, only_mask=True)" in media_source
     assert "new_session(canonical)" in media_source
+    assert "urlopen(" not in media_source  # Processor consumes local cache files only.
     print("PASS: scripts contain no WordPress/payment/SMS/model-download operation")
 
 
 def run_tests() -> None:
+    test_persian_iri_to_uri_conversion()
     test_three_product_fixtures()
     test_sitemap_category_and_limit()
     test_rate_limit_and_robots()
