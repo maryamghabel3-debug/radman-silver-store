@@ -9,6 +9,7 @@ never uses a private API.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import html
 import json
 import mimetypes
@@ -16,6 +17,7 @@ import os
 import re
 import sys
 import time
+from datetime import datetime, timezone
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -24,6 +26,19 @@ import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Callable, Dict, Iterable, List, Optional, Sequence, Tuple
+
+try:
+    from lib.legacy_identity import (
+        duplicate_codes,
+        extract_legacy_code,
+        map_legacy_code_to_sku,
+    )
+except ImportError:  # Imported as agents.agent_legacy_catalog_pilot in tests.
+    from agents.lib.legacy_identity import (
+        duplicate_codes,
+        extract_legacy_code,
+        map_legacy_code_to_sku,
+    )
 
 BASE_URL = "https://noghrehmashhad.ir"
 ROBOTS_URL = f"{BASE_URL}/robots.txt"
@@ -39,6 +54,8 @@ USER_AGENT = (
 )
 MIN_REQUEST_DELAY_SECONDS = 2.0
 MAX_PRODUCTS = 3
+ORIGINAL_PRODUCT_MAX = 10
+MAX_DISCOVERY_CANDIDATES = 100
 MAX_TEXT_BYTES = 25 * 1024 * 1024
 MAX_IMAGE_BYTES = 30 * 1024 * 1024
 
@@ -115,6 +132,14 @@ def parse_toman(value: str) -> Optional[int]:
 def validate_product_limit(limit: int) -> int:
     if limit < 1 or limit > MAX_PRODUCTS:
         raise PilotError(f"pilot product limit must be between 1 and {MAX_PRODUCTS}")
+    return limit
+
+
+def validate_original_product_limit(limit: int) -> int:
+    if limit < 1 or limit > ORIGINAL_PRODUCT_MAX:
+        raise PilotError(
+            f"original-product limit must be between 1 and {ORIGINAL_PRODUCT_MAX}"
+        )
     return limit
 
 
@@ -361,8 +386,10 @@ def _price_from_jsonld(product: Dict[str, object]) -> Tuple[Optional[int], str]:
     currency = str(offer.get("priceCurrency", "")).upper()
     if currency == "IRT":
         return amount, "jsonld_irt"
-    if currency == "IRR" and amount >= 10 and amount % 10 == 0:
-        return amount // 10, "jsonld_irr_div10_review"
+    # Owner correction: legacy numeric prices are Toman even when stale JSON-LD
+    # labels say IRR. Preserve the visible number exactly and flag the label.
+    if currency == "IRR":
+        return amount, "jsonld_irr_label_but_amount_toman_review"
     return amount, f"jsonld_{currency.lower() or 'unknown'}_review"
 
 
@@ -381,7 +408,12 @@ def map_radman_category(raw_category: str, title: str = "") -> Optional[str]:
     return None
 
 
-def parse_product_html(page_url: str, source_html: str) -> Dict[str, object]:
+def parse_product_html(
+    page_url: str,
+    source_html: str,
+    *,
+    visible_toman_only: bool = False,
+) -> Dict[str, object]:
     id_match = re.search(r"/product/([0-9]+)/", page_url)
     if not id_match:
         raise PilotError(f"product URL has no numeric legacy ID: {page_url}")
@@ -400,7 +432,11 @@ def parse_product_html(page_url: str, source_html: str) -> Dict[str, object]:
 
     visible_price = _price_from_visible(parser.price_parts)
     if visible_price is not None:
-        price_toman, price_source = visible_price, "visible_price"
+        price_toman = visible_price
+        price_source = "visible_price_toman" if visible_toman_only else "visible_price"
+    elif visible_toman_only:
+        # The original-product profile never infers a Rial conversion from JSON-LD.
+        price_toman, price_source = None, "missing_visible_toman_review"
     else:
         price_toman, price_source = _price_from_jsonld(json_product)
 
@@ -437,17 +473,30 @@ def parse_product_html(page_url: str, source_html: str) -> Dict[str, object]:
             seen.add(clean_url)
             images.append(clean_url)
 
+    legacy_code = extract_legacy_code(title, all_text)
+    identity = map_legacy_code_to_sku(legacy_code)
     return {
         "legacy_id": id_match.group(1),
+        "legacy_code": legacy_code,
+        "legacy_code_raw": identity.legacy_code_raw,
+        "sku": identity.sku,
+        "sku_mapping_reason": identity.mapping_reason,
+        "sku_normalized": identity.normalization_required,
         "product_url": page_url,
         "title_fa": title,
+        "title": title,
         "public_price_toman": price_toman,
+        "visible_legacy_price_toman": price_toman if visible_toman_only else None,
         "price_source": price_source,
         "weight_grams": weight,
         "raw_category": raw_category,
         "mapped_radman_category": mapped_category,
+        "category": mapped_category,
+        "short_description": normalize_space(parser.meta_description),
         "description": description,
+        "visible_text": all_text,
         "image_urls": images,
+        "requires_identity_review": identity.requires_review,
     }
 
 
@@ -581,11 +630,245 @@ def scrape_three(
     return outputs
 
 
+def discover_original_product_urls(
+    fetcher: RateLimitedFetcher,
+    category_urls: Sequence[str] = PILOT_CATEGORY_URLS,
+) -> List[str]:
+    """Discover category products in deterministic round-robin order."""
+    groups: List[List[str]] = []
+    for category_url in category_urls:
+        page = fetcher.fetch_text(category_url)
+        groups.append(parse_product_links(category_url, page))
+    discovered: List[str] = []
+    depth = 0
+    while any(depth < len(group) for group in groups):
+        for group in groups:
+            if depth < len(group):
+                discovered.append(group[depth])
+        depth += 1
+        if len(discovered) >= MAX_DISCOVERY_CANDIDATES:
+            break
+    return list(dict.fromkeys(discovered))
+
+
+def _sha256_bytes(value: bytes) -> str:
+    return hashlib.sha256(value).hexdigest()
+
+
+def scrape_original_products(
+    private_dir: Path,
+    *,
+    limit: int = ORIGINAL_PRODUCT_MAX,
+    category_urls: Sequence[str] = PILOT_CATEGORY_URLS,
+    fetcher: Optional[RateLimitedFetcher] = None,
+) -> Dict[str, object]:
+    """Scrape up to ten unique-code products and archive untouched source bytes."""
+    validate_original_product_limit(limit)
+    fetcher = fetcher or RateLimitedFetcher()
+    fetcher.load_robots()
+    urls = discover_original_product_urls(fetcher, category_urls)
+    if not urls:
+        raise PilotError("no public product URLs discovered for original-product profile")
+
+    cache_dir = private_dir / "legacy-cache"
+    product_dir = cache_dir / "original-products"
+    image_root = cache_dir / "original-images"
+    run_stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    run_dir = cache_dir / "runs" / run_stamp
+    for directory in (product_dir, image_root, run_dir):
+        directory.mkdir(parents=True, exist_ok=True, mode=0o700)
+        os.chmod(directory, 0o700)
+
+    products: List[Dict[str, object]] = []
+    skipped: List[Dict[str, object]] = []
+    seen_codes: Dict[str, str] = {}
+    seen_skus: Dict[str, str] = {}
+    seen_ids: set[str] = set()
+
+    for product_url in urls[:MAX_DISCOVERY_CANDIDATES]:
+        if len(products) >= limit:
+            break
+        try:
+            source_html = fetcher.fetch_text(product_url)
+            product = parse_product_html(
+                product_url, source_html, visible_toman_only=True
+            )
+        except PilotError as exc:
+            skipped.append(
+                {"product_url": product_url, "reason": "PARSE_ERROR", "detail": str(exc)}
+            )
+            continue
+
+        legacy_id = str(product["legacy_id"])
+        identity = map_legacy_code_to_sku(product.get("legacy_code"))
+        code_key = (identity.legacy_code or "").casefold()
+        sku_key = (identity.sku or "").casefold()
+        if not identity.legacy_code or not identity.sku:
+            skipped.append(
+                {
+                    "legacy_id": legacy_id,
+                    "product_url": product_url,
+                    "reason": "MISSING_LEGACY_CODE",
+                }
+            )
+            continue
+        if legacy_id in seen_ids:
+            skipped.append(
+                {
+                    "legacy_id": legacy_id,
+                    "legacy_code": identity.legacy_code,
+                    "product_url": product_url,
+                    "reason": "DUPLICATE_LEGACY_ID",
+                }
+            )
+            continue
+        if code_key in seen_codes:
+            skipped.append(
+                {
+                    "legacy_id": legacy_id,
+                    "legacy_code": identity.legacy_code,
+                    "product_url": product_url,
+                    "reason": "DUPLICATE_LEGACY_CODE",
+                    "conflicts_with_legacy_id": seen_codes[code_key],
+                }
+            )
+            continue
+        if sku_key in seen_skus:
+            skipped.append(
+                {
+                    "legacy_id": legacy_id,
+                    "legacy_code": identity.legacy_code,
+                    "sku": identity.sku,
+                    "product_url": product_url,
+                    "reason": "NORMALIZED_SKU_CONFLICT",
+                    "conflicts_with_legacy_id": seen_skus[sku_key],
+                }
+            )
+            continue
+
+        local_images: List[Dict[str, object]] = []
+        original_image_paths: List[str] = []
+        legacy_image_dir = image_root / legacy_id
+        legacy_image_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
+        os.chmod(legacy_image_dir, 0o700)
+        for index, source_url in enumerate(product.get("image_urls", []), start=1):
+            try:
+                data, headers = fetcher.fetch_bytes(
+                    str(source_url), max_bytes=MAX_IMAGE_BYTES
+                )
+                content_type = headers.get("content-type", "").lower()
+                if content_type and not content_type.startswith("image/"):
+                    raise PilotError("response content type is not an image")
+                extension = _image_extension(str(source_url), content_type)
+                source_sha256 = _sha256_bytes(data)
+                filename = f"{index:02d}-original{extension}"
+                destination = legacy_image_dir / filename
+                if destination.exists() and hashlib.sha256(destination.read_bytes()).hexdigest() != source_sha256:
+                    # Never destroy a previously archived source version.
+                    destination = legacy_image_dir / (
+                        f"{index:02d}-original-{source_sha256[:12]}{extension}"
+                    )
+                if not destination.exists():
+                    temporary = destination.with_suffix(destination.suffix + ".tmp")
+                    temporary.write_bytes(data)
+                    os.chmod(temporary, 0o600)
+                    os.replace(temporary, destination)
+                elif hashlib.sha256(destination.read_bytes()).hexdigest() != source_sha256:
+                    raise PilotError("source archive hash collision")
+                local_images.append(
+                    {
+                        "position": index,
+                        "source_url": source_url,
+                        "local_path": str(destination),
+                        "bytes": len(data),
+                        "sha256": source_sha256,
+                    }
+                )
+                original_image_paths.append(str(destination))
+            except (PilotError, OSError, urllib.error.URLError) as exc:
+                local_images.append(
+                    {
+                        "position": index,
+                        "source_url": source_url,
+                        "download_error": str(exc),
+                    }
+                )
+
+        review_reasons: List[str] = []
+        if product.get("visible_legacy_price_toman") is None:
+            review_reasons.append("VISIBLE_TOMAN_PRICE_MISSING")
+        if product.get("weight_grams") is None:
+            review_reasons.append("WEIGHT_MISSING")
+        if product.get("mapped_radman_category") is None:
+            review_reasons.append("CATEGORY_UNMAPPED")
+        if not original_image_paths:
+            review_reasons.append("NO_ORIGINAL_IMAGE_DOWNLOADED")
+        if identity.normalization_required:
+            review_reasons.append("LEGACY_CODE_NORMALIZED_FOR_SKU")
+
+        product.update(
+            {
+                "legacy_code": identity.legacy_code,
+                "legacy_code_raw": identity.legacy_code_raw,
+                "sku": identity.sku,
+                "sku_mapping_reason": identity.mapping_reason,
+                "sku_normalized": identity.normalization_required,
+                "downloaded_images": local_images,
+                "original_image_paths": original_image_paths,
+                "review_reasons": review_reasons,
+                "requires_review": bool(review_reasons),
+                "scrape_policy": {
+                    "profile": "original-products",
+                    "user_agent": fetcher.user_agent,
+                    "minimum_delay_seconds": fetcher.min_delay,
+                    "robots_respected": True,
+                    "legacy_prices_are_toman": True,
+                    "rial_toman_conversion": False,
+                    "private_api_used": False,
+                    "wordpress_imported": False,
+                },
+            }
+        )
+        destination = product_dir / f"{legacy_id}.json"
+        write_json_atomic(destination, product)
+        products.append(product)
+        seen_ids.add(legacy_id)
+        seen_codes[code_key] = legacy_id
+        seen_skus[sku_key] = legacy_id
+        print(
+            f"[ORIGINAL-SCRAPE] legacy_id={legacy_id} sku={identity.sku} "
+            f"images={len(original_image_paths)}"
+        )
+
+    manifest: Dict[str, object] = {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "profile": "original-products",
+        "requested_limit": limit,
+        "scraped_count": len(products),
+        "candidate_count": len(urls),
+        "products": products,
+        "skipped": skipped,
+        "duplicate_codes": sorted(
+            duplicate_codes(map_legacy_code_to_sku(p.get("legacy_code")) for p in products)
+        ),
+    }
+    manifest_path = run_dir / "scrape.json"
+    write_json_atomic(manifest_path, manifest)
+    manifest["manifest_path"] = str(manifest_path)
+    if len(products) < limit:
+        manifest["incomplete_reason"] = (
+            f"only {len(products)} unique-code products collected from {len(urls)} candidates"
+        )
+    return manifest
+
+
 def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="RADMAN public legacy catalog pilot")
     parser.add_argument("--plan", action="store_true")
     parser.add_argument("--scrape", action="store_true")
+    parser.add_argument("--scrape-original-products", action="store_true")
     parser.add_argument("--limit", type=int, default=MAX_PRODUCTS)
+    parser.add_argument("--original-limit", type=int, default=ORIGINAL_PRODUCT_MAX)
     parser.add_argument("--category-url", action="append", default=[])
     parser.add_argument(
         "--private-dir",
@@ -599,18 +882,32 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     args = parse_args(argv)
     try:
         validate_product_limit(args.limit)
-        if args.plan or not args.scrape:
-            print("RADMAN legacy catalog pilot plan")
+        validate_original_product_limit(args.original_limit)
+        if args.plan or not (args.scrape or args.scrape_original_products):
+            profile = "original-products" if args.scrape_original_products else "three-product-pilot"
+            print(f"RADMAN legacy catalog plan ({profile})")
             print(f"  robots: {ROBOTS_URL}")
             discovery = args.category_url or list(PILOT_CATEGORY_URLS)
             print(f"  controlled category discovery: {', '.join(discovery)}")
             print(f"  sitemap discovery capability: {SITEMAP_URL}")
             print(f"  user-agent: {USER_AGENT}")
             print(f"  minimum delay: {MIN_REQUEST_DELAY_SECONDS:.1f}s")
+            print(f"  original-product maximum: {ORIGINAL_PRODUCT_MAX}")
             print(f"  hard product maximum: {MAX_PRODUCTS}")
             print(f"  product JSON: {args.private_dir / 'legacy-cache/products'}")
             print(f"  original images: {args.private_dir / 'legacy-cache/original-images'}")
-            print("  WordPress import: NEVER in this pilot")
+            print("  WordPress import: NEVER in this scraper")
+            return 0
+        if args.scrape_original_products:
+            manifest = scrape_original_products(
+                args.private_dir,
+                limit=args.original_limit,
+                category_urls=args.category_url or PILOT_CATEGORY_URLS,
+            )
+            print(
+                f"[DONE] scraped {manifest['scraped_count']} original-product(s); "
+                "no WordPress operation performed"
+            )
             return 0
         outputs = scrape_three(
             args.private_dir,

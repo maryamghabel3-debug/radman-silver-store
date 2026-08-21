@@ -74,8 +74,11 @@
 - [STRATEGY-CONTENT-WRITING-GUIDELINES.md](STRATEGY-CONTENT-WRITING-GUIDELINES.md) — صدای برند، قواعد زبان فارسی، چک‌لیست بازبینی، و قالب‌های (templates) صفحه محصول/دسته/مقاله/FAQ.
 
 ### Phase 4 — Agent Integration & Testing (NEXT)
+- ✅ **PR-25 repository tooling ready (reviewed `2026-08-21, Asia/Tehran`):** پروفایل جداگانه حداکثر ۱۰ محصول واقعی، آرشیو تصویر اصلی به تفکیک `legacy_id`، QA رنگ/جزئیات با original fallback، classifier محافظه‌کارانه نگین، قیمت‌گذاری Decimal تومانی، نگاشت کد قدیمی، گزارش CSV/فارسی، و import create-only Draft در مخزن پیاده‌سازی و با mock-10 آفلاین تست شده است.
+- ⏳ **Owner host execution pending:** scrape زنده، sheet review و import Draft روی MizbanFa داخل ایران هنوز انجام نشده و هیچ موفقیت میزبان/WordPress برای PR-25 ادعا نمی‌شود. راهنما: [ORIGINAL-PRODUCT-IMPORT-RUNBOOK.md](ORIGINAL-PRODUCT-IMPORT-RUNBOOK.md).
+- نرخ موقت فقط برای این overlay: `590000` تومان/گرم برای انگشتر `large_stone` با confidence حداقل `0.85`؛ `650000` برای سایر موارد؛ انتخاب max قیمت visible قدیمی/کف وزنی و گردکردن رو به بالا به `50000`. همه قیمت‌های legacy تومان‌اند و تبدیل ×/÷۱۰ ممنوع است.
 - استقرار `Agent-LegacySync` (مشروط به تأیید اتصال و Python/Cron).
-- ایمپورت دسته اول محصولات به‌صورت Draft (۵۰ محصول).
+- ایمپورت دسته اول محصولات به‌صورت Draft (۵۰ محصول؛ پس از ارزیابی پایلوت ۱۰تایی و تأیید صریح مالک).
 - استقرار `Agent-Pricing` با ورود نرخ روزانه از طریق تلگرام.
 - استقرار `Agent-OrderApproval` (HITL).
 - تست کامل E2E سندباکس با درگاه و پیامک.
