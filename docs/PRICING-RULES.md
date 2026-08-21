@@ -59,3 +59,66 @@ This document defines the authoritative 4-mode pricing architecture, fixed gemst
    [تأیید و اعمال قیمت در فروشگاه]     [لغو عملیات]
    ```
 4. **Human Approval Gate:** Only upon the owner clicking `[تأیید و اعمال قیمت در فروشگاه]` does `Agent-Pricing` execute batch price updates against WooCommerce.
+
+---
+
+## 5. Temporary PR-25 legacy floor overlay
+
+**Owner-approved temporary rates reviewed:** `2026-08-21, Asia/Tehran`.
+
+This overlay applies only to products created through the ten-product original-image migration. It does **not** replace the four-mode daily-rate architecture above and must not be generalized to owner-authored inventory. Imported Drafts are stored as `manual_locked` with `radman_pricing_overlay=legacy_gemstone_floor_v1` until the owner reviews and migrates them to a permanent mode.
+
+### Currency invariant
+
+- Every visible legacy price is already **Toman**.
+- WooCommerce currency must be exactly `IRT`.
+- No Rial/Toman conversion is allowed: never multiply or divide a source price by `10`.
+
+### Temporary rates
+
+| Product/evidence | Rate (Toman/gram) |
+|---|---:|
+| Ring classified `large_stone` with confidence `>= 0.85` | `590000` |
+| Ring `no_stone`, `small_stone`, `uncertain`, or confidence `< 0.85` | `650000` |
+| Necklace | `650000` |
+| Bracelet | `650000` |
+
+Any ambiguous large-stone claim is converted to effective class `uncertain`, uses `650000`, and is marked for human review.
+
+### Decimal formula
+
+All operations use Python `Decimal`; binary floating-point is not used for price decisions.
+
+```text
+weight_floor = Decimal(weight_grams) × Decimal(rate_toman_per_gram)
+selected = max(visible_legacy_price_toman, weight_floor)
+final = ceil(selected / 50000) × 50000
+```
+
+Selection reasons are explicit:
+
+```text
+LEGACY_PRICE_HIGHER
+CALCULATED_FLOOR_HIGHER
+EQUAL
+LEGACY_MISSING_USED_CALCULATED
+WEIGHT_MISSING_USED_LEGACY_REVIEW
+INVALID_DATA_REVIEW
+```
+
+A missing legacy price with valid weight can produce a review Draft plan; a missing weight can retain the legacy amount only for review. If neither input is valid, no safe final price exists and import is blocked. Significant legacy/floor differences (30% or more) are flagged but `max(...)` still protects the floor.
+
+### Examples
+
+```text
+large-stone ring, confidence 0.85, 10g, legacy 5,000,000:
+max(5,000,000, 10 × 590,000) = 5,900,000 → 5,900,000 Toman
+
+same classification, confidence 0.849:
+rate is forced to 650,000; 10 × 650,000 = 6,500,000 Toman + review
+
+necklace, 10g, legacy 7,001,000:
+max(7,001,000, 6,500,000) = 7,001,000 → 7,050,000 Toman
+```
+
+Implementation: `agents/lib/legacy_pricing.py`. Operator procedure: [ORIGINAL-PRODUCT-IMPORT-RUNBOOK.md](ORIGINAL-PRODUCT-IMPORT-RUNBOOK.md).

@@ -27,6 +27,8 @@
   - Persian Final Approved Logo Suite: `APPROVED-FA/` (`Estedad Bold`, `S2` sizing, `T2` tagline / `T0` minimal header logo)
 - **Inventory Reality (1:1 Stock):** Radman Silver maintains its own Inventory Registry (`legacy_stock = radman_stock`, `stock = 1` is normal and sellable; exact 1:1 mappings). Oversell protection = Human-in-the-Loop (`HITL`) Order Confirmation (mandatory SMS alert + optional Telegram convenience channel, with WooCommerce Admin fallback).
 - **Pricing Reality (Simple Daily Rate):** Owner inputs one daily rate via Telegram (`نرخ امروز هر گرم نقره = X تومان`). Weight-based items compute `price = weight * daily_rate`. Special gemstone/labor items use `manual_locked`.
+- **Temporary Original-Product Overlay (reviewed `2026-08-21, Asia/Tehran`):** The create-only PR-25 migration treats every legacy price as Toman, uses `590000` Toman/gram only for `large_stone` rings at confidence `>=0.85`, uses `650000` otherwise, selects the higher of visible legacy price and weight floor, then rounds upward to `50000`. It does not replace the normal daily-rate architecture.
+- **Original-Product Pipeline Status:** repository tooling and offline mock-10 tests are ready; live scrape and staging Draft import remain owner-executed on MizbanFa inside Iran. New products are always Draft, stock `1`, backorders off; existing legacy IDs are skipped and SKU conflicts stop before mutation.
 - **Legacy Store (Admin Panel API):** [noghrehmashhad.ir](http://noghrehmashhad.ir) (Admin Panel API accessed from `MizbanFa Mars Plan — CONDITIONAL on post-purchase tests`).
 
 ---
@@ -43,7 +45,13 @@
 - [docs/PRICING-RULES.md](docs/PRICING-RULES.md) — Simplified daily silver gram rate pricing (`price = weight * daily_rate`), 4 official pricing modes, and Telegram rate confirmation.
 - [docs/LEGACY-API-ACCESS-STRATEGY.md](docs/LEGACY-API-ACCESS-STRATEGY.md) — Admin Panel API architecture, Iranian hosting server requirement (`[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]`), and read-only field audit workflow.
 - [docs/LEGACY-CATALOG-ANALYSIS.md](docs/LEGACY-CATALOG-ANALYSIS.md) — Public-only legacy catalog structure, category mapping, field coverage, quality risks, and owner-review extraction approach.
-- [docs/PRODUCT-DATA-MODEL.md](docs/PRODUCT-DATA-MODEL.md) — Standardized `SKU` taxonomy (`RAD-[CAT]-[GENDER]-[ID]`) and WooCommerce attribute schema.
+- [docs/ORIGINAL-PRODUCT-IMPORT-RUNBOOK.md](docs/ORIGINAL-PRODUCT-IMPORT-RUNBOOK.md) — Owner-facing automatic scrape → image QA → gemstone classification → Toman floor → create-only Draft procedure; no manual source CSV.
+- [docs/ORIGINAL-IMAGE-PROCESSING-RUNBOOK.md](docs/ORIGINAL-IMAGE-PROCESSING-RUNBOOK.md) — Original-byte archive, color/detail gates, before/after sheets, and untouched-original fallback policy.
+- [docs/GEMSTONE-CLASSIFICATION-RUNBOOK.md](docs/GEMSTONE-CLASSIFICATION-RUNBOOK.md) — Text-first four-class ring classifier and the conservative confidence `0.85` gate.
+- [docs/LEGACY-CODE-MAPPING-RUNBOOK.md](docs/LEGACY-CODE-MAPPING-RUNBOOK.md) — Exact-code SKU exception, deterministic normalization, duplicate handling, and conflict rules.
+- [agents/agent_original_product_pipeline.py](agents/agent_original_product_pipeline.py) / [scripts/run_original_product_import.sh](scripts/run_original_product_import.sh) — Ten-product orchestrator and one-command POSIX host runner (`--plan`, `--scrape-only`, `--image-qa`, `--pricing-preview`, `--import-drafts`, `--full-pilot`).
+- [scripts/test_original_product_pipeline.sh](scripts/test_original_product_pipeline.sh) — Offline compilation, POSIX/jailshell, secret, no-model, no-publish, mock-10, price, media-integrity, conflict, and idempotency acceptance gates.
+- [docs/PRODUCT-DATA-MODEL.md](docs/PRODUCT-DATA-MODEL.md) — Standardized `RAD-*` taxonomy plus the narrow original-migration legacy-code exception and auditable metadata.
 - [docs/PRODUCT-IMPORT-SCHEMA.md](docs/PRODUCT-IMPORT-SCHEMA.md) — Validated owner CSV/JSON contract for the four pricing modes and local image filenames.
 - [docs/PRODUCT-IMPORT-RUNBOOK.md](docs/PRODUCT-IMPORT-RUNBOOK.md) — Persian cPanel guide for CSV/image upload, dry-run preview, staging apply, Draft review, and rollback.
 - [scripts/import_products.sh](scripts/import_products.sh) — Staging-only, plan-by-default, backup-first product importer (idempotent by SKU; new products Draft only).

@@ -15,9 +15,12 @@
 
 ---
 
-## Phase 3: AI Agent Product Migration & Pricing Engine (PENDING ⏳)
-- [ ] Deploy `Agent-Migrate` to connect to legacy silver website, extract product data, clean Persian typography, and import gallery images into WooCommerce.
-- [ ] Configure `Agent-Orders` dynamic silver price calculation plugin (price per gram + craftsmanship fee).
+## Phase 3: AI Agent Product Migration & Pricing Engine (IN PROGRESS ⏳)
+- [x] Build PR-25 repository tooling for an owner-executed ten-product original-image pilot: public robots-aware scrape, exact legacy identity, color-safe media QA with original fallback, conservative gemstone classification, Decimal Toman floor pricing, create-only Draft import, and automatic reports. Reviewed `2026-08-21, Asia/Tehran`; mock-10 tests pass locally.
+- [ ] Owner executes live scrape and reviews QA/pricing reports on MizbanFa inside Iran; no live run is claimed by the repository.
+- [ ] Import approved pilot products to staging as Draft only (stock 1, backorders off); production/publication remain out of scope.
+- [ ] Deploy broader `Agent-Migrate` only after the ten-product pilot is accepted.
+- [ ] Configure `Agent-Orders` dynamic silver price calculation plugin (price per gram + craftsmanship fee). The temporary PR-25 rates (`590000` only for confident large-stone rings, `650000` otherwise) are a migration overlay, not the permanent daily-rate engine.
 
 ---
 
