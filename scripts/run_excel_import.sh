@@ -29,7 +29,8 @@ Modes (choose exactly one):
   --plan            Select newest eligible products and preview pricing
   --fetch-images    Select products and fetch/process original galleries
   --import-drafts   Import the latest fetched manifest as create-only Drafts
-  --enrich-existing Re-fetch specs and enrich existing legacy-ID Drafts
+  --enrich-existing Enrich existing Drafts and clean public titles in place
+  --identity-report Read-only SKU/legacy identity reconciliation report
   --full-pilot      Plan, fetch specs/images, then import guarded Drafts
 
 Options:
@@ -39,7 +40,7 @@ Options:
   --manifest PATH   Explicit prepared manifest for --import-drafts
   --help
 
-Product data always comes from Excel. Public legacy requests are image-only.
+Product data comes from Excel. Public legacy requests are specs/gallery-only.
 EOF
 }
 
@@ -53,7 +54,7 @@ set_mode() {
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
-    --inspect|--plan|--fetch-images|--import-drafts|--enrich-existing|--full-pilot)
+    --inspect|--plan|--fetch-images|--import-drafts|--enrich-existing|--identity-report|--full-pilot)
       set_mode "$1"
       shift
       ;;
@@ -127,11 +128,24 @@ command -v "$PYTHON_BIN" >/dev/null 2>&1 || {
   exit 2
 }
 
-if [ "$MODE" != "--import-drafts" ]; then
+if [ "$MODE" != "--import-drafts" ] && [ "$MODE" != "--identity-report" ]; then
   [ -r "$EXCEL_FILE" ] || {
     echo "[ERROR] Excel file is not readable: $EXCEL_FILE" >&2
     exit 2
   }
+fi
+
+if [ "$MODE" = "--identity-report" ]; then
+  [ "${APP_ENV:-}" = "staging" ] || { echo '[ERROR] APP_ENV must equal staging' >&2; exit 2; }
+  [ "${WP_URL:-}" = "https://staging.radmansilver.ir" ] || {
+    echo '[ERROR] WP_URL must equal https://staging.radmansilver.ir' >&2
+    exit 2
+  }
+  [ "${WP_PATH:-}" = "/home/radmansi/staging.radmansilver.ir" ] || {
+    echo '[ERROR] WP_PATH must equal /home/radmansi/staging.radmansilver.ir' >&2
+    exit 2
+  }
+  command -v wp >/dev/null 2>&1 || { echo '[ERROR] wp-cli unavailable' >&2; exit 2; }
 fi
 
 MUTATING_MODE=0
@@ -156,7 +170,7 @@ if [ "$MODE" = "--import-drafts" ] || [ "$MODE" = "--enrich-existing" ] || [ "$M
   command -v wp >/dev/null 2>&1 || { echo '[ERROR] wp-cli unavailable' >&2; exit 2; }
 fi
 
-if [ "$MODE" != "--inspect" ] && [ "$MODE" != "--plan" ]; then
+if [ "$MODE" != "--inspect" ] && [ "$MODE" != "--plan" ] && [ "$MODE" != "--identity-report" ]; then
   mkdir -p "$RADMAN_PRIVATE_DIR/locks"
   LOCK_DIR=$RADMAN_PRIVATE_DIR/locks/excel-import-pipeline.lock
   if ! mkdir "$LOCK_DIR" 2>/dev/null; then

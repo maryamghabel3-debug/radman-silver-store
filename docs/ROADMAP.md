@@ -74,7 +74,7 @@
 - [STRATEGY-CONTENT-WRITING-GUIDELINES.md](STRATEGY-CONTENT-WRITING-GUIDELINES.md) — صدای برند، قواعد زبان فارسی، چک‌لیست بازبینی، و قالب‌های (templates) صفحه محصول/دسته/مقاله/FAQ.
 
 ### Phase 4 — Agent Integration & Testing (NEXT)
-- ✅ **PR-28/PR-29 Excel + live-spec pipeline repository-ready:** فایل Excel مالک منبع قطعی داده است؛ انتخاب حداکثر ۱۰۰۰ محصول فعال/موجود با ID نزولی، SKU/قیمت/stock، discovery تصویر فقط با ID، استخراج specification واقعی در همان request، reconciliation وزن، توضیح یکتا، QA رنگ، import create-only Draft و enrichment idempotent Draftهای موجود با fixture آفلاین تست شده است.
+- ✅ **PR-28/PR-29/PR-30A Excel + live-spec + identity pipeline repository-ready:** فایل Excel مالک منبع قطعی داده است؛ انتخاب ID نزولی، SKU/قیمت/stock، specification/gallery با ID، reconciliation وزن، توضیح یکتا، عنوان عمومی بدون suffix کد، metadata هویتی کامل، identity report، import create-only Draft و enrichment idempotent Draftهای موجود با fixture آفلاین تست شده است.
 - ⚠️ **PR-25 data scraping deprecated:** ابزار پیشین فقط برای تاریخچه/تست باقی می‌ماند. web/API در مسیر جاری فقط gallery تصویر را تأمین می‌کند.
 - ⏳ **Owner host execution pending:** plan، image fetch و import واقعی Excel روی MizbanFa هنوز اجرا نشده است. راهنما: [EXCEL-1000-PRODUCT-IMPORT-RUNBOOK.md](EXCEL-1000-PRODUCT-IMPORT-RUNBOOK.md).
 - نرخ PR-28: `590000` فقط برای عنوان دارای «درشت/بزرگ» نزدیک «نگین/عقیق»؛ `650000` برای سایر/نامطمئن؛ max قیمت Excel/کف وزنی و گردکردن رو به بالا به `50000`. همه قیمت‌ها تومان‌اند.

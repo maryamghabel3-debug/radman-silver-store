@@ -55,3 +55,9 @@ AB-12.7  -> AB-12.7             (exact)
 ```
 
 هیچ شناسه تصادفی ساخته نمی‌شود. هر تغییر دستی mapping باید پیش از import توسط مالک ثبت و تأیید شود.
+
+## PR-30A — عنوان عمومی بدون کد، هویت private کامل
+
+مسیر Excel جاری از `agents/lib/product_identity.py` استفاده می‌کند. suffix صریح کد فقط در انتهای عنوان پاک می‌شود؛ SKU تغییر نمی‌کند. عنوان کامل اولیه در `legacy_original_title` و mapping قطعی در `legacy_identity_key=<legacy_product_id>:<SKU>` نگهداری می‌شود. کد مدل در specification مشتری نمایش داده می‌شود، نه در `post_title`.
+
+اگر title code با SKU محصول Draft موجود اختلاف داشته باشد، `--enrich-existing` SKU را حفظ و `SKU_TITLE_MISMATCH` ثبت می‌کند. WooCommerce Admin جست‌وجوی استاندارد SKU را پشتیبانی می‌کند؛ گزارش `--identity-report` نیز WP ID، عنوان، SKU، legacy ID/raw code/URL/key و review را بدون mutation خروجی می‌دهد.

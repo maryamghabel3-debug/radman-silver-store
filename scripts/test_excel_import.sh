@@ -8,7 +8,9 @@ cd "$REPO_ROOT"
 
 PYTHONDONTWRITEBYTECODE=1 python3 -m py_compile \
   agents/agent_excel_product_pipeline.py \
+  agents/lib/product_identity.py \
   agents/test_excel_product_pipeline.py \
+  agents/test_product_identity.py \
   scripts/analyze_excel_catalog.py \
   scripts/test_catalog_analysis.py \
   scripts/test_luxury_pricing.py
@@ -23,7 +25,9 @@ fi
 
 if grep -nE 'gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[0-9A-Z]{16}|BEGIN (RSA|OPENSSH|EC) PRIVATE KEY' \
   agents/agent_excel_product_pipeline.py \
+  agents/lib/product_identity.py \
   agents/test_excel_product_pipeline.py \
+  agents/test_product_identity.py \
   scripts/run_excel_import.sh; then
   echo '[FAIL] possible credential found' >&2
   exit 1
@@ -41,12 +45,19 @@ if grep -niE "set_status\([^)]*publish|post_status[^a-z]+publish|--post_status=p
   exit 1
 fi
 
+if grep -niE 'wp_delete_post|post[[:space:]]+delete|product[[:space:]]+delete' \
+  agents/agent_excel_product_pipeline.py scripts/run_excel_import.sh; then
+  echo '[FAIL] product deletion path found' >&2
+  exit 1
+fi
+
 if grep -nE 'amount[[:space:]]*//[[:space:]]*10|price[[:space:]]*\*[[:space:]]*10|price[[:space:]]*/[[:space:]]*10' \
   agents/agent_excel_product_pipeline.py; then
   echo '[FAIL] Rial/Toman conversion path found' >&2
   exit 1
 fi
 
+PYTHONDONTWRITEBYTECODE=1 python3 agents/test_product_identity.py
 PYTHONDONTWRITEBYTECODE=1 python3 agents/test_excel_product_pipeline.py
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/test_catalog_analysis.py
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/test_luxury_pricing.py

@@ -143,6 +143,12 @@ def test_excel_parsing_sku_pricing_and_categories() -> None:
         title_code = by_id[3643]
         assert title_code["sku"] == "1058"
         assert title_code["sku_source"] == "TITLE_CODE"
+        assert title_code["title"] == "انگشتر نقره"
+        assert title_code["legacy_original_title"] == "انگشتر نقره کد 1058"
+        assert title_code["extracted_title_code"] == "1058"
+        assert title_code["radman_legacy_code"] == "1058"
+        assert title_code["legacy_identity_key"] == "3643:1058"
+        assert title_code["legacy_title_cleanup_status"] == "CLEANED"
         assert title_code["raw_code"] == "2079000.0000000002"
         assert title_code["category"] == "rings"
         assert title_code["excel_price_toman"] == 7_689_000
@@ -211,6 +217,9 @@ def test_weight_reconciliation_live_fill_and_excel_mismatch() -> None:
         assert filled["final_price_toman"] == 10_400_000
         assert filled["price_source"] == "MAX_CALCULATED"
         assert filled["description_source"] == "SPECS_TEMPLATE"
+        assert filled["description"].startswith("انگشتر نقره\n")
+        assert "کد مدل: 1058" in filled["description"]
+        assert "انگشتر نقره کد 1058\n" not in filled["description"]
         assert "PRICE_RECALCULATED_FROM_LIVE_WEIGHT" in filled["review_flags"]
         assert "SPEC_CATEGORY_MISMATCH" in filled["review_flags"]
         assert filled["category"] == "rings"
@@ -365,15 +374,19 @@ def test_gallery_extraction_is_original_ordered_and_image_only() -> None:
 
 
 class FakeGateway:
-    def __init__(self, existing_ids=None, sku_conflicts=None) -> None:
+    def __init__(self, existing_ids=None, sku_conflicts=None, existing_rows=None) -> None:
         self.existing_ids = dict(existing_ids or {})
         self.sku_conflicts = dict(sku_conflicts or {})
+        self.existing_rows = list(existing_rows or [])
         self.created = []
         self.images = []
         self.enrich_calls = []
 
     def get_currency(self):
         return "IRT"
+
+    def list_draft_legacy_products(self, limit):
+        return [dict(row) for row in self.existing_rows[:limit]]
 
     def find_by_legacy_id(self, legacy_id):
         return self.existing_ids.get(str(legacy_id))
@@ -401,6 +414,10 @@ class FakeGateway:
         self.enrich_calls.append(
             {
                 "product_id": product_id,
+                "public_title": record["title"],
+                "sku": record["sku"],
+                "legacy_original_title": record.get("legacy_original_title"),
+                "legacy_identity_key": record.get("legacy_identity_key"),
                 "description": record["description"],
                 "legacy_specs": json.dumps(
                     record.get("legacy_specs", {}), ensure_ascii=False, sort_keys=True
@@ -413,6 +430,52 @@ class FakeGateway:
             "status": "draft",
             "price_updated": update_price,
         }
+
+
+def test_existing_draft_title_cleanup_preserves_sku_and_traceability() -> None:
+    with tempfile.TemporaryDirectory() as temporary:
+        excel = Path(temporary) / "products.xlsx"
+        make_excel(excel)
+        records, _ = pipeline.load_excel_records(excel)
+    gateway = FakeGateway(
+        existing_rows=[
+            {
+                "product_id": 65,
+                "legacy_id": "3643",
+                "public_title": "انگشتر نقره کد 1058",
+                "sku": "9999",
+                "legacy_raw_code": "2079000.0000000002",
+                "legacy_url": "https://noghrehmashhad.ir/product/3643/slug/",
+                "legacy_original_title": "",
+                "legacy_identity_key": "",
+                "title_cleanup_status": "",
+                "title_cleanup_timestamp": "",
+                "review_flags": "",
+                "price": "7700000",
+                "regular_price": "7700000",
+            }
+        ]
+    )
+    matched, missing = pipeline.prepare_existing_enrichment(records, gateway, 20)
+    assert missing == []
+    assert len(matched) == 1
+    record = matched[0]
+    assert record["wordpress_product_id"] == 65
+    assert record["old_public_title"] == "انگشتر نقره کد 1058"
+    assert record["new_public_title"] == "انگشتر نقره"
+    assert record["title"] == "انگشتر نقره"
+    assert record["sku"] == "9999"
+    assert record["current_sku"] == "9999"
+    assert record["extracted_title_code"] == "1058"
+    assert record["sku_title_match"] == "NO"
+    assert "SKU_TITLE_MISMATCH" in record["review_flags"]
+    assert record["legacy_original_title"] == "انگشتر نقره کد 1058"
+    assert record["raw_code"] == "2079000.0000000002"
+    assert record["legacy_url"].endswith("/product/3643/slug/")
+    assert record["legacy_identity_key"] == "3643:9999"
+    assert record["legacy_title_cleanup_status"] == "REVIEW"
+    assert gateway.created == []
+    print("PASS: existing Draft title cleans in place; mismatched SKU stays unchanged and flagged")
 
 
 def test_enrich_existing_is_idempotent_and_price_update_is_targeted() -> None:
@@ -436,6 +499,10 @@ def test_enrich_existing_is_idempotent_and_price_update_is_targeted() -> None:
     assert second[0]["price_updated"] is False
     assert gateway.enrich_calls[0]["description"] == gateway.enrich_calls[1]["description"]
     assert gateway.enrich_calls[0]["legacy_specs"] == gateway.enrich_calls[1]["legacy_specs"]
+    assert gateway.enrich_calls[0]["public_title"] == gateway.enrich_calls[1]["public_title"]
+    assert gateway.enrich_calls[0]["sku"] == gateway.enrich_calls[1]["sku"] == "1058"
+    assert gateway.enrich_calls[0]["legacy_original_title"] == "انگشتر نقره کد 1058"
+    assert gateway.enrich_calls[0]["legacy_identity_key"] == "3643:1058"
     assert gateway.enrich_calls[0]["update_price"] is True
     assert gateway.enrich_calls[1]["update_price"] is False
     print("PASS: enrich-existing is idempotent and only changes price after live-weight reconciliation")
@@ -492,6 +559,41 @@ def test_image_missing_still_importable_and_conflicts_skip() -> None:
     print("PASS: no-image Draft imports; SKU/legacy conflicts skip without overwrite")
 
 
+def test_read_only_identity_report_columns() -> None:
+    rows = [
+        {
+            "product_id": 65,
+            "public_title": "انگشتر نقره",
+            "sku": "1058",
+            "legacy_id": "3642",
+            "legacy_raw_code": "1058",
+            "legacy_url": "https://noghrehmashhad.ir/product/3642/slug/",
+            "legacy_identity_key": "3642:1058",
+            "title_cleanup_status": "CLEANED",
+            "review_flags": "",
+        }
+    ]
+    with tempfile.TemporaryDirectory() as temporary:
+        csv_path, txt_path = pipeline.write_identity_report(rows, Path(temporary))
+        with csv_path.open("r", encoding="utf-8-sig", newline="") as handle:
+            report = list(csv.DictReader(handle))
+        assert report == [
+            {
+                "wp_id": "65",
+                "public_title": "انگشتر نقره",
+                "sku": "1058",
+                "legacy_product_id": "3642",
+                "legacy_raw_code": "1058",
+                "legacy_url": "https://noghrehmashhad.ir/product/3642/slug/",
+                "identity_key": "3642:1058",
+                "title_cleanup_status": "CLEANED",
+                "review_flags": "",
+            }
+        ]
+        assert "3642:1058" in txt_path.read_text(encoding="utf-8")
+    print("PASS: identity-report emits complete read-only SKU/legacy reconciliation fields")
+
+
 def test_runner_plan_and_static_safety() -> None:
     runner = REPO_ROOT / "scripts" / "run_excel_import.sh"
     pipeline_source = (HERE / "agent_excel_product_pipeline.py").read_text(
@@ -504,7 +606,22 @@ def test_runner_plan_and_static_safety() -> None:
     assert "set_status('publish')" not in pipeline_source
     assert "set_sale_price" not in pipeline_source
     assert '"sale_price"' not in pipeline_source
-    assert "delete_post_meta($p->get_id(), '_sale_price')" in pipeline_source
+    assert "delete_post_meta($id, '_sale_price')" in pipeline_source
+    assert "update_post_meta($id, '_price', $luxury_regular)" in pipeline_source
+    enrichment_source = pipeline_source.split("def enrich_existing_draft", 1)[1].split(
+        "def create_excel_draft", 1
+    )[0]
+    assert "$p->set_name($d['public_title']);" in enrichment_source
+    for forbidden_setter in (
+        "set_sku(",
+        "set_status(",
+        "set_stock_quantity(",
+        "set_category_ids(",
+        "set_image_id(",
+        "set_gallery_image_ids(",
+    ):
+        assert forbidden_setter not in enrichment_source
+    assert "wp_delete_post" not in pipeline_source
     for meta_key in (
         "radman_legacy_specs",
         "radman_spec_stone_type",
@@ -516,12 +633,18 @@ def test_runner_plan_and_static_safety() -> None:
         "radman_spec_weight_grams",
         "radman_spec_weight_display",
         "radman_requires_review",
+        "radman_legacy_code",
+        "legacy_original_title",
+        "legacy_identity_key",
+        "legacy_title_cleanup_status",
+        "legacy_title_cleanup_timestamp",
     ):
         assert meta_key in pipeline_source
     assert "amount // 10" not in pipeline_source
     assert "public_html" in runner_source
     assert "LEGACY_API_ENV=/home/radmansi/.config/radman/api-keys/legacy-site.env" in runner_source
     assert "--enrich-existing" in runner_source
+    assert "--identity-report" in runner_source
     for prohibited in ("remove" + "bg", "BR" + "IA", "BiRef" + "Net"):
         assert prohibited.casefold() not in pipeline_source.casefold()
 
@@ -575,8 +698,25 @@ def test_runner_plan_and_static_safety() -> None:
             "weight_source",
             "description_source",
             "unknown_spec_labels_seen",
+            "wp_id",
+            "old_public_title",
+            "new_public_title",
+            "title_cleanup_applied",
+            "extracted_title_code",
+            "current_sku",
+            "sku_title_match",
+            "legacy_product_id",
+            "legacy_raw_code",
+            "identity_key",
+            "title_cleanup_status",
+            "description_updated",
+            "specs_found_count",
+            "price_changed",
         }.issubset(report_rows[0])
         assert report_rows[0]["legacy_id"] == "3643"
+        assert report_rows[0]["new_public_title"] == "انگشتر نقره"
+        assert report_rows[0]["extracted_title_code"] == "1058"
+        assert report_rows[0]["identity_key"] == "3643:1058"
         assert report_rows[0]["sku_source"] == "TITLE_CODE"
         assert report_rows[1]["sku"] == "NM-3642"
         assert report_rows[3]["stone_class"] == "large_stone"
@@ -590,7 +730,11 @@ def test_runner_plan_and_static_safety() -> None:
         unsafe = environment.copy()
         for key in ("APP_ENV", "WP_URL", "WP_PATH", "CONFIRM_STAGING_APPLY"):
             unsafe.pop(key, None)
-        for unsafe_mode in ("--import-drafts", "--enrich-existing"):
+        for unsafe_mode in (
+            "--import-drafts",
+            "--enrich-existing",
+            "--identity-report",
+        ):
             rejected = subprocess.run(
                 ["bash", str(runner), unsafe_mode],
                 cwd=REPO_ROOT,
@@ -611,8 +755,10 @@ def main() -> int:
     test_selection_descending_filters_and_cap()
     test_discovery_uses_direct_then_search_and_logs_strategy()
     test_gallery_extraction_is_original_ordered_and_image_only()
+    test_existing_draft_title_cleanup_preserves_sku_and_traceability()
     test_enrich_existing_is_idempotent_and_price_update_is_targeted()
     test_image_missing_still_importable_and_conflicts_skip()
+    test_read_only_identity_report_columns()
     test_runner_plan_and_static_safety()
     print("ALL EXCEL PRODUCT PIPELINE TESTS PASSED")
     return 0

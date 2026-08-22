@@ -42,6 +42,11 @@ from agents.agent_legacy_catalog_pilot import (  # noqa: E402
 )
 from agents.agent_original_image_processor import process_product  # noqa: E402
 from agents.lib.legacy_pricing import round_up_toman  # noqa: E402
+from agents.lib.product_identity import (  # noqa: E402
+    build_legacy_identity_key,
+    clean_public_product_title,
+    normalize_identity_digits,
+)
 from scripts.analyze_excel_catalog import (  # noqa: E402
     COL_ACTIVE,
     COL_AVAILABILITY,
@@ -71,7 +76,7 @@ EXPECTED_WP_URL = "https://staging.radmansilver.ir"
 EXPECTED_WP_PATH = "/home/radmansi/staging.radmansilver.ir"
 REQUIRED_CURRENCY = "IRT"
 API_SLOT = Path("/home/radmansi/.config/radman/api-keys/legacy-site.env")
-PIPELINE_VERSION = "PR-29"
+PIPELINE_VERSION = "PR-30A"
 EXCEL_IMAGE_USER_AGENT = (
     "RadmanSilverExcelImageImporter/1.0 "
     "(+https://radmansilver.ir; owner-controlled original-gallery migration)"
@@ -88,13 +93,27 @@ MIN_REQUIRED_COLUMNS = 29
 STANDARD_RATE = 650_000
 LARGE_STONE_RATE = 590_000
 ROUNDING_STEP = 50_000
-TITLE_CODE_RE = re.compile(r"کد\s*([0-9۰-۹٠-٩]{2,8})")
 LARGE_STONE_RE = re.compile(
     r"(?:(?:نگین|عقیق).{0,20}(?:درشت|بزرگ)|(?:درشت|بزرگ).{0,20}(?:نگین|عقیق))"
 )
 NO_STONE_RE = re.compile(r"(?:بدون|فاقد|بی)\s*(?:نگین|سنگ)")
 
 REPORT_COLUMNS = (
+    "wp_id",
+    "old_public_title",
+    "new_public_title",
+    "title_cleanup_applied",
+    "extracted_title_code",
+    "current_sku",
+    "sku_title_match",
+    "legacy_product_id",
+    "legacy_raw_code",
+    "legacy_url",
+    "identity_key",
+    "title_cleanup_status",
+    "description_updated",
+    "specs_found_count",
+    "price_changed",
     "legacy_id",
     "sku",
     "sku_source",
@@ -122,7 +141,6 @@ REPORT_COLUMNS = (
     "images_found",
     "image_status",
     "image_discovery_strategy",
-    "legacy_url",
     "action",
     "review_flags",
     "wordpress_product_id",
@@ -491,16 +509,12 @@ def parse_stock(value: Any) -> Tuple[int, Tuple[str, ...]]:
     return int(parsed), tuple()
 
 
-def _normalized_digits(value: str) -> str:
-    return normalize_text(value).replace(" ", "")
-
-
 def derive_sku(title: str, raw_code: Any, legacy_id: int) -> SKUDecision:
-    normalized_title = normalize_text(title)
-    title_match = TITLE_CODE_RE.search(normalized_title)
-    if title_match:
-        code = _normalized_digits(title_match.group(1))
-        return SKUDecision(code, "TITLE_CODE", _raw_trace(raw_code))
+    title_identity = clean_public_product_title(title)
+    if title_identity.extracted_code:
+        return SKUDecision(
+            title_identity.extracted_code, "TITLE_CODE", _raw_trace(raw_code)
+        )
 
     valid_code: Optional[str] = None
     if isinstance(raw_code, bool):
@@ -813,14 +827,21 @@ def load_excel_records(
             if legacy_id is None:
                 warnings.append(f"ROW_{excel_row}_INVALID_LEGACY_ID")
                 continue
-            title = display_text(_cell(values, COL_TITLE)) or f"محصول {legacy_id}"
+            raw_title_value = _cell(values, COL_TITLE)
+            raw_title = (
+                str(raw_title_value).strip()
+                if not is_blank(raw_title_value)
+                else f"محصول {legacy_id}"
+            )
+            title_identity = clean_public_product_title(raw_title)
+            title = title_identity.cleaned_title
             raw_category = display_text(_cell(values, COL_CATEGORY))
             availability = normalize_availability(_cell(values, COL_AVAILABILITY))
             active = parse_active(_cell(values, COL_ACTIVE))
             weight_raw = _cell(values, COL_WEIGHT)
             weight = parse_weight(weight_raw)
             raw_code = _cell(values, COL_RAW_CODE)
-            sku = derive_sku(title, raw_code, legacy_id)
+            sku = derive_sku(raw_title, raw_code, legacy_id)
             stock, stock_flags = parse_stock(_cell(values, COL_STOCK))
             category, category_flags = map_category(raw_category)
             pricing = calculate_pricing(
@@ -832,6 +853,7 @@ def load_excel_records(
             review_flags = list(stock_flags)
             review_flags.extend(category_flags)
             review_flags.extend(pricing.review_flags)
+            review_flags.extend(title_identity.review_flags)
             if not is_blank(weight_raw) and weight is None:
                 review_flags.append("WEIGHT_PRESENT_BUT_INVALID")
             description = display_text(_cell(values, COL_SEO_DESCRIPTION))
@@ -841,6 +863,14 @@ def load_excel_records(
                     "excel_row": excel_row,
                     "legacy_id": legacy_id,
                     "title": title,
+                    "legacy_original_title": title_identity.original_title,
+                    "old_public_title": "",
+                    "new_public_title": title,
+                    "title_cleanup_applied": title_identity.cleanup_applied,
+                    "extracted_title_code": title_identity.extracted_code,
+                    "title_code_label": title_identity.code_label,
+                    "legacy_title_cleanup_status": title_identity.cleanup_status,
+                    "legacy_title_cleanup_timestamp": datetime.now(TEHRAN).isoformat(),
                     "category_raw": raw_category,
                     "category": category,
                     "excel_price_toman": pricing.excel_price_toman,
@@ -856,7 +886,21 @@ def load_excel_records(
                     "active": active,
                     "raw_code": sku.raw_code,
                     "sku": sku.sku,
+                    "current_sku": sku.sku,
                     "sku_source": sku.source,
+                    "radman_legacy_code": sku.sku,
+                    "legacy_identity_key": build_legacy_identity_key(
+                        legacy_id, sku.sku
+                    ),
+                    "sku_title_match": (
+                        "NOT_APPLICABLE"
+                        if not title_identity.extracted_code
+                        else (
+                            "YES"
+                            if title_identity.extracted_code == sku.sku
+                            else "NO"
+                        )
+                    ),
                     "seo_title": seo_title,
                     "seo_fallback_description": description or seo_title or title,
                     "description": description or seo_title or title,
@@ -1303,7 +1347,7 @@ def fetch_specs_for_records(
         legacy_id = int(source_record["legacy_id"])
         page = service.discover(legacy_id)
         record = apply_specs_to_record(source_record, page.specs)
-        record["legacy_url"] = page.url
+        record["legacy_url"] = page.url or str(source_record.get("legacy_url") or "")
         record["image_discovery_strategy"] = page.strategy
         record["action"] = "ENRICH_READY"
         updated.append(record)
@@ -1350,7 +1394,15 @@ foreach ($q->posts as $id) {{
  $out[]=array(
   'product_id'=>(int)$id,
   'legacy_id'=>(string)get_post_meta($id,'legacy_product_id',true),
+  'public_title'=>(string)$p->get_name('edit'),
   'sku'=>(string)$p->get_sku('edit'),
+  'legacy_raw_code'=>(string)get_post_meta($id,'legacy_raw_code',true),
+  'legacy_url'=>(string)get_post_meta($id,'legacy_url',true),
+  'legacy_original_title'=>(string)get_post_meta($id,'legacy_original_title',true),
+  'legacy_identity_key'=>(string)get_post_meta($id,'legacy_identity_key',true),
+  'title_cleanup_status'=>(string)get_post_meta($id,'legacy_title_cleanup_status',true),
+  'title_cleanup_timestamp'=>(string)get_post_meta($id,'legacy_title_cleanup_timestamp',true),
+  'review_flags'=>(string)get_post_meta($id,'radman_review_flags',true),
   'price'=>(string)$p->get_price('edit'),
   'regular_price'=>(string)$p->get_regular_price('edit')
  );
@@ -1370,7 +1422,19 @@ echo wp_json_encode($out);
         update_price: bool,
     ) -> Dict[str, Any]:
         meta = {
+            "legacy_product_id": str(record["legacy_id"]),
+            "_legacy_store_id": str(record["legacy_id"]),
+            "legacy_raw_code": str(record.get("raw_code") or ""),
             "legacy_url": str(record.get("legacy_url") or ""),
+            "radman_legacy_code": str(record.get("radman_legacy_code") or record["sku"]),
+            "legacy_original_title": str(record.get("legacy_original_title") or record["title"]),
+            "legacy_identity_key": str(record.get("legacy_identity_key") or ""),
+            "legacy_title_cleanup_status": str(
+                record.get("legacy_title_cleanup_status") or "UNCHANGED"
+            ),
+            "legacy_title_cleanup_timestamp": str(
+                record.get("legacy_title_cleanup_timestamp") or ""
+            ),
             "radman_legacy_specs": json.dumps(
                 record.get("legacy_specs", {}), ensure_ascii=False
             ),
@@ -1413,6 +1477,7 @@ echo wp_json_encode($out);
         payload = {
             "product_id": int(product_id),
             "legacy_id": str(record["legacy_id"]),
+            "public_title": str(record.get("title") or ""),
             "description": str(record.get("description") or ""),
             "short_description": (
                 str(record.get("seo_fallback_description") or "")
@@ -1432,15 +1497,19 @@ $p=wc_get_product((int)$d['product_id']);
 if (!$p || $p->get_status('edit') !== 'draft') {{ fwrite(STDERR, 'Draft product not found'); exit(12); }}
 $legacy=(string)$p->get_meta('legacy_product_id', true, 'edit');
 if ($legacy !== (string)$d['legacy_id']) {{ fwrite(STDERR, 'legacy ID mismatch'); exit(13); }}
+$p->set_name($d['public_title']);
 $p->set_description($d['description']);
 $p->set_short_description($d['short_description']);
 if ($d['update_price']) {{
  $p->set_regular_price((string)$d['regular_price']);
- $p->set_price((string)$d['regular_price']);
- delete_post_meta($p->get_id(), '_sale_price');
 }}
+$luxury_regular=(string)$p->get_regular_price('edit');
+$p->set_price($luxury_regular);
 foreach ($d['meta'] as $key=>$value) {{ $p->update_meta_data($key, (string)$value); }}
 $id=$p->save();
+delete_post_meta($id, '_sale_price');
+update_post_meta($id, '_price', $luxury_regular);
+wc_delete_product_transients($id);
 echo wp_json_encode(array('id'=>(int)$id,'status'=>$p->get_status('edit'),'price_updated'=>(bool)$d['update_price']));
 """
         result = self.eval_json(php)
@@ -1454,6 +1523,15 @@ echo wp_json_encode(array('id'=>(int)$id,'status'=>$p->get_status('edit'),'price
             "_legacy_store_id": str(record["legacy_id"]),
             "legacy_raw_code": str(record.get("raw_code") or ""),
             "legacy_url": str(record.get("legacy_url") or ""),
+            "radman_legacy_code": str(record.get("radman_legacy_code") or record["sku"]),
+            "legacy_original_title": str(record.get("legacy_original_title") or record["title"]),
+            "legacy_identity_key": str(record.get("legacy_identity_key") or ""),
+            "legacy_title_cleanup_status": str(
+                record.get("legacy_title_cleanup_status") or "UNCHANGED"
+            ),
+            "legacy_title_cleanup_timestamp": str(
+                record.get("legacy_title_cleanup_timestamp") or ""
+            ),
             "radman_legacy_specs": json.dumps(
                 record.get("legacy_specs", {}), ensure_ascii=False
             ),
@@ -1566,7 +1644,7 @@ echo wp_json_encode(array('id'=>(int)$id,'status'=>$p->get_status('edit')));
         return int(result["id"])
 
 
-def require_import_environment(wp_path: str) -> Path:
+def require_readonly_wp_environment(wp_path: str) -> None:
     errors = []
     if os.environ.get("APP_ENV") != EXPECTED_APP_ENV:
         errors.append("APP_ENV must equal staging")
@@ -1576,6 +1654,13 @@ def require_import_environment(wp_path: str) -> Path:
         errors.append(f"WP_PATH must equal {EXPECTED_WP_PATH}")
     if "public_html" in wp_path:
         errors.append("public_html is prohibited")
+    if errors:
+        raise ExcelPipelineError("; ".join(errors))
+
+
+def require_import_environment(wp_path: str) -> Path:
+    require_readonly_wp_environment(wp_path)
+    errors = []
     if os.environ.get("CONFIRM_STAGING_APPLY") != "YES":
         errors.append("CONFIRM_STAGING_APPLY must equal YES")
     backup = Path(os.environ.get("RADMAN_DB_BACKUP_PATH", ""))
@@ -1715,17 +1800,26 @@ def enrich_existing_records(
             update_price=update_price,
         )
         record["action"] = "ENRICHED_DRAFT"
+        record["description_updated"] = "YES"
+        record["specs_found_count"] = len(record.get("legacy_specs", {}))
         record["price_updated_during_enrichment"] = bool(
             result.get("price_updated")
         )
+        record["price_changed"] = bool(result.get("price_updated"))
         actions.append(
             {
                 "legacy_id": record["legacy_id"],
                 "sku": record["sku"],
                 "product_id": product_id,
+                "old_public_title": record.get("old_public_title"),
+                "new_public_title": record.get("title"),
+                "title_cleanup_applied": record.get("title_cleanup_applied"),
+                "sku_title_match": record.get("sku_title_match"),
                 "action": "ENRICHED_DRAFT",
                 "description_source": record.get("description_source"),
                 "weight_source": record.get("weight_source"),
+                "description_updated": "YES",
+                "specs_found_count": len(record.get("legacy_specs", {})),
                 "price_updated": bool(result.get("price_updated")),
                 "review_flags": list(record.get("review_flags", [])),
             }
@@ -1756,10 +1850,68 @@ def prepare_existing_enrichment(
                 }
             )
             continue
+        existing_sku = str(item.get("sku") or excel_record["sku"])
+        original_title = str(
+            item.get("legacy_original_title")
+            or excel_record.get("legacy_original_title")
+            or item.get("public_title")
+            or excel_record["title"]
+        )
+        title_identity = clean_public_product_title(original_title)
+        old_public_title = str(item.get("public_title") or excel_record["title"])
+        normalized_existing_sku = normalize_identity_digits(existing_sku).strip()
+        flags = list(excel_record.get("review_flags", []))
+        flags.extend(title_identity.review_flags)
+        if (
+            title_identity.extracted_code
+            and title_identity.extracted_code != normalized_existing_sku
+        ):
+            flags.append("SKU_TITLE_MISMATCH")
+            sku_title_match = "NO"
+        elif title_identity.extracted_code:
+            sku_title_match = "YES"
+        else:
+            sku_title_match = "NOT_APPLICABLE"
+        cleanup_status = title_identity.cleanup_status
+        if "SKU_TITLE_MISMATCH" in flags or title_identity.review_flags:
+            cleanup_status = "REVIEW"
+
         excel_record["wordpress_product_id"] = int(item["product_id"])
         excel_record["wordpress_current_price"] = item.get("price")
         excel_record["wordpress_regular_price"] = item.get("regular_price")
-        excel_record["sku"] = str(item.get("sku") or excel_record["sku"])
+        excel_record["old_public_title"] = old_public_title
+        excel_record["new_public_title"] = title_identity.cleaned_title
+        excel_record["title"] = title_identity.cleaned_title
+        excel_record["title_cleanup_applied"] = (
+            normalize_text(old_public_title)
+            != normalize_text(title_identity.cleaned_title)
+        )
+        excel_record["extracted_title_code"] = title_identity.extracted_code
+        excel_record["title_code_label"] = title_identity.code_label
+        excel_record["legacy_original_title"] = original_title
+        excel_record["legacy_title_cleanup_status"] = cleanup_status
+        excel_record["legacy_title_cleanup_timestamp"] = str(
+            item.get("title_cleanup_timestamp")
+            or excel_record.get("legacy_title_cleanup_timestamp")
+            or datetime.now(TEHRAN).isoformat()
+        )
+        excel_record["legacy_url"] = str(
+            item.get("legacy_url") or excel_record.get("legacy_url") or ""
+        )
+        excel_record["raw_code"] = str(
+            item.get("legacy_raw_code") or excel_record.get("raw_code") or ""
+        )
+        excel_record["sku"] = existing_sku
+        excel_record["current_sku"] = existing_sku
+        excel_record["radman_legacy_code"] = normalized_existing_sku
+        excel_record["sku_title_match"] = sku_title_match
+        excel_record["legacy_identity_key"] = build_legacy_identity_key(
+            legacy_id, normalized_existing_sku
+        )
+        excel_record["review_flags"] = list(dict.fromkeys(flags))
+        excel_record["radman_requires_review"] = (
+            "YES" if excel_record["review_flags"] else "NO"
+        )
         matched.append(excel_record)
     return matched, missing
 
@@ -1781,6 +1933,23 @@ def write_json_atomic(path: Path, value: Any) -> None:
 
 def _report_row(record: Mapping[str, Any]) -> Dict[str, Any]:
     return {
+        "wp_id": record.get("wordpress_product_id") or "",
+        "old_public_title": record.get("old_public_title", ""),
+        "new_public_title": record.get("new_public_title") or record.get("title", ""),
+        "title_cleanup_applied": record.get("title_cleanup_applied", False),
+        "extracted_title_code": record.get("extracted_title_code", ""),
+        "current_sku": record.get("current_sku") or record.get("sku", ""),
+        "sku_title_match": record.get("sku_title_match", "NOT_APPLICABLE"),
+        "legacy_product_id": record.get("legacy_id", ""),
+        "legacy_raw_code": record.get("raw_code", ""),
+        "legacy_url": record.get("legacy_url", ""),
+        "identity_key": record.get("legacy_identity_key", ""),
+        "title_cleanup_status": record.get("legacy_title_cleanup_status", ""),
+        "description_updated": record.get("description_updated", ""),
+        "specs_found_count": record.get(
+            "specs_found_count", len(record.get("legacy_specs", {}))
+        ),
+        "price_changed": record.get("price_changed", False),
         "legacy_id": record.get("legacy_id", ""),
         "sku": record.get("sku", ""),
         "sku_source": record.get("sku_source", ""),
@@ -1810,7 +1979,6 @@ def _report_row(record: Mapping[str, Any]) -> Dict[str, Any]:
         "images_found": record.get("images_found", 0),
         "image_status": record.get("image_status", ""),
         "image_discovery_strategy": record.get("image_discovery_strategy", ""),
-        "legacy_url": record.get("legacy_url", ""),
         "action": record.get("action", ""),
         "review_flags": " | ".join(record.get("review_flags", [])),
         "wordpress_product_id": record.get("wordpress_product_id") or "",
@@ -1865,31 +2033,25 @@ def write_reports(
             else "ندارد"
         ),
         "",
-        "id | sku | منبع SKU | عنوان | دسته | وزن/منبع | قیمت Excel | محاسبه | نهایی | منبع قیمت | سنگ/رنگ/رکاب | منبع توضیح | موجودی | تصویر | اقدام | بازبینی",
+        "wp_id | عنوان قبلی -> عنوان جدید | پاکسازی | کد عنوان | SKU/تطبیق | legacy_id/identity | مشخصات/توضیح | قیمت تغییر کرد | اقدام | بازبینی",
     ]
     for record in records:
         lines.append(
-            "{legacy_id} | {sku} | {sku_source} | {title} | {category} | "
-            "{weight}/{weight_source} | {excel} | {computed} | {final} | {source} | "
-            "{stone}/{color}/{band} | {description_source} | "
-            "{stock} | {image} | {action} | {flags}".format(
+            "{wp_id} | {old_title} -> {new_title} | {cleaned} | {code} | "
+            "{sku}/{match} | {legacy_id}/{identity} | {spec_count}/{description} | "
+            "{price_changed} | {action} | {flags}".format(
+                wp_id=record.get("wordpress_product_id") or "—",
+                old_title=str(record.get("old_public_title") or "—").replace("|", "/"),
+                new_title=str(record.get("title") or "—").replace("|", "/"),
+                cleaned="بله" if record.get("title_cleanup_applied") else "خیر",
+                code=record.get("extracted_title_code") or "—",
+                sku=record.get("sku") or "—",
+                match=record.get("sku_title_match") or "NOT_APPLICABLE",
                 legacy_id=record.get("legacy_id"),
-                sku=record.get("sku"),
-                sku_source=record.get("sku_source"),
-                title=str(record.get("title", "")).replace("|", "/"),
-                category=record.get("category"),
-                weight=record.get("spec_weight_grams") or record.get("weight_grams") or "—",
-                weight_source=record.get("weight_source") or "MISSING",
-                excel=record.get("excel_price_toman") or "—",
-                computed=record.get("computed_price_toman") or "—",
-                final=record.get("final_price_toman") or "—",
-                source=record.get("price_source"),
-                stone=record.get("spec_stone_type") or record.get("stone_class") or "—",
-                color=record.get("spec_stone_color") or "—",
-                band=record.get("spec_band_type") or "—",
-                description_source=record.get("description_source") or "SEO_FALLBACK",
-                stock=record.get("stock"),
-                image=record.get("image_status"),
+                identity=record.get("legacy_identity_key") or "—",
+                spec_count=len(record.get("legacy_specs", {})),
+                description=record.get("description_source") or "SEO_FALLBACK",
+                price_changed="بله" if record.get("price_changed") else "خیر",
                 action=record.get("action"),
                 flags=",".join(record.get("review_flags", [])) or "—",
             )
@@ -1898,6 +2060,73 @@ def write_reports(
     txt_temporary.write_text("\n".join(lines) + "\n", encoding="utf-8")
     os.chmod(txt_temporary, 0o600)
     os.replace(txt_temporary, txt_path)
+    return csv_path, txt_path
+
+
+def write_identity_report(
+    rows: Sequence[Mapping[str, Any]], private_dir: Path
+) -> Tuple[Path, Path]:
+    stamp = now_slug()
+    run_dir = (
+        private_dir / "legacy-cache" / "runs" / f"identity-report-{stamp}"
+    )
+    run_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
+    columns = (
+        "wp_id",
+        "public_title",
+        "sku",
+        "legacy_product_id",
+        "legacy_raw_code",
+        "legacy_url",
+        "identity_key",
+        "title_cleanup_status",
+        "review_flags",
+    )
+    csv_path = run_dir / f"identity-report-{stamp}.csv"
+    txt_path = run_dir / f"identity-report-{stamp}-fa.txt"
+    normalized = []
+    for item in rows:
+        sku = str(item.get("sku") or "")
+        legacy_id = str(item.get("legacy_id") or "")
+        identity_key = str(item.get("legacy_identity_key") or "")
+        if not identity_key and sku and legacy_id:
+            identity_key = build_legacy_identity_key(legacy_id, sku)
+        normalized.append(
+            {
+                "wp_id": item.get("product_id") or "",
+                "public_title": item.get("public_title") or "",
+                "sku": sku,
+                "legacy_product_id": legacy_id,
+                "legacy_raw_code": item.get("legacy_raw_code") or "",
+                "legacy_url": item.get("legacy_url") or "",
+                "identity_key": identity_key,
+                "title_cleanup_status": item.get("title_cleanup_status") or "",
+                "review_flags": item.get("review_flags") or "",
+            }
+        )
+    with csv_path.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=columns)
+        writer.writeheader()
+        writer.writerows(normalized)
+    os.chmod(csv_path, 0o600)
+    lines = [
+        "گزارش هویت محصولات Draft رادمان",
+        "wp_id | عنوان عمومی | SKU | legacy_product_id | legacy_raw_code | legacy_url | identity_key | وضعیت پاکسازی | بازبینی",
+    ]
+    for row in normalized:
+        lines.append(
+            "{wp_id} | {public_title} | {sku} | {legacy_product_id} | "
+            "{legacy_raw_code} | {legacy_url} | {identity_key} | "
+            "{title_cleanup_status} | {review_flags}".format(**row)
+        )
+    txt_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    os.chmod(txt_path, 0o600)
+    for row in normalized:
+        print(
+            f"{row['wp_id']} | {row['public_title']} | {row['sku']} | "
+            f"{row['legacy_product_id']} | {row['identity_key']} | "
+            f"{row['title_cleanup_status']} | {row['review_flags']}"
+        )
     return csv_path, txt_path
 
 
@@ -2002,6 +2231,7 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     modes.add_argument("--fetch-images", action="store_true")
     modes.add_argument("--import-drafts", action="store_true")
     modes.add_argument("--enrich-existing", action="store_true")
+    modes.add_argument("--identity-report", action="store_true")
     modes.add_argument("--full-pilot", action="store_true")
     parser.add_argument("--excel", type=Path, default=DEFAULT_EXCEL_FILE)
     parser.add_argument("--max-products", type=int, default=DEFAULT_MAX_PRODUCTS)
@@ -2021,6 +2251,17 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         print(f"[ERROR] MAX_PRODUCTS must be 1..{HARD_MAX_PRODUCTS}", file=sys.stderr)
         return 2
     try:
+        if args.identity_report:
+            require_readonly_wp_environment(args.wp_path)
+            rows = ExcelDraftGateway(args.wp_path).list_draft_legacy_products(
+                args.max_products
+            )
+            csv_path, txt_path = write_identity_report(rows, private_dir)
+            print(f"[IDENTITY REPORT] {csv_path}")
+            print(f"[IDENTITY REPORT] {txt_path}")
+            print("[SAFETY] Read-only; standard WooCommerce SKU search remains enabled.")
+            return 0
+
         if args.inspect:
             inspect_excel(args.excel, args.max_products)
             return 0

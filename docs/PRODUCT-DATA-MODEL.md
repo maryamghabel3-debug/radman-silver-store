@@ -129,7 +129,7 @@ Required Draft metadata:
 | `image_discovery_strategy` | Direct ID, site search, sitemap cache, or not found |
 | `excel_category_raw`, `excel_row` | Source traceability |
 | `radman_import_source` | `excel_1000_pipeline` |
-| `radman_import_version` | `PR-29` for enriched/current runs |
+| `radman_import_version` | `PR-30A` for current clean-title/enriched runs |
 | `radman_review_flags` | Pipe-separated review reasons |
 
 SKU priority is title code, validated COL 27 integer under 100000, then `NM-<legacy_product_id>`. New products are simple Drafts, use real integer stock from COL 11, `manage_stock=true`, and `backorders=no`. Existing legacy IDs and SKU conflicts are skipped without update.
@@ -143,3 +143,11 @@ The ID-resolved legacy page is the source only for the specification block and i
 ## 9. Luxury single-price invariant
 
 Every product has one storefront price: `_regular_price == _price == final_price`. `_sale_price` must be absent. COL 10 may remain trace metadata but cannot alter regular price or create a strikethrough/discount display. See [LUXURY-PRICING-HOTFIX.md](LUXURY-PRICING-HOTFIX.md).
+
+## 10. Clean public title and complete identity invariant
+
+> Product codes do not appear in customer-facing product titles. The normalized legacy model code is preserved as the WooCommerce SKU and displayed in the technical specification section. The legacy platform ID, raw code, original title, and source URL remain in private metadata for traceability and future synchronization.
+
+Only an explicit trailing `کد` / `کد مدل` / `کد محصول` / `شناسه کالا` suffix is removed; meaningful numbers such as purity 925 remain. The normalized model code is preserved as WooCommerce SKU and shown as `کد مدل` in the technical description.
+
+Private mapping fields are mandatory: `legacy_product_id`, `radman_legacy_code`, `legacy_raw_code`, `legacy_original_title`, `legacy_url`, `legacy_identity_key`, `legacy_title_cleanup_status`, and `legacy_title_cleanup_timestamp`. `legacy_identity_key` is deterministic: `<legacy_product_id>:<SKU>`. Existing enrichment never silently changes an SKU; a title-code mismatch becomes `SKU_TITLE_MISMATCH` review.
