@@ -106,4 +106,30 @@ The general eight-field pricing model above remains present. To protect the temp
 | `radman_image_integrity_action`, `radman_image_fallback_used` | Optimized output or untouched-original fallback |
 | `radman_original_image_urls`, `radman_original_image_sha256` | Ordered JSON arrays of source URLs and archived-byte hashes |
 
-All products created by this path are simple products with `status=draft`, `manage_stock=true`, `stock_quantity=1`, `stock_status=instock`, and `backorders=no`. The importer is create-only and never overwrites owner-edited products.
+All products created by this historical path are simple products with `status=draft`, `manage_stock=true`, `stock_quantity=1`, `stock_status=instock`, and `backorders=no`. The importer is create-only and never overwrites owner-edited products.
+
+## 7. Definitive PR-28 Excel source and metadata
+
+PR-28 supersedes web scraping as the product-data source. The owner Excel sheet `همه محصولات` supplies columns 1/2/5/9/10/11/12/13/22/27/28/29. Higher legacy IDs are newer and selection is descending.
+
+Required Draft metadata:
+
+| Metadata | Source / meaning |
+|---|---|
+| `legacy_product_id`, `_legacy_store_id` | Excel COL 1; idempotency key |
+| `legacy_raw_code` | Unmodified trace value from COL 27 |
+| `legacy_url` | Image-discovery page URL, if found |
+| `weight_grams`, `silver_weight_grams` | Parsed COL 22 or blank |
+| `excel_price_toman` | Current Toman price, COL 9 |
+| `pre_discount_price_toman` | Toman price before discount, COL 10 |
+| `price_source` | `EXCEL_ONLY`, `MAX_EXCEL`, or `MAX_CALCULATED` |
+| `rate_used`, `computed_price`, `final_price` | Decimal pricing audit trail |
+| `stone_class` | Title-only `large_stone`, `no_stone`, or conservative `uncertain` |
+| `image_status` | `READY` or importable `MISSING` |
+| `image_discovery_strategy` | Direct ID, site search, sitemap cache, or not found |
+| `excel_category_raw`, `excel_row` | Source traceability |
+| `radman_import_source` | `excel_1000_pipeline` |
+| `radman_import_version` | `PR-28` |
+| `radman_review_flags` | Pipe-separated review reasons |
+
+SKU priority is title code, validated COL 27 integer under 100000, then `NM-<legacy_product_id>`. New products are simple Drafts, use real integer stock from COL 11, `manage_stock=true`, and `backorders=no`. Existing legacy IDs and SKU conflicts are skipped without update.

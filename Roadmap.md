@@ -16,11 +16,11 @@
 ---
 
 ## Phase 3: AI Agent Product Migration & Pricing Engine (IN PROGRESS ⏳)
-- [x] Build PR-25 repository tooling for an owner-executed ten-product original-image pilot: public robots-aware scrape, exact legacy identity, color-safe media QA with original fallback, conservative gemstone classification, Decimal Toman floor pricing, create-only Draft import, and automatic reports. Reviewed `2026-08-21, Asia/Tehran`; mock-10 tests pass locally.
-- [ ] Owner executes live scrape and reviews QA/pricing reports on MizbanFa inside Iran; no live run is claimed by the repository.
-- [ ] Import approved pilot products to staging as Draft only (stock 1, backorders off); production/publication remain out of scope.
-- [ ] Deploy broader `Agent-Migrate` only after the ten-product pilot is accepted.
-- [ ] Configure `Agent-Orders` dynamic silver price calculation plugin (price per gram + craftsmanship fee). The temporary PR-25 rates (`590000` only for confident large-stone rings, `650000` otherwise) are a migration overlay, not the permanent daily-rate engine.
+- [x] Build PR-28 repository tooling for the owner Excel as definitive data source: select up to 1000 newest eligible products by descending legacy ID, derive auditable SKUs/prices/categories/stock, fetch original galleries by ID only, preserve color, and create guarded Drafts with reports.
+- [x] Deprecate PR-25 web scraping for product data; retain it only for history/offline regressions. Public legacy access is gallery-image-only in the current path.
+- [ ] Owner runs `MAX_PRODUCTS=20 ... --plan`, reviews pricing/SKU/category flags, then authorizes staged image fetch/import.
+- [ ] Owner runs the 1000-product full pilot on MizbanFa; no live Excel import or WordPress mutation is claimed by the repository.
+- [ ] Configure the permanent daily-rate pricing engine after imported Draft review. PR-28 temporary rates remain `590000` for explicit large-stone title evidence and `650000` otherwise.
 
 ---
 

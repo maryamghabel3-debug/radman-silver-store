@@ -1,5 +1,7 @@
 # راهنمای اجرای خط لوله محصولات واقعی با تصویر اصلی
 
+> **DEPRECATED FOR PRODUCT DATA (PR-28):** فایل Excel مالک اکنون تنها منبع حقیقت داده محصول است. این PR-25 فقط برای تاریخچه/تست آفلاین نگه‌داری می‌شود؛ web scraping در مسیر مصوب جدید فقط برای gallery تصویر با ID مجاز است. راهنمای جاری: [EXCEL-1000-PRODUCT-IMPORT-RUNBOOK.md](EXCEL-1000-PRODUCT-IMPORT-RUNBOOK.md).
+
 **نسخه:** PR-25
 **بازبینی سیاست و نرخ موقت:** `2026-08-21, Asia/Tehran`
 **محیط مجاز:** فقط `https://staging.radmansilver.ir` در `/home/radmansi/staging.radmansilver.ir`
