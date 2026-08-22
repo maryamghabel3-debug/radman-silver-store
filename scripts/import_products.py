@@ -463,7 +463,7 @@ $p->set_name($d['name']);
 $p->set_short_description($d['short_description']);
 $p->set_description($d['description']);
 $p->set_regular_price((string) $d['price']);
-if ($p->get_sale_price('edit') === '') {{ $p->set_price((string) $d['price']); }}
+$p->set_price((string) $d['price']);
 $p->set_manage_stock(true);
 $p->set_stock_quantity((int) $d['stock']);
 $p->set_stock_status(((int) $d['stock']) > 0 ? 'instock' : 'outofstock');
@@ -474,6 +474,8 @@ foreach ($d['meta'] as $key => $value) {{
   if ($value === '') {{ $p->delete_meta_data($key); }} else {{ $p->update_meta_data($key, (string) $value); }}
 }}
 $id=$p->save();
+delete_post_meta($id, '_sale_price');
+update_post_meta($id, '_price', (string) $d['price']);
 wc_delete_product_transients($id);
 echo wp_json_encode(array('id'=>(int) $id, 'created'=>$created));
 """

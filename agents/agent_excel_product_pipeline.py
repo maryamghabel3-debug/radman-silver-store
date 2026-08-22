@@ -107,7 +107,6 @@ REPORT_COLUMNS = (
     "computed_price_toman",
     "final_price_toman",
     "regular_price_toman",
-    "sale_price_toman",
     "price_source",
     "rate_used",
     "stone_class",
@@ -143,7 +142,6 @@ class PricingDecision:
     final_price_toman: Optional[int]
     pre_discount_price_toman: Optional[int]
     regular_price_toman: Optional[int]
-    sale_price_toman: Optional[int]
     price_source: str
     review_flags: Tuple[str, ...]
 
@@ -566,15 +564,9 @@ def calculate_pricing(
             price_source = "MAX_CALCULATED"
         final = round_up_toman(selected, ROUNDING_STEP)
 
-    regular: Optional[int] = None
-    sale: Optional[int] = None
-    if final is not None:
-        if pre_discount is not None and pre_discount > final:
-            regular = pre_discount
-            sale = final
-        else:
-            regular = final
-            sale = None
+    # Luxury pricing policy: COL 10 is trace-only. The storefront exposes one
+    # price, so regular price always equals the computed/selected final price.
+    regular = final
 
     return PricingDecision(
         stone_class=stone_class,
@@ -584,7 +576,6 @@ def calculate_pricing(
         final_price_toman=final,
         pre_discount_price_toman=pre_discount,
         regular_price_toman=regular,
-        sale_price_toman=sale,
         price_source=price_source,
         review_flags=tuple(flags),
     )
@@ -702,7 +693,6 @@ def _apply_pricing_to_record(
             ),
             "final_price_toman": decision.final_price_toman,
             "regular_price_toman": decision.regular_price_toman,
-            "sale_price_toman": decision.sale_price_toman,
             "price_source": decision.price_source,
         }
     )
@@ -896,7 +886,6 @@ def load_excel_records(
                     ),
                     "final_price_toman": pricing.final_price_toman,
                     "regular_price_toman": pricing.regular_price_toman,
-                    "sale_price_toman": pricing.sale_price_toman,
                     "price_source": pricing.price_source,
                     "review_flags": list(dict.fromkeys(review_flags)),
                     "eligible": bool(active is True and availability != "ناموجود"),
@@ -1363,8 +1352,7 @@ foreach ($q->posts as $id) {{
   'legacy_id'=>(string)get_post_meta($id,'legacy_product_id',true),
   'sku'=>(string)$p->get_sku('edit'),
   'price'=>(string)$p->get_price('edit'),
-  'regular_price'=>(string)$p->get_regular_price('edit'),
-  'sale_price'=>(string)$p->get_sale_price('edit')
+  'regular_price'=>(string)$p->get_regular_price('edit')
  );
 }}
 echo wp_json_encode($out);
@@ -1433,7 +1421,6 @@ echo wp_json_encode($out);
             ),
             "update_price": bool(update_price),
             "regular_price": record.get("regular_price_toman"),
-            "sale_price": record.get("sale_price_toman"),
             "meta": meta,
         }
         encoded = _b64(
@@ -1449,13 +1436,8 @@ $p->set_description($d['description']);
 $p->set_short_description($d['short_description']);
 if ($d['update_price']) {{
  $p->set_regular_price((string)$d['regular_price']);
- if ($d['sale_price'] !== null) {{
-  $p->set_sale_price((string)$d['sale_price']);
-  $p->set_price((string)$d['sale_price']);
- }} else {{
-  $p->set_sale_price('');
-  $p->set_price((string)$d['regular_price']);
- }}
+ $p->set_price((string)$d['regular_price']);
+ delete_post_meta($p->get_id(), '_sale_price');
 }}
 foreach ($d['meta'] as $key=>$value) {{ $p->update_meta_data($key, (string)$value); }}
 $id=$p->save();
@@ -1537,7 +1519,6 @@ echo wp_json_encode(array('id'=>(int)$id,'status'=>$p->get_status('edit'),'price
             ),
             "category_id": int(category_id),
             "regular_price": int(record["regular_price_toman"]),
-            "sale_price": record.get("sale_price_toman"),
             "stock": int(record["stock"]),
             "meta": metadata,
         }
@@ -1564,13 +1545,7 @@ $p->set_name($d['name']);
 $p->set_description($d['description']);
 $p->set_short_description($d['short_description']);
 $p->set_regular_price((string)$d['regular_price']);
-if ($d['sale_price'] !== null) {{
- $p->set_sale_price((string)$d['sale_price']);
- $p->set_price((string)$d['sale_price']);
-}} else {{
- $p->set_sale_price('');
- $p->set_price((string)$d['regular_price']);
-}}
+$p->set_price((string)$d['regular_price']);
 $p->set_manage_stock(true);
 $p->set_stock_quantity((int)$d['stock']);
 $p->set_stock_status(((int)$d['stock']) > 0 ? 'instock' : 'outofstock');
@@ -1784,7 +1759,6 @@ def prepare_existing_enrichment(
         excel_record["wordpress_product_id"] = int(item["product_id"])
         excel_record["wordpress_current_price"] = item.get("price")
         excel_record["wordpress_regular_price"] = item.get("regular_price")
-        excel_record["wordpress_sale_price"] = item.get("sale_price")
         excel_record["sku"] = str(item.get("sku") or excel_record["sku"])
         matched.append(excel_record)
     return matched, missing
@@ -1819,7 +1793,6 @@ def _report_row(record: Mapping[str, Any]) -> Dict[str, Any]:
         "computed_price_toman": record.get("computed_price_toman") or "",
         "final_price_toman": record.get("final_price_toman") or "",
         "regular_price_toman": record.get("regular_price_toman") or "",
-        "sale_price_toman": record.get("sale_price_toman") or "",
         "price_source": record.get("price_source", ""),
         "rate_used": record.get("rate_used", ""),
         "stone_class": record.get("stone_class", ""),
