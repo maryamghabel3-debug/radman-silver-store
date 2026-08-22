@@ -137,4 +137,6 @@ weight exists: final = ceil(max(COL9, Decimal(weight) × rate) / 50000) × 50000
 weight missing: final = ceil(COL9 / 50000) × 50000
 ```
 
-`price_source` is `MAX_EXCEL` or `MAX_CALCULATED` when weight exists and `EXCEL_ONLY` when absent. COL 10 becomes regular price only when it is greater than final; then final is sale price. Otherwise regular price is final and no sale price is set. See [EXCEL-1000-PRODUCT-IMPORT-RUNBOOK.md](EXCEL-1000-PRODUCT-IMPORT-RUNBOOK.md).
+`price_source` is `MAX_EXCEL` or `MAX_CALCULATED` when weight exists and `EXCEL_ONLY` when absent. COL 10 becomes regular price only when it is greater than final; then final is sale price. Otherwise regular price is final and no sale price is set.
+
+PR-29 reconciliation: if COL 22 is empty and the same product page yields a parseable specification weight, that live weight becomes `weight_source=LIVE_PAGE` and the formula is re-run. If COL 22 is present, Excel remains authoritative; a live difference greater than 0.5g is reported as `WEIGHT_MISMATCH` without changing pricing weight. See [EXCEL-1000-PRODUCT-IMPORT-RUNBOOK.md](EXCEL-1000-PRODUCT-IMPORT-RUNBOOK.md).

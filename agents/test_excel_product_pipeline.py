@@ -18,6 +18,7 @@ from openpyxl import Workbook
 HERE = Path(__file__).resolve().parent
 REPO_ROOT = HERE.parent
 FIXTURE = REPO_ROOT / "tests" / "fixtures" / "excel-import" / "excel_products.json"
+SPEC_FIXTURE = REPO_ROOT / "tests" / "fixtures" / "legacy-specs" / "spec_blocks.json"
 sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(HERE))
 
@@ -48,6 +49,86 @@ def make_excel(path: Path) -> None:
     workbook.create_sheet("خالی")
     workbook.save(path)
     workbook.close()
+
+
+def test_real_spec_block_fixtures_and_html_section_parser() -> None:
+    fixtures = json.loads(SPEC_FIXTURE.read_text(encoding="utf-8"))
+    parsed = []
+    for fixture in fixtures:
+        specs = pipeline.parse_spec_block_text(fixture["text"])
+        expected = fixture["expected"]
+        assert specs.stone_type == expected["stone_type"]
+        assert specs.stone_color == expected["stone_color"]
+        assert specs.band_type == expected["band_type"]
+        assert specs.engraving_type == expected["engraving_type"]
+        assert specs.silver_purity == expected["silver_purity"]
+        assert specs.size == expected["size"]
+        assert specs.weight_grams == Decimal(expected["weight_grams"])
+        parsed.append(specs)
+    assert parsed[0].weight_display == "16 گرم"
+    assert parsed[2].stone_type == "در نجف"
+
+    html_page = (
+        '<section id="specifications"><h2>مشخصات</h2><p>'
+        + fixtures[0]["text"]
+        + " · طرح ویژه:شیر و خورشید</p></section>"
+    )
+    extracted = pipeline.extract_legacy_specs(html_page)
+    assert extracted.stone_type == "حدید"
+    assert extracted.weight_grams == Decimal("16")
+    assert extracted.all_specs["طرح ویژه"] == "شیر و خورشید"
+    assert extracted.unknown_labels == ("طرح ویژه",)
+    definition_html = """
+    <h3>مشخصات</h3><dl>
+      <dt>نوع سنگ</dt><dd>فیروزه</dd>
+      <dt>وزن</dt><dd>۹.۵ گرم</dd>
+      <dt>طرح</dt><dd>بیضی</dd>
+    </dl>
+    """
+    definition_specs = pipeline.extract_legacy_specs(definition_html)
+    assert definition_specs.stone_type == "فیروزه"
+    assert definition_specs.weight_grams == Decimal("9.5")
+    assert definition_specs.all_specs["طرح"] == "بیضی"
+    print("PASS: three verbatim real spec blocks, mixed digits, unknown labels, and HTML extraction")
+
+
+def test_unique_descriptions_differ_and_omit_missing_fields() -> None:
+    fixtures = json.loads(SPEC_FIXTURE.read_text(encoding="utf-8"))
+    descriptions = []
+    for index, fixture in enumerate(fixtures, start=1):
+        specs = pipeline.parse_spec_block_text(fixture["text"])
+        record = {
+            "legacy_id": 300 + index,
+            "sku": f"MODEL-{index}",
+            "title": f"انگشتر نمونه {index}",
+            "category_raw": "انگشتر مردانه",
+            "category": "rings",
+            "seo_fallback_description": "متن عمومی قدیمی",
+        }
+        description, source = pipeline.generate_unique_description(record, specs)
+        assert source == "SPECS_TEMPLATE"
+        assert "متن عمومی قدیمی" not in description
+        assert "None" not in description
+        assert f"کد مدل: MODEL-{index}" in description
+        descriptions.append(description)
+    assert len(set(descriptions)) == 3
+    assert "- نوع حکاکی: " not in descriptions[1]
+    assert "- نوع رکاب: " not in descriptions[1]
+    assert "- نوع سنگ: در نجف" in descriptions[2]
+    size_missing = pipeline.parse_spec_block_text("نوع سنگ:فیروزه · عیار نقره:925")
+    size_description, _ = pipeline.generate_unique_description(
+        {
+            "legacy_id": 999,
+            "sku": "MODEL-999",
+            "title": "انگشتر فیروزه",
+            "category_raw": "انگشتر",
+            "category": "rings",
+        },
+        size_missing,
+    )
+    assert "امکان انتخاب سایز دلخواه هنگام ثبت سفارش" in size_description
+    assert "None" not in size_description
+    print("PASS: three spec-based descriptions are unique and omit absent fields cleanly")
 
 
 def test_excel_parsing_sku_pricing_and_categories() -> None:
@@ -111,6 +192,47 @@ def test_excel_parsing_sku_pricing_and_categories() -> None:
         assert unknown["price_source"] == "MAX_CALCULATED"
         assert unknown["final_price_toman"] == 1_300_000
     print("PASS: mixed digits, SKU priority, category mapping, stock, and Decimal pricing")
+
+
+def test_weight_reconciliation_live_fill_and_excel_mismatch() -> None:
+    fixtures = json.loads(SPEC_FIXTURE.read_text(encoding="utf-8"))
+    with tempfile.TemporaryDirectory() as temporary:
+        excel = Path(temporary) / "products.xlsx"
+        make_excel(excel)
+        records, _ = pipeline.load_excel_records(excel)
+        by_id = {record["legacy_id"]: record for record in records}
+
+        live_specs = pipeline.parse_spec_block_text(fixtures[0]["text"])
+        filled = pipeline.apply_specs_to_record(by_id[3643], live_specs)
+        assert filled["excel_weight_grams"] is None
+        assert filled["weight_source"] == "LIVE_PAGE"
+        assert filled["weight_grams"] == "16"
+        assert filled["computed_price_toman"] == "10400000"
+        assert filled["final_price_toman"] == 10_400_000
+        assert filled["price_source"] == "MAX_CALCULATED"
+        assert filled["description_source"] == "SPECS_TEMPLATE"
+        assert "PRICE_RECALCULATED_FROM_LIVE_WEIGHT" in filled["review_flags"]
+        assert "SPEC_CATEGORY_MISMATCH" in filled["review_flags"]
+        assert filled["category"] == "rings"
+        report_row = pipeline._report_row(filled)
+        assert report_row["stone_type"] == "حدید"
+        assert report_row["stone_color"] == "طلایی"
+        assert report_row["band_type"] == "نقره ماشینی"
+        assert report_row["silver_purity"] == "925"
+        assert report_row["spec_weight"] == "16"
+        assert report_row["weight_source"] == "LIVE_PAGE"
+        assert report_row["description_source"] == "SPECS_TEMPLATE"
+
+        mismatch_specs = pipeline.parse_spec_block_text(fixtures[1]["text"])
+        mismatch = pipeline.apply_specs_to_record(by_id[3641], mismatch_specs)
+        assert mismatch["excel_weight_grams"] == "1.0"
+        assert mismatch["weight_source"] == "EXCEL"
+        assert mismatch["weight_grams"] == "1.0"
+        assert mismatch["spec_weight_grams"] == "13"
+        assert mismatch["final_price_toman"] == 1_000_000
+        assert "WEIGHT_MISMATCH" in mismatch["review_flags"]
+        assert mismatch["radman_requires_review"] == "YES"
+    print("PASS: live weight fills Excel blanks; Excel weight stays authoritative with mismatch flag")
 
 
 def test_sku_edge_cases_and_rounding() -> None:
@@ -197,22 +319,28 @@ class FakeDiscoveryFetcher:
         if "/search?q=3643" in url:
             return '<a href="/product/3643/slug-fa/">product</a>'
         if "/product/3643/slug-fa/" in url:
-            return '<img src="/product-images/3643-main.jpg">'
+            return (
+                '<h2>مشخصات</h2><p>وزن:16 گرم · نوع سنگ:حدید · عیار نقره:925</p>'
+                '<img src="/product-images/3643-main.jpg">'
+            )
         return "<html></html>"
 
 
 def test_discovery_uses_direct_then_search_and_logs_strategy() -> None:
     fetcher = FakeDiscoveryFetcher()
     discovery = pipeline.LegacyImageDiscovery(fetcher=fetcher)
-    url, images, strategy = discovery.discover(3643)
-    assert strategy == "SITE_SEARCH"
-    assert url == "https://noghrehmashhad.ir/product/3643/slug-fa/"
-    assert images == [
-        "https://noghrehmashhad.ir/product-images/3643-main.jpg"
-    ]
+    page = discovery.discover(3643)
+    assert page.strategy == "SITE_SEARCH"
+    assert page.url == "https://noghrehmashhad.ir/product/3643/slug-fa/"
+    assert page.image_urls == (
+        "https://noghrehmashhad.ir/product-images/3643-main.jpg",
+    )
+    assert page.specs.stone_type == "حدید"
+    assert page.specs.weight_grams == Decimal("16")
+    assert fetcher.calls.count(page.url) == 1
     assert fetcher.calls[0] == "https://noghrehmashhad.ir/product/3643/"
     assert any(item["strategy"] == "SITE_SEARCH" and item["status"] == "FOUND" for item in discovery.log)
-    print("PASS: image discovery tries direct ID patterns before site search and logs success")
+    print("PASS: one resolved-page response yields both gallery and specs with logged strategy")
 
 
 def test_gallery_extraction_is_original_ordered_and_image_only() -> None:
@@ -242,6 +370,7 @@ class FakeGateway:
         self.sku_conflicts = dict(sku_conflicts or {})
         self.created = []
         self.images = []
+        self.enrich_calls = []
 
     def get_currency(self):
         return "IRT"
@@ -267,6 +396,49 @@ class FakeGateway:
 
     def set_product_images(self, product_id, image_ids):
         raise AssertionError("missing-image test must not attach media")
+
+    def enrich_existing_draft(self, record, product_id, *, update_price):
+        self.enrich_calls.append(
+            {
+                "product_id": product_id,
+                "description": record["description"],
+                "legacy_specs": json.dumps(
+                    record.get("legacy_specs", {}), ensure_ascii=False, sort_keys=True
+                ),
+                "update_price": update_price,
+            }
+        )
+        return {
+            "id": product_id,
+            "status": "draft",
+            "price_updated": update_price,
+        }
+
+
+def test_enrich_existing_is_idempotent_and_price_update_is_targeted() -> None:
+    fixture = json.loads(SPEC_FIXTURE.read_text(encoding="utf-8"))[0]
+    specs = pipeline.parse_spec_block_text(fixture["text"])
+    with tempfile.TemporaryDirectory() as temporary:
+        excel = Path(temporary) / "products.xlsx"
+        make_excel(excel)
+        records, _ = pipeline.load_excel_records(excel)
+        base = next(record for record in records if record["legacy_id"] == 3643)
+    enriched = pipeline.apply_specs_to_record(base, specs)
+    enriched["wordpress_product_id"] = 77
+    enriched["wordpress_current_price"] = 7_700_000
+    gateway = FakeGateway()
+    first = pipeline.enrich_existing_records([dict(enriched)], gateway)
+    assert first[0]["price_updated"] is True
+
+    rerun_record = dict(enriched)
+    rerun_record["wordpress_current_price"] = enriched["final_price_toman"]
+    second = pipeline.enrich_existing_records([rerun_record], gateway)
+    assert second[0]["price_updated"] is False
+    assert gateway.enrich_calls[0]["description"] == gateway.enrich_calls[1]["description"]
+    assert gateway.enrich_calls[0]["legacy_specs"] == gateway.enrich_calls[1]["legacy_specs"]
+    assert gateway.enrich_calls[0]["update_price"] is True
+    assert gateway.enrich_calls[1]["update_price"] is False
+    print("PASS: enrich-existing is idempotent and only changes price after live-weight reconciliation")
 
 
 def test_image_missing_still_importable_and_conflicts_skip() -> None:
@@ -331,9 +503,23 @@ def test_runner_plan_and_static_safety() -> None:
     subprocess.run(["bash", "--posix", "-n", str(runner)], check=True)
     assert "set_status('draft')" in pipeline_source
     assert "set_status('publish')" not in pipeline_source
+    for meta_key in (
+        "radman_legacy_specs",
+        "radman_spec_stone_type",
+        "radman_spec_stone_color",
+        "radman_spec_band_type",
+        "radman_spec_engraving_type",
+        "radman_spec_silver_purity",
+        "radman_spec_size",
+        "radman_spec_weight_grams",
+        "radman_spec_weight_display",
+        "radman_requires_review",
+    ):
+        assert meta_key in pipeline_source
     assert "amount // 10" not in pipeline_source
     assert "public_html" in runner_source
     assert "LEGACY_API_ENV=/home/radmansi/.config/radman/api-keys/legacy-site.env" in runner_source
+    assert "--enrich-existing" in runner_source
     for prohibited in ("remove" + "bg", "BR" + "IA", "BiRef" + "Net"):
         assert prohibited.casefold() not in pipeline_source.casefold()
 
@@ -378,6 +564,16 @@ def test_runner_plan_and_static_safety() -> None:
         with csv_reports[0].open("r", encoding="utf-8-sig", newline="") as handle:
             report_rows = list(csv.DictReader(handle))
         assert len(report_rows) == 5
+        assert {
+            "stone_type",
+            "stone_color",
+            "band_type",
+            "silver_purity",
+            "spec_weight",
+            "weight_source",
+            "description_source",
+            "unknown_spec_labels_seen",
+        }.issubset(report_rows[0])
         assert report_rows[0]["legacy_id"] == "3643"
         assert report_rows[0]["sku_source"] == "TITLE_CODE"
         assert report_rows[1]["sku"] == "NM-3642"
@@ -392,23 +588,28 @@ def test_runner_plan_and_static_safety() -> None:
         unsafe = environment.copy()
         for key in ("APP_ENV", "WP_URL", "WP_PATH", "CONFIRM_STAGING_APPLY"):
             unsafe.pop(key, None)
-        rejected = subprocess.run(
-            ["bash", str(runner), "--import-drafts"],
-            cwd=REPO_ROOT,
-            env=unsafe,
-            capture_output=True,
-            text=True,
-        )
-        assert rejected.returncode != 0
+        for unsafe_mode in ("--import-drafts", "--enrich-existing"):
+            rejected = subprocess.run(
+                ["bash", str(runner), unsafe_mode],
+                cwd=REPO_ROOT,
+                env=unsafe,
+                capture_output=True,
+                text=True,
+            )
+            assert rejected.returncode != 0
     print("PASS: plan is offline/no-WP; Bash/POSIX, guards, API slot, and newest ordering")
 
 
 def main() -> int:
+    test_real_spec_block_fixtures_and_html_section_parser()
+    test_unique_descriptions_differ_and_omit_missing_fields()
     test_excel_parsing_sku_pricing_and_categories()
+    test_weight_reconciliation_live_fill_and_excel_mismatch()
     test_sku_edge_cases_and_rounding()
     test_selection_descending_filters_and_cap()
     test_discovery_uses_direct_then_search_and_logs_strategy()
     test_gallery_extraction_is_original_ordered_and_image_only()
+    test_enrich_existing_is_idempotent_and_price_update_is_targeted()
     test_image_missing_still_importable_and_conflicts_skip()
     test_runner_plan_and_static_safety()
     print("ALL EXCEL PRODUCT PIPELINE TESTS PASSED")

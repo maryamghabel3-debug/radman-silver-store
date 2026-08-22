@@ -1,0 +1,41 @@
+[
+  {
+    "name": "full-eight-fields",
+    "text": "دسته‌بندی: انگشتر مردانه · وزن:1۶ گرم · نوع رکاب:نقره ماشینی · رنگ نگین:طلایی · نوع سنگ:حدید · نوع حکاکی:لیزر · عیار نقره:925 · سایز:دلخواه",
+    "expected": {
+      "stone_type": "حدید",
+      "stone_color": "طلایی",
+      "band_type": "نقره ماشینی",
+      "engraving_type": "لیزر",
+      "silver_purity": "925",
+      "size": "دلخواه",
+      "weight_grams": "16"
+    }
+  },
+  {
+    "name": "missing-band-and-engraving",
+    "text": "دسته‌بندی: انگشتر مردانه · وزن:13 · نوع سنگ:عقیق · عیار نقره:925 · سایز:دلخواه · رنگ نگین:سیاه",
+    "expected": {
+      "stone_type": "عقیق",
+      "stone_color": "سیاه",
+      "band_type": "",
+      "engraving_type": "",
+      "silver_purity": "925",
+      "size": "دلخواه",
+      "weight_grams": "13"
+    }
+  },
+  {
+    "name": "stone-name-with-space",
+    "text": "دسته‌بندی: انگشتر مردانه · وزن:12 گرم · نوع سنگ:در نجف · عیار نقره:925 · سایز:دلخواه · رنگ نگین:سفید",
+    "expected": {
+      "stone_type": "در نجف",
+      "stone_color": "سفید",
+      "band_type": "",
+      "engraving_type": "",
+      "silver_purity": "925",
+      "size": "دلخواه",
+      "weight_grams": "12"
+    }
+  }
+]

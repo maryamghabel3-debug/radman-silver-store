@@ -20,12 +20,13 @@ import re
 import sys
 import urllib.error
 import urllib.parse
+from collections import Counter
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from decimal import Decimal, ROUND_FLOOR
 from html.parser import HTMLParser
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 from zoneinfo import ZoneInfo
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -70,7 +71,7 @@ EXPECTED_WP_URL = "https://staging.radmansilver.ir"
 EXPECTED_WP_PATH = "/home/radmansi/staging.radmansilver.ir"
 REQUIRED_CURRENCY = "IRT"
 API_SLOT = Path("/home/radmansi/.config/radman/api-keys/legacy-site.env")
-PIPELINE_VERSION = "PR-28"
+PIPELINE_VERSION = "PR-29"
 EXCEL_IMAGE_USER_AGENT = (
     "RadmanSilverExcelImageImporter/1.0 "
     "(+https://radmansilver.ir; owner-controlled original-gallery migration)"
@@ -110,6 +111,14 @@ REPORT_COLUMNS = (
     "price_source",
     "rate_used",
     "stone_class",
+    "stone_type",
+    "stone_color",
+    "band_type",
+    "silver_purity",
+    "spec_weight",
+    "weight_source",
+    "description_source",
+    "unknown_spec_labels_seen",
     "stock",
     "images_found",
     "image_status",
@@ -153,6 +162,137 @@ class SKUDecision:
     sku: str
     source: str
     raw_code: str
+
+
+KNOWN_SPEC_LABELS = {
+    "دسته بندی": "category",
+    "وزن": "weight",
+    "نوع رکاب": "band_type",
+    "رنگ نگین": "stone_color",
+    "نوع سنگ": "stone_type",
+    "نوع حکاکی": "engraving_type",
+    "عیار نقره": "silver_purity",
+    "سایز": "size",
+}
+
+
+@dataclass(frozen=True)
+class LegacySpecs:
+    all_specs: Dict[str, str]
+    category: str
+    weight_display: str
+    weight_grams: Optional[Decimal]
+    band_type: str
+    stone_color: str
+    stone_type: str
+    engraving_type: str
+    silver_purity: str
+    size: str
+    unknown_labels: Tuple[str, ...]
+
+    @property
+    def found(self) -> bool:
+        return bool(self.all_specs)
+
+    def to_dict(self) -> Dict[str, Any]:
+        value = asdict(self)
+        value["weight_grams"] = (
+            format(self.weight_grams, "f") if self.weight_grams is not None else None
+        )
+        value["unknown_labels"] = list(self.unknown_labels)
+        return value
+
+
+@dataclass(frozen=True)
+class LegacyPageResult:
+    url: str
+    image_urls: Tuple[str, ...]
+    strategy: str
+    specs: LegacySpecs
+
+
+class SpecTextHTMLParser(HTMLParser):
+    """Render HTML to text and preserve dl/table label-value pairs."""
+
+    BLOCK_TAGS = {
+        "article",
+        "br",
+        "dd",
+        "div",
+        "dl",
+        "dt",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "li",
+        "p",
+        "section",
+        "table",
+        "td",
+        "th",
+        "tr",
+        "ul",
+    }
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.parts: List[str] = []
+        self.structured_pairs: List[Tuple[str, str]] = []
+        self._ignored_depth = 0
+        self._capture_tag: Optional[str] = None
+        self._capture_parts: List[str] = []
+        self._pending_label: Optional[str] = None
+
+    def handle_starttag(
+        self, tag: str, attrs: Sequence[Tuple[str, Optional[str]]]
+    ) -> None:
+        if tag in {"script", "style", "noscript"}:
+            self._ignored_depth += 1
+            return
+        if self._ignored_depth:
+            return
+        if tag in self.BLOCK_TAGS:
+            self.parts.append("\n")
+        if tag in {"dt", "dd", "th", "td"}:
+            self._capture_tag = tag
+            self._capture_parts = []
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag in {"script", "style", "noscript"} and self._ignored_depth:
+            self._ignored_depth -= 1
+            return
+        if self._ignored_depth:
+            return
+        if self._capture_tag == tag:
+            text = normalize_text(" ".join(self._capture_parts))
+            if tag in {"dt", "th"}:
+                self._pending_label = text or None
+            elif tag == "td" and text:
+                if self._pending_label:
+                    self.structured_pairs.append((self._pending_label, text))
+                    self._pending_label = None
+                else:
+                    self._pending_label = text.strip(" :：") or None
+            elif tag == "dd" and self._pending_label and text:
+                self.structured_pairs.append((self._pending_label, text))
+                self._pending_label = None
+            self._capture_tag = None
+            self._capture_parts = []
+        if tag in self.BLOCK_TAGS:
+            self.parts.append("\n")
+
+    def handle_data(self, data: str) -> None:
+        if self._ignored_depth:
+            return
+        text = html.unescape(data)
+        self.parts.append(text)
+        if self._capture_tag:
+            self._capture_parts.append(text)
+
+    @property
+    def text(self) -> str:
+        return "".join(self.parts)
 
 
 class GalleryHTMLParser(HTMLParser):
@@ -236,6 +376,108 @@ def parse_weight(value: Any) -> Optional[Decimal]:
     if parsed is None or parsed <= 0 or parsed > Decimal("500"):
         return None
     return parsed
+
+
+def empty_legacy_specs() -> LegacySpecs:
+    return LegacySpecs({}, "", "", None, "", "", "", "", "", "", tuple())
+
+
+def _normalized_spec_label(label: str) -> str:
+    value = normalize_text(label).strip(" .،؛:：-")
+    if value.startswith("مشخصات"):
+        value = normalize_text(value[len("مشخصات") :]).strip(" .،؛:：-")
+    return value
+
+
+def legacy_specs_from_pairs(pairs: Iterable[Tuple[str, str]]) -> LegacySpecs:
+    all_specs: Dict[str, str] = {}
+    known: Dict[str, str] = {}
+    unknown: List[str] = []
+    for raw_label, raw_value in pairs:
+        label = _normalized_spec_label(raw_label)
+        value = normalize_text(raw_value).strip(" .،؛")
+        if not label or not value:
+            continue
+        if len(label) > 80 or len(value) > 500:
+            continue
+        all_specs.setdefault(label, value)
+        key = KNOWN_SPEC_LABELS.get(label)
+        if key:
+            known.setdefault(key, value)
+        elif label not in unknown:
+            unknown.append(label)
+    weight_display = known.get("weight", "")
+    return LegacySpecs(
+        all_specs=all_specs,
+        category=known.get("category", ""),
+        weight_display=weight_display,
+        weight_grams=parse_weight(weight_display),
+        band_type=known.get("band_type", ""),
+        stone_color=known.get("stone_color", ""),
+        stone_type=known.get("stone_type", ""),
+        engraving_type=known.get("engraving_type", ""),
+        silver_purity=known.get("silver_purity", ""),
+        size=known.get("size", ""),
+        unknown_labels=tuple(unknown),
+    )
+
+
+def parse_spec_block_text(text: str) -> LegacySpecs:
+    normalized = html.unescape(str(text or ""))
+    normalized = normalized.replace("•", "·")
+    segments = re.split(r"\s*·\s*|[\r\n]+", normalized)
+    pairs: List[Tuple[str, str]] = []
+    for segment in segments:
+        cleaned = normalize_text(segment)
+        if not cleaned:
+            continue
+        match = re.search(r"[:：]", cleaned)
+        if not match:
+            continue
+        label = cleaned[: match.start()]
+        value = cleaned[match.end() :]
+        pairs.append((label, value))
+    return legacy_specs_from_pairs(pairs)
+
+
+def extract_legacy_specs(source_html: str) -> LegacySpecs:
+    parser = SpecTextHTMLParser()
+    parser.feed(source_html)
+    candidates: List[LegacySpecs] = []
+    plain_text = html.unescape(parser.text)
+    for match in re.finditer(r"مشخصات", plain_text):
+        chunk = plain_text[match.start() : match.start() + 3000]
+        stop = re.search(r"\n\s*(?:توضیحات|نظرات|دیدگاه|محصولات مرتبط)\s*\n", chunk)
+        if stop:
+            chunk = chunk[: stop.start()]
+        candidates.append(parse_spec_block_text(chunk))
+    if parser.structured_pairs:
+        candidates.append(legacy_specs_from_pairs(parser.structured_pairs))
+    if not candidates:
+        # Some legacy templates omit the visible section heading but retain the
+        # middle-dot field block. Restrict fallback to a known-label window.
+        label_match = re.search(
+            r"(?:دسته[‌ ]?بندی|وزن|نوع رکاب|نوع سنگ|عیار نقره)\s*[:：]",
+            plain_text,
+        )
+        if label_match:
+            candidates.append(
+                parse_spec_block_text(
+                    plain_text[label_match.start() : label_match.start() + 2500]
+                )
+            )
+    if not candidates:
+        return empty_legacy_specs()
+    candidates.sort(
+        key=lambda item: (
+            sum(label in KNOWN_SPEC_LABELS for label in item.all_specs),
+            len(item.all_specs),
+        ),
+        reverse=True,
+    )
+    best = candidates[0]
+    known_count = sum(label in KNOWN_SPEC_LABELS for label in best.all_specs)
+    return best if known_count >= 1 else empty_legacy_specs()
 
 
 def parse_stock(value: Any) -> Tuple[int, Tuple[str, ...]]:
@@ -359,6 +601,172 @@ def map_category(raw_category: str) -> Tuple[str, Tuple[str, ...]]:
     return "rings", ("UNKNOWN_CATEGORY_DEFAULTED_TO_RINGS",)
 
 
+def _category_display(record: Mapping[str, Any], specs: LegacySpecs) -> str:
+    if specs.category:
+        return specs.category
+    raw = display_text(record.get("category_raw"))
+    if raw:
+        return raw
+    return {
+        "rings": "انگشتر نقره",
+        "necklaces": "گردنبند و مدال نقره",
+        "bracelets": "دستبند نقره",
+    }.get(str(record.get("category")), "زیورآلات نقره")
+
+
+def generate_unique_description(
+    record: Mapping[str, Any], specs: LegacySpecs
+) -> Tuple[str, str]:
+    if not specs.found:
+        fallback = display_text(
+            record.get("seo_fallback_description")
+            or record.get("description")
+            or record.get("seo_title")
+            or record.get("title")
+        )
+        return fallback, "SEO_FALLBACK"
+
+    title = display_text(record.get("title"))
+    category = _category_display(record, specs)
+    legacy_id = int(record.get("legacy_id") or 0)
+    sku = display_text(record.get("sku"))
+    intros = (
+        f"این {category} از مجموعه رادمان سیلور با مشخصات واقعی زیر ارائه می‌شود:",
+        f"در این قطعه {category} از رادمان سیلور، جزئیات ساخت و نگین چنین است:",
+        f"برای مدل حاضر از گروه {category}، مشخصات ثبت‌شده محصول عبارت است از:",
+    )
+    bullets: List[str] = []
+    if specs.silver_purity:
+        bullets.append(f"- جنس: نقره عیار {specs.silver_purity} اصل")
+    if specs.stone_type:
+        stone = f"- نوع سنگ: {specs.stone_type}"
+        if specs.stone_color:
+            stone += f"، رنگ {specs.stone_color}"
+        bullets.append(stone)
+    elif specs.stone_color:
+        bullets.append(f"- رنگ نگین: {specs.stone_color}")
+    if specs.band_type:
+        bullets.append(f"- نوع رکاب: {specs.band_type}")
+    if specs.weight_display:
+        weight_text = specs.weight_display
+        if specs.weight_grams is not None and "گرم" not in weight_text:
+            weight_text += " گرم"
+        bullets.append(f"- وزن تقریبی: {weight_text}")
+    if specs.engraving_type:
+        bullets.append(f"- نوع حکاکی: {specs.engraving_type}")
+    if specs.size:
+        bullets.append(f"- سایز: {specs.size}")
+    else:
+        bullets.append("- سایز: امکان انتخاب سایز دلخواه هنگام ثبت سفارش")
+    for label in specs.unknown_labels:
+        value = specs.all_specs.get(label, "")
+        if value:
+            bullets.append(f"- {label}: {value}")
+    if sku:
+        bullets.append(f"- کد مدل: {sku}")
+
+    conclusions = (
+        "موجودی این قطعه محدود است؛ وزن دقیق ممکن است اندکی با مقدار درج‌شده تفاوت داشته باشد که از ویژگی‌های طبیعی ساخت محصولات نقره است.",
+        "این مدل با موجودی محدود عرضه می‌شود. به‌دلیل ماهیت ساخت زیورآلات نقره، اختلاف جزئی وزن با مقدار تقریبی طبیعی است.",
+        "تعداد این قطعه محدود است و وزن نهایی می‌تواند در بازه‌ای اندک با عدد ثبت‌شده تفاوت داشته باشد؛ این موضوع در محصولات نقره طبیعی است.",
+    )
+    description = "\n\n".join(
+        [
+            title,
+            intros[legacy_id % len(intros)],
+            "\n".join(bullets),
+            conclusions[legacy_id % len(conclusions)],
+        ]
+    )
+    return description, "SPECS_TEMPLATE"
+
+
+def _apply_pricing_to_record(
+    record: Dict[str, Any], weight: Optional[Decimal]
+) -> None:
+    decision = calculate_pricing(
+        title=str(record["title"]),
+        excel_price=record.get("excel_price_toman"),
+        pre_discount_price=record.get("pre_discount_price_toman"),
+        weight=weight,
+    )
+    record.update(
+        {
+            "weight_grams": format(weight, "f") if weight is not None else None,
+            "stone_class": decision.stone_class,
+            "rate_used": decision.rate_used,
+            "computed_price_toman": (
+                format(decision.computed_price_toman, "f")
+                if decision.computed_price_toman is not None
+                else None
+            ),
+            "final_price_toman": decision.final_price_toman,
+            "regular_price_toman": decision.regular_price_toman,
+            "sale_price_toman": decision.sale_price_toman,
+            "price_source": decision.price_source,
+        }
+    )
+
+
+def apply_specs_to_record(
+    source_record: Mapping[str, Any], specs: LegacySpecs
+) -> Dict[str, Any]:
+    record = dict(source_record)
+    flags = list(record.get("review_flags", []))
+    record["legacy_specs"] = specs.all_specs
+    record["spec_category"] = specs.category
+    record["spec_stone_type"] = specs.stone_type
+    record["spec_stone_color"] = specs.stone_color
+    record["spec_band_type"] = specs.band_type
+    record["spec_engraving_type"] = specs.engraving_type
+    record["spec_silver_purity"] = specs.silver_purity
+    record["spec_size"] = specs.size
+    record["spec_weight_grams"] = (
+        format(specs.weight_grams, "f") if specs.weight_grams is not None else None
+    )
+    record["spec_weight_display"] = specs.weight_display
+    record["unknown_spec_labels_seen"] = list(specs.unknown_labels)
+    record["spec_status"] = "FOUND" if specs.found else "MISSING"
+
+    if specs.category and normalize_text(specs.category) != normalize_text(
+        record.get("category_raw")
+    ):
+        flags.append("SPEC_CATEGORY_MISMATCH")
+
+    excel_weight_raw = record.get("excel_weight_grams")
+    if excel_weight_raw in {None, ""}:
+        excel_weight_raw = None
+    excel_weight = parse_weight(excel_weight_raw)
+    live_weight = specs.weight_grams
+    previous_final = record.get("final_price_toman")
+    if excel_weight is not None:
+        record["weight_source"] = "EXCEL"
+        record["weight_grams"] = format(excel_weight, "f")
+        if live_weight is not None and abs(excel_weight - live_weight) > Decimal("0.5"):
+            flags.append("WEIGHT_MISMATCH")
+        record["price_reconciled_from_live_weight"] = False
+    elif live_weight is not None:
+        record["weight_source"] = "LIVE_PAGE"
+        _apply_pricing_to_record(record, live_weight)
+        record["price_reconciled_from_live_weight"] = True
+        flags.append("LIVE_PAGE_WEIGHT_USED_FOR_PRICING")
+        if previous_final != record.get("final_price_toman"):
+            flags.append("PRICE_RECALCULATED_FROM_LIVE_WEIGHT")
+    else:
+        record["weight_source"] = "MISSING"
+        record["weight_grams"] = None
+        record["price_reconciled_from_live_weight"] = False
+
+    description, description_source = generate_unique_description(record, specs)
+    record["description"] = description
+    record["description_source"] = description_source
+    if not specs.found:
+        flags.append("SPECS_MISSING_SEO_FALLBACK")
+    record["review_flags"] = list(dict.fromkeys(flags))
+    record["radman_requires_review"] = "YES" if record["review_flags"] else "NO"
+    return record
+
+
 def _json_safe(value: Any) -> Any:
     if isinstance(value, Decimal):
         return format(value, "f")
@@ -447,7 +855,11 @@ def load_excel_records(
                     "category": category,
                     "excel_price_toman": pricing.excel_price_toman,
                     "pre_discount_price_toman": pricing.pre_discount_price_toman,
+                    "excel_weight_grams": (
+                        format(weight, "f") if weight is not None else None
+                    ),
                     "weight_grams": format(weight, "f") if weight is not None else None,
+                    "weight_source": "EXCEL" if weight is not None else "MISSING",
                     "weight_missing": weight is None,
                     "stock": stock,
                     "availability": availability,
@@ -456,7 +868,25 @@ def load_excel_records(
                     "sku": sku.sku,
                     "sku_source": sku.source,
                     "seo_title": seo_title,
+                    "seo_fallback_description": description or seo_title or title,
                     "description": description or seo_title or title,
+                    "description_source": "SEO_FALLBACK",
+                    "legacy_specs": {},
+                    "spec_category": "",
+                    "spec_stone_type": "",
+                    "spec_stone_color": "",
+                    "spec_band_type": "",
+                    "spec_engraving_type": "",
+                    "spec_silver_purity": "",
+                    "spec_size": "",
+                    "spec_weight_grams": None,
+                    "spec_weight_display": "",
+                    "unknown_spec_labels_seen": [],
+                    "spec_status": "NOT_FETCHED",
+                    "radman_requires_review": (
+                        "YES" if review_flags else "NO"
+                    ),
+                    "price_reconciled_from_live_weight": False,
                     "stone_class": pricing.stone_class,
                     "rate_used": pricing.rate_used,
                     "computed_price_toman": (
@@ -625,7 +1055,7 @@ class LegacyImageDiscovery:
 
     def _try_page(
         self, url: str, strategy: str, legacy_id: int
-    ) -> Optional[Tuple[str, List[str], str]]:
+    ) -> Optional[LegacyPageResult]:
         try:
             source = self.fetcher.fetch_text(url)
         except (OSError, urllib.error.URLError, RuntimeError) as exc:
@@ -640,17 +1070,21 @@ class LegacyImageDiscovery:
             )
             return None
         images = extract_gallery_urls(url, source)
+        specs = extract_legacy_specs(source)
+        found = bool(images or specs.found)
         self.log.append(
             {
                 "legacy_id": legacy_id,
                 "strategy": strategy,
                 "url": url,
-                "status": "FOUND" if images else "NO_GALLERY",
+                "status": "FOUND" if found else "NO_PRODUCT_ASSETS",
                 "images": len(images),
+                "spec_fields": len(specs.all_specs),
+                "unknown_spec_labels": list(specs.unknown_labels),
             }
         )
-        if images:
-            return url, images, strategy
+        if found:
+            return LegacyPageResult(url, tuple(images), strategy, specs)
         return None
 
     def _load_sitemaps(self) -> Dict[int, List[str]]:
@@ -679,7 +1113,7 @@ class LegacyImageDiscovery:
         self._sitemap_by_id = mapping
         return mapping
 
-    def discover(self, legacy_id: int) -> Tuple[str, List[str], str]:
+    def discover(self, legacy_id: int) -> LegacyPageResult:
         self.load_robots()
         direct = (
             f"{BASE_URL}/product/{legacy_id}/",
@@ -727,7 +1161,7 @@ class LegacyImageDiscovery:
                 "status": "MISSING",
             }
         )
-        return "", [], "NOT_FOUND"
+        return LegacyPageResult("", tuple(), "NOT_FOUND", empty_legacy_specs())
 
 
 def _image_extension(url: str, content_type: str) -> str:
@@ -774,7 +1208,11 @@ def fetch_images_for_records(
                 f"[IMAGE] id={legacy_id} strategy=NOT_RUN status=SKIPPED"
             )
             continue
-        legacy_url, image_urls, strategy = service.discover(legacy_id)
+        page = service.discover(legacy_id)
+        record = apply_specs_to_record(record, page.specs)
+        legacy_url = page.url
+        image_urls = list(page.image_urls)
+        strategy = page.strategy
         record["legacy_url"] = legacy_url
         record["image_urls"] = image_urls
         record["image_discovery_strategy"] = strategy
@@ -826,6 +1264,12 @@ def fetch_images_for_records(
         record["original_image_paths"] = originals
         record["downloaded_images"] = downloads
         record["images_found"] = len(originals)
+        if any(item.get("error") for item in downloads):
+            record["review_flags"] = list(
+                dict.fromkeys(
+                    [*record.get("review_flags", []), "IMAGE_DOWNLOAD_ERROR"]
+                )
+            )
         if originals:
             qa = process_product(
                 str(legacy_id),
@@ -845,6 +1289,8 @@ def fetch_images_for_records(
             record["review_flags"] = list(
                 dict.fromkeys([*record.get("review_flags", []), "IMAGES_MISSING"])
             )
+        if record.get("review_flags"):
+            record["radman_requires_review"] = "YES"
         if record.get("action") == "PLAN_CREATE_DRAFT":
             record["action"] = "READY_DRAFT"
         updated.append(record)
@@ -853,6 +1299,30 @@ def fetch_images_for_records(
             f"found={len(originals)} status={record['image_status']}"
         )
     write_json_atomic(run_dir / "image-discovery-log.json", service.log)
+    return updated
+
+
+def fetch_specs_for_records(
+    records: Sequence[Dict[str, Any]],
+    *,
+    run_dir: Path,
+    discovery: Optional[LegacyImageDiscovery] = None,
+) -> List[Dict[str, Any]]:
+    service = discovery or LegacyImageDiscovery()
+    updated: List[Dict[str, Any]] = []
+    for source_record in records:
+        legacy_id = int(source_record["legacy_id"])
+        page = service.discover(legacy_id)
+        record = apply_specs_to_record(source_record, page.specs)
+        record["legacy_url"] = page.url
+        record["image_discovery_strategy"] = page.strategy
+        record["action"] = "ENRICH_READY"
+        updated.append(record)
+        print(
+            f"[SPECS] id={legacy_id} strategy={page.strategy} "
+            f"fields={len(page.specs.all_specs)} description={record['description_source']}"
+        )
+    write_json_atomic(run_dir / "spec-discovery-log.json", service.log)
     return updated
 
 
@@ -880,12 +1350,157 @@ if ($q->posts) {{ echo (string)$q->posts[0]; }}
         raw = self.eval_scalar(php)
         return int(raw) if raw.isdigit() and int(raw) > 0 else None
 
+    def list_draft_legacy_products(self, limit: int) -> List[Dict[str, Any]]:
+        php = f"""
+$q=new WP_Query(array('post_type'=>'product','post_status'=>'draft','posts_per_page'=>{int(limit)},
+ 'meta_key'=>'legacy_product_id','orderby'=>'meta_value_num','order'=>'DESC','fields'=>'ids'));
+$out=array();
+foreach ($q->posts as $id) {{
+ $p=wc_get_product($id);
+ if (!$p) {{ continue; }}
+ $out[]=array(
+  'product_id'=>(int)$id,
+  'legacy_id'=>(string)get_post_meta($id,'legacy_product_id',true),
+  'sku'=>(string)$p->get_sku('edit'),
+  'price'=>(string)$p->get_price('edit'),
+  'regular_price'=>(string)$p->get_regular_price('edit'),
+  'sale_price'=>(string)$p->get_sale_price('edit')
+ );
+}}
+echo wp_json_encode($out);
+"""
+        result = self.eval_json(php)
+        if not isinstance(result, list):
+            raise WPCliError("invalid existing Draft list")
+        return [dict(item) for item in result if isinstance(item, dict)]
+
+    def enrich_existing_draft(
+        self,
+        record: Mapping[str, Any],
+        product_id: int,
+        *,
+        update_price: bool,
+    ) -> Dict[str, Any]:
+        meta = {
+            "legacy_url": str(record.get("legacy_url") or ""),
+            "radman_legacy_specs": json.dumps(
+                record.get("legacy_specs", {}), ensure_ascii=False
+            ),
+            "radman_spec_stone_type": str(record.get("spec_stone_type") or ""),
+            "radman_spec_stone_color": str(record.get("spec_stone_color") or ""),
+            "radman_spec_band_type": str(record.get("spec_band_type") or ""),
+            "radman_spec_engraving_type": str(
+                record.get("spec_engraving_type") or ""
+            ),
+            "radman_spec_silver_purity": str(
+                record.get("spec_silver_purity") or ""
+            ),
+            "radman_spec_size": str(record.get("spec_size") or ""),
+            "radman_spec_weight_grams": str(
+                record.get("spec_weight_grams") or ""
+            ),
+            "radman_spec_weight_display": str(
+                record.get("spec_weight_display") or ""
+            ),
+            "weight_source": str(record.get("weight_source") or "MISSING"),
+            "description_source": str(
+                record.get("description_source") or "SEO_FALLBACK"
+            ),
+            "radman_requires_review": str(
+                record.get("radman_requires_review") or "NO"
+            ),
+            "unknown_spec_labels_seen": ",".join(
+                record.get("unknown_spec_labels_seen", [])
+            ),
+            "weight_grams": str(record.get("weight_grams") or ""),
+            "silver_weight_grams": str(record.get("weight_grams") or ""),
+            "price_source": str(record.get("price_source") or ""),
+            "rate_used": str(record.get("rate_used") or ""),
+            "computed_price": str(record.get("computed_price_toman") or ""),
+            "final_price": str(record.get("final_price_toman") or ""),
+            "radman_review_flags": " | ".join(record.get("review_flags", [])),
+            "radman_import_source": "excel_1000_pipeline",
+            "radman_import_version": PIPELINE_VERSION,
+        }
+        payload = {
+            "product_id": int(product_id),
+            "legacy_id": str(record["legacy_id"]),
+            "description": str(record.get("description") or ""),
+            "short_description": (
+                str(record.get("seo_fallback_description") or "")
+                if record.get("description_source") == "SEO_FALLBACK"
+                else ""
+            ),
+            "update_price": bool(update_price),
+            "regular_price": record.get("regular_price_toman"),
+            "sale_price": record.get("sale_price_toman"),
+            "meta": meta,
+        }
+        encoded = _b64(
+            json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+        )
+        php = f"""
+$d=json_decode(base64_decode('{encoded}'), true);
+$p=wc_get_product((int)$d['product_id']);
+if (!$p || $p->get_status('edit') !== 'draft') {{ fwrite(STDERR, 'Draft product not found'); exit(12); }}
+$legacy=(string)$p->get_meta('legacy_product_id', true, 'edit');
+if ($legacy !== (string)$d['legacy_id']) {{ fwrite(STDERR, 'legacy ID mismatch'); exit(13); }}
+$p->set_description($d['description']);
+$p->set_short_description($d['short_description']);
+if ($d['update_price']) {{
+ $p->set_regular_price((string)$d['regular_price']);
+ if ($d['sale_price'] !== null) {{
+  $p->set_sale_price((string)$d['sale_price']);
+  $p->set_price((string)$d['sale_price']);
+ }} else {{
+  $p->set_sale_price('');
+  $p->set_price((string)$d['regular_price']);
+ }}
+}}
+foreach ($d['meta'] as $key=>$value) {{ $p->update_meta_data($key, (string)$value); }}
+$id=$p->save();
+echo wp_json_encode(array('id'=>(int)$id,'status'=>$p->get_status('edit'),'price_updated'=>(bool)$d['update_price']));
+"""
+        result = self.eval_json(php)
+        if not isinstance(result, dict) or result.get("status") != "draft":
+            raise WPCliError(f"invalid enrichment result for {record['legacy_id']}")
+        return dict(result)
+
     def create_excel_draft(self, record: Mapping[str, Any], category_id: int) -> int:
         metadata = {
             "legacy_product_id": str(record["legacy_id"]),
             "_legacy_store_id": str(record["legacy_id"]),
             "legacy_raw_code": str(record.get("raw_code") or ""),
             "legacy_url": str(record.get("legacy_url") or ""),
+            "radman_legacy_specs": json.dumps(
+                record.get("legacy_specs", {}), ensure_ascii=False
+            ),
+            "radman_spec_stone_type": str(record.get("spec_stone_type") or ""),
+            "radman_spec_stone_color": str(record.get("spec_stone_color") or ""),
+            "radman_spec_band_type": str(record.get("spec_band_type") or ""),
+            "radman_spec_engraving_type": str(
+                record.get("spec_engraving_type") or ""
+            ),
+            "radman_spec_silver_purity": str(
+                record.get("spec_silver_purity") or ""
+            ),
+            "radman_spec_size": str(record.get("spec_size") or ""),
+            "radman_spec_weight_grams": str(
+                record.get("spec_weight_grams") or ""
+            ),
+            "radman_spec_weight_display": str(
+                record.get("spec_weight_display") or ""
+            ),
+            "weight_source": str(record.get("weight_source") or "MISSING"),
+            "description_source": str(
+                record.get("description_source") or "SEO_FALLBACK"
+            ),
+            "radman_requires_review": str(
+                record.get("radman_requires_review") or "NO"
+            ),
+            "unknown_spec_labels_seen": ",".join(
+                record.get("unknown_spec_labels_seen", [])
+            ),
             "weight_grams": str(record.get("weight_grams") or ""),
             "silver_weight_grams": str(record.get("weight_grams") or ""),
             "price_source": str(record["price_source"]),
@@ -915,6 +1530,11 @@ if ($q->posts) {{ echo (string)$q->posts[0]; }}
             "sku": record["sku"],
             "name": record["title"],
             "description": record["description"],
+            "short_description": (
+                str(record.get("seo_fallback_description") or "")
+                if record.get("description_source") == "SEO_FALLBACK"
+                else ""
+            ),
             "category_id": int(category_id),
             "regular_price": int(record["regular_price_toman"]),
             "sale_price": record.get("sale_price_toman"),
@@ -942,7 +1562,7 @@ $p->set_status('draft');
 $p->set_catalog_visibility('visible');
 $p->set_name($d['name']);
 $p->set_description($d['description']);
-$p->set_short_description('');
+$p->set_short_description($d['short_description']);
 $p->set_regular_price((string)$d['regular_price']);
 if ($d['sale_price'] !== null) {{
  $p->set_sale_price((string)$d['sale_price']);
@@ -1054,6 +1674,9 @@ def import_records(
                 }
             )
             continue
+        record["radman_requires_review"] = (
+            "YES" if record.get("review_flags") else "NO"
+        )
         valid_media: List[Path] = []
         for raw_path in record.get("selected_import_paths", []):
             path = Path(raw_path)
@@ -1097,6 +1720,76 @@ def import_records(
     return actions
 
 
+def enrich_existing_records(
+    records: Sequence[Dict[str, Any]],
+    gateway: ExcelDraftGateway,
+) -> List[Dict[str, Any]]:
+    actions: List[Dict[str, Any]] = []
+    for record in records:
+        product_id = int(record["wordpress_product_id"])
+        current_price = _positive_toman(record.get("wordpress_current_price"))
+        final_price = record.get("final_price_toman")
+        update_price = bool(
+            record.get("price_reconciled_from_live_weight")
+            and final_price is not None
+            and current_price != int(final_price)
+        )
+        result = gateway.enrich_existing_draft(
+            record,
+            product_id,
+            update_price=update_price,
+        )
+        record["action"] = "ENRICHED_DRAFT"
+        record["price_updated_during_enrichment"] = bool(
+            result.get("price_updated")
+        )
+        actions.append(
+            {
+                "legacy_id": record["legacy_id"],
+                "sku": record["sku"],
+                "product_id": product_id,
+                "action": "ENRICHED_DRAFT",
+                "description_source": record.get("description_source"),
+                "weight_source": record.get("weight_source"),
+                "price_updated": bool(result.get("price_updated")),
+                "review_flags": list(record.get("review_flags", [])),
+            }
+        )
+    return actions
+
+
+def prepare_existing_enrichment(
+    all_excel_records: Sequence[Dict[str, Any]],
+    gateway: ExcelDraftGateway,
+    max_products: int,
+) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    existing = gateway.list_draft_legacy_products(max_products)
+    by_legacy_id = {
+        str(record["legacy_id"]): dict(record) for record in all_excel_records
+    }
+    matched: List[Dict[str, Any]] = []
+    missing: List[Dict[str, Any]] = []
+    for item in existing:
+        legacy_id = str(item.get("legacy_id") or "")
+        excel_record = by_legacy_id.get(legacy_id)
+        if excel_record is None:
+            missing.append(
+                {
+                    "legacy_id": legacy_id,
+                    "wordpress_product_id": item.get("product_id"),
+                    "action": "SKIP_LEGACY_ID_NOT_IN_EXCEL",
+                }
+            )
+            continue
+        excel_record["wordpress_product_id"] = int(item["product_id"])
+        excel_record["wordpress_current_price"] = item.get("price")
+        excel_record["wordpress_regular_price"] = item.get("regular_price")
+        excel_record["wordpress_sale_price"] = item.get("sale_price")
+        excel_record["sku"] = str(item.get("sku") or excel_record["sku"])
+        matched.append(excel_record)
+    return matched, missing
+
+
 def now_slug() -> str:
     return datetime.now(TEHRAN).strftime("%Y%m%dT%H%M%S%f%z")
 
@@ -1130,6 +1823,16 @@ def _report_row(record: Mapping[str, Any]) -> Dict[str, Any]:
         "price_source": record.get("price_source", ""),
         "rate_used": record.get("rate_used", ""),
         "stone_class": record.get("stone_class", ""),
+        "stone_type": record.get("spec_stone_type", ""),
+        "stone_color": record.get("spec_stone_color", ""),
+        "band_type": record.get("spec_band_type", ""),
+        "silver_purity": record.get("spec_silver_purity", ""),
+        "spec_weight": record.get("spec_weight_grams") or "",
+        "weight_source": record.get("weight_source", "MISSING"),
+        "description_source": record.get("description_source", "SEO_FALLBACK"),
+        "unknown_spec_labels_seen": ",".join(
+            record.get("unknown_spec_labels_seen", [])
+        ),
         "stock": record.get("stock", 0),
         "images_found": record.get("images_found", 0),
         "image_status": record.get("image_status", ""),
@@ -1161,6 +1864,14 @@ def write_reports(
 
     missing_images = sum(record.get("image_status") == "MISSING" for record in records)
     review = sum(bool(record.get("review_flags")) for record in records)
+    specs_template_count = sum(
+        record.get("description_source") == "SPECS_TEMPLATE" for record in records
+    )
+    unknown_labels = Counter(
+        label
+        for record in records
+        for label in record.get("unknown_spec_labels_seen", [])
+    )
     lines = [
         "گزارش خط لوله Excel برای جدیدترین محصولات رادمان",
         f"زمان: {datetime.now(TEHRAN).isoformat(timespec='seconds')}",
@@ -1172,26 +1883,38 @@ def write_reports(
         f"غیرفعال ردشده: {selection_summary.get('inactive_skipped', 0)}",
         f"ناموجود ردشده: {selection_summary.get('unavailable_skipped', 0)}",
         f"بدون تصویر: {missing_images}",
+        f"توضیح ساخته‌شده از مشخصات واقعی: {specs_template_count}",
         f"نیازمند بازبینی: {review}",
+        "برچسب‌های مشخصات ناشناخته در batch: "
+        + (
+            "، ".join(f"{label} ({count})" for label, count in unknown_labels.items())
+            if unknown_labels
+            else "ندارد"
+        ),
         "",
-        "id | sku | منبع SKU | عنوان | دسته | وزن | قیمت Excel | محاسبه | نهایی | منبع قیمت | نگین | موجودی | تصویر | اقدام | بازبینی",
+        "id | sku | منبع SKU | عنوان | دسته | وزن/منبع | قیمت Excel | محاسبه | نهایی | منبع قیمت | سنگ/رنگ/رکاب | منبع توضیح | موجودی | تصویر | اقدام | بازبینی",
     ]
     for record in records:
         lines.append(
             "{legacy_id} | {sku} | {sku_source} | {title} | {category} | "
-            "{weight} | {excel} | {computed} | {final} | {source} | {stone} | "
+            "{weight}/{weight_source} | {excel} | {computed} | {final} | {source} | "
+            "{stone}/{color}/{band} | {description_source} | "
             "{stock} | {image} | {action} | {flags}".format(
                 legacy_id=record.get("legacy_id"),
                 sku=record.get("sku"),
                 sku_source=record.get("sku_source"),
                 title=str(record.get("title", "")).replace("|", "/"),
                 category=record.get("category"),
-                weight=record.get("weight_grams") or "—",
+                weight=record.get("spec_weight_grams") or record.get("weight_grams") or "—",
+                weight_source=record.get("weight_source") or "MISSING",
                 excel=record.get("excel_price_toman") or "—",
                 computed=record.get("computed_price_toman") or "—",
                 final=record.get("final_price_toman") or "—",
                 source=record.get("price_source"),
-                stone=record.get("stone_class"),
+                stone=record.get("spec_stone_type") or record.get("stone_class") or "—",
+                color=record.get("spec_stone_color") or "—",
+                band=record.get("spec_band_type") or "—",
+                description_source=record.get("description_source") or "SEO_FALLBACK",
                 stock=record.get("stock"),
                 image=record.get("image_status"),
                 action=record.get("action"),
@@ -1305,6 +2028,7 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     modes.add_argument("--plan", action="store_true")
     modes.add_argument("--fetch-images", action="store_true")
     modes.add_argument("--import-drafts", action="store_true")
+    modes.add_argument("--enrich-existing", action="store_true")
     modes.add_argument("--full-pilot", action="store_true")
     parser.add_argument("--excel", type=Path, default=DEFAULT_EXCEL_FILE)
     parser.add_argument("--max-products", type=int, default=DEFAULT_MAX_PRODUCTS)
@@ -1326,6 +2050,56 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     try:
         if args.inspect:
             inspect_excel(args.excel, args.max_products)
+            return 0
+
+        if args.enrich_existing:
+            require_import_environment(args.wp_path)
+            all_records, excel_warnings = load_excel_records(args.excel)
+            gateway = ExcelDraftGateway(args.wp_path)
+            matched, missing = prepare_existing_enrichment(
+                all_records, gateway, args.max_products
+            )
+            if not matched and not missing:
+                raise ExcelPipelineError(
+                    "هیچ Draft دارای meta legacy_product_id برای enrichment پیدا نشد"
+                )
+            run_stamp = now_slug()
+            run_dir = (
+                private_dir
+                / "legacy-cache"
+                / "runs"
+                / f"excel-enrich-{run_stamp}"
+            )
+            enriched = fetch_specs_for_records(
+                matched,
+                run_dir=run_dir,
+            )
+            actions = enrich_existing_records(enriched, gateway)
+            actions.extend(missing)
+            selection = {
+                "excel_rows": len(all_records),
+                "eligible_rows": len(matched),
+                "selected_rows": len(matched),
+                "inactive_skipped": 0,
+                "unavailable_skipped": 0,
+            }
+            payload = {
+                "generated_at": datetime.now(TEHRAN).isoformat(),
+                "run_stamp": run_stamp,
+                "pipeline_version": PIPELINE_VERSION,
+                "mode": "enrich-existing",
+                "excel_file": str(args.excel.expanduser().resolve()),
+                "excel_warnings": excel_warnings,
+                "products": enriched,
+                "actions": actions,
+            }
+            write_json_atomic(run_dir / "enrichment-results.json", payload)
+            write_json_atomic(run_dir / "import-actions.json", actions)
+            write_reports(enriched, run_dir, run_stamp, selection)
+            print(
+                f"[ENRICH] matched={len(enriched)} missing_excel={len(missing)} "
+                "Draft descriptions/meta updated idempotently"
+            )
             return 0
 
         if args.import_drafts:

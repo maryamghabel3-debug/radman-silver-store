@@ -84,6 +84,20 @@ bash scripts/run_excel_import.sh --import-drafts \
 
 runner قبل از اجرای Python یک backup دیتابیس خصوصی می‌سازد. manifest صرفاً plan با `image_status=NOT_FETCHED` قابل import نیست؛ ابتدا باید `--fetch-images` اجرا شود. محصولی که پس از تمام strategyها تصویر ندارد، `image_status=MISSING` می‌گیرد ولی همچنان Draft ساخته می‌شود.
 
+### enrich-existing — اصلاح Draftهای موجود با مشخصات واقعی
+
+این mode فقط Draftهای دارای meta `legacy_product_id` را با Excel تطبیق می‌دهد، همان صفحه ID-based را یک‌بار fetch می‌کند، specificationها و توضیح یکتا را می‌سازد و post content/meta را idempotent به‌روزرسانی می‌کند. stock، category و image دست‌نخورده می‌مانند. قیمت فقط وقتی تغییر می‌کند که وزن Excel خالی و وزن live قابل‌استفاده باشد و محاسبه جدید final را تغییر دهد.
+
+```bash
+export APP_ENV=staging
+export WP_URL=https://staging.radmansilver.ir
+export WP_PATH=/home/radmansi/staging.radmansilver.ir
+export CONFIRM_STAGING_APPLY=YES
+export RADMAN_PRIVATE_DIR=/home/radmansi/private
+
+MAX_PRODUCTS=20 bash scripts/run_excel_import.sh --enrich-existing
+```
+
 ### full-pilot — هزار محصول
 
 ```bash
@@ -145,6 +159,31 @@ final = ceil(selected / 50000) × 50000
 - failure رنگ/detail → فایل اصلی انتخاب می‌شود؛
 - تصویر اول featured و بقیه gallery با ترتیب source هستند.
 
+## مشخصات واقعی و توضیح یکتا (PR-29)
+
+همان HTTP response که برای gallery استفاده می‌شود، بخش «مشخصات» را نیز parse می‌کند؛ round-trip دوم انجام نمی‌شود. pairهای `label:value` با جداکننده `·` مستقل از ترتیب/تعداد خوانده می‌شوند. labelهای شناخته‌شده دسته‌بندی، وزن، نوع رکاب، رنگ نگین، نوع سنگ، نوع حکاکی، عیار نقره و سایز هستند؛ label ناشناخته نیز در JSON حفظ و در گزارش batch فهرست می‌شود.
+
+متادیتا:
+
+```text
+radman_legacy_specs
+radman_spec_stone_type
+radman_spec_stone_color
+radman_spec_band_type
+radman_spec_engraving_type
+radman_spec_silver_purity
+radman_spec_size
+radman_spec_weight_grams
+radman_spec_weight_display
+weight_source
+description_source
+radman_requires_review
+```
+
+اگر وزن Excel خالی و وزن live معتبر باشد، `weight_source=LIVE_PAGE` و قیمت دوباره با نرخ PR-28 محاسبه می‌شود. اگر وزن Excel موجود باشد، `weight_source=EXCEL` باقی می‌ماند؛ اختلاف بیش از `0.5g` فقط `WEIGHT_MISMATCH` و review ایجاد می‌کند.
+
+وقتی مشخصات وجود دارد، description قابل‌مشاهده از title، category، سنگ/رنگ، رکاب، وزن، حکاکی، سایز، labelهای اضافی و کد مدل ساخته می‌شود (`SPECS_TEMPLATE`). متن عمومی COL 29 در این حالت استفاده نمی‌شود. فقط در نبود کامل spec، COL 29/COL 28 به‌صورت `SEO_FALLBACK` مجاز است. اجرای `--full-pilot` برای batchهای 100/1000 این enrichment را به‌طور پیش‌فرض انجام می‌دهد.
+
 ## گزارش‌ها
 
 ```text
@@ -157,7 +196,7 @@ RADMAN_PRIVATE_DIR/legacy-cache/runs/excel-import-<timestamp>/
 └── excel-import-<timestamp>-fa.txt
 ```
 
-هر ردیف گزارش شامل ID، SKU/source، عنوان، دسته، وزن، قیمت Excel/computed/final، price source، stone class، stock، تصویر، action و review flags است.
+هر ردیف گزارش شامل ID، SKU/source، عنوان، دسته، وزن، قیمت Excel/computed/final، price source، stone class، stone type/color، band type، purity، spec weight، weight/description source، labelهای ناشناخته، stock، تصویر، action و review flags است. TXT همچنین فراوانی همه labelهای ناشناخته batch را جمع‌بندی می‌کند.
 
 ## failure و rollback
 
