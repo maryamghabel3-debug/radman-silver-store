@@ -45,6 +45,7 @@
 - [docs/PRICING-RULES.md](docs/PRICING-RULES.md) — Simplified daily silver gram rate pricing (`price = weight * daily_rate`), 4 official pricing modes, and Telegram rate confirmation.
 - [docs/LEGACY-API-ACCESS-STRATEGY.md](docs/LEGACY-API-ACCESS-STRATEGY.md) — Admin Panel API architecture, Iranian hosting server requirement (`[HOSTING VENDOR / PLAN / ARCHITECTURE: TBD — pending technical due diligence]`), and read-only field audit workflow.
 - [docs/LEGACY-CATALOG-ANALYSIS.md](docs/LEGACY-CATALOG-ANALYSIS.md) — Public-only legacy catalog structure, category mapping, field coverage, quality risks, and owner-review extraction approach.
+- [docs/EXCEL-CATALOG-ANALYSIS.md](docs/EXCEL-CATALOG-ANALYSIS.md) / [scripts/run_catalog_analysis.sh](scripts/run_catalog_analysis.sh) — Read-only analysis of the owner XLSX export: all category counts, ID endpoints, weight/price/stock coverage, and a proposed two-level taxonomy; no WordPress, media, network, or import action.
 - [docs/ORIGINAL-PRODUCT-IMPORT-RUNBOOK.md](docs/ORIGINAL-PRODUCT-IMPORT-RUNBOOK.md) — Owner-facing automatic scrape → image QA → gemstone classification → Toman floor → create-only Draft procedure; no manual source CSV.
 - [docs/ORIGINAL-IMAGE-PROCESSING-RUNBOOK.md](docs/ORIGINAL-IMAGE-PROCESSING-RUNBOOK.md) — Original-byte archive, color/detail gates, before/after sheets, and untouched-original fallback policy.
 - [docs/GEMSTONE-CLASSIFICATION-RUNBOOK.md](docs/GEMSTONE-CLASSIFICATION-RUNBOOK.md) — Text-first four-class ring classifier and the conservative confidence `0.85` gate.
