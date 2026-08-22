@@ -58,8 +58,8 @@ def test_no_importer_sets_sale_price() -> None:
     assert "set_sale_price" not in combined
     assert not re.search(r"[\"']sale_price[\"']\s*[:=]", combined)
     assert "sale_price_toman" not in combined
-    assert "delete_post_meta($p->get_id(), '_sale_price')" in combined
     assert "delete_post_meta($id, '_sale_price')" in combined
+    assert "update_post_meta($id, '_price', $luxury_regular)" in combined
     assert "delete_post_meta({pid}, '_sale_price')" in combined
     assert "$p->set_price((string)$d['regular_price']);" in combined
     assert "$p->set_price((string) $d['price']);" in combined

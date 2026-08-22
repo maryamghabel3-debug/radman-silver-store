@@ -86,7 +86,7 @@ runner قبل از اجرای Python یک backup دیتابیس خصوصی می�
 
 ### enrich-existing — اصلاح Draftهای موجود با مشخصات واقعی
 
-این mode فقط Draftهای دارای meta `legacy_product_id` را با Excel تطبیق می‌دهد، همان صفحه ID-based را یک‌بار fetch می‌کند، specificationها و توضیح یکتا را می‌سازد و post content/meta را idempotent به‌روزرسانی می‌کند. stock، category و image دست‌نخورده می‌مانند. قیمت فقط وقتی تغییر می‌کند که وزن Excel خالی و وزن live قابل‌استفاده باشد و محاسبه جدید final را تغییر دهد.
+این mode فقط Draftهای دارای meta `legacy_product_id` را با Excel تطبیق می‌دهد، همان صفحه ID-based را یک‌بار fetch می‌کند، title عمومی را پاک می‌کند، specificationها و توضیح یکتا را می‌سازد و post title/content/meta را idempotent به‌روزرسانی می‌کند. محصول recreate نمی‌شود و SKU فعلی، stock، category، featured image، gallery و Draft status دست‌نخورده می‌مانند. قیمت فقط وقتی تغییر می‌کند که وزن Excel خالی و وزن live قابل‌استفاده باشد و محاسبه جدید final را تغییر دهد.
 
 ```bash
 export APP_ENV=staging
@@ -119,6 +119,38 @@ MAX_PRODUCTS=1000 bash scripts/run_excel_import.sh --full-pilot
 3. در غیر این صورت `NM-<legacy_id>`.
 
 ارقام فارسی/عربی به لاتین تبدیل می‌شوند. مقدار خام ستون ۲۷ همیشه در `legacy_raw_code` و ID در `legacy_product_id` نگهداری می‌شود. conflict SKU در WordPress skip/report است و محصول موجود overwrite نمی‌شود.
+
+## عنوان عمومی لوکس و هویت legacy (PR-30A)
+
+suffix صریح انتهای عنوان مانند `کد 1058`، `کد مدل 1007`، `کد محصول 1008` یا `شناسه کالا 1057` از `post_title` حذف می‌شود. اعداد معنادار بدون label، از جمله `عیار 925` و `طرح 12 پر`، حذف نمی‌شوند. کد normalize‌شده همچنان SKU و ردیف قابل‌مشاهده «کد مدل» در مشخصات است.
+
+متادیتای private زیر mapping کامل را حفظ می‌کند:
+
+```text
+legacy_product_id
+radman_legacy_code
+legacy_raw_code
+legacy_original_title
+legacy_url
+legacy_identity_key
+legacy_title_cleanup_status
+legacy_title_cleanup_timestamp
+```
+
+در `--enrich-existing` محصول Draft موجود با `legacy_product_id` update می‌شود و recreate نمی‌شود. اگر کد انتهای عنوان با SKU فعلی متفاوت باشد، SKU تغییر نمی‌کند؛ `SKU_TITLE_MISMATCH` و review ثبت می‌شود. title/description/meta و در صورت reconciliation مجاز price تغییر می‌کنند؛ featured image، gallery، category، stock و Draft status دست‌نخورده می‌مانند.
+
+گزارش read-only هویت:
+
+```bash
+APP_ENV=staging \
+WP_URL=https://staging.radmansilver.ir \
+WP_PATH=/home/radmansi/staging.radmansilver.ir \
+RADMAN_PRIVATE_DIR=/home/radmansi/private \
+MAX_PRODUCTS=20 \
+bash scripts/run_excel_import.sh --identity-report
+```
+
+WooCommerce Admin به‌طور استاندارد SKU را جست‌وجو می‌کند؛ customization اضافه لازم نیست. agentها می‌توانند با `legacy_product_id`، `legacy_url` یا `legacy_identity_key` reconciliation کنند.
 
 ## قیمت‌گذاری تومانی
 

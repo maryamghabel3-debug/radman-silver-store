@@ -16,7 +16,7 @@
 ---
 
 ## Phase 3: AI Agent Product Migration & Pricing Engine (IN PROGRESS ⏳)
-- [x] Build PR-28/PR-29 repository tooling for the owner Excel as definitive data source: select up to 1000 newest eligible products by descending legacy ID, derive auditable SKUs/prices/categories/stock, fetch original galleries and real specification blocks by ID, reconcile weights, generate unique descriptions, preserve color, enrich existing Drafts, and create guarded future Drafts with reports.
+- [x] Build PR-28/PR-29/PR-30A repository tooling for the owner Excel as definitive data source: select newest eligible products, preserve auditable SKU/legacy mapping, fetch gallery/specs by ID, reconcile weights, generate unique descriptions, clean public titles without losing model codes, provide identity reports, enrich existing Drafts in place, and create guarded future Drafts.
 - [x] Deprecate PR-25 web scraping for product data; retain it only for history/offline regressions. Public legacy access is gallery-image-only in the current path.
 - [ ] Owner runs `MAX_PRODUCTS=20 ... --plan`, reviews pricing/SKU/category flags, then authorizes staged image fetch/import.
 - [ ] Owner runs the 1000-product full pilot on MizbanFa; no live Excel import or WordPress mutation is claimed by the repository.
