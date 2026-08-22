@@ -74,9 +74,10 @@
 - [STRATEGY-CONTENT-WRITING-GUIDELINES.md](STRATEGY-CONTENT-WRITING-GUIDELINES.md) — صدای برند، قواعد زبان فارسی، چک‌لیست بازبینی، و قالب‌های (templates) صفحه محصول/دسته/مقاله/FAQ.
 
 ### Phase 4 — Agent Integration & Testing (NEXT)
-- ✅ **PR-25 repository tooling ready (reviewed `2026-08-21, Asia/Tehran`):** پروفایل جداگانه حداکثر ۱۰ محصول واقعی، آرشیو تصویر اصلی به تفکیک `legacy_id`، QA رنگ/جزئیات با original fallback، classifier محافظه‌کارانه نگین، قیمت‌گذاری Decimal تومانی، نگاشت کد قدیمی، گزارش CSV/فارسی، و import create-only Draft در مخزن پیاده‌سازی و با mock-10 آفلاین تست شده است.
-- ⏳ **Owner host execution pending:** scrape زنده، sheet review و import Draft روی MizbanFa داخل ایران هنوز انجام نشده و هیچ موفقیت میزبان/WordPress برای PR-25 ادعا نمی‌شود. راهنما: [ORIGINAL-PRODUCT-IMPORT-RUNBOOK.md](ORIGINAL-PRODUCT-IMPORT-RUNBOOK.md).
-- نرخ موقت فقط برای این overlay: `590000` تومان/گرم برای انگشتر `large_stone` با confidence حداقل `0.85`؛ `650000` برای سایر موارد؛ انتخاب max قیمت visible قدیمی/کف وزنی و گردکردن رو به بالا به `50000`. همه قیمت‌های legacy تومان‌اند و تبدیل ×/÷۱۰ ممنوع است.
+- ✅ **PR-28 Excel pipeline repository-ready:** فایل Excel مالک منبع قطعی داده است؛ انتخاب حداکثر ۱۰۰۰ محصول فعال/موجود با ID نزولی، استخراج SKU محافظه‌کارانه، قیمت‌گذاری Decimal تومانی، stock واقعی، discovery تصویر فقط با ID، QA رنگ و import create-only Draft پیاده‌سازی و با fixture آفلاین تست شده است.
+- ⚠️ **PR-25 data scraping deprecated:** ابزار پیشین فقط برای تاریخچه/تست باقی می‌ماند. web/API در مسیر جاری فقط gallery تصویر را تأمین می‌کند.
+- ⏳ **Owner host execution pending:** plan، image fetch و import واقعی Excel روی MizbanFa هنوز اجرا نشده است. راهنما: [EXCEL-1000-PRODUCT-IMPORT-RUNBOOK.md](EXCEL-1000-PRODUCT-IMPORT-RUNBOOK.md).
+- نرخ PR-28: `590000` فقط برای عنوان دارای «درشت/بزرگ» نزدیک «نگین/عقیق»؛ `650000` برای سایر/نامطمئن؛ max قیمت Excel/کف وزنی و گردکردن رو به بالا به `50000`. همه قیمت‌ها تومان‌اند.
 - استقرار `Agent-LegacySync` (مشروط به تأیید اتصال و Python/Cron).
 - ایمپورت دسته اول محصولات به‌صورت Draft (۵۰ محصول؛ پس از ارزیابی پایلوت ۱۰تایی و تأیید صریح مالک).
 - استقرار `Agent-Pricing` با ورود نرخ روزانه از طریق تلگرام.

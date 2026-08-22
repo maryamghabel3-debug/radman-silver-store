@@ -112,7 +112,7 @@ def test_category_counting_and_catalog_stats() -> None:
             analysis, source_path=xlsx, sheet_name=analyzer.SHEET_NAME
         )
         assert "تعداد دسته یکتای غیرخالی: **3**" in report
-        assert "**فرض اعلام‌شده مالک:** ID پایین‌تر یعنی محصول جدیدتر" in report
+        assert "**ساختار نهایی تأییدشده مالک:** ID بالاتر یعنی محصول جدیدتر" in report
         assert "| 1 | انگشتر عقیق مردانه | 3 |" in report
         assert "| 1 | انگشتر جدید یک | 100,000 | 5.500 |" in report
         assert "| 3643 | محصول بدون دسته | 900,000 | — |" in report
@@ -212,7 +212,7 @@ def test_runner_and_no_mutation_contract() -> None:
         assert sha256(xlsx) == before
         assert "[SAVED]" in result.stdout
         assert "No WordPress" not in result.stderr
-        assert "ID پایین‌تر یعنی محصول جدیدتر" in reports[0].read_text(
+        assert "ID بالاتر یعنی محصول جدیدتر" in reports[0].read_text(
             encoding="utf-8"
         )
         created = sorted(

@@ -121,4 +121,20 @@ necklace, 10g, legacy 7,001,000:
 max(7,001,000, 6,500,000) = 7,001,000 → 7,050,000 Toman
 ```
 
-Implementation: `agents/lib/legacy_pricing.py`. Operator procedure: [ORIGINAL-PRODUCT-IMPORT-RUNBOOK.md](ORIGINAL-PRODUCT-IMPORT-RUNBOOK.md).
+Implementation: `agents/lib/legacy_pricing.py`. Historical operator procedure: [ORIGINAL-PRODUCT-IMPORT-RUNBOOK.md](ORIGINAL-PRODUCT-IMPORT-RUNBOOK.md).
+
+---
+
+## 6. PR-28 Excel title-only pricing overlay
+
+PR-28 uses current Toman price from Excel COL 9 as the trusted baseline. Data scraping and Rial conversion are forbidden.
+
+- explicit «درشت»/«بزرگ» within 20 normalized characters of «نگین»/«عقیق» → `large_stone`, `590000` Toman/gram;
+- all other titles, including uncertainty → `650000` Toman/gram.
+
+```text
+weight exists: final = ceil(max(COL9, Decimal(weight) × rate) / 50000) × 50000
+weight missing: final = ceil(COL9 / 50000) × 50000
+```
+
+`price_source` is `MAX_EXCEL` or `MAX_CALCULATED` when weight exists and `EXCEL_ONLY` when absent. COL 10 becomes regular price only when it is greater than final; then final is sale price. Otherwise regular price is final and no sale price is set. See [EXCEL-1000-PRODUCT-IMPORT-RUNBOOK.md](EXCEL-1000-PRODUCT-IMPORT-RUNBOOK.md).

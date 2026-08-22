@@ -1,0 +1,20 @@
+{
+  "headers": [
+    "شناسه", "نام", "ستون 3", "ستون 4", "نام دسته اصلی",
+    "ستون 6", "ستون 7", "ستون 8", "قیمت", "قیمت قبل از تخفیف",
+    "موجودی", "نوع موجودی", "فعال بودن", "ستون 14", "ستون 15",
+    "ستون 16", "ستون 17", "ستون 18", "ستون 19", "ستون 20",
+    "ستون 21", "وزن", "ستون 23", "ستون 24", "ستون 25",
+    "ستون 26", "شناسه کالا", "عنوان سئو", "توضیحات سئو"
+  ],
+  "products": [
+    {"id": "۳۶۴۳", "title": "انگشتر نقره کد 1058", "category": "انگشتر های خطی", "price": "۷٬۶۸۹٬۰۰۰", "pre_discount": "۸٬۰۰۰٬۰۰۰", "stock": "۲", "availability": "محدود", "active": "۱", "weight": null, "raw_code": "2079000.0000000002", "seo_title": "عنوان ۳۶۴۳", "seo_description": "توضیح محصول ۳۶۴۳"},
+    {"id": 3642, "title": "گردنبند فیروزه", "category": "مدال نقره", "price": 2079000, "pre_discount": null, "stock": 1, "availability": "محدود", "active": 1, "weight": 2, "raw_code": "2079000.0000000002", "seo_title": "عنوان 3642", "seo_description": ""},
+    {"id": 3641, "title": "دستبند نقره", "category": "دستبند مردانه", "price": 1000000, "pre_discount": 1200000, "stock": 3, "availability": "محدود", "active": 1, "weight": "۱٫۰", "raw_code": "۱۰۵۹", "seo_title": "عنوان 3641", "seo_description": "توضیح 3641"},
+    {"id": 3640, "title": "انگشتر با نگین درشت عقیق", "category": "انگشتر عقیق", "price": 5000000, "pre_discount": 5500000, "stock": 1, "availability": "محدود", "active": 1, "weight": 10, "raw_code": 999, "seo_title": "عنوان 3640", "seo_description": "توضیح 3640"},
+    {"id": 3639, "title": "انگشتر بدون وزن", "category": "انگشتر زنانه", "price": 7689000, "pre_discount": 7000000, "stock": 4, "availability": "محدود", "active": 1, "weight": null, "raw_code": null, "seo_title": "عنوان 3639", "seo_description": ""},
+    {"id": 3638, "title": "محصول غیرفعال", "category": "انگشتر", "price": 1000000, "pre_discount": null, "stock": 1, "availability": "محدود", "active": 0, "weight": 1, "raw_code": 88, "seo_title": "", "seo_description": ""},
+    {"id": 3637, "title": "محصول ناموجود", "category": "دستبند", "price": 1000000, "pre_discount": null, "stock": 0, "availability": "ناموجود", "active": 1, "weight": 1, "raw_code": 89, "seo_title": "", "seo_description": ""},
+    {"id": 3636, "title": "محصول دسته ناشناخته", "category": "سایر زیورآلات", "price": 1000000, "pre_discount": null, "stock": "5.7", "availability": "محدود", "active": 1, "weight": 2, "raw_code": "قیمت 1000000", "seo_title": "عنوان 3636", "seo_description": "توضیح 3636"}
+  ]
+}
