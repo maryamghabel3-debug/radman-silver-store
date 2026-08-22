@@ -129,7 +129,13 @@ Required Draft metadata:
 | `image_discovery_strategy` | Direct ID, site search, sitemap cache, or not found |
 | `excel_category_raw`, `excel_row` | Source traceability |
 | `radman_import_source` | `excel_1000_pipeline` |
-| `radman_import_version` | `PR-28` |
+| `radman_import_version` | `PR-29` for enriched/current runs |
 | `radman_review_flags` | Pipe-separated review reasons |
 
 SKU priority is title code, validated COL 27 integer under 100000, then `NM-<legacy_product_id>`. New products are simple Drafts, use real integer stock from COL 11, `manage_stock=true`, and `backorders=no`. Existing legacy IDs and SKU conflicts are skipped without update.
+
+## 8. PR-29 live specification enrichment
+
+The ID-resolved legacy page is the source only for the specification block and images. All `label:value` pairs are stored in `radman_legacy_specs` JSON. Known fields are flattened to `radman_spec_stone_type`, `radman_spec_stone_color`, `radman_spec_band_type`, `radman_spec_engraving_type`, `radman_spec_silver_purity`, `radman_spec_size`, `radman_spec_weight_grams`, and `radman_spec_weight_display`.
+
+`weight_source` is `EXCEL`, `LIVE_PAGE`, or `MISSING`; Excel weight remains authoritative when present. Differences over 0.5g set `radman_requires_review=YES` with `WEIGHT_MISMATCH`. `description_source` is `SPECS_TEMPLATE` when any real specs were found and `SEO_FALLBACK` only when the spec block is absent. Unknown labels remain in JSON and the batch report for future attribute planning.

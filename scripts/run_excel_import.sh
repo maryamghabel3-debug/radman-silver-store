@@ -29,7 +29,8 @@ Modes (choose exactly one):
   --plan            Select newest eligible products and preview pricing
   --fetch-images    Select products and fetch/process original galleries
   --import-drafts   Import the latest fetched manifest as create-only Drafts
-  --full-pilot      Plan, fetch/process images, then import guarded Drafts
+  --enrich-existing Re-fetch specs and enrich existing legacy-ID Drafts
+  --full-pilot      Plan, fetch specs/images, then import guarded Drafts
 
 Options:
   --excel PATH      Override EXCEL_FILE
@@ -52,7 +53,7 @@ set_mode() {
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
-    --inspect|--plan|--fetch-images|--import-drafts|--full-pilot)
+    --inspect|--plan|--fetch-images|--import-drafts|--enrich-existing|--full-pilot)
       set_mode "$1"
       shift
       ;;
@@ -134,7 +135,7 @@ if [ "$MODE" != "--import-drafts" ]; then
 fi
 
 MUTATING_MODE=0
-if [ "$MODE" = "--import-drafts" ] || [ "$MODE" = "--full-pilot" ]; then
+if [ "$MODE" = "--import-drafts" ] || [ "$MODE" = "--enrich-existing" ] || [ "$MODE" = "--full-pilot" ]; then
   MUTATING_MODE=1
   [ "${APP_ENV:-}" = "staging" ] || { echo '[ERROR] APP_ENV must equal staging' >&2; exit 2; }
   [ "${WP_URL:-}" = "https://staging.radmansilver.ir" ] || {
