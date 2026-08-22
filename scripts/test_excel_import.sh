@@ -10,7 +10,8 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m py_compile \
   agents/agent_excel_product_pipeline.py \
   agents/test_excel_product_pipeline.py \
   scripts/analyze_excel_catalog.py \
-  scripts/test_catalog_analysis.py
+  scripts/test_catalog_analysis.py \
+  scripts/test_luxury_pricing.py
 bash -n scripts/run_excel_import.sh
 bash --posix -n scripts/run_excel_import.sh
 bash -n scripts/test_excel_import.sh
@@ -48,5 +49,6 @@ fi
 
 PYTHONDONTWRITEBYTECODE=1 python3 agents/test_excel_product_pipeline.py
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/test_catalog_analysis.py
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/test_luxury_pricing.py
 
 echo 'ALL EXCEL IMPORT ACCEPTANCE GATES PASSED'

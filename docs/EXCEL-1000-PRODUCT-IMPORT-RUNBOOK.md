@@ -138,7 +138,7 @@ MAX_PRODUCTS=1000 bash scripts/run_excel_import.sh --full-pilot
 final = ceil(selected / 50000) × 50000
 ```
 
-`price_source` یکی از `EXCEL_ONLY`، `MAX_EXCEL` یا `MAX_CALCULATED` است. اگر ستون ۱۰ بزرگ‌تر از final باشد، regular price برابر ستون ۱۰ و sale price برابر final است؛ وگرنه regular برابر final و sale خالی است.
+`price_source` یکی از `EXCEL_ONLY`، `MAX_EXCEL` یا `MAX_CALCULATED` است. طبق سیاست لوکس HOTFIX، ستون ۱۰ فقط برای trace نگهداری و در storefront نادیده گرفته می‌شود: `regular_price` همیشه دقیقاً برابر `final` است، هیچ sale price ساخته نمی‌شود و نمایش خط‌خورده مجاز نیست.
 
 ## دسته، موجودی و وضعیت
 

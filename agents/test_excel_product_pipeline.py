@@ -149,8 +149,8 @@ def test_excel_parsing_sku_pricing_and_categories() -> None:
         assert title_code["weight_grams"] is None
         assert title_code["price_source"] == "EXCEL_ONLY"
         assert title_code["final_price_toman"] == 7_700_000
-        assert title_code["regular_price_toman"] == 8_000_000
-        assert title_code["sale_price_toman"] == 7_700_000
+        assert title_code["regular_price_toman"] == 7_700_000
+        assert "sale_price_toman" not in title_code
 
         contaminated = by_id[3642]
         assert contaminated["sku"] == "NM-3642"
@@ -167,8 +167,8 @@ def test_excel_parsing_sku_pricing_and_categories() -> None:
         assert persian_code["category"] == "bracelets"
         assert persian_code["weight_grams"] == "1.0"
         assert persian_code["price_source"] == "MAX_EXCEL"
-        assert persian_code["regular_price_toman"] == 1_200_000
-        assert persian_code["sale_price_toman"] == 1_000_000
+        assert persian_code["regular_price_toman"] == 1_000_000
+        assert "sale_price_toman" not in persian_code
 
         large = by_id[3640]
         assert large["stone_class"] == "large_stone"
@@ -177,7 +177,7 @@ def test_excel_parsing_sku_pricing_and_categories() -> None:
         assert large["price_source"] == "MAX_CALCULATED"
         assert large["final_price_toman"] == 5_900_000
         assert large["regular_price_toman"] == 5_900_000
-        assert large["sale_price_toman"] is None
+        assert "sale_price_toman" not in large
 
         missing_weight = by_id[3639]
         assert missing_weight["sku"] == "NM-3639"
@@ -458,8 +458,7 @@ def test_image_missing_still_importable_and_conflicts_skip() -> None:
         "final_price_toman": 7_700_000,
         "excel_price_toman": 7_689_000,
         "pre_discount_price_toman": 8_000_000,
-        "regular_price_toman": 8_000_000,
-        "sale_price_toman": 7_700_000,
+        "regular_price_toman": 7_700_000,
         "stone_class": "uncertain",
         "stock": 2,
         "image_status": "MISSING",
@@ -503,6 +502,9 @@ def test_runner_plan_and_static_safety() -> None:
     subprocess.run(["bash", "--posix", "-n", str(runner)], check=True)
     assert "set_status('draft')" in pipeline_source
     assert "set_status('publish')" not in pipeline_source
+    assert "set_sale_price" not in pipeline_source
+    assert '"sale_price"' not in pipeline_source
+    assert "delete_post_meta($p->get_id(), '_sale_price')" in pipeline_source
     for meta_key in (
         "radman_legacy_specs",
         "radman_spec_stone_type",

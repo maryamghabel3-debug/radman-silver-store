@@ -121,7 +121,7 @@ Required Draft metadata:
 | `legacy_url` | Image-discovery page URL, if found |
 | `weight_grams`, `silver_weight_grams` | Parsed COL 22 or blank |
 | `excel_price_toman` | Current Toman price, COL 9 |
-| `pre_discount_price_toman` | Toman price before discount, COL 10 |
+| `pre_discount_price_toman` | Trace-only COL 10 value; never used as storefront regular/sale pricing |
 | `price_source` | `EXCEL_ONLY`, `MAX_EXCEL`, or `MAX_CALCULATED` |
 | `rate_used`, `computed_price`, `final_price` | Decimal pricing audit trail |
 | `stone_class` | Title-only `large_stone`, `no_stone`, or conservative `uncertain` |
@@ -139,3 +139,7 @@ SKU priority is title code, validated COL 27 integer under 100000, then `NM-<leg
 The ID-resolved legacy page is the source only for the specification block and images. All `label:value` pairs are stored in `radman_legacy_specs` JSON. Known fields are flattened to `radman_spec_stone_type`, `radman_spec_stone_color`, `radman_spec_band_type`, `radman_spec_engraving_type`, `radman_spec_silver_purity`, `radman_spec_size`, `radman_spec_weight_grams`, and `radman_spec_weight_display`.
 
 `weight_source` is `EXCEL`, `LIVE_PAGE`, or `MISSING`; Excel weight remains authoritative when present. Differences over 0.5g set `radman_requires_review=YES` with `WEIGHT_MISMATCH`. `description_source` is `SPECS_TEMPLATE` when any real specs were found and `SEO_FALLBACK` only when the spec block is absent. Unknown labels remain in JSON and the batch report for future attribute planning.
+
+## 9. Luxury single-price invariant
+
+Every product has one storefront price: `_regular_price == _price == final_price`. `_sale_price` must be absent. COL 10 may remain trace metadata but cannot alter regular price or create a strikethrough/discount display. See [LUXURY-PRICING-HOTFIX.md](LUXURY-PRICING-HOTFIX.md).

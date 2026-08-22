@@ -102,7 +102,6 @@ foreach ($products as $product) {{
     'name' => $product->get_name('edit'),
     'sku' => $product->get_sku('edit'),
     'regular_price' => $product->get_regular_price('edit'),
-    'sale_price' => $product->get_sale_price('edit'),
     'meta' => $meta,
   );
 }}
@@ -130,7 +129,6 @@ echo wp_json_encode($out, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             "name": str(row.get("name", "")),
             "sku": str(row.get("sku", "")),
             "regular_price": str(row.get("regular_price") or "0"),
-            "sale_price": str(row.get("sale_price") or ""),
             "meta": row.get("meta") if isinstance(row.get("meta"), dict) else {},
         })
     return products
@@ -264,8 +262,10 @@ def apply_prices(env: rc.Env, to_update: List[Dict[str, Any]], logger) -> Tuple[
 $product = function_exists('wc_get_product') ? wc_get_product({pid}) : false;
 if (!$product) {{ fwrite(STDERR, "Product not found\\n"); exit(4); }}
 $product->set_regular_price('{new_price}');
-if ($product->get_sale_price('edit') === '') {{ $product->set_price('{new_price}'); }}
+$product->set_price('{new_price}');
 $product->save();
+delete_post_meta({pid}, '_sale_price');
+update_post_meta({pid}, '_price', '{new_price}');
 wc_delete_product_transients({pid});
 echo (string) $product->get_id();
 '''
