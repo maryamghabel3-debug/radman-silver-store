@@ -1,0 +1,32 @@
+[
+  {
+    "name": "stone-marketing-fragment",
+    "sku": "1057",
+    "title": "انگشتر عقیق سرخ",
+    "html": "<html><head><title>انگشتر عقیق سرخ کد 1057</title></head><body><h1>انگشتر عقیق سرخ کد 1057</h1><section class='product-specifications'><h2>مشخصات محصول</h2><table><tr><th>وزن</th><td>8 گرم</td></tr><tr><th>نوع سنگ</th><td>سنگ‌های اصلی</td></tr><tr><th>عیار</th><td>925</td></tr><tr><th>کد مدل</th><td>1057</td></tr></table></section></body></html>"
+  },
+  {
+    "name": "related-product-contamination",
+    "sku": "1057",
+    "title": "انگشتر عقیق سرخ",
+    "html": "<html><head><title>انگشتر عقیق سرخ کد 1057</title></head><body><h1>انگشتر عقیق سرخ کد 1057</h1><section class='product-specifications'><h2>مشخصات محصول</h2><table><tr><th>وزن</th><td>8 گرم</td></tr><tr><th>نوع سنگ</th><td>عقیق</td></tr><tr><th>رنگ نگین</th><td>سرخ</td></tr><tr><th>عیار</th><td>925</td></tr><tr><th>کد مدل</th><td>1057</td></tr></table><div class='related-products'><h2>محصولات مرتبط</h2><div><span>رنگ نگین</span><span>آبی</span><span>کد مدل: 9999</span></div><div><span>نوع رکاب</span><span>انگشتر مردانه مدل دیگر</span></div></div></section></body></html>"
+  },
+  {
+    "name": "red-agate-blue-conflict",
+    "sku": "1057",
+    "title": "انگشتر عقیق سرخ",
+    "html": "<html><head><title>انگشتر عقیق سرخ کد 1057</title></head><body><h1>انگشتر عقیق سرخ کد 1057</h1><section id='product-specifications'><h2>مشخصات</h2><table><tr><th>وزن</th><td>8 گرم</td></tr><tr><th>نوع سنگ</th><td>عقیق</td></tr><tr><th>رنگ نگین</th><td>آبی</td></tr><tr><th>عیار نقره</th><td>925</td></tr><tr><th>کد مدل</th><td>1057</td></tr></table></section></body></html>"
+  },
+  {
+    "name": "free-text-setting-and-engraving",
+    "sku": "1057",
+    "title": "انگشتر عقیق سیاه",
+    "html": "<html><head><title>انگشتر عقیق سیاه کد 1057</title></head><body><h1>انگشتر عقیق سیاه کد 1057</h1><section class='product-specifications'><h2>مشخصات</h2><div class='spec-row'><span>وزن</span><span>8 گرم</span></div><div class='spec-row'><span>نوع سنگ</span><span>عقیق</span></div><div class='spec-row'><span>عیار</span><span>925</span></div><div class='spec-row'><span>نوع رکاب</span><span>نقره عقیق سیاه یا مشکی انگشتر مردانه</span></div><div class='spec-row'><span>نوع حکاکی</span><span>یاعلی انگشتر خطی کد 14254778</span></div><div class='spec-row'><span>کد مدل</span><span>1057</span></div></section></body></html>"
+  },
+  {
+    "name": "only-two-valid-fields",
+    "sku": "1057",
+    "title": "انگشتر نقره ساده",
+    "html": "<html><head><title>انگشتر نقره ساده کد 1057</title></head><body><h1>انگشتر نقره ساده کد 1057</h1><section class='product-specifications'><h2>مشخصات</h2><table><tr><th>وزن</th><td>8 گرم</td></tr><tr><th>عیار</th><td>925</td></tr><tr><th>نوع سنگ</th><td>های اصلی</td></tr><tr><th>نوع رکاب</th><td>نقره عقیق سیاه یا مشکی انگشتر مردانه</td></tr></table></section></body></html>"
+  }
+]

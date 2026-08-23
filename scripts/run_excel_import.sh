@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# PR-31 owner runner: HTML-primary spec repair for existing Draft products.
+# PR-32 owner runner: HTML-primary spec repair for existing Draft products.
 set -euo pipefail
 
 umask 077

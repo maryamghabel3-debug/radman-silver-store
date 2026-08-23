@@ -20,6 +20,7 @@ REPO_ROOT = HERE.parent
 FIXTURE = REPO_ROOT / "tests" / "fixtures" / "excel-import" / "excel_products.json"
 SPEC_FIXTURE = REPO_ROOT / "tests" / "fixtures" / "legacy-specs" / "spec_blocks.json"
 LIVE_HTML_FIXTURE = REPO_ROOT / "tests" / "fixtures" / "legacy-specs" / "live_product_page.html"
+CONTAMINATION_FIXTURE = REPO_ROOT / "tests" / "fixtures" / "legacy-specs" / "contamination_cases.json"
 sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(HERE))
 
@@ -100,6 +101,106 @@ def test_real_spec_block_fixtures_and_html_section_parser() -> None:
     assert adjacent.stone_type == "فیروزه"
     assert adjacent.silver_purity == "925"
     print("PASS: strict table/dl/div/visible HTML extraction yields 5+ safe technical fields")
+
+
+def test_real_contamination_fixtures_are_strictly_validated() -> None:
+    cases = {
+        item["name"]: item
+        for item in json.loads(CONTAMINATION_FIXTURE.read_text(encoding="utf-8"))
+    }
+
+    marketing = cases["stone-marketing-fragment"]
+    specs = pipeline.extract_legacy_specs(
+        marketing["html"],
+        expected_sku=marketing["sku"],
+        expected_title=marketing["title"],
+    )
+    assert specs.stone_type == "عقیق"
+    assert specs.stone_source == "TITLE"
+    assert "های اصلی" not in json.dumps(specs.to_dict(), ensure_ascii=False)
+    assert any("UNKNOWN_STONE_STYLE" in reason for reason in specs.dropped_fields.values())
+
+    related = cases["related-product-contamination"]
+    specs = pipeline.extract_legacy_specs(
+        related["html"],
+        expected_sku=related["sku"],
+        expected_title=related["title"],
+    )
+    serialized = json.dumps(specs.to_dict(), ensure_ascii=False)
+    assert specs.stone_color == "سرخ"
+    assert "آبی" not in serialized
+    assert "9999" not in serialized
+    assert "محصولات مرتبط" not in serialized
+
+    red_blue = cases["red-agate-blue-conflict"]
+    specs = pipeline.extract_legacy_specs(
+        red_blue["html"],
+        expected_sku=red_blue["sku"],
+        expected_title=red_blue["title"],
+    )
+    assert specs.stone_color == "سرخ"
+    assert specs.color_mismatch is True
+    assert any("COLOR_MISMATCH" in reason for reason in specs.dropped_fields.values())
+    description, source = pipeline.generate_unique_description(
+        {"title": red_blue["title"], "sku": red_blue["sku"]}, specs
+    )
+    assert source == "SPECS_TEMPLATE"
+    assert "رنگ نگین: سرخ" in description
+    assert "آبی" not in description
+
+    free_text = cases["free-text-setting-and-engraving"]
+    specs = pipeline.extract_legacy_specs(
+        free_text["html"],
+        expected_sku=free_text["sku"],
+        expected_title=free_text["title"],
+    )
+    assert specs.band_type == ""
+    assert specs.engraving_type == ""
+    assert "انگشتر مردانه" not in json.dumps(specs.to_dict(), ensure_ascii=False)
+    assert any(
+        "SETTING_VALUE" in reason or "OTHER_PRODUCT_CODE" in reason
+        for reason in specs.dropped_fields.values()
+    )
+
+    insufficient = cases["only-two-valid-fields"]
+    specs = pipeline.extract_legacy_specs(
+        insufficient["html"],
+        expected_sku=insufficient["sku"],
+        expected_title=insufficient["title"],
+    )
+    assert specs.fields_extracted == 4
+    assert specs.fields_validated == 2
+    description, source = pipeline.generate_unique_description(
+        {"title": insufficient["title"], "sku": insufficient["sku"]}, specs
+    )
+    assert source == "MINIMAL_SAFE"
+    assert "در حال تکمیل مشخصات فنی است" in description
+    assert "های اصلی" not in description
+    corrected = pipeline.apply_specs_to_record(
+        {
+            "legacy_id": 3643,
+            "sku": "1057",
+            "title": insufficient["title"],
+            "category": "rings",
+            "category_raw": "انگشتر",
+            "excel_weight_grams": "8",
+            "excel_price_toman": 5_000_000,
+            "pre_discount_price_toman": None,
+            "final_price_toman": 5_000_000,
+            "regular_price_toman": 5_000_000,
+            "spec_stone_type": "های اصلی",
+            "spec_stone_color": "آبی",
+            "spec_band_type": "متن آلوده قبلی",
+            "review_flags": [],
+        },
+        specs,
+    )
+    assert corrected["spec_stone_type"] == ""
+    assert corrected["spec_stone_color"] == ""
+    assert corrected["spec_band_type"] == ""
+    assert corrected["legacy_specs"] == {"وزن": "8 گرم", "عیار نقره": "925"}
+    assert corrected["description_source"] == "MINIMAL_SAFE"
+    print("PASS: real bug fixtures drop contamination and safely overwrite stale bad specs")
 
 
 def test_unique_descriptions_differ_and_omit_missing_fields() -> None:
@@ -407,6 +508,58 @@ def test_sku_search_selects_best_result_then_fetches_actual_product_page() -> No
     print("PASS: SKU search scores title/URL, then extracts only from the actual product page")
 
 
+class IdentityMismatchFetcher:
+    def __init__(self) -> None:
+        self.loaded = False
+
+    def load_robots(self):
+        self.loaded = True
+
+    def fetch_text(self, url):
+        assert self.loaded
+        if url == "https://noghrehmashhad.ir/?s=1057":
+            return '<a href="/product/9999/انگشتر-فیروزه-آبی-کد-9999/">انگشتر فیروزه آبی</a>'
+        if "/product/9999/" in url:
+            return """
+              <html><head><title>انگشتر فیروزه آبی کد 9999</title></head>
+              <body><h1>انگشتر فیروزه آبی کد 9999</h1>
+              <section class="product-specifications"><h2>مشخصات</h2>
+              <table><tr><th>وزن</th><td>9 گرم</td></tr>
+              <tr><th>نوع سنگ</th><td>فیروزه</td></tr>
+              <tr><th>عیار</th><td>925</td></tr>
+              <tr><th>کد مدل</th><td>9999</td></tr></table></section></body></html>
+            """
+        if "sitemap.xml" in url:
+            return "<urlset></urlset>"
+        raise RuntimeError("expected direct-ID fallback miss")
+
+
+def test_strict_page_identity_validation_and_low_confidence_status() -> None:
+    discovery = pipeline.LegacyImageDiscovery(fetcher=IdentityMismatchFetcher())
+    page = discovery.discover_specs(3643, "1057", "انگشتر عقیق سرخ")
+    assert page.match_status == "IDENTITY_MISMATCH"
+    assert page.specs.fields_validated == 0
+    assert any(
+        item.get("match_status") == "IDENTITY_MISMATCH"
+        and item.get("url", "").endswith("کد-9999/")
+        for item in discovery.log
+    )
+
+    low_html = "<html><head><title>انگشتر عقیق آبی</title></head><body><h1>انگشتر عقیق آبی</h1></body></html>"
+    status, _title, overlap, reason = pipeline._page_match_status(
+        url="https://noghrehmashhad.ir/product/9999/other/",
+        source_html=low_html,
+        specs=pipeline.empty_legacy_specs(),
+        expected_legacy_id=3643,
+        expected_sku="1057",
+        expected_title="انگشتر عقیق سرخ",
+    )
+    assert status == "LOW_CONFIDENCE"
+    assert overlap >= 0.60
+    assert reason == "TITLE_TOKEN_OVERLAP"
+    print("PASS: wrong page is blocked; title-only 60% match is explicitly low confidence")
+
+
 def test_gallery_extraction_is_original_ordered_and_image_only() -> None:
     page = "https://noghrehmashhad.ir/product/3643/محصول/"
     source = """
@@ -535,6 +688,38 @@ def test_existing_draft_title_cleanup_preserves_sku_and_traceability() -> None:
     assert record["legacy_title_cleanup_status"] == "REVIEW"
     assert gateway.created == []
     print("PASS: existing Draft title cleans in place; mismatched SKU stays unchanged and flagged")
+
+
+def test_identity_mismatch_skips_existing_product_update() -> None:
+    source = {
+        "wordpress_product_id": 61,
+        "legacy_id": 3643,
+        "sku": "1057",
+        "title": "انگشتر عقیق سرخ",
+        "description": "محتوای موجود نباید تغییر کند",
+        "review_flags": [],
+        "legacy_url": "",
+    }
+    with tempfile.TemporaryDirectory() as temporary:
+        records = pipeline.fetch_specs_for_records(
+            [source],
+            run_dir=Path(temporary),
+            discovery=pipeline.LegacyImageDiscovery(fetcher=IdentityMismatchFetcher()),
+        )
+    assert records[0]["match_status"] == "IDENTITY_MISMATCH"
+    assert records[0]["description"] == source["description"]
+    gateway = FakeGateway()
+    actions = pipeline.enrich_existing_records(records, gateway)
+    assert gateway.enrich_calls == []
+    assert gateway.created == []
+    assert actions[0]["action"] == "SKIP_IDENTITY_MISMATCH"
+    assert actions[0]["description_updated"] == "NO"
+    report = pipeline._report_row(records[0])
+    assert report["match_status"] == "IDENTITY_MISMATCH"
+    assert report["fields_extracted"] == 0
+    assert report["fields_validated"] == 0
+    assert "identity" in report["dropped_fields"]
+    print("PASS: identity mismatch preserves existing content and performs no WP update")
 
 
 def test_exact_twenty_existing_drafts_update_without_recreation() -> None:
@@ -758,6 +943,12 @@ def test_runner_plan_and_static_safety() -> None:
         "radman_spec_model_code",
         "radman_spec_status",
         "radman_spec_count",
+        "radman_spec_match_status",
+        "radman_spec_fields_extracted",
+        "radman_spec_fields_validated",
+        "radman_spec_dropped_fields",
+        "radman_spec_color_mismatch",
+        "radman_spec_stone_source",
         "radman_spec_weight_grams",
         "radman_spec_weight_display",
         "radman_requires_review",
@@ -841,6 +1032,12 @@ def test_runner_plan_and_static_safety() -> None:
             "identity_key",
             "title_cleanup_status",
             "description_updated",
+            "match_status",
+            "fields_extracted",
+            "fields_validated",
+            "dropped_fields",
+            "color_mismatch",
+            "stone_source",
             "specs_found_count",
             "price_changed",
         }.issubset(report_rows[0])
@@ -879,6 +1076,7 @@ def test_runner_plan_and_static_safety() -> None:
 
 def main() -> int:
     test_real_spec_block_fixtures_and_html_section_parser()
+    test_real_contamination_fixtures_are_strictly_validated()
     test_unique_descriptions_differ_and_omit_missing_fields()
     test_excel_parsing_sku_pricing_and_categories()
     test_weight_reconciliation_live_fill_and_excel_mismatch()
@@ -886,8 +1084,10 @@ def main() -> int:
     test_selection_descending_filters_and_cap()
     test_discovery_uses_direct_then_search_and_logs_strategy()
     test_sku_search_selects_best_result_then_fetches_actual_product_page()
+    test_strict_page_identity_validation_and_low_confidence_status()
     test_gallery_extraction_is_original_ordered_and_image_only()
     test_existing_draft_title_cleanup_preserves_sku_and_traceability()
+    test_identity_mismatch_skips_existing_product_update()
     test_exact_twenty_existing_drafts_update_without_recreation()
     test_enrich_existing_is_idempotent_and_price_update_is_targeted()
     test_image_missing_still_importable_and_conflicts_skip()

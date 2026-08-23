@@ -1,6 +1,6 @@
 # راهنمای import هزار محصول جدیدتر از Excel با تصاویر اصلی
 
-**نسخه:** PR-31 (HTML spec repair)
+**نسخه:** PR-32 (strict HTML validation)
 
 **تصمیم قطعی منبع داده:** Excel منبع selection، price، stock و active flag است. API سایت قدیمی deferred است. برای `--enrich-existing`، صفحه HTML واقعی محصول پس از SKU search منبع اصلی مشخصات فنی allowlisted است؛ متن عمومی/SEO و contact وارد رادمان نمی‌شود.
 
@@ -22,7 +22,7 @@ ID بالاتر = محصول جدیدتر
 
 ## API deferred
 
-API autodiscovery در این مرحله موفق نبود و هیچ `--api-probe` یا credential API در runner استفاده نمی‌شود. مسیر رسمی PR-31، SKU search و fetch صفحه HTML واقعی محصول است.
+API autodiscovery در این مرحله موفق نبود و هیچ `--api-probe` یا credential API در runner استفاده نمی‌شود. مسیر رسمی PR-32، SKU search و fetch صفحه HTML واقعی محصول است.
 
 ## پیش‌نیاز
 
@@ -87,7 +87,7 @@ export APP_ENV=staging
 export WP_URL=https://staging.radmansilver.ir
 export WP_PATH=/home/radmansi/staging.radmansilver.ir
 export CONFIRM_STAGING_APPLY=YES
-export RADMAN_PRIVATE_DIR=/home/radmansi/private
+export RADMAN_PRIVATE_DIR=/home/radmansi/.config/radman
 
 MAX_PRODUCTS=20 bash scripts/run_excel_import.sh --enrich-existing
 ```
@@ -185,9 +185,11 @@ final = ceil(selected / 50000) × 50000
 - failure رنگ/detail → فایل اصلی انتخاب می‌شود؛
 - تصویر اول featured و بقیه gallery با ترتیب source هستند.
 
-## مشخصات واقعی و توضیح امن (PR-31)
+## مشخصات دقیق، scoped و توضیح امن (PR-32)
 
 labelهای مجاز: وزن/وزن تقریبی/وزن محصول، نوع سنگ/سنگ/نوع نگین، رنگ نگین/رنگ سنگ/رنگ، نوع رکاب/رکاب، عیار نقره/عیار/نقره، ابعاد/ابعاد نگین/اندازه نگین، سایز/اندازه، کد/کد مدل/شناسه کالا و حکاکی. unknown label و تمام phone/contact/address، shipping/payment، warranty/support/return و SEO/general marketing حذف می‌شوند.
+
+PR-32 ابتدا page identity را با SKU/code، legacy ID یا title overlap حداقل 60٪ تأیید می‌کند؛ سپس فقط container اصلی مشخصات را parse می‌کند. related/suggested/recent products، comments/sidebar/widgets و block دارای کد دیگر کنار گذاشته می‌شوند. stone/color/setting/engraving/weight/purity validation اختصاصی دارند و stone/color با title cross-check می‌شوند. mismatch هویتی بدون هیچ WordPress update گزارش می‌شود.
 
 متادیتای فنی شامل `radman_legacy_specs`, fieldهای `radman_spec_*`, `radman_spec_dimensions`, `radman_spec_model_code`, `radman_spec_status` و `radman_spec_count` است. کمتر از سه field فنی، `MINIMAL_SAFE` و `INSUFFICIENT_SPECS` می‌گیرد. description verified شامل title، intro کوتاه، فقط bulletهای واقعی و `کد مدل` است؛ promise یا scarcity ساختگی ندارد.
 
