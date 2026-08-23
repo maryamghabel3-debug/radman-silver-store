@@ -7,7 +7,20 @@ Owner decision: product prices use one luxury retail price only. WooCommerce sal
 - `regular_price` always equals the final selected/computed Toman price.
 - Excel COL 10 remains trace metadata only and cannot affect storefront pricing.
 - Importers and the pricing engine never set a sale-price field.
-- Whenever existing product pricing is written, stale `_sale_price` metadata is deleted and `_price` is synchronized with `_regular_price`.
+- Whenever existing product pricing is written, stale `_sale_price`/sale-date metadata is deleted and `_price` is synchronized with `_regular_price`.
+
+## PR-34 exact pricing policy
+
+```text
+legacy_price = exact current Excel price in Toman
+computed_floor = verified weight × approved gram rate, when weight exists
+selected_price = max(legacy_price, computed_floor)
+final_price = ceil(selected_price to the next whole Toman only)
+```
+
+There is no 50000-Toman rounding and no automatic 9-ending/charm pricing. Missing weight uses the exact Excel price with `pricing_mode=legacy_mirror`. The exact values and selection reason are saved in `radman_legacy_price_exact_toman`, `radman_computed_floor_exact_toman`, `radman_final_price_exact_toman`, `radman_price_rounding_policy`, and `radman_price_selection_reason`.
+
+Guarded preview/apply commands are documented in `docs/PRODUCT-SEO-AND-AI-VISIBILITY-RUNBOOK.md`.
 
 ## One-time cleanup for the 20 existing Drafts
 

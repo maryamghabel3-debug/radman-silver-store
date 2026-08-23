@@ -92,7 +92,7 @@ All operations use Python `Decimal`; binary floating-point is not used for price
 ```text
 weight_floor = Decimal(weight_grams) × Decimal(rate_toman_per_gram)
 selected = max(visible_legacy_price_toman, weight_floor)
-final = ceil(selected / 50000) × 50000
+final = ceil(selected to the next whole Toman only when fractional)
 ```
 
 Selection reasons are explicit:
@@ -118,14 +118,14 @@ same classification, confidence 0.849:
 rate is forced to 650,000; 10 × 650,000 = 6,500,000 Toman + review
 
 necklace, 10g, legacy 7,001,000:
-max(7,001,000, 6,500,000) = 7,001,000 → 7,050,000 Toman
+max(7,001,000, 6,500,000) = 7,001,000 Toman exactly
 ```
 
 Implementation: `agents/lib/legacy_pricing.py`. Historical operator procedure: [ORIGINAL-PRODUCT-IMPORT-RUNBOOK.md](ORIGINAL-PRODUCT-IMPORT-RUNBOOK.md).
 
 ---
 
-## 6. PR-28 Excel title-only pricing overlay
+## 6. PR-34 exact Excel pricing overlay
 
 PR-28 uses current Toman price from Excel COL 9 as the trusted baseline. Data scraping and Rial conversion are forbidden.
 
@@ -133,10 +133,10 @@ PR-28 uses current Toman price from Excel COL 9 as the trusted baseline. Data sc
 - all other titles, including uncertainty → `650000` Toman/gram.
 
 ```text
-weight exists: final = ceil(max(COL9, Decimal(weight) × rate) / 50000) × 50000
-weight missing: final = ceil(COL9 / 50000) × 50000
+weight exists: final = ceil(max(exact COL9, Decimal(weight) × rate) to whole Toman)
+weight missing: final = exact COL9
 ```
 
-`price_source` is `MAX_EXCEL` or `MAX_CALCULATED` when weight exists and `EXCEL_ONLY` when absent. **Luxury pricing hotfix:** `regular_price` always equals `final`; Excel COL 10 is trace-only and never creates a sale price, discount badge, or strikethrough display. Importers/pricing agents delete stale `_sale_price` metadata whenever they write a product price.
+`price_source` is `MAX_EXACT_LEGACY` or `MAX_EXACT_COMPUTED_FLOOR` when weight exists and `LEGACY_MIRROR` when absent. No 50000/charm/9-ending transformation is allowed. **Luxury pricing hotfix:** `regular_price` always equals `final`; Excel COL 10 is trace-only and never creates a sale price, discount badge, or strikethrough display. Importers/pricing agents delete stale `_sale_price` metadata whenever they write a product price.
 
 PR-29 reconciliation: if COL 22 is empty and the same product page yields a parseable specification weight, that live weight becomes `weight_source=LIVE_PAGE` and the formula is re-run. If COL 22 is present, Excel remains authoritative; a live difference greater than 0.5g is reported as `WEIGHT_MISMATCH` without changing pricing weight. See [EXCEL-1000-PRODUCT-IMPORT-RUNBOOK.md](EXCEL-1000-PRODUCT-IMPORT-RUNBOOK.md).

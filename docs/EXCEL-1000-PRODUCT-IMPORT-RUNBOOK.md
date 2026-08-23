@@ -156,15 +156,16 @@ WooCommerce Admin به‌طور استاندارد SKU را جست‌وجو می
 | سایر، بدون نگین یا نامطمئن | 650000 |
 
 ```text
+legacy_price = exact COL9
 اگر وزن موجود:
-  computed = weight × rate
-  selected = max(COL9, computed)
+  computed_floor = weight × rate
+  selected = max(legacy_price, computed_floor)
 اگر وزن خالی:
-  selected = COL9
-final = ceil(selected / 50000) × 50000
+  selected = legacy_price
+final = ceil(selected فقط در صورت اعشاری بودن، تا تومان کامل بعدی)
 ```
 
-`price_source` یکی از `EXCEL_ONLY`، `MAX_EXCEL` یا `MAX_CALCULATED` است. طبق سیاست لوکس HOTFIX، ستون ۱۰ فقط برای trace نگهداری و در storefront نادیده گرفته می‌شود: `regular_price` همیشه دقیقاً برابر `final` است، هیچ sale price ساخته نمی‌شود و نمایش خط‌خورده مجاز نیست.
+هیچ rounding اجباری 50000 تومانی و هیچ charm/9-ending وجود ندارد. `price_source` یکی از `LEGACY_MIRROR`، `MAX_EXACT_LEGACY` یا `MAX_EXACT_COMPUTED_FLOOR` است. ستون ۱۰ فقط trace است؛ `regular_price == current_price == final_price` و sale price همیشه خالی می‌ماند.
 
 ## دسته، موجودی و وضعیت
 

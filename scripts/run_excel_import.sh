@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# PR-33 owner runner: HTML-primary spec repair for existing Draft products.
+# PR-34 owner runner: exact pricing plus Draft-only product SEO quality gates.
 set -euo pipefail
 
 umask 077
@@ -11,6 +11,7 @@ MAX_PRODUCTS=${MAX_PRODUCTS:-1000}
 RADMAN_PRIVATE_DIR=${RADMAN_PRIVATE_DIR:-/home/radmansi/private}
 MODE=
 MANIFEST=
+DRY_RUN=0
 LOCK_DIR=
 
 cleanup() {
@@ -30,6 +31,11 @@ Modes (choose exactly one):
   --import-drafts   Import the latest fetched manifest as create-only Drafts
   --enrich-existing Repair existing Draft descriptions/meta from HTML product pages
   --identity-report Read-only SKU/legacy identity reconciliation report
+  --reprice-existing-exact  Preview/apply exact-Toman repricing of existing Drafts
+  --seo-plan         Read-only deterministic SEO package plan
+  --seo-enrich-existing  Apply deterministic SEO metadata to existing Drafts
+  --seo-qa           Read-only SEO/schema/publication quality gate
+  --seo-batch-ready  SEO enrichment, QA, and publication blockers; never publish
   --full-pilot      Plan, fetch specs/images, then import guarded Drafts
 
 Options:
@@ -37,9 +43,10 @@ Options:
   --max-products N  Override MAX_PRODUCTS (hard maximum 1000)
   --private-dir P   Override RADMAN_PRIVATE_DIR
   --manifest PATH   Explicit prepared manifest for --import-drafts
+  --dry-run         Preview --reprice-existing-exact without mutation
   --help
 
-Excel controls selection/price/stock/active. HTML product pages are primary for specs; API is deferred.
+Excel controls exact price/stock/active. Verified specs drive deterministic SEO; all products remain Draft.
 EOF
 }
 
@@ -53,7 +60,7 @@ set_mode() {
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
-    --inspect|--plan|--fetch-images|--import-drafts|--enrich-existing|--identity-report|--full-pilot)
+    --inspect|--plan|--fetch-images|--import-drafts|--enrich-existing|--identity-report|--reprice-existing-exact|--seo-plan|--seo-enrich-existing|--seo-qa|--seo-batch-ready|--full-pilot)
       set_mode "$1"
       shift
       ;;
@@ -76,6 +83,10 @@ while [ "$#" -gt 0 ]; do
       [ "$#" -ge 2 ] || { echo '[ERROR] --manifest requires a path' >&2; exit 2; }
       MANIFEST=$2
       shift 2
+      ;;
+    --dry-run)
+      DRY_RUN=1
+      shift
       ;;
     --help|-h)
       usage
@@ -134,7 +145,11 @@ if [ "$MODE" != "--import-drafts" ] && [ "$MODE" != "--identity-report" ]; then
   }
 fi
 
-if [ "$MODE" = "--identity-report" ]; then
+READONLY_WP_MODE=0
+if [ "$MODE" = "--identity-report" ] || [ "$MODE" = "--seo-plan" ] || [ "$MODE" = "--seo-qa" ] || { [ "$MODE" = "--reprice-existing-exact" ] && [ "$DRY_RUN" -eq 1 ]; }; then
+  READONLY_WP_MODE=1
+fi
+if [ "$READONLY_WP_MODE" -eq 1 ]; then
   [ "${APP_ENV:-}" = "staging" ] || { echo '[ERROR] APP_ENV must equal staging' >&2; exit 2; }
   [ "${WP_URL:-}" = "https://staging.radmansilver.ir" ] || {
     echo '[ERROR] WP_URL must equal https://staging.radmansilver.ir' >&2
@@ -147,8 +162,14 @@ if [ "$MODE" = "--identity-report" ]; then
   command -v wp >/dev/null 2>&1 || { echo '[ERROR] wp-cli unavailable' >&2; exit 2; }
 fi
 
+
+if [ "$DRY_RUN" -eq 1 ] && [ "$MODE" != "--reprice-existing-exact" ]; then
+  echo '[ERROR] --dry-run is only valid with --reprice-existing-exact' >&2
+  exit 2
+fi
+
 MUTATING_MODE=0
-if [ "$MODE" = "--import-drafts" ] || [ "$MODE" = "--enrich-existing" ] || [ "$MODE" = "--full-pilot" ]; then
+if [ "$MODE" = "--import-drafts" ] || [ "$MODE" = "--enrich-existing" ] || [ "$MODE" = "--seo-enrich-existing" ] || [ "$MODE" = "--seo-batch-ready" ] || [ "$MODE" = "--full-pilot" ] || { [ "$MODE" = "--reprice-existing-exact" ] && [ "$DRY_RUN" -eq 0 ]; }; then
   MUTATING_MODE=1
   [ "${APP_ENV:-}" = "staging" ] || { echo '[ERROR] APP_ENV must equal staging' >&2; exit 2; }
   [ "${WP_URL:-}" = "https://staging.radmansilver.ir" ] || {
@@ -169,7 +190,7 @@ if [ "$MODE" = "--import-drafts" ] || [ "$MODE" = "--enrich-existing" ] || [ "$M
   command -v wp >/dev/null 2>&1 || { echo '[ERROR] wp-cli unavailable' >&2; exit 2; }
 fi
 
-if [ "$MODE" != "--inspect" ] && [ "$MODE" != "--plan" ] && [ "$MODE" != "--identity-report" ]; then
+if [ "$MODE" != "--inspect" ] && [ "$MODE" != "--plan" ] && [ "$READONLY_WP_MODE" -eq 0 ]; then
   mkdir -p "$RADMAN_PRIVATE_DIR/locks"
   LOCK_DIR=$RADMAN_PRIVATE_DIR/locks/excel-import-pipeline.lock
   if ! mkdir "$LOCK_DIR" 2>/dev/null; then
@@ -184,9 +205,9 @@ if [ "$MUTATING_MODE" -eq 1 ]; then
   BACKUP_DIR=$RADMAN_PRIVATE_DIR/backups
   mkdir -p "$BACKUP_DIR"
   BACKUP_STAMP=$(date -u +%Y%m%dT%H%M%SZ)
-  RADMAN_DB_BACKUP_PATH=$BACKUP_DIR/pre-excel-import-$BACKUP_STAMP.sql
+  RADMAN_DB_BACKUP_PATH=$BACKUP_DIR/pre-product-mutation-$BACKUP_STAMP.sql
   export RADMAN_DB_BACKUP_PATH
-  echo '[BACKUP] creating staging database backup before Draft import'
+  echo '[BACKUP] creating staging database backup before guarded Draft mutation'
   wp --path="$WP_PATH" --no-color db export "$RADMAN_DB_BACKUP_PATH" --quiet
   [ -s "$RADMAN_DB_BACKUP_PATH" ] || {
     echo '[ERROR] database backup is empty' >&2
@@ -194,7 +215,7 @@ if [ "$MUTATING_MODE" -eq 1 ]; then
   }
 fi
 
-printf '[SOURCE] Excel controls selection/price/stock/active; HTML product pages are the primary spec source.\n'
+printf '[SOURCE] Excel controls exact price/stock/active; verified specs drive SEO and optional exact floor.\n'
 printf '[API] DEFERRED — no API probe or API credential is used.\n'
 
 set -- "$MODE" \
@@ -203,6 +224,9 @@ set -- "$MODE" \
   --private-dir "$RADMAN_PRIVATE_DIR"
 if [ -n "$MANIFEST" ]; then
   set -- "$@" --manifest "$MANIFEST"
+fi
+if [ "$DRY_RUN" -eq 1 ]; then
+  set -- "$@" --dry-run
 fi
 if [ -n "${WP_PATH:-}" ]; then
   set -- "$@" --wp-path "$WP_PATH"

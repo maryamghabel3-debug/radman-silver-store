@@ -298,17 +298,22 @@ def test_excel_parsing_sku_pricing_and_categories() -> None:
         assert title_code["category"] == "rings"
         assert title_code["excel_price_toman"] == 7_689_000
         assert title_code["weight_grams"] is None
-        assert title_code["price_source"] == "EXCEL_ONLY"
-        assert title_code["final_price_toman"] == 7_700_000
-        assert title_code["regular_price_toman"] == 7_700_000
+        assert title_code["price_source"] == "LEGACY_MIRROR"
+        assert title_code["final_price_toman"] == 7_689_000
+        assert title_code["regular_price_toman"] == 7_689_000
+        assert title_code["pricing_mode"] == "legacy_mirror"
+        assert title_code["radman_legacy_price_exact_toman"] == "7689000"
+        assert title_code["radman_computed_floor_exact_toman"] == ""
+        assert title_code["radman_final_price_exact_toman"] == "7689000"
+        assert title_code["radman_price_rounding_policy"] == "EXACT_NO_CHARM_NO_50000_ROUNDING"
         assert "sale_price_toman" not in title_code
 
         contaminated = by_id[3642]
         assert contaminated["sku"] == "NM-3642"
         assert contaminated["sku_source"] == "FALLBACK_LEGACY_ID"
         assert contaminated["computed_price_toman"] == "1300000"
-        assert contaminated["price_source"] == "MAX_EXCEL"
-        assert contaminated["final_price_toman"] == 2_100_000
+        assert contaminated["price_source"] == "MAX_EXACT_LEGACY"
+        assert contaminated["final_price_toman"] == 2_079_000
         assert contaminated["category"] == "necklaces"
         assert contaminated["description"] == "عنوان 3642"
 
@@ -317,7 +322,7 @@ def test_excel_parsing_sku_pricing_and_categories() -> None:
         assert persian_code["sku_source"] == "COL27_VALIDATED"
         assert persian_code["category"] == "bracelets"
         assert persian_code["weight_grams"] == "1.0"
-        assert persian_code["price_source"] == "MAX_EXCEL"
+        assert persian_code["price_source"] == "MAX_EXACT_LEGACY"
         assert persian_code["regular_price_toman"] == 1_000_000
         assert "sale_price_toman" not in persian_code
 
@@ -325,22 +330,24 @@ def test_excel_parsing_sku_pricing_and_categories() -> None:
         assert large["stone_class"] == "large_stone"
         assert large["rate_used"] == 590_000
         assert large["computed_price_toman"] == "5900000"
-        assert large["price_source"] == "MAX_CALCULATED"
+        assert large["price_source"] == "MAX_EXACT_COMPUTED_FLOOR"
         assert large["final_price_toman"] == 5_900_000
         assert large["regular_price_toman"] == 5_900_000
+        assert large["radman_computed_floor_exact_toman"] == "5900000"
+        assert large["radman_price_selection_reason"] == "COMPUTED_FLOOR_ABOVE_LEGACY_PRICE"
         assert "sale_price_toman" not in large
 
         missing_weight = by_id[3639]
         assert missing_weight["sku"] == "NM-3639"
-        assert missing_weight["price_source"] == "EXCEL_ONLY"
-        assert missing_weight["final_price_toman"] == 7_700_000
+        assert missing_weight["price_source"] == "LEGACY_MIRROR"
+        assert missing_weight["final_price_toman"] == 7_689_000
 
         unknown = by_id[3636]
         assert unknown["category"] == "rings"
         assert "UNKNOWN_CATEGORY_DEFAULTED_TO_RINGS" in unknown["review_flags"]
         assert unknown["stock"] == 5
         assert "STOCK_FRACTION_FLOORED" in unknown["review_flags"]
-        assert unknown["price_source"] == "MAX_CALCULATED"
+        assert unknown["price_source"] == "MAX_EXACT_COMPUTED_FLOOR"
         assert unknown["final_price_toman"] == 1_300_000
     print("PASS: mixed digits, SKU priority, category mapping, stock, and Decimal pricing")
 
@@ -360,7 +367,7 @@ def test_weight_reconciliation_live_fill_and_excel_mismatch() -> None:
         assert filled["weight_grams"] == "16"
         assert filled["computed_price_toman"] == "10400000"
         assert filled["final_price_toman"] == 10_400_000
-        assert filled["price_source"] == "MAX_CALCULATED"
+        assert filled["price_source"] == "MAX_EXACT_COMPUTED_FLOOR"
         assert filled["description_source"] == "SPECS_TEMPLATE"
         assert filled["description"].startswith("انگشتر نقره\n")
         assert "کد مدل: 1058" in filled["description"]
@@ -405,8 +412,8 @@ def test_sku_edge_cases_and_rounding() -> None:
     )
     assert max_calculated.rate_used == 650_000
     assert max_calculated.computed_price_toman == Decimal("1306500.00")
-    assert max_calculated.final_price_toman == 1_350_000
-    assert max_calculated.price_source == "MAX_CALCULATED"
+    assert max_calculated.final_price_toman == 1_306_500
+    assert max_calculated.price_source == "MAX_EXACT_COMPUTED_FLOOR"
 
     missing = pipeline.calculate_pricing(
         title="انگشتر",
@@ -414,8 +421,8 @@ def test_sku_edge_cases_and_rounding() -> None:
         pre_discount_price=None,
         weight=None,
     )
-    assert missing.price_source == "EXCEL_ONLY"
-    assert missing.final_price_toman == 1_050_000
+    assert missing.price_source == "LEGACY_MIRROR"
+    assert missing.final_price_toman == 1_001_000
 
     large = pipeline.calculate_pricing(
         title="انگشتر با عقیق بزرگ",
@@ -427,6 +434,42 @@ def test_sku_edge_cases_and_rounding() -> None:
     assert large.rate_used == 590_000
     assert large.final_price_toman == 5_900_000
     print("PASS: title/column/fallback SKUs and all owner-approved pricing branches")
+
+
+def test_exact_pricing_has_no_50000_or_charm_rounding() -> None:
+    legacy_wins = pipeline.calculate_pricing(
+        title="انگشتر نقره",
+        excel_price=7_689_123,
+        pre_discount_price=None,
+        weight=Decimal("2"),
+    )
+    assert legacy_wins.final_price_toman == 7_689_123
+    assert legacy_wins.excel_price_toman == Decimal("7689123")
+    assert legacy_wins.price_source == "MAX_EXACT_LEGACY"
+    assert legacy_wins.rounding_policy == "EXACT_NO_CHARM_NO_50000_ROUNDING"
+    assert legacy_wins.final_price_toman % 50_000 != 0
+
+    floor_wins = pipeline.calculate_pricing(
+        title="انگشتر نقره",
+        excel_price=1_000_000,
+        pre_discount_price=None,
+        weight=Decimal("2.000001"),
+    )
+    assert floor_wins.computed_price_toman == Decimal("1300000.650000")
+    assert floor_wins.final_price_toman == 1_300_001
+    assert floor_wins.price_source == "MAX_EXACT_COMPUTED_FLOOR"
+    assert not str(floor_wins.final_price_toman).endswith("9")
+
+    missing_weight = pipeline.calculate_pricing(
+        title="دستبند نقره",
+        excel_price=1_234_567,
+        pre_discount_price=None,
+        weight=None,
+    )
+    assert missing_weight.final_price_toman == 1_234_567
+    assert missing_weight.pricing_mode == "legacy_mirror"
+    assert missing_weight.selection_reason == "WEIGHT_MISSING_EXACT_LEGACY_PRICE"
+    print("PASS: exact pricing preserves legacy/floor values with whole-Toman ceiling only")
 
 
 def test_selection_descending_filters_and_cap() -> None:
@@ -617,6 +660,8 @@ class FakeGateway:
         self.created = []
         self.images = []
         self.enrich_calls = []
+        self.reprice_calls = []
+        self.seo_calls = []
 
     def get_currency(self):
         return "IRT"
@@ -669,6 +714,34 @@ class FakeGateway:
             "status": "draft",
             "price_updated": update_price,
             "sale_meta_after_cleanup": "",
+        }
+
+    def reprice_existing_draft_exact(self, record, product_id):
+        self.reprice_calls.append(
+            {
+                "product_id": product_id,
+                "legacy_id": record["legacy_id"],
+                "sku": record["sku"],
+                "final_price": record["final_price_toman"],
+                "protected_snapshot": dict(record.get("protected_snapshot", {})),
+            }
+        )
+        return {
+            "id": product_id,
+            "status": "draft",
+            "before": str(record.get("wordpress_current_price") or ""),
+            "after": str(record["final_price_toman"]),
+            "regular": str(record["final_price_toman"]),
+            "sale_meta_after_cleanup": "",
+            "protected_unchanged": True,
+        }
+
+    def update_product_seo_draft(self, record, package):
+        self.seo_calls.append((record["product_id"], dict(package)))
+        return {
+            "id": record["product_id"],
+            "status": "draft",
+            "protected_unchanged": True,
         }
 
 
@@ -769,7 +842,7 @@ def test_exact_twenty_existing_drafts_update_without_recreation() -> None:
             "pre_discount_price_toman": None,
             "final_price_toman": 4_000_000,
             "regular_price_toman": 4_000_000,
-            "wordpress_current_price": 7_700_000,
+            "wordpress_current_price": 7_689_000,
             "review_flags": [],
         }
         records.append(pipeline.apply_specs_to_record(source, specs))
@@ -790,6 +863,55 @@ def test_exact_twenty_existing_drafts_update_without_recreation() -> None:
     print("PASS: exact 20 existing Drafts update in place with zero product recreation")
 
 
+def test_exact_repricing_updates_twenty_drafts_in_place_only() -> None:
+    records = []
+    for index in range(20):
+        snapshot = {
+            "title": f"محصول {index}",
+            "sku": f"SKU-{index}",
+            "status": "draft",
+            "description": f"توضیح {index}",
+            "short_description": f"خلاصه {index}",
+            "stock_quantity": index + 1,
+            "stock_status": "instock",
+            "category_ids": [17],
+            "featured_image_id": 700 + index,
+            "gallery_image_ids": [800 + index],
+        }
+        records.append(
+            {
+                "wordpress_product_id": 500 + index,
+                "legacy_id": 3643 - index,
+                "sku": f"SKU-{index}",
+                "wordpress_current_price": 7_700_000,
+                "final_price_toman": 7_689_123 + index,
+                "pricing_mode": "legacy_mirror",
+                "radman_legacy_price_exact_toman": str(7_689_123 + index),
+                "radman_computed_floor_exact_toman": "",
+                "radman_price_selection_reason": "WEIGHT_MISSING_EXACT_LEGACY_PRICE",
+                "protected_snapshot": snapshot,
+            }
+        )
+    gateway = FakeGateway()
+    actions = pipeline.reprice_existing_exact(records, gateway, dry_run=False)
+    assert len(actions) == len(gateway.reprice_calls) == 20
+    assert gateway.created == [] and gateway.enrich_calls == [] and gateway.images == []
+    assert all(action["action"] == "REPRICED_DRAFT_EXACT" for action in actions)
+    assert all(action["sale_meta_after_cleanup"] == "" for action in actions)
+    assert all(action["protected_unchanged"] is True for action in actions)
+    for source, call in zip(records, gateway.reprice_calls):
+        assert call["sku"] == source["sku"]
+        assert call["protected_snapshot"] == source["protected_snapshot"]
+    with tempfile.TemporaryDirectory() as temporary:
+        before = pipeline.write_exact_reprice_before_backup(records, Path(temporary))
+        csv_path, txt_path = pipeline.write_exact_reprice_reports(
+            records, actions, [], Path(temporary)
+        )
+        assert before.is_file() and csv_path.is_file() and txt_path.is_file()
+        assert (Path(temporary) / "exact-reprice-before-fa.txt").is_file()
+    print("PASS: exact repricing updates 20 Draft prices only and writes CSV backup/reports")
+
+
 def test_enrich_existing_is_idempotent_and_price_update_is_targeted() -> None:
     fixture = json.loads(SPEC_FIXTURE.read_text(encoding="utf-8"))[0]
     specs = pipeline.parse_spec_block_text(fixture["text"])
@@ -800,7 +922,7 @@ def test_enrich_existing_is_idempotent_and_price_update_is_targeted() -> None:
         base = next(record for record in records if record["legacy_id"] == 3643)
     enriched = pipeline.apply_specs_to_record(base, specs)
     enriched["wordpress_product_id"] = 77
-    enriched["wordpress_current_price"] = 7_700_000
+    enriched["wordpress_current_price"] = 7_689_000
     gateway = FakeGateway()
     first = pipeline.enrich_existing_records([dict(enriched)], gateway)
     assert first[0]["price_updated"] is True
@@ -847,13 +969,13 @@ def test_image_missing_still_importable_and_conflicts_skip() -> None:
         "category_raw": "انگشتر",
         "raw_code": "2079000.0000000002",
         "weight_grams": None,
-        "price_source": "EXCEL_ONLY",
+        "price_source": "LEGACY_MIRROR",
         "rate_used": 650000,
         "computed_price_toman": None,
-        "final_price_toman": 7_700_000,
+        "final_price_toman": 7_689_000,
         "excel_price_toman": 7_689_000,
         "pre_discount_price_toman": 8_000_000,
-        "regular_price_toman": 7_700_000,
+        "regular_price_toman": 7_689_000,
         "stone_class": "uncertain",
         "stock": 2,
         "image_status": "MISSING",
@@ -936,7 +1058,7 @@ def test_runner_plan_and_static_safety() -> None:
     assert "delete_post_meta($id, '_sale_price')" in pipeline_source
     assert "update_post_meta($id, '_price', $luxury_regular)" in pipeline_source
     enrichment_source = pipeline_source.split("def enrich_existing_draft", 1)[1].split(
-        "def create_excel_draft", 1
+        "def reprice_existing_draft_exact", 1
     )[0]
     assert "$p->set_description($d['description']);" in enrichment_source
     assert "$p->set_short_description($d['short_description']);" in enrichment_source
@@ -950,6 +1072,31 @@ def test_runner_plan_and_static_safety() -> None:
         "set_gallery_image_ids(",
     ):
         assert forbidden_setter not in enrichment_source
+    reprice_source = pipeline_source.split("def reprice_existing_draft_exact", 1)[1].split(
+        "def update_product_seo_draft", 1
+    )[0]
+    assert "$p->set_regular_price((string)$d['final_price']);" in reprice_source
+    assert "$p->set_price((string)$d['final_price']);" in reprice_source
+    for forbidden_setter in (
+        "set_name(", "set_sku(", "set_status(", "set_description(",
+        "set_short_description(", "set_stock_quantity(", "set_category_ids(",
+        "set_image_id(", "set_gallery_image_ids(",
+    ):
+        assert forbidden_setter not in reprice_source
+
+    seo_source = pipeline_source.split("def update_product_seo_draft", 1)[1].split(
+        "def create_excel_draft", 1
+    )[0]
+    assert "$p->set_short_description((string)$d['short_description']);" in seo_source
+    assert "$p->set_attributes($attrs);" in seo_source
+    for forbidden_setter in (
+        "$p->set_name(", "$p->set_sku(", "$p->set_status(",
+        "$p->set_description(", "$p->set_regular_price(", "$p->set_price(",
+        "$p->set_stock_quantity(", "$p->set_category_ids(",
+        "$p->set_image_id(", "$p->set_gallery_image_ids(",
+    ):
+        assert forbidden_setter not in seo_source
+
     assert "wp_delete_post" not in pipeline_source
     for protected_meta_write in (
         '"legacy_product_id":',
@@ -980,6 +1127,11 @@ def test_runner_plan_and_static_safety() -> None:
         "radman_spec_weight_grams",
         "radman_spec_weight_display",
         "radman_requires_review",
+        "radman_legacy_price_exact_toman",
+        "radman_computed_floor_exact_toman",
+        "radman_final_price_exact_toman",
+        "radman_price_rounding_policy",
+        "radman_price_selection_reason",
         "radman_legacy_code",
         "legacy_original_title",
         "legacy_identity_key",
@@ -991,8 +1143,13 @@ def test_runner_plan_and_static_safety() -> None:
     assert "public_html" in runner_source
     assert "--api-probe" not in runner_source
     assert "API] DEFERRED" in runner_source
-    assert "--enrich-existing" in runner_source
-    assert "--identity-report" in runner_source
+    for owner_mode in (
+        "--enrich-existing", "--identity-report", "--reprice-existing-exact",
+        "--seo-plan", "--seo-enrich-existing", "--seo-qa", "--seo-batch-ready",
+    ):
+        assert owner_mode in runner_source
+    assert "EXACT_NO_CHARM_NO_50000_ROUNDING" in pipeline_source
+    assert "ROUNDING_STEP" not in pipeline_source
     for prohibited in ("remove" + "bg", "BR" + "IA", "BiRef" + "Net"):
         assert prohibited.casefold() not in pipeline_source.casefold()
 
@@ -1014,7 +1171,7 @@ def test_runner_plan_and_static_safety() -> None:
             check=True,
         )
         assert "[API] DEFERRED" in result.stdout
-        assert "HTML product pages are the primary spec source" in result.stdout
+        assert "Excel controls exact price" in result.stdout
         assert "SELECTION + PRICING PREVIEW" in result.stdout
         assert "PLAN PREVIEW ONLY" in result.stdout
         manifests = list(
@@ -1090,6 +1247,11 @@ def test_runner_plan_and_static_safety() -> None:
             "--import-drafts",
             "--enrich-existing",
             "--identity-report",
+            "--reprice-existing-exact",
+            "--seo-plan",
+            "--seo-enrich-existing",
+            "--seo-qa",
+            "--seo-batch-ready",
         ):
             rejected = subprocess.run(
                 ["bash", str(runner), unsafe_mode],
@@ -1110,6 +1272,7 @@ def main() -> int:
     test_excel_parsing_sku_pricing_and_categories()
     test_weight_reconciliation_live_fill_and_excel_mismatch()
     test_sku_edge_cases_and_rounding()
+    test_exact_pricing_has_no_50000_or_charm_rounding()
     test_selection_descending_filters_and_cap()
     test_discovery_uses_direct_then_search_and_logs_strategy()
     test_sku_search_selects_best_result_then_fetches_actual_product_page()
@@ -1118,6 +1281,7 @@ def main() -> int:
     test_existing_draft_title_cleanup_preserves_sku_and_traceability()
     test_identity_mismatch_skips_existing_product_update()
     test_exact_twenty_existing_drafts_update_without_recreation()
+    test_exact_repricing_updates_twenty_drafts_in_place_only()
     test_enrich_existing_is_idempotent_and_price_update_is_targeted()
     test_image_missing_still_importable_and_conflicts_skip()
     test_read_only_identity_report_columns()
