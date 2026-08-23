@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Excel-driven newest-product Draft pipeline for RADMAN SILVER.
+"""Excel-driven Draft repair with HTML-primary legacy specification extraction.
 
-Excel is the sole catalog-data source. Public legacy pages are consulted only to
-locate and download original gallery images. Imports are create-only Drafts.
+Excel remains authoritative for selection, price, stock, and active state. The
+legacy API is deferred; actual legacy product pages are the primary spec source.
 """
 
 from __future__ import annotations
@@ -75,8 +75,7 @@ EXPECTED_APP_ENV = "staging"
 EXPECTED_WP_URL = "https://staging.radmansilver.ir"
 EXPECTED_WP_PATH = "/home/radmansi/staging.radmansilver.ir"
 REQUIRED_CURRENCY = "IRT"
-API_SLOT = Path("/home/radmansi/.config/radman/api-keys/legacy-site.env")
-PIPELINE_VERSION = "PR-30A"
+PIPELINE_VERSION = "PR-31-HTML"
 EXCEL_IMAGE_USER_AGENT = (
     "RadmanSilverExcelImageImporter/1.0 "
     "(+https://radmansilver.ir; owner-controlled original-gallery migration)"
@@ -124,6 +123,7 @@ REPORT_COLUMNS = (
     "excel_price_toman",
     "pre_discount_price_toman",
     "computed_price_toman",
+    "live_weight_floor_toman",
     "final_price_toman",
     "regular_price_toman",
     "price_source",
@@ -133,6 +133,8 @@ REPORT_COLUMNS = (
     "stone_color",
     "band_type",
     "silver_purity",
+    "dimensions",
+    "model_code",
     "spec_weight",
     "weight_source",
     "description_source",
@@ -180,16 +182,104 @@ class SKUDecision:
     raw_code: str
 
 
-KNOWN_SPEC_LABELS = {
-    "دسته بندی": "category",
-    "وزن": "weight",
-    "نوع رکاب": "band_type",
-    "رنگ نگین": "stone_color",
-    "نوع سنگ": "stone_type",
-    "نوع حکاکی": "engraving_type",
-    "عیار نقره": "silver_purity",
-    "سایز": "size",
+SPEC_LABEL_ALIASES: Dict[str, Tuple[str, ...]] = {
+    "category": ("دسته بندی", "دسته‌بندی"),
+    "weight": ("وزن", "وزن تقریبی", "وزن محصول"),
+    "stone_type": ("نوع سنگ", "سنگ", "نوع نگین"),
+    "stone_color": ("رنگ نگین", "رنگ سنگ", "رنگ"),
+    "setting_type": ("نوع رکاب", "رکاب"),
+    "silver_purity": ("عیار نقره", "عیار", "نقره"),
+    "dimensions": ("ابعاد", "ابعاد نگین", "اندازه نگین"),
+    "size": ("سایز", "اندازه"),
+    "model_code": ("کد", "کد مدل", "شناسه کالا"),
+    "engraving": ("نوع حکاکی", "حکاکی"),
 }
+TECHNICAL_FIELDS = {
+    "weight",
+    "stone_type",
+    "stone_color",
+    "setting_type",
+    "silver_purity",
+    "dimensions",
+    "size",
+    "model_code",
+    "engraving",
+}
+SPEC_META_LABELS = {
+    "weight": "وزن",
+    "stone_type": "نوع سنگ",
+    "stone_color": "رنگ نگین",
+    "setting_type": "نوع رکاب",
+    "silver_purity": "عیار نقره",
+    "dimensions": "ابعاد نگین",
+    "size": "سایز",
+    "model_code": "کد مدل",
+    "engraving": "نوع حکاکی",
+}
+DISPLAY_MARKER_RE = re.compile(r"(?:نمایش\s*(?:بیشتر|کمتر)|show\s*(?:more|less))", re.I)
+UNSAFE_SPEC_TERMS = (
+    "شماره تماس", "تماس", "تلفن", "موبایل", "واتساپ", "تلگرام", "اینستاگرام",
+    "ایمیل", "آدرس", "نشانی", "خیابان", "پلاک", "ارسال", "پست پیشتاز",
+    "پرداخت", "گارانتی", "ضمانت", "پشتیبانی", "مرجوعی", "بازگشت", "استرداد",
+    "سفارش", "خرید", "تخفیف", "موجودی محدود", "بهترین قیمت", "سئو",
+    "phone", "contact", "shipping", "payment", "warranty", "support", "return",
+)
+_MOBILE_RE = re.compile(r"(?<![0-9])(?:(?:\+?98)|(?:0098)|0)?[\s()\-]*9(?:[\s()\-]*[0-9]){9}(?![0-9])")
+_LANDLINE_RE = re.compile(r"(?<![0-9])0[\s(\-]*[0-9]{2,3}[\s)\-]*(?:[0-9][\s\-]*){7,8}(?![0-9])")
+_EMAIL_RE = re.compile(r"[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}", re.I)
+
+
+def _normalized_spec_label(label: Any) -> str:
+    value = normalize_text(label).strip(" .،؛:：-–—")
+    if value.startswith("مشخصات"):
+        value = normalize_text(value[len("مشخصات") :]).strip(" .،؛:：-–—")
+    return value.casefold()
+
+
+_SPEC_ALIAS_TO_FIELD = {
+    _normalized_spec_label(alias): field
+    for field, aliases in SPEC_LABEL_ALIASES.items()
+    for alias in aliases
+}
+_SPEC_ALIAS_PATTERN = "|".join(
+    re.escape(alias)
+    for alias in sorted(_SPEC_ALIAS_TO_FIELD, key=len, reverse=True)
+)
+
+
+def _canonical_spec_field(label: Any) -> str:
+    return _SPEC_ALIAS_TO_FIELD.get(_normalized_spec_label(label), "")
+
+
+def _contains_contact_or_unsafe(value: Any) -> bool:
+    text = normalize_text(value)
+    lowered = text.casefold()
+    return bool(
+        _MOBILE_RE.search(text)
+        or _LANDLINE_RE.search(text)
+        or _EMAIL_RE.search(text)
+        or any(term in lowered for term in UNSAFE_SPEC_TERMS)
+    )
+
+
+def _clean_spec_value(value: Any) -> str:
+    text = DISPLAY_MARKER_RE.sub("", html.unescape(str(value or "")))
+    text = normalize_text(text).strip(" .،؛:：-–—|")
+    return text
+
+
+def _valid_spec_value(field: str, value: str) -> bool:
+    if not value or len(value) > 160 or _contains_contact_or_unsafe(value):
+        return False
+    if field == "weight":
+        return parse_weight(value) is not None
+    if field == "silver_purity":
+        return bool(re.search(r"(?:800|830|835|900|925|950|999)", value))
+    if field == "dimensions":
+        return bool(re.search(r"[0-9]", value))
+    if field == "model_code":
+        return len(value) <= 80
+    return True
 
 
 @dataclass(frozen=True)
@@ -203,12 +293,19 @@ class LegacySpecs:
     stone_type: str
     engraving_type: str
     silver_purity: str
+    dimensions: str
     size: str
+    model_code: str
+    technical: Dict[str, str]
     unknown_labels: Tuple[str, ...]
 
     @property
     def found(self) -> bool:
-        return bool(self.all_specs)
+        return bool(self.technical)
+
+    @property
+    def technical_count(self) -> int:
+        return len([value for value in self.technical.values() if value])
 
     def to_dict(self) -> Dict[str, Any]:
         value = asdict(self)
@@ -227,74 +324,78 @@ class LegacyPageResult:
     specs: LegacySpecs
 
 
+@dataclass(frozen=True)
+class SearchCandidate:
+    url: str
+    title: str
+    score: int
+    sku_match: bool
+
+
 class SpecTextHTMLParser(HTMLParser):
-    """Render HTML to text and preserve dl/table label-value pairs."""
+    """Render visible HTML and preserve table, definition-list, and block pairs."""
 
     BLOCK_TAGS = {
-        "article",
-        "br",
-        "dd",
-        "div",
-        "dl",
-        "dt",
-        "h1",
-        "h2",
-        "h3",
-        "h4",
-        "li",
-        "p",
-        "section",
-        "table",
-        "td",
-        "th",
-        "tr",
-        "ul",
+        "article", "br", "dd", "div", "dl", "dt", "h1", "h2", "h3", "h4",
+        "li", "p", "section", "table", "td", "th", "tr", "ul", "span",
     }
+    CAPTURE_BLOCKS = {"article", "div", "li", "p", "section", "span"}
 
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
         self.parts: List[str] = []
         self.structured_pairs: List[Tuple[str, str]] = []
+        self.visible_blocks: List[str] = []
         self._ignored_depth = 0
         self._capture_tag: Optional[str] = None
         self._capture_parts: List[str] = []
-        self._pending_label: Optional[str] = None
+        self._pending_dt: Optional[str] = None
+        self._row_cells: List[str] = []
+        self._block_stack: List[Tuple[str, List[str]]] = []
 
     def handle_starttag(
         self, tag: str, attrs: Sequence[Tuple[str, Optional[str]]]
     ) -> None:
-        if tag in {"script", "style", "noscript"}:
+        if tag in {"script", "style", "noscript", "svg"}:
             self._ignored_depth += 1
             return
         if self._ignored_depth:
             return
         if tag in self.BLOCK_TAGS:
             self.parts.append("\n")
+        if tag == "tr":
+            self._row_cells = []
         if tag in {"dt", "dd", "th", "td"}:
             self._capture_tag = tag
             self._capture_parts = []
+        if tag in self.CAPTURE_BLOCKS:
+            self._block_stack.append((tag, []))
 
     def handle_endtag(self, tag: str) -> None:
-        if tag in {"script", "style", "noscript"} and self._ignored_depth:
+        if tag in {"script", "style", "noscript", "svg"} and self._ignored_depth:
             self._ignored_depth -= 1
             return
         if self._ignored_depth:
             return
         if self._capture_tag == tag:
             text = normalize_text(" ".join(self._capture_parts))
-            if tag in {"dt", "th"}:
-                self._pending_label = text or None
-            elif tag == "td" and text:
-                if self._pending_label:
-                    self.structured_pairs.append((self._pending_label, text))
-                    self._pending_label = None
-                else:
-                    self._pending_label = text.strip(" :：") or None
-            elif tag == "dd" and self._pending_label and text:
-                self.structured_pairs.append((self._pending_label, text))
-                self._pending_label = None
+            if tag in {"th", "td"} and text:
+                self._row_cells.append(text)
+            elif tag == "dt":
+                self._pending_dt = text or None
+            elif tag == "dd" and self._pending_dt and text:
+                self.structured_pairs.append((self._pending_dt, text))
+                self._pending_dt = None
             self._capture_tag = None
             self._capture_parts = []
+        if tag == "tr" and len(self._row_cells) >= 2:
+            self.structured_pairs.append((self._row_cells[0], self._row_cells[1]))
+            self._row_cells = []
+        if self._block_stack and self._block_stack[-1][0] == tag:
+            _block_tag, block_parts = self._block_stack.pop()
+            text = normalize_text(" ".join(block_parts))
+            if text:
+                self.visible_blocks.append(text)
         if tag in self.BLOCK_TAGS:
             self.parts.append("\n")
 
@@ -305,10 +406,152 @@ class SpecTextHTMLParser(HTMLParser):
         self.parts.append(text)
         if self._capture_tag:
             self._capture_parts.append(text)
+        for _tag, parts in self._block_stack:
+            parts.append(text)
 
     @property
     def text(self) -> str:
         return "".join(self.parts)
+
+
+class SearchResultHTMLParser(HTMLParser):
+    """Collect actual product links and their visible anchor titles."""
+
+    def __init__(self, page_url: str) -> None:
+        super().__init__(convert_charrefs=True)
+        self.page_url = page_url
+        self.links: List[Tuple[str, str]] = []
+        self._href = ""
+        self._title = ""
+        self._parts: List[str] = []
+
+    def handle_starttag(
+        self, tag: str, attrs: Sequence[Tuple[str, Optional[str]]]
+    ) -> None:
+        if tag != "a":
+            return
+        values = {key.lower(): value or "" for key, value in attrs}
+        self._href = values.get("href", "")
+        self._title = values.get("title", "")
+        self._parts = []
+
+    def handle_data(self, data: str) -> None:
+        if self._href:
+            self._parts.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag != "a" or not self._href:
+            return
+        url = urllib.parse.urljoin(self.page_url, html.unescape(self._href).strip())
+        parsed = urllib.parse.urlsplit(url)
+        if parsed.hostname == "noghrehmashhad.ir" and (
+            re.search(r"/(?:product|p)/[0-9]+(?:/|$)", parsed.path)
+            or urllib.parse.parse_qs(parsed.query).get("product_id")
+        ):
+            visible_title = normalize_text(" ".join(self._parts))
+            title = visible_title or normalize_text(self._title)
+            self.links.append(
+                (urllib.parse.urlunsplit(("https", parsed.netloc, parsed.path, parsed.query, "")), title)
+            )
+        self._href = ""
+        self._title = ""
+        self._parts = []
+
+
+def empty_legacy_specs() -> LegacySpecs:
+    return LegacySpecs(
+        all_specs={}, category="", weight_display="", weight_grams=None,
+        band_type="", stone_color="", stone_type="", engraving_type="",
+        silver_purity="", dimensions="", size="", model_code="", technical={},
+        unknown_labels=tuple(),
+    )
+
+
+def legacy_specs_from_pairs(pairs: Iterable[Tuple[str, str]]) -> LegacySpecs:
+    known: Dict[str, str] = {}
+    unknown: List[str] = []
+    category = ""
+    for raw_label, raw_value in pairs:
+        label = _normalized_spec_label(raw_label)
+        value = _clean_spec_value(raw_value)
+        if not label or not value:
+            continue
+        field = _canonical_spec_field(label)
+        if not field:
+            if not _contains_contact_or_unsafe(label) and label not in unknown:
+                unknown.append(label)
+            continue
+        if field == "category":
+            if not _contains_contact_or_unsafe(value):
+                category = category or value
+            continue
+        if field not in TECHNICAL_FIELDS or not _valid_spec_value(field, value):
+            continue
+        known.setdefault(field, value)
+    weight_display = known.get("weight", "")
+    all_specs = {
+        SPEC_META_LABELS[field]: value
+        for field, value in known.items()
+        if field in SPEC_META_LABELS
+    }
+    return LegacySpecs(
+        all_specs=all_specs,
+        category=category,
+        weight_display=weight_display,
+        weight_grams=parse_weight(weight_display),
+        band_type=known.get("setting_type", ""),
+        stone_color=known.get("stone_color", ""),
+        stone_type=known.get("stone_type", ""),
+        engraving_type=known.get("engraving", ""),
+        silver_purity=known.get("silver_purity", ""),
+        dimensions=known.get("dimensions", ""),
+        size=known.get("size", ""),
+        model_code=known.get("model_code", ""),
+        technical=dict(known),
+        unknown_labels=tuple(unknown),
+    )
+
+
+def _pairs_from_labeled_text(text: str) -> List[Tuple[str, str]]:
+    cleaned = DISPLAY_MARKER_RE.sub("", html.unescape(str(text or "")))
+    cleaned = cleaned.replace("•", "·")
+    pairs: List[Tuple[str, str]] = []
+    segments = [normalize_text(item) for item in re.split(r"\s*·\s*|[\r\n]+", cleaned)]
+    for index, segment in enumerate(segments):
+        if not segment:
+            continue
+        match = re.match(rf"^\s*(?P<label>{_SPEC_ALIAS_PATTERN})\s*[:：\-–—]?\s*(?P<value>.*)$", segment, re.I)
+        if match and match.group("value").strip():
+            pairs.append((match.group("label"), match.group("value")))
+            continue
+        if _canonical_spec_field(segment) and index + 1 < len(segments):
+            next_value = segments[index + 1]
+            if next_value and not _canonical_spec_field(next_value):
+                pairs.append((segment, next_value))
+    inline = re.compile(
+        rf"(?P<label>{_SPEC_ALIAS_PATTERN})\s*[:：]\s*(?P<value>.*?)"
+        rf"(?=(?:\s*(?:·|\n)\s*)|(?:{_SPEC_ALIAS_PATTERN})\s*[:：]|$)",
+        re.I | re.S,
+    )
+    for match in inline.finditer(cleaned):
+        pairs.append((match.group("label"), match.group("value")))
+    return pairs
+
+
+def parse_spec_block_text(text: str) -> LegacySpecs:
+    return legacy_specs_from_pairs(_pairs_from_labeled_text(text))
+
+
+def extract_legacy_specs(source_html: str) -> LegacySpecs:
+    parser = SpecTextHTMLParser()
+    parser.feed(source_html)
+    pairs: List[Tuple[str, str]] = list(parser.structured_pairs)
+    for block in parser.visible_blocks:
+        if any(alias in _normalized_spec_label(block) for alias in _SPEC_ALIAS_TO_FIELD):
+            pairs.extend(_pairs_from_labeled_text(block))
+    plain_text = html.unescape(parser.text)
+    pairs.extend(_pairs_from_labeled_text(plain_text))
+    return legacy_specs_from_pairs(pairs)
 
 
 class GalleryHTMLParser(HTMLParser):
@@ -392,108 +635,6 @@ def parse_weight(value: Any) -> Optional[Decimal]:
     if parsed is None or parsed <= 0 or parsed > Decimal("500"):
         return None
     return parsed
-
-
-def empty_legacy_specs() -> LegacySpecs:
-    return LegacySpecs({}, "", "", None, "", "", "", "", "", "", tuple())
-
-
-def _normalized_spec_label(label: str) -> str:
-    value = normalize_text(label).strip(" .،؛:：-")
-    if value.startswith("مشخصات"):
-        value = normalize_text(value[len("مشخصات") :]).strip(" .،؛:：-")
-    return value
-
-
-def legacy_specs_from_pairs(pairs: Iterable[Tuple[str, str]]) -> LegacySpecs:
-    all_specs: Dict[str, str] = {}
-    known: Dict[str, str] = {}
-    unknown: List[str] = []
-    for raw_label, raw_value in pairs:
-        label = _normalized_spec_label(raw_label)
-        value = normalize_text(raw_value).strip(" .،؛")
-        if not label or not value:
-            continue
-        if len(label) > 80 or len(value) > 500:
-            continue
-        all_specs.setdefault(label, value)
-        key = KNOWN_SPEC_LABELS.get(label)
-        if key:
-            known.setdefault(key, value)
-        elif label not in unknown:
-            unknown.append(label)
-    weight_display = known.get("weight", "")
-    return LegacySpecs(
-        all_specs=all_specs,
-        category=known.get("category", ""),
-        weight_display=weight_display,
-        weight_grams=parse_weight(weight_display),
-        band_type=known.get("band_type", ""),
-        stone_color=known.get("stone_color", ""),
-        stone_type=known.get("stone_type", ""),
-        engraving_type=known.get("engraving_type", ""),
-        silver_purity=known.get("silver_purity", ""),
-        size=known.get("size", ""),
-        unknown_labels=tuple(unknown),
-    )
-
-
-def parse_spec_block_text(text: str) -> LegacySpecs:
-    normalized = html.unescape(str(text or ""))
-    normalized = normalized.replace("•", "·")
-    segments = re.split(r"\s*·\s*|[\r\n]+", normalized)
-    pairs: List[Tuple[str, str]] = []
-    for segment in segments:
-        cleaned = normalize_text(segment)
-        if not cleaned:
-            continue
-        match = re.search(r"[:：]", cleaned)
-        if not match:
-            continue
-        label = cleaned[: match.start()]
-        value = cleaned[match.end() :]
-        pairs.append((label, value))
-    return legacy_specs_from_pairs(pairs)
-
-
-def extract_legacy_specs(source_html: str) -> LegacySpecs:
-    parser = SpecTextHTMLParser()
-    parser.feed(source_html)
-    candidates: List[LegacySpecs] = []
-    plain_text = html.unescape(parser.text)
-    for match in re.finditer(r"مشخصات", plain_text):
-        chunk = plain_text[match.start() : match.start() + 3000]
-        stop = re.search(r"\n\s*(?:توضیحات|نظرات|دیدگاه|محصولات مرتبط)\s*\n", chunk)
-        if stop:
-            chunk = chunk[: stop.start()]
-        candidates.append(parse_spec_block_text(chunk))
-    if parser.structured_pairs:
-        candidates.append(legacy_specs_from_pairs(parser.structured_pairs))
-    if not candidates:
-        # Some legacy templates omit the visible section heading but retain the
-        # middle-dot field block. Restrict fallback to a known-label window.
-        label_match = re.search(
-            r"(?:دسته[‌ ]?بندی|وزن|نوع رکاب|نوع سنگ|عیار نقره)\s*[:：]",
-            plain_text,
-        )
-        if label_match:
-            candidates.append(
-                parse_spec_block_text(
-                    plain_text[label_match.start() : label_match.start() + 2500]
-                )
-            )
-    if not candidates:
-        return empty_legacy_specs()
-    candidates.sort(
-        key=lambda item: (
-            sum(label in KNOWN_SPEC_LABELS for label in item.all_specs),
-            len(item.all_specs),
-        ),
-        reverse=True,
-    )
-    best = candidates[0]
-    known_count = sum(label in KNOWN_SPEC_LABELS for label in best.all_specs)
-    return best if known_count >= 1 else empty_legacy_specs()
 
 
 def parse_stock(value: Any) -> Tuple[int, Tuple[str, ...]]:
@@ -619,71 +760,63 @@ def _category_display(record: Mapping[str, Any], specs: LegacySpecs) -> str:
     }.get(str(record.get("category")), "زیورآلات نقره")
 
 
-def generate_unique_description(
-    record: Mapping[str, Any], specs: LegacySpecs
-) -> Tuple[str, str]:
-    if not specs.found:
-        fallback = display_text(
-            record.get("seo_fallback_description")
-            or record.get("description")
-            or record.get("seo_title")
-            or record.get("title")
-        )
-        return fallback, "SEO_FALLBACK"
-
-    title = display_text(record.get("title"))
-    category = _category_display(record, specs)
-    legacy_id = int(record.get("legacy_id") or 0)
-    sku = display_text(record.get("sku"))
-    intros = (
-        f"این {category} از مجموعه رادمان سیلور با مشخصات واقعی زیر ارائه می‌شود:",
-        f"در این قطعه {category} از رادمان سیلور، جزئیات ساخت و نگین چنین است:",
-        f"برای مدل حاضر از گروه {category}، مشخصات ثبت‌شده محصول عبارت است از:",
+def minimal_safe_description(title: str, sku: str) -> str:
+    return (
+        f"{title}\n\n"
+        f"این محصول از مجموعه رادمان سیلور با کد مدل {sku} در حال تکمیل "
+        "مشخصات فنی است. اطلاعات تکمیلی پیش از انتشار نهایی بازبینی می‌شود."
     )
+
+
+def _verified_spec_bullets(specs: LegacySpecs) -> List[str]:
     bullets: List[str] = []
-    if specs.silver_purity:
-        bullets.append(f"- جنس: نقره عیار {specs.silver_purity} اصل")
-    if specs.stone_type:
-        stone = f"- نوع سنگ: {specs.stone_type}"
-        if specs.stone_color:
-            stone += f"، رنگ {specs.stone_color}"
-        bullets.append(stone)
-    elif specs.stone_color:
-        bullets.append(f"- رنگ نگین: {specs.stone_color}")
-    if specs.band_type:
-        bullets.append(f"- نوع رکاب: {specs.band_type}")
     if specs.weight_display:
         weight_text = specs.weight_display
         if specs.weight_grams is not None and "گرم" not in weight_text:
             weight_text += " گرم"
-        bullets.append(f"- وزن تقریبی: {weight_text}")
-    if specs.engraving_type:
-        bullets.append(f"- نوع حکاکی: {specs.engraving_type}")
+        bullets.append(f"- وزن: {weight_text}")
+    if specs.stone_type:
+        bullets.append(f"- نوع سنگ: {specs.stone_type}")
+    if specs.stone_color:
+        bullets.append(f"- رنگ نگین: {specs.stone_color}")
+    if specs.band_type:
+        bullets.append(f"- نوع رکاب: {specs.band_type}")
+    if specs.silver_purity:
+        bullets.append(f"- عیار نقره: {specs.silver_purity}")
+    if specs.dimensions:
+        bullets.append(f"- ابعاد نگین: {specs.dimensions}")
     if specs.size:
         bullets.append(f"- سایز: {specs.size}")
-    else:
-        bullets.append("- سایز: امکان انتخاب سایز دلخواه هنگام ثبت سفارش")
-    for label in specs.unknown_labels:
-        value = specs.all_specs.get(label, "")
-        if value:
-            bullets.append(f"- {label}: {value}")
-    if sku:
-        bullets.append(f"- کد مدل: {sku}")
+    if specs.engraving_type:
+        bullets.append(f"- نوع حکاکی: {specs.engraving_type}")
+    return bullets
 
-    conclusions = (
-        "موجودی این قطعه محدود است؛ وزن دقیق ممکن است اندکی با مقدار درج‌شده تفاوت داشته باشد که از ویژگی‌های طبیعی ساخت محصولات نقره است.",
-        "این مدل با موجودی محدود عرضه می‌شود. به‌دلیل ماهیت ساخت زیورآلات نقره، اختلاف جزئی وزن با مقدار تقریبی طبیعی است.",
-        "تعداد این قطعه محدود است و وزن نهایی می‌تواند در بازه‌ای اندک با عدد ثبت‌شده تفاوت داشته باشد؛ این موضوع در محصولات نقره طبیعی است.",
-    )
-    description = "\n\n".join(
-        [
-            title,
-            intros[legacy_id % len(intros)],
-            "\n".join(bullets),
-            conclusions[legacy_id % len(conclusions)],
-        ]
+
+def generate_unique_description(
+    record: Mapping[str, Any], specs: LegacySpecs
+) -> Tuple[str, str]:
+    title = display_text(record.get("title"))
+    sku = display_text(record.get("sku"))
+    if specs.technical_count < 3:
+        return minimal_safe_description(title, sku), "MINIMAL_SAFE"
+    bullets = _verified_spec_bullets(specs)
+    bullets.append(f"- کد مدل: {sku}")
+    description = (
+        f"{title}\n\n"
+        "مشخصات فنی ثبت‌شده برای این قطعه از مجموعه رادمان سیلور:\n\n"
+        + "\n".join(bullets)
+        + "\n\nاطلاعات فوق فقط از مشخصات فنی صفحه همان محصول استخراج شده است."
     )
     return description, "SPECS_TEMPLATE"
+
+
+def generate_safe_excerpt(record: Mapping[str, Any], specs: LegacySpecs) -> str:
+    sku = display_text(record.get("sku"))
+    if specs.technical_count < 3:
+        return f"مشخصات فنی این محصول در حال تکمیل و بازبینی است. کد مدل: {sku}"
+    values = [line.removeprefix("- ") for line in _verified_spec_bullets(specs)]
+    values.append(f"کد مدل: {sku}")
+    return "مشخصات فنی: " + " | ".join(values)
 
 
 def _apply_pricing_to_record(
@@ -724,13 +857,18 @@ def apply_specs_to_record(
     record["spec_band_type"] = specs.band_type
     record["spec_engraving_type"] = specs.engraving_type
     record["spec_silver_purity"] = specs.silver_purity
+    record["spec_dimensions"] = specs.dimensions
     record["spec_size"] = specs.size
+    record["spec_model_code"] = specs.model_code
     record["spec_weight_grams"] = (
         format(specs.weight_grams, "f") if specs.weight_grams is not None else None
     )
     record["spec_weight_display"] = specs.weight_display
     record["unknown_spec_labels_seen"] = list(specs.unknown_labels)
-    record["spec_status"] = "FOUND" if specs.found else "MISSING"
+    record["specs_found_count"] = specs.technical_count
+    record["spec_status"] = (
+        "VERIFIED" if specs.technical_count >= 3 else "INSUFFICIENT_SPECS"
+    )
 
     if specs.category and normalize_text(specs.category) != normalize_text(
         record.get("category_raw")
@@ -748,10 +886,14 @@ def apply_specs_to_record(
         record["weight_grams"] = format(excel_weight, "f")
         if live_weight is not None and abs(excel_weight - live_weight) > Decimal("0.5"):
             flags.append("WEIGHT_MISMATCH")
+        record["live_weight_floor_toman"] = None
         record["price_reconciled_from_live_weight"] = False
     elif live_weight is not None:
         record["weight_source"] = "LIVE_PAGE"
         _apply_pricing_to_record(record, live_weight)
+        record["live_weight_floor_toman"] = round_up_toman(
+            live_weight * Decimal(int(record["rate_used"])), ROUNDING_STEP
+        )
         record["price_reconciled_from_live_weight"] = True
         flags.append("LIVE_PAGE_WEIGHT_USED_FOR_PRICING")
         if previous_final != record.get("final_price_toman"):
@@ -759,13 +901,15 @@ def apply_specs_to_record(
     else:
         record["weight_source"] = "MISSING"
         record["weight_grams"] = None
+        record["live_weight_floor_toman"] = None
         record["price_reconciled_from_live_weight"] = False
 
     description, description_source = generate_unique_description(record, specs)
     record["description"] = description
+    record["short_description"] = generate_safe_excerpt(record, specs)
     record["description_source"] = description_source
-    if not specs.found:
-        flags.append("SPECS_MISSING_SEO_FALLBACK")
+    if specs.technical_count < 3:
+        flags.append("INSUFFICIENT_SPECS")
     record["review_flags"] = list(dict.fromkeys(flags))
     record["radman_requires_review"] = "YES" if record["review_flags"] else "NO"
     return record
@@ -912,7 +1056,9 @@ def load_excel_records(
                     "spec_band_type": "",
                     "spec_engraving_type": "",
                     "spec_silver_purity": "",
+                    "spec_dimensions": "",
                     "spec_size": "",
+                    "spec_model_code": "",
                     "spec_weight_grams": None,
                     "spec_weight_display": "",
                     "unknown_spec_labels_seen": [],
@@ -921,6 +1067,7 @@ def load_excel_records(
                         "YES" if review_flags else "NO"
                     ),
                     "price_reconciled_from_live_weight": False,
+                    "live_weight_floor_toman": None,
                     "stone_class": pricing.stone_class,
                     "rate_used": pricing.rate_used,
                     "computed_price_toman": (
@@ -1056,6 +1203,80 @@ def extract_gallery_urls(page_url: str, source_html: str) -> List[str]:
     return fallback if product_marker else []
 
 
+def _text_has_sku(value: Any, sku: str) -> bool:
+    haystack = normalize_identity_digits(
+        urllib.parse.unquote(html.unescape(str(value or "")))
+    ).casefold()
+    needle = normalize_identity_digits(sku).casefold().strip()
+    if not needle:
+        return False
+    if needle.isdigit():
+        return bool(re.search(rf"(?<![0-9]){re.escape(needle)}(?![0-9])", haystack))
+    compact_haystack = re.sub(r"[^0-9a-z]+", "", haystack)
+    compact_needle = re.sub(r"[^0-9a-z]+", "", needle)
+    return bool(compact_needle and compact_needle in compact_haystack)
+
+
+def _title_tokens(value: Any) -> set[str]:
+    normalized = normalize_text(urllib.parse.unquote(str(value or ""))).casefold()
+    return {
+        token
+        for token in re.findall(r"[0-9a-zآ-ی]+", normalized)
+        if len(token) >= 2 and token not in {"محصول", "مدل", "کد", "نقره"}
+    }
+
+
+def score_search_candidate(
+    url: str,
+    candidate_title: str,
+    *,
+    sku: str,
+    expected_title: str,
+    legacy_id: int,
+) -> SearchCandidate:
+    combined = f"{candidate_title} {urllib.parse.unquote(url)}"
+    sku_match = _text_has_sku(combined, sku)
+    expected_tokens = _title_tokens(expected_title)
+    candidate_tokens = _title_tokens(combined)
+    overlap = len(expected_tokens & candidate_tokens)
+    parsed = urllib.parse.urlsplit(url)
+    id_match = bool(
+        re.search(rf"/(?:product|p)/{legacy_id}(?:/|$)", parsed.path)
+        or urllib.parse.parse_qs(parsed.query).get("product_id") == [str(legacy_id)]
+    )
+    score = (100 if sku_match else 0) + (35 if id_match else 0) + min(overlap, 5) * 8
+    if candidate_title:
+        score += 3
+    return SearchCandidate(url=url, title=candidate_title, score=score, sku_match=sku_match)
+
+
+def extract_search_candidates(
+    search_url: str,
+    source_html: str,
+    *,
+    sku: str,
+    expected_title: str,
+    legacy_id: int,
+) -> List[SearchCandidate]:
+    parser = SearchResultHTMLParser(search_url)
+    parser.feed(source_html)
+    by_url: Dict[str, SearchCandidate] = {}
+    for url, title in parser.links:
+        candidate = score_search_candidate(
+            url,
+            title,
+            sku=sku,
+            expected_title=expected_title,
+            legacy_id=legacy_id,
+        )
+        if candidate.score <= 0:
+            continue
+        previous = by_url.get(url)
+        if previous is None or candidate.score > previous.score:
+            by_url[url] = candidate
+    return sorted(by_url.values(), key=lambda item: (-item.score, item.url))
+
+
 def _links_for_legacy_id(page_url: str, source_html: str, legacy_id: int) -> List[str]:
     discovered = parse_product_links(page_url, source_html)
     hrefs = re.findall(r"href=[\"']([^\"']+)[\"']", source_html, re.I)
@@ -1085,6 +1306,58 @@ class LegacyImageDiscovery:
         if not self._robots_loaded:
             self.fetcher.load_robots()
             self._robots_loaded = True
+
+    def _try_spec_page(
+        self,
+        url: str,
+        strategy: str,
+        legacy_id: int,
+        expected_sku: str,
+        *,
+        identity_evidence: bool,
+    ) -> Optional[LegacyPageResult]:
+        try:
+            source = self.fetcher.fetch_text(url)
+        except (OSError, urllib.error.URLError, RuntimeError) as exc:
+            self.log.append(
+                {
+                    "legacy_id": legacy_id,
+                    "strategy": strategy,
+                    "url": url,
+                    "status": "ERROR",
+                    "detail": str(exc),
+                }
+            )
+            return None
+        specs = extract_legacy_specs(source)
+        expected = normalize_identity_digits(expected_sku).strip().casefold()
+        extracted_code = normalize_identity_digits(specs.model_code).strip().casefold()
+        code_mismatch = bool(expected and extracted_code and extracted_code != expected)
+        page_sku_match = _text_has_sku(f"{url} {source}", expected_sku)
+        identity_ok = not code_mismatch and bool(
+            identity_evidence or page_sku_match or (expected and extracted_code == expected)
+        )
+        found = bool(identity_ok and specs.found)
+        self.log.append(
+            {
+                "legacy_id": legacy_id,
+                "strategy": strategy,
+                "url": url,
+                "status": (
+                    "FOUND"
+                    if found
+                    else ("IDENTITY_MISMATCH" if code_mismatch or not identity_ok else "SPECS_MISSING")
+                ),
+                "identity_confirmed": identity_ok,
+                "page_sku_match": page_sku_match,
+                "extracted_model_code": specs.model_code,
+                "spec_fields": specs.technical_count,
+                "unknown_spec_labels": list(specs.unknown_labels),
+            }
+        )
+        if found:
+            return LegacyPageResult(url, tuple(), strategy, specs)
+        return None
 
     def _try_page(
         self, url: str, strategy: str, legacy_id: int
@@ -1145,6 +1418,103 @@ class LegacyImageDiscovery:
                     mapping.setdefault(int(match.group(1)), []).append(url)
         self._sitemap_by_id = mapping
         return mapping
+
+    def discover_specs(
+        self, legacy_id: int, expected_sku: str, expected_title: str
+    ) -> LegacyPageResult:
+        """Resolve specs by SKU search first, then guarded ID fallbacks."""
+        self.load_robots()
+        search_url = f"{BASE_URL}/?s={urllib.parse.quote(str(expected_sku))}"
+        try:
+            search_html = self.fetcher.fetch_text(search_url)
+            candidates = extract_search_candidates(
+                search_url,
+                search_html,
+                sku=expected_sku,
+                expected_title=expected_title,
+                legacy_id=legacy_id,
+            )
+            self.log.append(
+                {
+                    "legacy_id": legacy_id,
+                    "strategy": "SKU_SEARCH_RESULTS",
+                    "url": search_url,
+                    "status": "CANDIDATES" if candidates else "NO_CANDIDATE",
+                    "candidate_count": len(candidates),
+                    "candidates": [
+                        {
+                            "url": item.url,
+                            "title": item.title,
+                            "score": item.score,
+                            "sku_match": item.sku_match,
+                        }
+                        for item in candidates[:10]
+                    ],
+                }
+            )
+            for candidate in candidates:
+                parsed = urllib.parse.urlsplit(candidate.url)
+                id_match = bool(
+                    re.search(rf"/(?:product|p)/{legacy_id}(?:/|$)", parsed.path)
+                    or urllib.parse.parse_qs(parsed.query).get("product_id")
+                    == [str(legacy_id)]
+                )
+                result = self._try_spec_page(
+                    candidate.url,
+                    "SKU_SEARCH",
+                    legacy_id,
+                    expected_sku,
+                    identity_evidence=bool(
+                        candidate.sku_match or (id_match and candidate.score >= 50)
+                    ),
+                )
+                if result:
+                    return result
+        except (OSError, urllib.error.URLError, RuntimeError) as exc:
+            self.log.append(
+                {
+                    "legacy_id": legacy_id,
+                    "strategy": "SKU_SEARCH_RESULTS",
+                    "url": search_url,
+                    "status": "ERROR",
+                    "detail": str(exc),
+                }
+            )
+
+        direct = (
+            f"{BASE_URL}/product/{legacy_id}/",
+            f"{BASE_URL}/product/{legacy_id}",
+            f"{BASE_URL}/p/{legacy_id}/",
+            f"{BASE_URL}/?product_id={legacy_id}",
+        )
+        for url in direct:
+            result = self._try_spec_page(
+                url,
+                "DIRECT_ID_FALLBACK",
+                legacy_id,
+                expected_sku,
+                identity_evidence=False,
+            )
+            if result:
+                return result
+        for product_url in self._load_sitemaps().get(legacy_id, []):
+            result = self._try_spec_page(
+                product_url,
+                "SITEMAP_ID_FALLBACK",
+                legacy_id,
+                expected_sku,
+                identity_evidence=False,
+            )
+            if result:
+                return result
+        self.log.append(
+            {
+                "legacy_id": legacy_id,
+                "strategy": "ALL_SPEC_STRATEGIES",
+                "status": "MISSING",
+            }
+        )
+        return LegacyPageResult("", tuple(), "NOT_FOUND", empty_legacy_specs())
 
     def discover(self, legacy_id: int) -> LegacyPageResult:
         self.load_robots()
@@ -1345,7 +1715,11 @@ def fetch_specs_for_records(
     updated: List[Dict[str, Any]] = []
     for source_record in records:
         legacy_id = int(source_record["legacy_id"])
-        page = service.discover(legacy_id)
+        page = service.discover_specs(
+            legacy_id,
+            str(source_record.get("sku") or ""),
+            str(source_record.get("title") or ""),
+        )
         record = apply_specs_to_record(source_record, page.specs)
         record["legacy_url"] = page.url or str(source_record.get("legacy_url") or "")
         record["image_discovery_strategy"] = page.strategy
@@ -1422,19 +1796,6 @@ echo wp_json_encode($out);
         update_price: bool,
     ) -> Dict[str, Any]:
         meta = {
-            "legacy_product_id": str(record["legacy_id"]),
-            "_legacy_store_id": str(record["legacy_id"]),
-            "legacy_raw_code": str(record.get("raw_code") or ""),
-            "legacy_url": str(record.get("legacy_url") or ""),
-            "radman_legacy_code": str(record.get("radman_legacy_code") or record["sku"]),
-            "legacy_original_title": str(record.get("legacy_original_title") or record["title"]),
-            "legacy_identity_key": str(record.get("legacy_identity_key") or ""),
-            "legacy_title_cleanup_status": str(
-                record.get("legacy_title_cleanup_status") or "UNCHANGED"
-            ),
-            "legacy_title_cleanup_timestamp": str(
-                record.get("legacy_title_cleanup_timestamp") or ""
-            ),
             "radman_legacy_specs": json.dumps(
                 record.get("legacy_specs", {}), ensure_ascii=False
             ),
@@ -1447,43 +1808,40 @@ echo wp_json_encode($out);
             "radman_spec_silver_purity": str(
                 record.get("spec_silver_purity") or ""
             ),
+            "radman_spec_dimensions": str(record.get("spec_dimensions") or ""),
             "radman_spec_size": str(record.get("spec_size") or ""),
+            "radman_spec_model_code": str(record.get("spec_model_code") or record["sku"]),
             "radman_spec_weight_grams": str(
                 record.get("spec_weight_grams") or ""
             ),
             "radman_spec_weight_display": str(
                 record.get("spec_weight_display") or ""
             ),
+            "radman_spec_status": str(record.get("spec_status") or "INSUFFICIENT_SPECS"),
+            "radman_spec_count": str(record.get("specs_found_count") or 0),
             "weight_source": str(record.get("weight_source") or "MISSING"),
             "description_source": str(
-                record.get("description_source") or "SEO_FALLBACK"
+                record.get("description_source") or "MINIMAL_SAFE"
             ),
             "radman_requires_review": str(
                 record.get("radman_requires_review") or "NO"
-            ),
-            "unknown_spec_labels_seen": ",".join(
-                record.get("unknown_spec_labels_seen", [])
             ),
             "weight_grams": str(record.get("weight_grams") or ""),
             "silver_weight_grams": str(record.get("weight_grams") or ""),
             "price_source": str(record.get("price_source") or ""),
             "rate_used": str(record.get("rate_used") or ""),
             "computed_price": str(record.get("computed_price_toman") or ""),
+            "live_weight_floor_toman": str(
+                record.get("live_weight_floor_toman") or ""
+            ),
             "final_price": str(record.get("final_price_toman") or ""),
             "radman_review_flags": " | ".join(record.get("review_flags", [])),
-            "radman_import_source": "excel_1000_pipeline",
-            "radman_import_version": PIPELINE_VERSION,
         }
         payload = {
             "product_id": int(product_id),
             "legacy_id": str(record["legacy_id"]),
-            "public_title": str(record.get("title") or ""),
             "description": str(record.get("description") or ""),
-            "short_description": (
-                str(record.get("seo_fallback_description") or "")
-                if record.get("description_source") == "SEO_FALLBACK"
-                else ""
-            ),
+            "short_description": str(record.get("short_description") or ""),
             "update_price": bool(update_price),
             "regular_price": record.get("regular_price_toman"),
             "meta": meta,
@@ -1497,7 +1855,6 @@ $p=wc_get_product((int)$d['product_id']);
 if (!$p || $p->get_status('edit') !== 'draft') {{ fwrite(STDERR, 'Draft product not found'); exit(12); }}
 $legacy=(string)$p->get_meta('legacy_product_id', true, 'edit');
 if ($legacy !== (string)$d['legacy_id']) {{ fwrite(STDERR, 'legacy ID mismatch'); exit(13); }}
-$p->set_name($d['public_title']);
 $p->set_description($d['description']);
 $p->set_short_description($d['short_description']);
 if ($d['update_price']) {{
@@ -1510,7 +1867,12 @@ $id=$p->save();
 delete_post_meta($id, '_sale_price');
 update_post_meta($id, '_price', $luxury_regular);
 wc_delete_product_transients($id);
-echo wp_json_encode(array('id'=>(int)$id,'status'=>$p->get_status('edit'),'price_updated'=>(bool)$d['update_price']));
+echo wp_json_encode(array(
+ 'id'=>(int)$id,
+ 'status'=>$p->get_status('edit'),
+ 'price_updated'=>(bool)$d['update_price'],
+ 'sale_meta_after_cleanup'=>(string)get_post_meta($id, '_sale_price', true)
+));
 """
         result = self.eval_json(php)
         if not isinstance(result, dict) or result.get("status") != "draft":
@@ -1789,11 +2151,26 @@ def enrich_existing_records(
         product_id = int(record["wordpress_product_id"])
         current_price = _positive_toman(record.get("wordpress_current_price"))
         final_price = record.get("final_price_toman")
+        live_floor = _positive_toman(record.get("live_weight_floor_toman"))
         update_price = bool(
             record.get("price_reconciled_from_live_weight")
+            and live_floor is not None
             and final_price is not None
-            and current_price != int(final_price)
+            and (
+                current_price is None
+                or (live_floor > current_price and int(final_price) > current_price)
+            )
         )
+        if (
+            current_price is not None
+            and final_price is not None
+            and int(final_price) < current_price
+        ):
+            record["final_price_toman"] = current_price
+            record["regular_price_toman"] = current_price
+            record["review_flags"] = list(
+                dict.fromkeys([*record.get("review_flags", []), "PRICE_REDUCTION_BLOCKED"])
+            )
         result = gateway.enrich_existing_draft(
             record,
             product_id,
@@ -1821,6 +2198,7 @@ def enrich_existing_records(
                 "description_updated": "YES",
                 "specs_found_count": len(record.get("legacy_specs", {})),
                 "price_updated": bool(result.get("price_updated")),
+                "sale_meta_after_cleanup": str(result.get("sale_meta_after_cleanup") or ""),
                 "review_flags": list(record.get("review_flags", [])),
             }
         )
@@ -1960,6 +2338,7 @@ def _report_row(record: Mapping[str, Any]) -> Dict[str, Any]:
         "excel_price_toman": record.get("excel_price_toman") or "",
         "pre_discount_price_toman": record.get("pre_discount_price_toman") or "",
         "computed_price_toman": record.get("computed_price_toman") or "",
+        "live_weight_floor_toman": record.get("live_weight_floor_toman") or "",
         "final_price_toman": record.get("final_price_toman") or "",
         "regular_price_toman": record.get("regular_price_toman") or "",
         "price_source": record.get("price_source", ""),
@@ -1969,6 +2348,8 @@ def _report_row(record: Mapping[str, Any]) -> Dict[str, Any]:
         "stone_color": record.get("spec_stone_color", ""),
         "band_type": record.get("spec_band_type", ""),
         "silver_purity": record.get("spec_silver_purity", ""),
+        "dimensions": record.get("spec_dimensions", ""),
+        "model_code": record.get("spec_model_code") or record.get("sku", ""),
         "spec_weight": record.get("spec_weight_grams") or "",
         "weight_source": record.get("weight_source", "MISSING"),
         "description_source": record.get("description_source", "SEO_FALLBACK"),
@@ -2219,7 +2600,7 @@ def inspect_excel(excel_file: Path, max_products: int) -> None:
         print(f"  first/newest IDs: {', '.join(str(value) for value in identifiers[:5])}")
     print("  ordering: ID DESCENDING (higher ID is newer)")
     print(f"  warnings: {len(warnings)}")
-    print(f"  API slot: {API_SLOT}")
+    print("  API: DEFERRED; HTML product pages are the primary spec source")
     print("  mutation: NONE")
 
 
@@ -2365,7 +2746,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             "max_products": args.max_products,
             "selection_summary": selection,
             "excel_warnings": warnings,
-            "api_slot": str(API_SLOT),
+            "spec_source": "HTML_PRODUCT_PAGE_PRIMARY_API_DEFERRED",
             "products": records,
         }
         manifest_path = run_dir / "prepared-products.json"

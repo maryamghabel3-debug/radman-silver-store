@@ -1,8 +1,8 @@
 # راهنمای import هزار محصول جدیدتر از Excel با تصاویر اصلی
 
-**نسخه:** PR-28
+**نسخه:** PR-31 (HTML spec repair)
 
-**تصمیم قطعی منبع داده:** فایل Excel مالک تنها منبع حقیقت عنوان، دسته، قیمت، موجودی، فعال بودن، وزن، کد و توضیحات است. scrape/API برای داده محصول منسوخ شده و فقط برای یافتن و دانلود gallery اصلی با `legacy_product_id` مجاز است.
+**تصمیم قطعی منبع داده:** Excel منبع selection، price، stock و active flag است. API سایت قدیمی deferred است. برای `--enrich-existing`، صفحه HTML واقعی محصول پس از SKU search منبع اصلی مشخصات فنی allowlisted است؛ متن عمومی/SEO و contact وارد رادمان نمی‌شود.
 
 ## ورودی قطعی
 
@@ -20,15 +20,9 @@ ID بالاتر = محصول جدیدتر
 
 انتخاب با `legacy_id DESC` انجام می‌شود؛ ردیف غیرفعال یا `نوع موجودی=ناموجود` حذف و سپس اولین `MAX_PRODUCTS` انتخاب می‌شود.
 
-## API slot
+## API deferred
 
-مسیر رزروشده برای credential احتمالی API تصویر:
-
-```text
-/home/radmansi/.config/radman/api-keys/legacy-site.env
-```
-
-نسخه فعلی برای تصویر از صفحات عمومی، search و sitemap استفاده می‌کند و محتوای این فایل را نمی‌خواند یا log نمی‌کند. credential نباید در repository قرار گیرد. در صورت استفاده آینده، فایل باید mode `600` داشته باشد.
+API autodiscovery در این مرحله موفق نبود و هیچ `--api-probe` یا credential API در runner استفاده نمی‌شود. مسیر رسمی PR-31، SKU search و fetch صفحه HTML واقعی محصول است.
 
 ## پیش‌نیاز
 
@@ -86,7 +80,7 @@ runner قبل از اجرای Python یک backup دیتابیس خصوصی می�
 
 ### enrich-existing — اصلاح Draftهای موجود با مشخصات واقعی
 
-این mode فقط Draftهای دارای meta `legacy_product_id` را با Excel تطبیق می‌دهد، همان صفحه ID-based را یک‌بار fetch می‌کند، title عمومی را پاک می‌کند، specificationها و توضیح یکتا را می‌سازد و post title/content/meta را idempotent به‌روزرسانی می‌کند. محصول recreate نمی‌شود و SKU فعلی، stock، category، featured image، gallery و Draft status دست‌نخورده می‌مانند. قیمت فقط وقتی تغییر می‌کند که وزن Excel خالی و وزن live قابل‌استفاده باشد و محاسبه جدید final را تغییر دهد.
+این mode فقط Draftهای دارای meta `legacy_product_id` را با Excel تطبیق می‌دهد. ابتدا `/?s=<SKU>` را می‌خواند، بهترین نتیجه مطابق SKU/title را انتخاب می‌کند و سپس صفحه واقعی محصول را fetch می‌کند. table، definition list، div/span و visible labeled blocks—including بخش «نمایش بیشتر/کمتر»—با allowlist سخت استخراج می‌شوند. محصول recreate نمی‌شود و title، SKU، stock، category، featured image، gallery و Draft status دست‌نخورده می‌مانند. فقط content، excerpt و technical meta نوشته می‌شوند؛ قیمت فقط وقتی بالا می‌رود که وزن live مجاز کف بالاتری از current بسازد. sale price حذف می‌شود.
 
 ```bash
 export APP_ENV=staging
@@ -137,7 +131,7 @@ legacy_title_cleanup_status
 legacy_title_cleanup_timestamp
 ```
 
-در `--enrich-existing` محصول Draft موجود با `legacy_product_id` update می‌شود و recreate نمی‌شود. اگر کد انتهای عنوان با SKU فعلی متفاوت باشد، SKU تغییر نمی‌کند؛ `SKU_TITLE_MISMATCH` و review ثبت می‌شود. title/description/meta و در صورت reconciliation مجاز price تغییر می‌کنند؛ featured image، gallery، category، stock و Draft status دست‌نخورده می‌مانند.
+در `--enrich-existing` محصول Draft موجود با `legacy_product_id` update می‌شود و recreate نمی‌شود. title و SKU فعلی تغییر نمی‌کنند؛ mismatch فقط report/review می‌شود. content، excerpt، technical meta و در صورت floor بالاتر price مجازند؛ featured image، gallery، category، stock و Draft status دست‌نخورده می‌مانند.
 
 گزارش read-only هویت:
 
@@ -191,30 +185,15 @@ final = ceil(selected / 50000) × 50000
 - failure رنگ/detail → فایل اصلی انتخاب می‌شود؛
 - تصویر اول featured و بقیه gallery با ترتیب source هستند.
 
-## مشخصات واقعی و توضیح یکتا (PR-29)
+## مشخصات واقعی و توضیح امن (PR-31)
 
-همان HTTP response که برای gallery استفاده می‌شود، بخش «مشخصات» را نیز parse می‌کند؛ round-trip دوم انجام نمی‌شود. pairهای `label:value` با جداکننده `·` مستقل از ترتیب/تعداد خوانده می‌شوند. labelهای شناخته‌شده دسته‌بندی، وزن، نوع رکاب، رنگ نگین، نوع سنگ، نوع حکاکی، عیار نقره و سایز هستند؛ label ناشناخته نیز در JSON حفظ و در گزارش batch فهرست می‌شود.
+labelهای مجاز: وزن/وزن تقریبی/وزن محصول، نوع سنگ/سنگ/نوع نگین، رنگ نگین/رنگ سنگ/رنگ، نوع رکاب/رکاب، عیار نقره/عیار/نقره، ابعاد/ابعاد نگین/اندازه نگین، سایز/اندازه، کد/کد مدل/شناسه کالا و حکاکی. unknown label و تمام phone/contact/address، shipping/payment، warranty/support/return و SEO/general marketing حذف می‌شوند.
 
-متادیتا:
+متادیتای فنی شامل `radman_legacy_specs`, fieldهای `radman_spec_*`, `radman_spec_dimensions`, `radman_spec_model_code`, `radman_spec_status` و `radman_spec_count` است. کمتر از سه field فنی، `MINIMAL_SAFE` و `INSUFFICIENT_SPECS` می‌گیرد. description verified شامل title، intro کوتاه، فقط bulletهای واقعی و `کد مدل` است؛ promise یا scarcity ساختگی ندارد.
 
-```text
-radman_legacy_specs
-radman_spec_stone_type
-radman_spec_stone_color
-radman_spec_band_type
-radman_spec_engraving_type
-radman_spec_silver_purity
-radman_spec_size
-radman_spec_weight_grams
-radman_spec_weight_display
-weight_source
-description_source
-radman_requires_review
-```
+اگر وزن Excel خالی و وزن live معتبر باشد، floor قیمت محاسبه می‌شود؛ فقط floor بالاتر از current قابل اعمال است و کاهش قیمت ممنوع است. `_sale_price` حذف و regular/current همگام می‌شوند.
 
-اگر وزن Excel خالی و وزن live معتبر باشد، `weight_source=LIVE_PAGE` و قیمت دوباره با نرخ PR-28 محاسبه می‌شود. اگر وزن Excel موجود باشد، `weight_source=EXCEL` باقی می‌ماند؛ اختلاف بیش از `0.5g` فقط `WEIGHT_MISMATCH` و review ایجاد می‌کند.
-
-وقتی مشخصات وجود دارد، description قابل‌مشاهده از title، category، سنگ/رنگ، رکاب، وزن، حکاکی، سایز، labelهای اضافی و کد مدل ساخته می‌شود (`SPECS_TEMPLATE`). متن عمومی COL 29 در این حالت استفاده نمی‌شود. فقط در نبود کامل spec، COL 29/COL 28 به‌صورت `SEO_FALLBACK` مجاز است. اجرای `--full-pilot` برای batchهای 100/1000 این enrichment را به‌طور پیش‌فرض انجام می‌دهد.
+نمونه‌ها و فرمان owner در `docs/HTML-SPEC-ENRICHMENT-RUNBOOK.md` ثبت شده‌اند.
 
 ## گزارش‌ها
 

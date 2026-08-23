@@ -19,6 +19,7 @@ HERE = Path(__file__).resolve().parent
 REPO_ROOT = HERE.parent
 FIXTURE = REPO_ROOT / "tests" / "fixtures" / "excel-import" / "excel_products.json"
 SPEC_FIXTURE = REPO_ROOT / "tests" / "fixtures" / "legacy-specs" / "spec_blocks.json"
+LIVE_HTML_FIXTURE = REPO_ROOT / "tests" / "fixtures" / "legacy-specs" / "live_product_page.html"
 sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(HERE))
 
@@ -68,28 +69,37 @@ def test_real_spec_block_fixtures_and_html_section_parser() -> None:
     assert parsed[0].weight_display == "16 گرم"
     assert parsed[2].stone_type == "در نجف"
 
-    html_page = (
-        '<section id="specifications"><h2>مشخصات</h2><p>'
-        + fixtures[0]["text"]
-        + " · طرح ویژه:شیر و خورشید</p></section>"
-    )
+    html_page = LIVE_HTML_FIXTURE.read_text(encoding="utf-8")
     extracted = pipeline.extract_legacy_specs(html_page)
-    assert extracted.stone_type == "حدید"
-    assert extracted.weight_grams == Decimal("16")
-    assert extracted.all_specs["طرح ویژه"] == "شیر و خورشید"
-    assert extracted.unknown_labels == ("طرح ویژه",)
-    definition_html = """
-    <h3>مشخصات</h3><dl>
-      <dt>نوع سنگ</dt><dd>فیروزه</dd>
-      <dt>وزن</dt><dd>۹.۵ گرم</dd>
-      <dt>طرح</dt><dd>بیضی</dd>
-    </dl>
+    assert extracted.technical_count == 8
+    assert extracted.category == "انگشتر مردانه"
+    assert extracted.weight_grams == Decimal("8.2")
+    assert extracted.stone_type == "عقیق"
+    assert extracted.stone_color == "سیاه"
+    assert extracted.band_type == "دست ساز"
+    assert extracted.silver_purity == "925"
+    assert extracted.dimensions == "14 × 10 میلی متر"
+    assert extracted.size == "60"
+    assert extracted.model_code == "1057"
+    serialized = json.dumps(extracted.to_dict(), ensure_ascii=False)
+    for forbidden in (
+        "0912", "۰۹۱۲", "نمایش کمتر", "پست پیشتاز رایگان",
+        "ضمانت مادام", "پرداخت در محل", "آدرس", "بهترین انگشتر",
+    ):
+        assert forbidden not in serialized
+
+    adjacent_blocks = """
+    <section><h2>مشخصات</h2>
+      <div>وزن تقریبی</div><div>۹.۵ گرم</div>
+      <div><span>سنگ</span><span>فیروزه</span></div>
+      <div><span>عیار</span><span>925</span></div>
+    </section>
     """
-    definition_specs = pipeline.extract_legacy_specs(definition_html)
-    assert definition_specs.stone_type == "فیروزه"
-    assert definition_specs.weight_grams == Decimal("9.5")
-    assert definition_specs.all_specs["طرح"] == "بیضی"
-    print("PASS: three verbatim real spec blocks, mixed digits, unknown labels, and HTML extraction")
+    adjacent = pipeline.extract_legacy_specs(adjacent_blocks)
+    assert adjacent.weight_grams == Decimal("9.5")
+    assert adjacent.stone_type == "فیروزه"
+    assert adjacent.silver_purity == "925"
+    print("PASS: strict table/dl/div/visible HTML extraction yields 5+ safe technical fields")
 
 
 def test_unique_descriptions_differ_and_omit_missing_fields() -> None:
@@ -110,13 +120,16 @@ def test_unique_descriptions_differ_and_omit_missing_fields() -> None:
         assert "متن عمومی قدیمی" not in description
         assert "None" not in description
         assert f"کد مدل: MODEL-{index}" in description
+        assert "موجودی محدود" not in description
+        assert "اصل" not in description
+        assert "ثبت سفارش" not in description
         descriptions.append(description)
     assert len(set(descriptions)) == 3
     assert "- نوع حکاکی: " not in descriptions[1]
     assert "- نوع رکاب: " not in descriptions[1]
     assert "- نوع سنگ: در نجف" in descriptions[2]
     size_missing = pipeline.parse_spec_block_text("نوع سنگ:فیروزه · عیار نقره:925")
-    size_description, _ = pipeline.generate_unique_description(
+    size_description, size_source = pipeline.generate_unique_description(
         {
             "legacy_id": 999,
             "sku": "MODEL-999",
@@ -126,9 +139,12 @@ def test_unique_descriptions_differ_and_omit_missing_fields() -> None:
         },
         size_missing,
     )
-    assert "امکان انتخاب سایز دلخواه هنگام ثبت سفارش" in size_description
+    assert size_source == "MINIMAL_SAFE"
+    assert "در حال تکمیل مشخصات فنی است" in size_description
+    assert "امکان انتخاب سایز دلخواه هنگام ثبت سفارش" not in size_description
+    assert "موجودی محدود" not in size_description
     assert "None" not in size_description
-    print("PASS: three spec-based descriptions are unique and omit absent fields cleanly")
+    print("PASS: factual descriptions use verified bullets or exact minimal-safe fallback")
 
 
 def test_excel_parsing_sku_pricing_and_categories() -> None:
@@ -352,6 +368,45 @@ def test_discovery_uses_direct_then_search_and_logs_strategy() -> None:
     print("PASS: one resolved-page response yields both gallery and specs with logged strategy")
 
 
+class FakeSKUSearchFetcher:
+    def __init__(self) -> None:
+        self.loaded = False
+        self.calls = []
+
+    def load_robots(self):
+        self.loaded = True
+
+    def fetch_text(self, url):
+        assert self.loaded
+        self.calls.append(url)
+        if url == "https://noghrehmashhad.ir/?s=1057":
+            return """
+              <a href="/product/3643/دستبند-قدیمی-کد-9999/">دستبند کد 9999</a>
+              <a href="/product/9999/انگشتر-عقیق-کد-1057/">انگشتر عقیق سیاه کد 1057</a>
+            """
+        if "/product/9999/" in url:
+            return LIVE_HTML_FIXTURE.read_text(encoding="utf-8")
+        raise AssertionError(f"unexpected fetch: {url}")
+
+
+def test_sku_search_selects_best_result_then_fetches_actual_product_page() -> None:
+    fetcher = FakeSKUSearchFetcher()
+    discovery = pipeline.LegacyImageDiscovery(fetcher=fetcher)
+    page = discovery.discover_specs(3643, "1057", "انگشتر عقیق سیاه")
+    assert fetcher.calls[0] == "https://noghrehmashhad.ir/?s=1057"
+    assert page.url == "https://noghrehmashhad.ir/product/9999/انگشتر-عقیق-کد-1057/"
+    assert page.strategy == "SKU_SEARCH"
+    assert page.specs.technical_count >= 5
+    assert page.specs.model_code == "1057"
+    assert all("?s=1057" not in item.get("url", "") for item in discovery.log if item.get("status") == "FOUND")
+    assert any(
+        item.get("strategy") == "SKU_SEARCH_RESULTS"
+        and item.get("candidate_count") == 2
+        for item in discovery.log
+    )
+    print("PASS: SKU search scores title/URL, then extracts only from the actual product page")
+
+
 def test_gallery_extraction_is_original_ordered_and_image_only() -> None:
     page = "https://noghrehmashhad.ir/product/3643/محصول/"
     source = """
@@ -419,6 +474,9 @@ class FakeGateway:
                 "legacy_original_title": record.get("legacy_original_title"),
                 "legacy_identity_key": record.get("legacy_identity_key"),
                 "description": record["description"],
+                "short_description": record.get("short_description", ""),
+                "spec_dimensions": record.get("spec_dimensions", ""),
+                "specs_found_count": record.get("specs_found_count", 0),
                 "legacy_specs": json.dumps(
                     record.get("legacy_specs", {}), ensure_ascii=False, sort_keys=True
                 ),
@@ -429,6 +487,7 @@ class FakeGateway:
             "id": product_id,
             "status": "draft",
             "price_updated": update_price,
+            "sale_meta_after_cleanup": "",
         }
 
 
@@ -478,6 +537,46 @@ def test_existing_draft_title_cleanup_preserves_sku_and_traceability() -> None:
     print("PASS: existing Draft title cleans in place; mismatched SKU stays unchanged and flagged")
 
 
+def test_exact_twenty_existing_drafts_update_without_recreation() -> None:
+    specs = pipeline.extract_legacy_specs(
+        LIVE_HTML_FIXTURE.read_text(encoding="utf-8")
+    )
+    records = []
+    for index in range(20):
+        sku = str(1057 + index)
+        source = {
+            "wordpress_product_id": 500 + index,
+            "legacy_id": 3643 - index,
+            "sku": sku,
+            "title": f"انگشتر نقره نمونه {index + 1}",
+            "category": "rings",
+            "category_raw": "انگشتر مردانه",
+            "excel_weight_grams": None,
+            "excel_price_toman": 4_000_000,
+            "pre_discount_price_toman": None,
+            "final_price_toman": 4_000_000,
+            "regular_price_toman": 4_000_000,
+            "wordpress_current_price": 7_700_000,
+            "review_flags": [],
+        }
+        records.append(pipeline.apply_specs_to_record(source, specs))
+    gateway = FakeGateway()
+    actions = pipeline.enrich_existing_records(records, gateway)
+    assert len(actions) == len(gateway.enrich_calls) == 20
+    assert gateway.created == []
+    assert all(action["action"] == "ENRICHED_DRAFT" for action in actions)
+    assert all(action["sale_meta_after_cleanup"] == "" for action in actions)
+    assert all(call["update_price"] is False for call in gateway.enrich_calls)
+    assert all(call["specs_found_count"] >= 5 for call in gateway.enrich_calls)
+    for call in gateway.enrich_calls:
+        assert call["short_description"]
+        assert "0912" not in call["description"]
+        assert "نمایش کمتر" not in call["description"]
+        assert "پست پیشتاز" not in call["description"]
+        assert "موجودی محدود" not in call["description"]
+    print("PASS: exact 20 existing Drafts update in place with zero product recreation")
+
+
 def test_enrich_existing_is_idempotent_and_price_update_is_targeted() -> None:
     fixture = json.loads(SPEC_FIXTURE.read_text(encoding="utf-8"))[0]
     specs = pipeline.parse_spec_block_text(fixture["text"])
@@ -505,7 +604,23 @@ def test_enrich_existing_is_idempotent_and_price_update_is_targeted() -> None:
     assert gateway.enrich_calls[0]["legacy_identity_key"] == "3643:1058"
     assert gateway.enrich_calls[0]["update_price"] is True
     assert gateway.enrich_calls[1]["update_price"] is False
-    print("PASS: enrich-existing is idempotent and only changes price after live-weight reconciliation")
+    assert first[0]["sale_meta_after_cleanup"] == second[0]["sale_meta_after_cleanup"] == ""
+
+    lower = dict(enriched)
+    lower["wordpress_current_price"] = 20_000_000
+    lower_actions = pipeline.enrich_existing_records([lower], gateway)
+    assert lower_actions[0]["price_updated"] is False
+    assert lower["regular_price_toman"] == 20_000_000
+    assert "PRICE_REDUCTION_BLOCKED" in lower["review_flags"]
+
+    excel_only_higher = dict(enriched)
+    excel_only_higher["wordpress_current_price"] = 9_000_000
+    excel_only_higher["live_weight_floor_toman"] = 8_000_000
+    excel_only_higher["final_price_toman"] = 12_000_000
+    excel_only_higher["regular_price_toman"] = 12_000_000
+    no_floor_raise = pipeline.enrich_existing_records([excel_only_higher], gateway)
+    assert no_floor_raise[0]["price_updated"] is False
+    print("PASS: price rises only when live-weight floor beats current; sale price stays empty")
 
 
 def test_image_missing_still_importable_and_conflicts_skip() -> None:
@@ -605,14 +720,15 @@ def test_runner_plan_and_static_safety() -> None:
     assert "set_status('draft')" in pipeline_source
     assert "set_status('publish')" not in pipeline_source
     assert "set_sale_price" not in pipeline_source
-    assert '"sale_price"' not in pipeline_source
     assert "delete_post_meta($id, '_sale_price')" in pipeline_source
     assert "update_post_meta($id, '_price', $luxury_regular)" in pipeline_source
     enrichment_source = pipeline_source.split("def enrich_existing_draft", 1)[1].split(
         "def create_excel_draft", 1
     )[0]
-    assert "$p->set_name($d['public_title']);" in enrichment_source
+    assert "$p->set_description($d['description']);" in enrichment_source
+    assert "$p->set_short_description($d['short_description']);" in enrichment_source
     for forbidden_setter in (
+        "set_name(",
         "set_sku(",
         "set_status(",
         "set_stock_quantity(",
@@ -622,6 +738,14 @@ def test_runner_plan_and_static_safety() -> None:
     ):
         assert forbidden_setter not in enrichment_source
     assert "wp_delete_post" not in pipeline_source
+    for protected_meta_write in (
+        '"legacy_product_id":',
+        '"legacy_raw_code":',
+        '"legacy_original_title":',
+        '"legacy_identity_key":',
+        '"legacy_title_cleanup_status":',
+    ):
+        assert protected_meta_write not in enrichment_source
     for meta_key in (
         "radman_legacy_specs",
         "radman_spec_stone_type",
@@ -629,7 +753,11 @@ def test_runner_plan_and_static_safety() -> None:
         "radman_spec_band_type",
         "radman_spec_engraving_type",
         "radman_spec_silver_purity",
+        "radman_spec_dimensions",
         "radman_spec_size",
+        "radman_spec_model_code",
+        "radman_spec_status",
+        "radman_spec_count",
         "radman_spec_weight_grams",
         "radman_spec_weight_display",
         "radman_requires_review",
@@ -642,7 +770,8 @@ def test_runner_plan_and_static_safety() -> None:
         assert meta_key in pipeline_source
     assert "amount // 10" not in pipeline_source
     assert "public_html" in runner_source
-    assert "LEGACY_API_ENV=/home/radmansi/.config/radman/api-keys/legacy-site.env" in runner_source
+    assert "--api-probe" not in runner_source
+    assert "API] DEFERRED" in runner_source
     assert "--enrich-existing" in runner_source
     assert "--identity-report" in runner_source
     for prohibited in ("remove" + "bg", "BR" + "IA", "BiRef" + "Net"):
@@ -665,7 +794,8 @@ def test_runner_plan_and_static_safety() -> None:
             text=True,
             check=True,
         )
-        assert "[API SLOT] /home/radmansi/.config/radman/api-keys/legacy-site.env" in result.stdout
+        assert "[API] DEFERRED" in result.stdout
+        assert "HTML product pages are the primary spec source" in result.stdout
         assert "SELECTION + PRICING PREVIEW" in result.stdout
         assert "PLAN PREVIEW ONLY" in result.stdout
         manifests = list(
@@ -676,6 +806,7 @@ def test_runner_plan_and_static_safety() -> None:
         assert len(manifests) == 1
         payload = json.loads(manifests[0].read_text(encoding="utf-8"))
         assert payload["sort"] == "legacy_id DESC"
+        assert payload["spec_source"] == "HTML_PRODUCT_PAGE_PRIMARY_API_DEFERRED"
         assert [row["legacy_id"] for row in payload["products"]] == [
             3643,
             3642,
@@ -743,7 +874,7 @@ def test_runner_plan_and_static_safety() -> None:
                 text=True,
             )
             assert rejected.returncode != 0
-    print("PASS: plan is offline/no-WP; Bash/POSIX, guards, API slot, and newest ordering")
+    print("PASS: plan is offline/no-WP; guards declare API deferred and HTML primary")
 
 
 def main() -> int:
@@ -754,8 +885,10 @@ def main() -> int:
     test_sku_edge_cases_and_rounding()
     test_selection_descending_filters_and_cap()
     test_discovery_uses_direct_then_search_and_logs_strategy()
+    test_sku_search_selects_best_result_then_fetches_actual_product_page()
     test_gallery_extraction_is_original_ordered_and_image_only()
     test_existing_draft_title_cleanup_preserves_sku_and_traceability()
+    test_exact_twenty_existing_drafts_update_without_recreation()
     test_enrich_existing_is_idempotent_and_price_update_is_targeted()
     test_image_missing_still_importable_and_conflicts_skip()
     test_read_only_identity_report_columns()

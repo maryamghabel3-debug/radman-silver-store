@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Offline PR-28 acceptance gates. No host, network, image download, or WP mutation.
+# Offline PR-31 HTML-enrichment gates. No host, network, image download, or WP mutation.
 set -euo pipefail
 
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
@@ -48,6 +48,11 @@ fi
 if grep -niE 'wp_delete_post|post[[:space:]]+delete|product[[:space:]]+delete' \
   agents/agent_excel_product_pipeline.py scripts/run_excel_import.sh; then
   echo '[FAIL] product deletion path found' >&2
+  exit 1
+fi
+
+if grep -n -- '--api-probe' scripts/run_excel_import.sh; then
+  echo '[FAIL] API probe must remain deferred in the PR-31 owner runner' >&2
   exit 1
 fi
 
