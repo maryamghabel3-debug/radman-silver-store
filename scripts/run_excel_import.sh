@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# PR-28 owner runner: Excel data + ID-based original gallery images.
+# PR-31 owner runner: HTML-primary spec repair for existing Draft products.
 set -euo pipefail
 
 umask 077
@@ -9,7 +9,6 @@ PYTHON_BIN=${PYTHON_BIN:-python3}
 EXCEL_FILE=${EXCEL_FILE:-/home/radmansi/radman-deploy/products_20260821_182238.xlsx}
 MAX_PRODUCTS=${MAX_PRODUCTS:-1000}
 RADMAN_PRIVATE_DIR=${RADMAN_PRIVATE_DIR:-/home/radmansi/private}
-LEGACY_API_ENV=/home/radmansi/.config/radman/api-keys/legacy-site.env
 MODE=
 MANIFEST=
 LOCK_DIR=
@@ -29,7 +28,7 @@ Modes (choose exactly one):
   --plan            Select newest eligible products and preview pricing
   --fetch-images    Select products and fetch/process original galleries
   --import-drafts   Import the latest fetched manifest as create-only Drafts
-  --enrich-existing Enrich existing Drafts and clean public titles in place
+  --enrich-existing Repair existing Draft descriptions/meta from HTML product pages
   --identity-report Read-only SKU/legacy identity reconciliation report
   --full-pilot      Plan, fetch specs/images, then import guarded Drafts
 
@@ -40,7 +39,7 @@ Options:
   --manifest PATH   Explicit prepared manifest for --import-drafts
   --help
 
-Product data comes from Excel. Public legacy requests are specs/gallery-only.
+Excel controls selection/price/stock/active. HTML product pages are primary for specs; API is deferred.
 EOF
 }
 
@@ -195,8 +194,8 @@ if [ "$MUTATING_MODE" -eq 1 ]; then
   }
 fi
 
-printf '[API SLOT] %s\n' "$LEGACY_API_ENV"
-printf '[SOURCE] Excel-only product data; legacy web requests are gallery-image only.\n'
+printf '[SOURCE] Excel controls selection/price/stock/active; HTML product pages are the primary spec source.\n'
+printf '[API] DEFERRED — no API probe or API credential is used.\n'
 
 set -- "$MODE" \
   --excel "$EXCEL_FILE" \
