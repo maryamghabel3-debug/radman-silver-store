@@ -53,4 +53,13 @@ function radman_blocksy_child_enqueue_styles() {
         array('radman-local-fonts'),
         wp_get_theme()->get('Version')
     );
+
+    // 4) Product UI layer (shop, product, cart; presentation only)
+    $product_ui_path = get_stylesheet_directory() . '/assets/radman-product-ui.css';
+    wp_enqueue_style(
+        'radman-product-ui',
+        get_stylesheet_directory_uri() . '/assets/radman-product-ui.css',
+        array('radman-design-system'),
+        file_exists($product_ui_path) ? (string) filemtime($product_ui_path) : wp_get_theme()->get('Version')
+    );
 }
