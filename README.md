@@ -31,8 +31,8 @@
 - **Luxury Public Title + Identity Policy (PR-30A):** explicit trailing legacy codes are removed from customer-facing titles, while normalized model code remains the searchable WooCommerce SKU and visible `کد مدل` specification. Legacy ID, raw code, original title, source URL and deterministic identity key remain private metadata; `--enrich-existing` updates Drafts in place and `--identity-report` audits mapping read-only.
 - **Temporary Original-Product Overlay (reviewed `2026-08-21, Asia/Tehran`):** The create-only PR-25 migration treats every legacy price as Toman, uses `590000` Toman/gram only for `large_stone` rings at confidence `>=0.85`, uses `650000` otherwise, selects the higher of visible legacy price and weight floor, then rounds upward to `50000`. It does not replace the normal daily-rate architecture.
 - **Definitive Excel Product Source:** `/home/radmansi/radman-deploy/products_20260821_182238.xlsx` controls selection, price, stock, category and active state. Newest selection is `legacy_id DESC`; public HTML is consulted only for original galleries and strict technical specs.
-- **Original-Product Pipeline Status:** Excel remains authoritative for selection, price, stock and active state. PR-31 defers the unavailable legacy API and makes the actual HTML product page the primary technical-spec source for `--enrich-existing`: SKU search resolves the page, strict allowlisted extraction builds safe factual descriptions, and the existing Draft is updated without recreation or protected-field changes.
-- **Legacy Store:** [noghrehmashhad.ir](https://noghrehmashhad.ir) — API is deferred; PR-31 uses public HTML product pages for strict technical-spec enrichment.
+- **Original-Product Pipeline Status:** Excel remains authoritative for selection, price, stock and active state. PR-32 validates the resolved HTML page by SKU/code, legacy ID, or ≥60% title-token overlap; scopes extraction to the main spec container; rejects cross-product/free-text contamination; and cross-checks stone/color against the Draft title before updating an existing Draft.
+- **Legacy Store:** [noghrehmashhad.ir](https://noghrehmashhad.ir) — API remains deferred; PR-32 uses identity-verified, container-scoped HTML specifications.
 
 ---
 
@@ -46,10 +46,10 @@
 - [docs/SYNC-RULES.md](docs/SYNC-RULES.md) — Exact 1:1 stock mapping (`stock=1 is normal`), field ownership table, and overwrite protection.
 - [docs/INVENTORY-REGISTRY.md](docs/INVENTORY-REGISTRY.md) — Radman Silver's own Inventory Registry (`inventory_registry` SQLite table), 1:1 stock mapping, and Telegram order verification.
 - [docs/PRICING-RULES.md](docs/PRICING-RULES.md) — Simplified daily silver gram rate pricing (`price = weight * daily_rate`), 4 official pricing modes, and Telegram rate confirmation.
-- [docs/LEGACY-API-ACCESS-STRATEGY.md](docs/LEGACY-API-ACCESS-STRATEGY.md) — Historical/deferred API strategy; not used by the PR-31 owner runner.
+- [docs/LEGACY-API-ACCESS-STRATEGY.md](docs/LEGACY-API-ACCESS-STRATEGY.md) — Historical/deferred API strategy; not used by the PR-32 owner runner.
 - [docs/LEGACY-CATALOG-ANALYSIS.md](docs/LEGACY-CATALOG-ANALYSIS.md) — Public-only legacy catalog structure, category mapping, field coverage, quality risks, and owner-review extraction approach.
 - [docs/EXCEL-CATALOG-ANALYSIS.md](docs/EXCEL-CATALOG-ANALYSIS.md) / [scripts/run_catalog_analysis.sh](scripts/run_catalog_analysis.sh) — Read-only analysis of the owner XLSX export: all category counts, ID endpoints, weight/price/stock coverage, and a proposed two-level taxonomy; no WordPress, media, network, or import action.
-- [docs/HTML-SPEC-ENRICHMENT-RUNBOOK.md](docs/HTML-SPEC-ENRICHMENT-RUNBOOK.md) / [scripts/run_excel_import.sh](scripts/run_excel_import.sh) — PR-31 HTML-primary SKU-search enrichment for the existing 20 Drafts, strict sanitation, safe descriptions, and guarded staging execution.
+- [docs/HTML-SPEC-ENRICHMENT-RUNBOOK.md](docs/HTML-SPEC-ENRICHMENT-RUNBOOK.md) / [scripts/run_excel_import.sh](scripts/run_excel_import.sh) — PR-32 identity validation, main-container scoping, value sanity checks, contamination reports, safe reruns, and guarded staging execution for the existing 20 Drafts.
 - [docs/EXCEL-1000-PRODUCT-IMPORT-RUNBOOK.md](docs/EXCEL-1000-PRODUCT-IMPORT-RUNBOOK.md) — Excel selection/pricing and historical import operations.
 - [docs/ORIGINAL-PRODUCT-IMPORT-RUNBOOK.md](docs/ORIGINAL-PRODUCT-IMPORT-RUNBOOK.md) — Historical PR-25 ten-product data-scrape runbook; deprecated for catalog data after PR-28.
 - [docs/ORIGINAL-IMAGE-PROCESSING-RUNBOOK.md](docs/ORIGINAL-IMAGE-PROCESSING-RUNBOOK.md) — Original-byte archive, color/detail gates, before/after sheets, and untouched-original fallback policy.

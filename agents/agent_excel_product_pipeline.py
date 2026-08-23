@@ -21,7 +21,7 @@ import sys
 import urllib.error
 import urllib.parse
 from collections import Counter
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from datetime import datetime
 from decimal import Decimal, ROUND_FLOOR
 from html.parser import HTMLParser
@@ -75,7 +75,7 @@ EXPECTED_APP_ENV = "staging"
 EXPECTED_WP_URL = "https://staging.radmansilver.ir"
 EXPECTED_WP_PATH = "/home/radmansi/staging.radmansilver.ir"
 REQUIRED_CURRENCY = "IRT"
-PIPELINE_VERSION = "PR-31-HTML"
+PIPELINE_VERSION = "PR-32-STRICT-HTML"
 EXCEL_IMAGE_USER_AGENT = (
     "RadmanSilverExcelImageImporter/1.0 "
     "(+https://radmansilver.ir; owner-controlled original-gallery migration)"
@@ -111,6 +111,12 @@ REPORT_COLUMNS = (
     "identity_key",
     "title_cleanup_status",
     "description_updated",
+    "match_status",
+    "fields_extracted",
+    "fields_validated",
+    "dropped_fields",
+    "color_mismatch",
+    "stone_source",
     "specs_found_count",
     "price_changed",
     "legacy_id",
@@ -227,6 +233,39 @@ UNSAFE_SPEC_TERMS = (
 _MOBILE_RE = re.compile(r"(?<![0-9])(?:(?:\+?98)|(?:0098)|0)?[\s()\-]*9(?:[\s()\-]*[0-9]){9}(?![0-9])")
 _LANDLINE_RE = re.compile(r"(?<![0-9])0[\s(\-]*[0-9]{2,3}[\s)\-]*(?:[0-9][\s\-]*){7,8}(?![0-9])")
 _EMAIL_RE = re.compile(r"[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}", re.I)
+_OTHER_PRODUCT_CODE_RE = re.compile(
+    r"(?:کد(?:\s*(?:مدل|محصول))?|شناسه\s*کالا)\s*[:：\-]?\s*([0-9]{2,})",
+    re.I,
+)
+EXCLUDED_CONTAINER_MARKERS = (
+    "related", "suggest", "recommended", "recent", "comment", "review", "sidebar",
+    "widget", "cross-sell", "upsell", "محصولات مرتبط", "محصولات پیشنهادی",
+    "پیشنهادی", "محصولات اخیر", "نظرات", "دیدگاه", "دسته بندی محصولات",
+)
+SPEC_CONTAINER_MARKERS = (
+    "spec", "specification", "attribute", "product-attribute", "product-spec",
+    "مشخصات محصول", "مشخصات فنی", "ویژگی های محصول",
+)
+STONE_STYLES = (
+    "عقیق یمنی", "عقیق سلیمانی", "عقیق شجر", "عقیق سرخ", "عقیق سیاه",
+    "در نجف", "دُر نجف", "درّ نجف", "فیروزه", "حدید", "اونیکس", "اونکس",
+    "یاقوت", "زبرجد", "زمرد", "الکساندریت", "موزانایت", "عقیق",
+)
+COLOR_CANONICAL: Dict[str, str] = {
+    "سیاه": "black", "مشکی": "black",
+    "سرخ": "red", "قرمز": "red",
+    "آبی": "blue", "ابی": "blue", "سبز": "green", "زرد": "yellow",
+    "سفید": "white", "شفاف": "clear", "بی رنگ": "clear",
+    "نارنجی": "orange", "سوسنی": "lilac", "بنفش": "purple",
+    "قهوه ای": "brown", "طلایی": "gold", "کبود": "blue",
+}
+STONE_VALUE_FORBIDDEN = ("انگشتر", "رکاب", "مردانه", "زنانه", "دستبند", "گردنبند", "مدال", "کد")
+SETTING_VALUE_FORBIDDEN = ("انگشتر", "کد", "دستبند", "گردنبند", "مدال", "مردانه", "زنانه")
+ENGRAVING_VALUE_FORBIDDEN = ("انگشتر", "دستبند", "گردنبند", "مدال", "مردانه", "زنانه")
+HTML_VOID_TAGS = {
+    "area", "base", "br", "col", "embed", "hr", "img", "input", "link",
+    "meta", "param", "source", "track", "wbr",
+}
 
 
 def _normalized_spec_label(label: Any) -> str:
@@ -268,18 +307,123 @@ def _clean_spec_value(value: Any) -> str:
     return text
 
 
-def _valid_spec_value(field: str, value: str) -> bool:
-    if not value or len(value) > 160 or _contains_contact_or_unsafe(value):
-        return False
+def _different_product_codes(value: Any, expected_sku: str) -> List[str]:
+    text = normalize_text(value)
+    expected = normalize_identity_digits(expected_sku).strip().casefold()
+    if not expected:
+        return []
+    return [
+        code
+        for code in _OTHER_PRODUCT_CODE_RE.findall(text)
+        if not expected or normalize_identity_digits(code).strip().casefold() != expected
+    ]
+
+
+def _stone_family(value: Any) -> str:
+    text = normalize_text(value).casefold()
+    if "عقیق" in text:
+        return "عقیق"
+    if "در نجف" in text or "دُر نجف" in text or "درّ نجف" in text:
+        return "در نجف"
+    if "اونیکس" in text or "اونکس" in text:
+        return "اونیکس"
+    for stone in ("فیروزه", "حدید", "یاقوت", "زبرجد", "زمرد", "الکساندریت", "موزانایت"):
+        if stone in text:
+            return stone
+    return ""
+
+
+def _stone_from_title(title: Any) -> str:
+    text = normalize_text(title)
+    for style in STONE_STYLES:
+        normalized_style = normalize_text(style)
+        if normalized_style in text:
+            if normalized_style in {"عقیق سرخ", "عقیق سیاه"}:
+                return "عقیق"
+            return normalized_style
+    return ""
+
+
+def _color_from_title(title: Any) -> str:
+    text = normalize_text(title)
+    for color in sorted(COLOR_CANONICAL, key=len, reverse=True):
+        if re.search(rf"(?<![آ-ی]){re.escape(color)}(?![آ-ی])", text):
+            return color
+    return ""
+
+
+def _color_family(value: Any) -> str:
+    return COLOR_CANONICAL.get(normalize_text(value).casefold(), "")
+
+
+def _validate_spec_value(
+    field: str,
+    value: str,
+    *,
+    expected_sku: str = "",
+) -> Tuple[Optional[str], str]:
+    if not value:
+        return None, "EMPTY"
+    if _contains_contact_or_unsafe(value):
+        return None, "CONTACT_OR_UNSAFE_TEXT"
+    if _different_product_codes(value, expected_sku):
+        return None, "OTHER_PRODUCT_CODE"
+    normalized = normalize_text(value)
     if field == "weight":
-        return parse_weight(value) is not None
+        weight = parse_weight(normalized)
+        if weight is None or weight < Decimal("1") or weight > Decimal("100"):
+            return None, "WEIGHT_OUT_OF_RANGE_1_100"
+        return normalized, ""
     if field == "silver_purity":
-        return bool(re.search(r"(?:800|830|835|900|925|950|999)", value))
+        match = re.search(r"(?<![0-9])(800|830|835|900|925|950|999)(?![0-9])", normalized)
+        if not match:
+            return None, "IMPLAUSIBLE_PURITY"
+        return match.group(1), ""
+    if field == "stone_type":
+        if len(normalized) > 25:
+            return None, "STONE_VALUE_TOO_LONG"
+        if any(term in normalized for term in STONE_VALUE_FORBIDDEN):
+            return None, "STONE_VALUE_HAS_PRODUCT_WORDS"
+        if not _stone_family(normalized):
+            return None, "UNKNOWN_STONE_STYLE"
+        return normalized, ""
+    if field == "stone_color":
+        if len(normalized) > 15:
+            return None, "COLOR_VALUE_TOO_LONG"
+        if any(term in normalized for term in STONE_VALUE_FORBIDDEN):
+            return None, "COLOR_VALUE_HAS_PRODUCT_WORDS"
+        if not _color_family(normalized):
+            return None, "UNKNOWN_COLOR"
+        return normalized, ""
+    if field == "setting_type":
+        if len(normalized) > 20:
+            return None, "SETTING_VALUE_TOO_LONG"
+        if any(term in normalized for term in SETTING_VALUE_FORBIDDEN):
+            return None, "SETTING_VALUE_HAS_PRODUCT_WORDS"
+        return normalized, ""
+    if field == "engraving":
+        if len(normalized) > 30:
+            return None, "ENGRAVING_VALUE_TOO_LONG"
+        if any(term in normalized for term in ENGRAVING_VALUE_FORBIDDEN):
+            return None, "ENGRAVING_VALUE_HAS_PRODUCT_WORDS"
+        return normalized, ""
     if field == "dimensions":
-        return bool(re.search(r"[0-9]", value))
+        if len(normalized) > 40 or not re.search(r"[0-9]", normalized):
+            return None, "IMPLAUSIBLE_DIMENSIONS"
+        return normalized, ""
+    if field == "size":
+        if len(normalized) > 20:
+            return None, "SIZE_VALUE_TOO_LONG"
+        return normalized, ""
     if field == "model_code":
-        return len(value) <= 80
-    return True
+        code = normalize_identity_digits(normalized).strip()
+        expected = normalize_identity_digits(expected_sku).strip()
+        if len(code) > 80:
+            return None, "MODEL_CODE_TOO_LONG"
+        if expected and code != expected:
+            return None, "MODEL_CODE_MISMATCH"
+        return code, ""
+    return None, "UNSUPPORTED_FIELD"
 
 
 @dataclass(frozen=True)
@@ -296,8 +440,14 @@ class LegacySpecs:
     dimensions: str
     size: str
     model_code: str
+    extracted_model_code: str
     technical: Dict[str, str]
     unknown_labels: Tuple[str, ...]
+    fields_extracted: int
+    fields_validated: int
+    dropped_fields: Dict[str, str]
+    color_mismatch: bool
+    stone_source: str
 
     @property
     def found(self) -> bool:
@@ -305,7 +455,7 @@ class LegacySpecs:
 
     @property
     def technical_count(self) -> int:
-        return len([value for value in self.technical.values() if value])
+        return self.fields_validated
 
     def to_dict(self) -> Dict[str, Any]:
         value = asdict(self)
@@ -322,6 +472,10 @@ class LegacyPageResult:
     image_urls: Tuple[str, ...]
     strategy: str
     specs: LegacySpecs
+    match_status: str = "LOW_CONFIDENCE"
+    page_title: str = ""
+    title_overlap: float = 0.0
+    identity_reason: str = ""
 
 
 @dataclass(frozen=True)
@@ -458,19 +612,313 @@ class SearchResultHTMLParser(HTMLParser):
         self._parts = []
 
 
+@dataclass
+class _ContainerFrame:
+    tag: str
+    attrs_text: str
+    chunks: List[str]
+    text_parts: List[str]
+    explicit_marker: bool
+
+
+@dataclass(frozen=True)
+class _SpecContainerCandidate:
+    tag: str
+    attrs_text: str
+    source_html: str
+    visible_text: str
+    explicit_marker: bool
+    fields_extracted_hint: int = 0
+
+
+class SpecContainerScopeParser(HTMLParser):
+    """Capture candidate spec containers while omitting known contaminating blocks."""
+
+    CANDIDATE_TAGS = {"section", "div", "table", "dl", "ul"}
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.frames: List[_ContainerFrame] = []
+        self.candidates: List[_SpecContainerCandidate] = []
+        self._excluded_depth = 0
+
+    @staticmethod
+    def _attrs_text(attrs: Sequence[Tuple[str, Optional[str]]]) -> str:
+        return normalize_text(" ".join(f"{key} {value or ''}" for key, value in attrs)).casefold()
+
+    def handle_starttag(
+        self, tag: str, attrs: Sequence[Tuple[str, Optional[str]]]
+    ) -> None:
+        if self._excluded_depth:
+            if tag not in HTML_VOID_TAGS:
+                self._excluded_depth += 1
+            return
+        attrs_text = self._attrs_text(attrs)
+        if any(marker in attrs_text for marker in EXCLUDED_CONTAINER_MARKERS):
+            if tag not in HTML_VOID_TAGS:
+                self._excluded_depth = 1
+            return
+        start = self.get_starttag_text() or f"<{tag}>"
+        for frame in self.frames:
+            frame.chunks.append(start)
+        if tag in self.CANDIDATE_TAGS:
+            explicit = any(marker in attrs_text for marker in SPEC_CONTAINER_MARKERS)
+            self.frames.append(
+                _ContainerFrame(tag, attrs_text, [start], [], explicit)
+            )
+
+    def handle_startendtag(
+        self, tag: str, attrs: Sequence[Tuple[str, Optional[str]]]
+    ) -> None:
+        if self._excluded_depth:
+            return
+        attrs_text = self._attrs_text(attrs)
+        if any(marker in attrs_text for marker in EXCLUDED_CONTAINER_MARKERS):
+            return
+        start = self.get_starttag_text() or f"<{tag}/>"
+        for frame in self.frames:
+            frame.chunks.append(start)
+
+    def handle_data(self, data: str) -> None:
+        if self._excluded_depth:
+            return
+        escaped = html.escape(data)
+        for frame in self.frames:
+            frame.chunks.append(escaped)
+            frame.text_parts.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if self._excluded_depth:
+            self._excluded_depth -= 1
+            return
+        closing = f"</{tag}>"
+        for frame in self.frames:
+            frame.chunks.append(closing)
+        if self.frames and self.frames[-1].tag == tag:
+            frame = self.frames.pop()
+            self.candidates.append(
+                _SpecContainerCandidate(
+                    tag=frame.tag,
+                    attrs_text=frame.attrs_text,
+                    source_html="".join(frame.chunks),
+                    visible_text=normalize_text(" ".join(frame.text_parts)),
+                    explicit_marker=frame.explicit_marker,
+                )
+            )
+
+
+class PageIdentityHTMLParser(HTMLParser):
+    """Read the main page title/H1 without considering related/widget blocks."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.title_parts: List[str] = []
+        self.h1_parts: List[str] = []
+        self._capture = ""
+        self._excluded_depth = 0
+
+    def handle_starttag(
+        self, tag: str, attrs: Sequence[Tuple[str, Optional[str]]]
+    ) -> None:
+        if self._excluded_depth:
+            if tag not in HTML_VOID_TAGS:
+                self._excluded_depth += 1
+            return
+        attrs_text = normalize_text(
+            " ".join(f"{key} {value or ''}" for key, value in attrs)
+        ).casefold()
+        if any(marker in attrs_text for marker in EXCLUDED_CONTAINER_MARKERS):
+            if tag not in HTML_VOID_TAGS:
+                self._excluded_depth = 1
+            return
+        if tag == "title" and not self.title_parts:
+            self._capture = "title"
+        elif tag == "h1" and not self.h1_parts:
+            self._capture = "h1"
+
+    def handle_data(self, data: str) -> None:
+        if self._excluded_depth:
+            return
+        if self._capture == "title":
+            self.title_parts.append(data)
+        elif self._capture == "h1":
+            self.h1_parts.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if self._excluded_depth:
+            self._excluded_depth -= 1
+            return
+        if tag == self._capture:
+            self._capture = ""
+
+    @property
+    def page_title(self) -> str:
+        return normalize_text(" ".join(self.h1_parts or self.title_parts))
+
+
+def _extract_pairs_unscoped(source_html: str) -> List[Tuple[str, str]]:
+    parser = SpecTextHTMLParser()
+    parser.feed(source_html)
+    pairs: List[Tuple[str, str]] = list(parser.structured_pairs)
+    for block in parser.visible_blocks:
+        if any(alias in _normalized_spec_label(block) for alias in _SPEC_ALIAS_TO_FIELD):
+            pairs.extend(_pairs_from_labeled_text(block))
+    pairs.extend(_pairs_from_labeled_text(html.unescape(parser.text)))
+    return pairs
+
+
+def _heading_window_candidates(source_html: str) -> List[_SpecContainerCandidate]:
+    candidates: List[_SpecContainerCandidate] = []
+    heading_re = re.compile(
+        r"<h([2-4])[^>]*>.*?مشخصات(?:\s+(?:محصول|فنی))?.*?</h\1>",
+        re.I | re.S,
+    )
+    for match in heading_re.finditer(source_html):
+        tail = source_html[match.start() : match.start() + 5000]
+        stop = re.search(
+            r"<h[1-4][^>]*>.*?(?:محصولات\s*(?:مرتبط|پیشنهادی|اخیر)|نظرات|دیدگاه).*?</h[1-4]>",
+            tail[match.end() - match.start() :],
+            re.I | re.S,
+        )
+        if stop:
+            tail = tail[: match.end() - match.start() + stop.start()]
+        candidates.append(
+            _SpecContainerCandidate(
+                tag="heading-window",
+                attrs_text="مشخصات محصول",
+                source_html=f"<section>{tail}</section>",
+                visible_text=normalize_text(re.sub(r"<[^>]+>", " ", tail)),
+                explicit_marker=True,
+            )
+        )
+    return candidates
+
+
+def _strip_other_product_code_blocks(
+    source_html: str,
+    *,
+    expected_sku: str,
+) -> Tuple[str, int]:
+    if not normalize_identity_digits(expected_sku).strip():
+        return source_html, 0
+    cleaned = source_html
+    removed = 0
+    for tag in ("tr", "li", "div", "p"):
+        pattern = re.compile(rf"<{tag}\b[^>]*>.*?</{tag}>", re.I | re.S)
+
+        def replace_block(match: re.Match[str]) -> str:
+            nonlocal removed
+            visible = normalize_text(re.sub(r"<[^>]+>", " ", match.group(0)))
+            if _different_product_codes(visible, expected_sku):
+                removed += 1
+                return ""
+            return match.group(0)
+
+        cleaned = pattern.sub(replace_block, cleaned)
+    return cleaned, removed
+
+
+def _select_spec_container(
+    source_html: str,
+    *,
+    expected_sku: str,
+) -> Tuple[Optional[_SpecContainerCandidate], Dict[str, str]]:
+    parser = SpecContainerScopeParser()
+    parser.feed(source_html)
+    candidates = [*parser.candidates, *_heading_window_candidates(source_html)]
+    dropped: Dict[str, str] = {}
+    ranked: List[Tuple[int, int, _SpecContainerCandidate]] = []
+    for index, candidate in enumerate(candidates, 1):
+        text = normalize_text(candidate.visible_text)
+        lowered = text.casefold()
+        if any(marker in lowered for marker in EXCLUDED_CONTAINER_MARKERS):
+            dropped[f"container_{index}"] = "EXCLUDED_RELATED_OR_WIDGET_SECTION"
+            continue
+        raw_pairs = _extract_pairs_unscoped(candidate.source_html)
+        raw_fields = {
+            field
+            for label, _value in raw_pairs
+            for field in [_canonical_spec_field(label)]
+            if field in TECHNICAL_FIELDS
+        }
+        scoped_html, removed_code_blocks = _strip_other_product_code_blocks(
+            candidate.source_html, expected_sku=expected_sku
+        )
+        if removed_code_blocks:
+            dropped[f"container_{index}_blocks"] = (
+                f"REMOVED_{removed_code_blocks}_OTHER_PRODUCT_CODE_BLOCKS"
+            )
+        pairs = _extract_pairs_unscoped(scoped_html)
+        fields = {
+            field
+            for label, _value in pairs
+            for field in [_canonical_spec_field(label)]
+            if field in TECHNICAL_FIELDS
+        }
+        heading_marker = "مشخصات" in lowered
+        table_like = candidate.tag in {"table", "dl"}
+        qualifies = bool(
+            fields
+            and (
+                candidate.explicit_marker
+                or heading_marker
+                or (table_like and len(fields) >= 2)
+            )
+        )
+        if not qualifies:
+            continue
+        score = (
+            (100 if candidate.explicit_marker else 0)
+            + (60 if heading_marker else 0)
+            + (30 if table_like else 0)
+            + len(fields) * 10
+            - min(len(text) // 500, 20)
+        )
+        sanitized_candidate = replace(
+            candidate,
+            source_html=scoped_html,
+            fields_extracted_hint=len(raw_fields),
+        )
+        ranked.append((score, -len(text), sanitized_candidate))
+    if not ranked:
+        dropped.setdefault("container", "NO_DEDICATED_SPEC_CONTAINER")
+        return None, dropped
+    ranked.sort(key=lambda item: (item[0], item[1]), reverse=True)
+    return ranked[0][2], dropped
+
+
 def empty_legacy_specs() -> LegacySpecs:
     return LegacySpecs(
         all_specs={}, category="", weight_display="", weight_grams=None,
         band_type="", stone_color="", stone_type="", engraving_type="",
-        silver_purity="", dimensions="", size="", model_code="", technical={},
-        unknown_labels=tuple(),
+        silver_purity="", dimensions="", size="", model_code="",
+        extracted_model_code="", technical={}, unknown_labels=tuple(),
+        fields_extracted=0, fields_validated=0, dropped_fields={},
+        color_mismatch=False, stone_source="DROPPED",
     )
 
 
-def legacy_specs_from_pairs(pairs: Iterable[Tuple[str, str]]) -> LegacySpecs:
+def legacy_specs_from_pairs(
+    pairs: Iterable[Tuple[str, str]],
+    *,
+    expected_sku: str = "",
+    expected_title: str = "",
+) -> LegacySpecs:
     known: Dict[str, str] = {}
     unknown: List[str] = []
+    dropped: Dict[str, str] = {}
+    extracted_fields: set[str] = set()
     category = ""
+    extracted_model_code = ""
+
+    def drop(field: str, reason: str) -> None:
+        key = field
+        suffix = 2
+        while key in dropped:
+            key = f"{field}_{suffix}"
+            suffix += 1
+        dropped[key] = reason
+
     for raw_label, raw_value in pairs:
         label = _normalized_spec_label(raw_label)
         value = _clean_spec_value(raw_value)
@@ -485,15 +933,54 @@ def legacy_specs_from_pairs(pairs: Iterable[Tuple[str, str]]) -> LegacySpecs:
             if not _contains_contact_or_unsafe(value):
                 category = category or value
             continue
-        if field not in TECHNICAL_FIELDS or not _valid_spec_value(field, value):
+        if field not in TECHNICAL_FIELDS:
             continue
-        known.setdefault(field, value)
+        extracted_fields.add(field)
+        if field == "model_code" and not extracted_model_code:
+            extracted_model_code = normalize_identity_digits(value).strip()
+        validated, reason = _validate_spec_value(
+            field, value, expected_sku=expected_sku
+        )
+        if validated is None:
+            drop(field, reason)
+            continue
+        known.setdefault(field, validated)
+
+    title_stone = _stone_from_title(expected_title)
+    table_stone = known.get("stone_type", "")
+    if title_stone:
+        if not table_stone:
+            known["stone_type"] = title_stone
+            stone_source = "TITLE"
+        elif _stone_family(table_stone) != _stone_family(title_stone):
+            drop("stone_type", "TITLE_TABLE_STONE_MISMATCH_TABLE_REPLACED")
+            known["stone_type"] = title_stone
+            stone_source = "TITLE"
+        else:
+            stone_source = "TABLE"
+    elif table_stone:
+        stone_source = "TABLE"
+    else:
+        stone_source = "DROPPED"
+
+    title_color = _color_from_title(expected_title)
+    table_color = known.get("stone_color", "")
+    color_mismatch = False
+    if title_color:
+        if not table_color:
+            known["stone_color"] = title_color
+        elif _color_family(table_color) != _color_family(title_color):
+            color_mismatch = True
+            drop("stone_color", "COLOR_MISMATCH_TABLE_REPLACED_BY_TITLE")
+            known["stone_color"] = title_color
+
     weight_display = known.get("weight", "")
     all_specs = {
         SPEC_META_LABELS[field]: value
         for field, value in known.items()
         if field in SPEC_META_LABELS
     }
+    fields_validated = len([value for value in known.values() if value])
     return LegacySpecs(
         all_specs=all_specs,
         category=category,
@@ -507,8 +994,14 @@ def legacy_specs_from_pairs(pairs: Iterable[Tuple[str, str]]) -> LegacySpecs:
         dimensions=known.get("dimensions", ""),
         size=known.get("size", ""),
         model_code=known.get("model_code", ""),
+        extracted_model_code=extracted_model_code,
         technical=dict(known),
         unknown_labels=tuple(unknown),
+        fields_extracted=len(extracted_fields),
+        fields_validated=fields_validated,
+        dropped_fields=dropped,
+        color_mismatch=color_mismatch,
+        stone_source=stone_source,
     )
 
 
@@ -538,20 +1031,43 @@ def _pairs_from_labeled_text(text: str) -> List[Tuple[str, str]]:
     return pairs
 
 
-def parse_spec_block_text(text: str) -> LegacySpecs:
-    return legacy_specs_from_pairs(_pairs_from_labeled_text(text))
+def parse_spec_block_text(
+    text: str,
+    *,
+    expected_sku: str = "",
+    expected_title: str = "",
+) -> LegacySpecs:
+    return legacy_specs_from_pairs(
+        _pairs_from_labeled_text(text),
+        expected_sku=expected_sku,
+        expected_title=expected_title,
+    )
 
 
-def extract_legacy_specs(source_html: str) -> LegacySpecs:
-    parser = SpecTextHTMLParser()
-    parser.feed(source_html)
-    pairs: List[Tuple[str, str]] = list(parser.structured_pairs)
-    for block in parser.visible_blocks:
-        if any(alias in _normalized_spec_label(block) for alias in _SPEC_ALIAS_TO_FIELD):
-            pairs.extend(_pairs_from_labeled_text(block))
-    plain_text = html.unescape(parser.text)
-    pairs.extend(_pairs_from_labeled_text(plain_text))
-    return legacy_specs_from_pairs(pairs)
+def extract_legacy_specs(
+    source_html: str,
+    *,
+    expected_sku: str = "",
+    expected_title: str = "",
+) -> LegacySpecs:
+    container, container_drops = _select_spec_container(
+        source_html, expected_sku=expected_sku
+    )
+    if container is None:
+        return replace(empty_legacy_specs(), dropped_fields=container_drops)
+    specs = legacy_specs_from_pairs(
+        _extract_pairs_unscoped(container.source_html),
+        expected_sku=expected_sku,
+        expected_title=expected_title,
+    )
+    merged_drops = {**container_drops, **specs.dropped_fields}
+    return replace(
+        specs,
+        fields_extracted=max(
+            specs.fields_extracted, container.fields_extracted_hint
+        ),
+        dropped_fields=merged_drops,
+    )
 
 
 class GalleryHTMLParser(HTMLParser):
@@ -865,6 +1381,12 @@ def apply_specs_to_record(
     )
     record["spec_weight_display"] = specs.weight_display
     record["unknown_spec_labels_seen"] = list(specs.unknown_labels)
+    record["fields_extracted"] = specs.fields_extracted
+    record["fields_validated"] = specs.fields_validated
+    record["dropped_fields"] = dict(specs.dropped_fields)
+    record["color_mismatch"] = specs.color_mismatch
+    record["stone_source"] = specs.stone_source
+    record["match_status"] = str(record.get("match_status") or "MATCHED")
     record["specs_found_count"] = specs.technical_count
     record["spec_status"] = (
         "VERIFIED" if specs.technical_count >= 3 else "INSUFFICIENT_SPECS"
@@ -908,6 +1430,8 @@ def apply_specs_to_record(
     record["description"] = description
     record["short_description"] = generate_safe_excerpt(record, specs)
     record["description_source"] = description_source
+    if specs.color_mismatch:
+        flags.append("COLOR_MISMATCH")
     if specs.technical_count < 3:
         flags.append("INSUFFICIENT_SPECS")
     record["review_flags"] = list(dict.fromkeys(flags))
@@ -1062,6 +1586,12 @@ def load_excel_records(
                     "spec_weight_grams": None,
                     "spec_weight_display": "",
                     "unknown_spec_labels_seen": [],
+                    "match_status": "NOT_RUN",
+                    "fields_extracted": 0,
+                    "fields_validated": 0,
+                    "dropped_fields": {},
+                    "color_mismatch": False,
+                    "stone_source": "DROPPED",
                     "spec_status": "NOT_FETCHED",
                     "radman_requires_review": (
                         "YES" if review_flags else "NO"
@@ -1293,6 +1823,51 @@ def _links_for_legacy_id(page_url: str, source_html: str, legacy_id: int) -> Lis
     return list(dict.fromkeys(result))
 
 
+def _resolved_legacy_id(url: str) -> Optional[int]:
+    parsed = urllib.parse.urlsplit(url)
+    match = re.search(r"/(?:product|p)/([0-9]+)(?:/|$)", parsed.path)
+    if match:
+        return int(match.group(1))
+    values = urllib.parse.parse_qs(parsed.query).get("product_id", [])
+    return int(values[0]) if values and str(values[0]).isdigit() else None
+
+
+def _title_overlap_ratio(expected_title: str, page_title: str) -> float:
+    expected = _title_tokens(expected_title)
+    if not expected:
+        return 0.0
+    actual = _title_tokens(page_title)
+    return len(expected & actual) / len(expected)
+
+
+def _page_match_status(
+    *,
+    url: str,
+    source_html: str,
+    specs: LegacySpecs,
+    expected_legacy_id: int,
+    expected_sku: str,
+    expected_title: str,
+) -> Tuple[str, str, float, str]:
+    parser = PageIdentityHTMLParser()
+    parser.feed(source_html)
+    page_title = parser.page_title
+    title_ratio = _title_overlap_ratio(expected_title, page_title)
+    expected_code = normalize_identity_digits(expected_sku).strip().casefold()
+    title_code_match = _text_has_sku(page_title, expected_sku)
+    spec_code = normalize_identity_digits(specs.extracted_model_code).strip().casefold()
+    spec_code_match = bool(expected_code and spec_code == expected_code)
+    resolved_id = _resolved_legacy_id(url)
+    id_match = resolved_id == int(expected_legacy_id)
+    if title_code_match or spec_code_match:
+        return "MATCHED", page_title, title_ratio, "SKU_OR_CODE_MATCH"
+    if id_match:
+        return "MATCHED", page_title, title_ratio, "LEGACY_ID_MATCH"
+    if title_ratio >= 0.60:
+        return "LOW_CONFIDENCE", page_title, title_ratio, "TITLE_TOKEN_OVERLAP"
+    return "IDENTITY_MISMATCH", page_title, title_ratio, "NO_STRICT_IDENTITY_SIGNAL"
+
+
 class LegacyImageDiscovery:
     def __init__(self, fetcher: Optional[RateLimitedFetcher] = None) -> None:
         self.fetcher = fetcher or RateLimitedFetcher(
@@ -1313,8 +1888,7 @@ class LegacyImageDiscovery:
         strategy: str,
         legacy_id: int,
         expected_sku: str,
-        *,
-        identity_evidence: bool,
+        expected_title: str,
     ) -> Optional[LegacyPageResult]:
         try:
             source = self.fetcher.fetch_text(url)
@@ -1329,35 +1903,49 @@ class LegacyImageDiscovery:
                 }
             )
             return None
-        specs = extract_legacy_specs(source)
-        expected = normalize_identity_digits(expected_sku).strip().casefold()
-        extracted_code = normalize_identity_digits(specs.model_code).strip().casefold()
-        code_mismatch = bool(expected and extracted_code and extracted_code != expected)
-        page_sku_match = _text_has_sku(f"{url} {source}", expected_sku)
-        identity_ok = not code_mismatch and bool(
-            identity_evidence or page_sku_match or (expected and extracted_code == expected)
+        specs = extract_legacy_specs(
+            source,
+            expected_sku=expected_sku,
+            expected_title=expected_title,
         )
-        found = bool(identity_ok and specs.found)
+        match_status, page_title, title_overlap, identity_reason = _page_match_status(
+            url=url,
+            source_html=source,
+            specs=specs,
+            expected_legacy_id=legacy_id,
+            expected_sku=expected_sku,
+            expected_title=expected_title,
+        )
         self.log.append(
             {
                 "legacy_id": legacy_id,
                 "strategy": strategy,
                 "url": url,
-                "status": (
-                    "FOUND"
-                    if found
-                    else ("IDENTITY_MISMATCH" if code_mismatch or not identity_ok else "SPECS_MISSING")
-                ),
-                "identity_confirmed": identity_ok,
-                "page_sku_match": page_sku_match,
-                "extracted_model_code": specs.model_code,
-                "spec_fields": specs.technical_count,
-                "unknown_spec_labels": list(specs.unknown_labels),
+                "status": match_status,
+                "match_status": match_status,
+                "identity_reason": identity_reason,
+                "page_title": page_title,
+                "title_overlap": round(title_overlap, 4),
+                "extracted_model_code": specs.extracted_model_code,
+                "fields_extracted": specs.fields_extracted,
+                "fields_validated": specs.fields_validated,
+                "dropped_fields": dict(specs.dropped_fields),
+                "color_mismatch": specs.color_mismatch,
+                "stone_source": specs.stone_source,
             }
         )
-        if found:
-            return LegacyPageResult(url, tuple(), strategy, specs)
-        return None
+        if match_status == "IDENTITY_MISMATCH":
+            return None
+        return LegacyPageResult(
+            url=url,
+            image_urls=tuple(),
+            strategy=strategy,
+            specs=specs,
+            match_status=match_status,
+            page_title=page_title,
+            title_overlap=title_overlap,
+            identity_reason=identity_reason,
+        )
 
     def _try_page(
         self, url: str, strategy: str, legacy_id: int
@@ -1453,20 +2041,12 @@ class LegacyImageDiscovery:
                 }
             )
             for candidate in candidates:
-                parsed = urllib.parse.urlsplit(candidate.url)
-                id_match = bool(
-                    re.search(rf"/(?:product|p)/{legacy_id}(?:/|$)", parsed.path)
-                    or urllib.parse.parse_qs(parsed.query).get("product_id")
-                    == [str(legacy_id)]
-                )
                 result = self._try_spec_page(
                     candidate.url,
                     "SKU_SEARCH",
                     legacy_id,
                     expected_sku,
-                    identity_evidence=bool(
-                        candidate.sku_match or (id_match and candidate.score >= 50)
-                    ),
+                    expected_title,
                 )
                 if result:
                     return result
@@ -1493,7 +2073,7 @@ class LegacyImageDiscovery:
                 "DIRECT_ID_FALLBACK",
                 legacy_id,
                 expected_sku,
-                identity_evidence=False,
+                expected_title,
             )
             if result:
                 return result
@@ -1503,7 +2083,7 @@ class LegacyImageDiscovery:
                 "SITEMAP_ID_FALLBACK",
                 legacy_id,
                 expected_sku,
-                identity_evidence=False,
+                expected_title,
             )
             if result:
                 return result
@@ -1514,7 +2094,11 @@ class LegacyImageDiscovery:
                 "status": "MISSING",
             }
         )
-        return LegacyPageResult("", tuple(), "NOT_FOUND", empty_legacy_specs())
+        return LegacyPageResult(
+            "", tuple(), "NOT_FOUND", empty_legacy_specs(),
+            match_status="IDENTITY_MISMATCH",
+            identity_reason="NO_VERIFIED_PRODUCT_PAGE",
+        )
 
     def discover(self, legacy_id: int) -> LegacyPageResult:
         self.load_robots()
@@ -1720,14 +2304,52 @@ def fetch_specs_for_records(
             str(source_record.get("sku") or ""),
             str(source_record.get("title") or ""),
         )
-        record = apply_specs_to_record(source_record, page.specs)
+        if page.match_status == "IDENTITY_MISMATCH":
+            record = dict(source_record)
+            record["match_status"] = "IDENTITY_MISMATCH"
+            record["fields_extracted"] = 0
+            record["fields_validated"] = 0
+            record["dropped_fields"] = {
+                "identity": page.identity_reason or "NO_VERIFIED_PRODUCT_PAGE"
+            }
+            record["color_mismatch"] = False
+            record["stone_source"] = "DROPPED"
+            record["skip_enrichment"] = True
+            record["review_flags"] = list(
+                dict.fromkeys([*record.get("review_flags", []), "IDENTITY_MISMATCH"])
+            )
+            record["radman_requires_review"] = "YES"
+            record["action"] = "SKIP_IDENTITY_MISMATCH"
+        else:
+            record = apply_specs_to_record(source_record, page.specs)
+            record["match_status"] = page.match_status
+            record["fields_extracted"] = page.specs.fields_extracted
+            record["fields_validated"] = page.specs.fields_validated
+            record["dropped_fields"] = dict(page.specs.dropped_fields)
+            record["color_mismatch"] = page.specs.color_mismatch
+            record["stone_source"] = page.specs.stone_source
+            record["skip_enrichment"] = False
+            if page.match_status == "LOW_CONFIDENCE":
+                record["review_flags"] = list(
+                    dict.fromkeys([*record.get("review_flags", []), "LOW_CONFIDENCE_MATCH"])
+                )
+                record["radman_requires_review"] = "YES"
+            if page.specs.color_mismatch:
+                record["review_flags"] = list(
+                    dict.fromkeys([*record.get("review_flags", []), "COLOR_MISMATCH"])
+                )
+                record["radman_requires_review"] = "YES"
+            record["action"] = "ENRICH_READY"
         record["legacy_url"] = page.url or str(source_record.get("legacy_url") or "")
         record["image_discovery_strategy"] = page.strategy
-        record["action"] = "ENRICH_READY"
+        record["page_title"] = page.page_title
+        record["title_overlap"] = round(page.title_overlap, 4)
+        record["identity_reason"] = page.identity_reason
         updated.append(record)
         print(
             f"[SPECS] id={legacy_id} strategy={page.strategy} "
-            f"fields={len(page.specs.all_specs)} description={record['description_source']}"
+            f"match={record['match_status']} extracted={record['fields_extracted']} "
+            f"validated={record['fields_validated']} action={record['action']}"
         )
     write_json_atomic(run_dir / "spec-discovery-log.json", service.log)
     return updated
@@ -1819,6 +2441,14 @@ echo wp_json_encode($out);
             ),
             "radman_spec_status": str(record.get("spec_status") or "INSUFFICIENT_SPECS"),
             "radman_spec_count": str(record.get("specs_found_count") or 0),
+            "radman_spec_match_status": str(record.get("match_status") or "MATCHED"),
+            "radman_spec_fields_extracted": str(record.get("fields_extracted") or 0),
+            "radman_spec_fields_validated": str(record.get("fields_validated") or 0),
+            "radman_spec_dropped_fields": json.dumps(
+                record.get("dropped_fields", {}), ensure_ascii=False
+            ),
+            "radman_spec_color_mismatch": "YES" if record.get("color_mismatch") else "NO",
+            "radman_spec_stone_source": str(record.get("stone_source") or "DROPPED"),
             "weight_source": str(record.get("weight_source") or "MISSING"),
             "description_source": str(
                 record.get("description_source") or "MINIMAL_SAFE"
@@ -2149,6 +2779,28 @@ def enrich_existing_records(
     actions: List[Dict[str, Any]] = []
     for record in records:
         product_id = int(record["wordpress_product_id"])
+        if record.get("skip_enrichment") or record.get("match_status") == "IDENTITY_MISMATCH":
+            record["action"] = "SKIP_IDENTITY_MISMATCH"
+            record["description_updated"] = "NO"
+            record["price_changed"] = False
+            actions.append(
+                {
+                    "legacy_id": record["legacy_id"],
+                    "sku": record["sku"],
+                    "product_id": product_id,
+                    "action": "SKIP_IDENTITY_MISMATCH",
+                    "match_status": "IDENTITY_MISMATCH",
+                    "fields_extracted": record.get("fields_extracted", 0),
+                    "fields_validated": record.get("fields_validated", 0),
+                    "dropped_fields": dict(record.get("dropped_fields", {})),
+                    "color_mismatch": bool(record.get("color_mismatch", False)),
+                    "stone_source": record.get("stone_source", "DROPPED"),
+                    "description_updated": "NO",
+                    "price_updated": False,
+                    "review_flags": list(record.get("review_flags", [])),
+                }
+            )
+            continue
         current_price = _positive_toman(record.get("wordpress_current_price"))
         final_price = record.get("final_price_toman")
         live_floor = _positive_toman(record.get("live_weight_floor_toman"))
@@ -2193,6 +2845,12 @@ def enrich_existing_records(
                 "title_cleanup_applied": record.get("title_cleanup_applied"),
                 "sku_title_match": record.get("sku_title_match"),
                 "action": "ENRICHED_DRAFT",
+                "match_status": record.get("match_status", "MATCHED"),
+                "fields_extracted": record.get("fields_extracted", 0),
+                "fields_validated": record.get("fields_validated", 0),
+                "dropped_fields": dict(record.get("dropped_fields", {})),
+                "color_mismatch": bool(record.get("color_mismatch", False)),
+                "stone_source": record.get("stone_source", "DROPPED"),
                 "description_source": record.get("description_source"),
                 "weight_source": record.get("weight_source"),
                 "description_updated": "YES",
@@ -2324,6 +2982,14 @@ def _report_row(record: Mapping[str, Any]) -> Dict[str, Any]:
         "identity_key": record.get("legacy_identity_key", ""),
         "title_cleanup_status": record.get("legacy_title_cleanup_status", ""),
         "description_updated": record.get("description_updated", ""),
+        "match_status": record.get("match_status", ""),
+        "fields_extracted": record.get("fields_extracted", 0),
+        "fields_validated": record.get("fields_validated", 0),
+        "dropped_fields": json.dumps(
+            record.get("dropped_fields", {}), ensure_ascii=False, sort_keys=True
+        ),
+        "color_mismatch": bool(record.get("color_mismatch", False)),
+        "stone_source": record.get("stone_source", ""),
         "specs_found_count": record.get(
             "specs_found_count", len(record.get("legacy_specs", {}))
         ),
@@ -2414,25 +3080,23 @@ def write_reports(
             else "ندارد"
         ),
         "",
-        "wp_id | عنوان قبلی -> عنوان جدید | پاکسازی | کد عنوان | SKU/تطبیق | legacy_id/identity | مشخصات/توضیح | قیمت تغییر کرد | اقدام | بازبینی",
+        "wp_id | SKU | legacy_id | match | extracted/validated | dropped | color mismatch | stone source | توضیح | اقدام | بازبینی",
     ]
     for record in records:
         lines.append(
-            "{wp_id} | {old_title} -> {new_title} | {cleaned} | {code} | "
-            "{sku}/{match} | {legacy_id}/{identity} | {spec_count}/{description} | "
-            "{price_changed} | {action} | {flags}".format(
+            "{wp_id} | {sku} | {legacy_id} | {match_status} | "
+            "{extracted}/{validated} | {dropped} | {color_mismatch} | "
+            "{stone_source} | {description} | {action} | {flags}".format(
                 wp_id=record.get("wordpress_product_id") or "—",
-                old_title=str(record.get("old_public_title") or "—").replace("|", "/"),
-                new_title=str(record.get("title") or "—").replace("|", "/"),
-                cleaned="بله" if record.get("title_cleanup_applied") else "خیر",
-                code=record.get("extracted_title_code") or "—",
                 sku=record.get("sku") or "—",
-                match=record.get("sku_title_match") or "NOT_APPLICABLE",
                 legacy_id=record.get("legacy_id"),
-                identity=record.get("legacy_identity_key") or "—",
-                spec_count=len(record.get("legacy_specs", {})),
-                description=record.get("description_source") or "SEO_FALLBACK",
-                price_changed="بله" if record.get("price_changed") else "خیر",
+                match_status=record.get("match_status") or "—",
+                extracted=record.get("fields_extracted", 0),
+                validated=record.get("fields_validated", 0),
+                dropped=json.dumps(record.get("dropped_fields", {}), ensure_ascii=False),
+                color_mismatch="بله" if record.get("color_mismatch") else "خیر",
+                stone_source=record.get("stone_source") or "DROPPED",
+                description=record.get("description_source") or "MINIMAL_SAFE",
                 action=record.get("action"),
                 flags=",".join(record.get("review_flags", [])) or "—",
             )
