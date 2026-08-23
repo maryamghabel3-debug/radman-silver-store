@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Excel-driven Draft repair with HTML-primary legacy specification extraction.
+"""Excel-driven exact pricing, Draft repair, and product SEO publication gates.
 
-Excel remains authoritative for selection, price, stock, and active state. The
-legacy API is deferred; actual legacy product pages are the primary spec source.
+Excel remains authoritative for selection, exact price, stock, and active state.
+Verified HTML specs drive deterministic SEO; every mutating mode remains Draft-only.
 """
 
 from __future__ import annotations
@@ -23,7 +23,7 @@ import urllib.parse
 from collections import Counter
 from dataclasses import asdict, dataclass, replace
 from datetime import datetime
-from decimal import Decimal, ROUND_FLOOR
+from decimal import Decimal, ROUND_CEILING, ROUND_FLOOR
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
@@ -41,7 +41,8 @@ from agents.agent_legacy_catalog_pilot import (  # noqa: E402
     parse_sitemap_urls,
 )
 from agents.agent_original_image_processor import process_product  # noqa: E402
-from agents.lib.legacy_pricing import round_up_toman  # noqa: E402
+from agents.agent_product_seo import generate_seo_package  # noqa: E402
+from agents.agent_product_seo_qa import evaluate_products, write_qa_reports  # noqa: E402
 from agents.lib.product_identity import (  # noqa: E402
     build_legacy_identity_key,
     clean_public_product_title,
@@ -75,7 +76,7 @@ EXPECTED_APP_ENV = "staging"
 EXPECTED_WP_URL = "https://staging.radmansilver.ir"
 EXPECTED_WP_PATH = "/home/radmansi/staging.radmansilver.ir"
 REQUIRED_CURRENCY = "IRT"
-PIPELINE_VERSION = "PR-33-CLEAN-PUBLIC-DESCRIPTIONS"
+PIPELINE_VERSION = "PR-34-EXACT-PRICING-SEO-GATE"
 EXCEL_IMAGE_USER_AGENT = (
     "RadmanSilverExcelImageImporter/1.0 "
     "(+https://radmansilver.ir; owner-controlled original-gallery migration)"
@@ -91,7 +92,7 @@ MIN_REQUIRED_COLUMNS = 29
 
 STANDARD_RATE = 650_000
 LARGE_STONE_RATE = 590_000
-ROUNDING_STEP = 50_000
+EXACT_ROUNDING_POLICY = "EXACT_NO_CHARM_NO_50000_ROUNDING"
 LARGE_STONE_RE = re.compile(
     r"(?:(?:نگین|عقیق).{0,20}(?:درشت|بزرگ)|(?:درشت|بزرگ).{0,20}(?:نگین|عقیق))"
 )
@@ -133,6 +134,11 @@ REPORT_COLUMNS = (
     "final_price_toman",
     "regular_price_toman",
     "price_source",
+    "pricing_mode",
+    "legacy_price_exact_toman",
+    "computed_floor_exact_toman",
+    "price_rounding_policy",
+    "price_selection_reason",
     "rate_used",
     "stone_class",
     "stone_type",
@@ -163,20 +169,28 @@ class ExcelPipelineError(RuntimeError):
 class PricingDecision:
     stone_class: str
     rate_used: int
-    excel_price_toman: Optional[int]
+    excel_price_toman: Optional[Decimal]
     computed_price_toman: Optional[Decimal]
+    selected_price_toman: Optional[Decimal]
     final_price_toman: Optional[int]
-    pre_discount_price_toman: Optional[int]
+    pre_discount_price_toman: Optional[Decimal]
     regular_price_toman: Optional[int]
     price_source: str
+    pricing_mode: str
+    rounding_policy: str
+    selection_reason: str
     review_flags: Tuple[str, ...]
 
     def to_dict(self) -> Dict[str, Any]:
         value = asdict(self)
-        if self.computed_price_toman is not None:
-            value["computed_price_toman"] = format(
-                self.computed_price_toman, "f"
-            )
+        for field in (
+            "excel_price_toman",
+            "computed_price_toman",
+            "selected_price_toman",
+            "pre_discount_price_toman",
+        ):
+            if value[field] is not None:
+                value[field] = format(value[field], "f")
         value["review_flags"] = list(self.review_flags)
         return value
 
@@ -1151,6 +1165,26 @@ def _positive_toman(value: Any) -> Optional[int]:
     return int(parsed.to_integral_value(rounding=ROUND_FLOOR))
 
 
+def _positive_decimal_toman(value: Any) -> Optional[Decimal]:
+    parsed = parse_decimal(value)
+    return parsed if parsed is not None and parsed > 0 else None
+
+
+def _ceil_whole_toman(value: Decimal) -> int:
+    return int(value.to_integral_value(rounding=ROUND_CEILING))
+
+
+def _decimal_text(value: Optional[Decimal]) -> str:
+    if value is None:
+        return ""
+    text = format(value, "f")
+    if "." not in text:
+        return text
+    whole, fraction = text.split(".", 1)
+    fraction = fraction.rstrip("0")
+    return whole if not fraction else f"{whole}.{fraction}"
+
+
 def parse_weight(value: Any) -> Optional[Decimal]:
     parsed = parse_decimal(value, decimal_comma=True)
     if parsed is None or parsed <= 0 or parsed > Decimal("500"):
@@ -1217,42 +1251,51 @@ def calculate_pricing(
     weight: Optional[Decimal],
 ) -> PricingDecision:
     flags: List[str] = []
-    current = _positive_toman(excel_price)
-    pre_discount = _positive_toman(pre_discount_price)
+    legacy_price = _positive_decimal_toman(excel_price)
+    pre_discount = _positive_decimal_toman(pre_discount_price)
     stone_class = classify_stone_from_title(title)
     rate = LARGE_STONE_RATE if stone_class == "large_stone" else STANDARD_RATE
     computed: Optional[Decimal] = None
+    selected: Optional[Decimal] = None
     final: Optional[int] = None
     price_source = "INVALID_REVIEW"
+    pricing_mode = "invalid_review"
+    selection_reason = "INVALID_LEGACY_PRICE"
 
-    if current is None:
+    if legacy_price is None:
         flags.append("EXCEL_PRICE_MISSING_OR_INVALID")
     elif weight is None:
-        final = round_up_toman(Decimal(current), ROUNDING_STEP)
-        price_source = "EXCEL_ONLY"
+        selected = legacy_price
+        final = _ceil_whole_toman(selected)
+        price_source = "LEGACY_MIRROR"
+        pricing_mode = "legacy_mirror"
+        selection_reason = "WEIGHT_MISSING_EXACT_LEGACY_PRICE"
     else:
         computed = weight * Decimal(rate)
-        if Decimal(current) >= computed:
-            selected = Decimal(current)
-            price_source = "MAX_EXCEL"
+        pricing_mode = "max_legacy_or_weight_floor"
+        if legacy_price >= computed:
+            selected = legacy_price
+            price_source = "MAX_EXACT_LEGACY"
+            selection_reason = "LEGACY_PRICE_ABOVE_OR_EQUAL_COMPUTED_FLOOR"
         else:
             selected = computed
-            price_source = "MAX_CALCULATED"
-        final = round_up_toman(selected, ROUNDING_STEP)
-
-    # Luxury pricing policy: COL 10 is trace-only. The storefront exposes one
-    # price, so regular price always equals the computed/selected final price.
-    regular = final
+            price_source = "MAX_EXACT_COMPUTED_FLOOR"
+            selection_reason = "COMPUTED_FLOOR_ABOVE_LEGACY_PRICE"
+        final = _ceil_whole_toman(selected)
 
     return PricingDecision(
         stone_class=stone_class,
         rate_used=rate,
-        excel_price_toman=current,
+        excel_price_toman=legacy_price,
         computed_price_toman=computed,
+        selected_price_toman=selected,
         final_price_toman=final,
         pre_discount_price_toman=pre_discount,
-        regular_price_toman=regular,
+        regular_price_toman=final,
         price_source=price_source,
+        pricing_mode=pricing_mode,
+        rounding_policy=EXACT_ROUNDING_POLICY,
+        selection_reason=selection_reason,
         review_flags=tuple(flags),
     )
 
@@ -1353,14 +1396,23 @@ def _apply_pricing_to_record(
             "weight_grams": format(weight, "f") if weight is not None else None,
             "stone_class": decision.stone_class,
             "rate_used": decision.rate_used,
-            "computed_price_toman": (
-                format(decision.computed_price_toman, "f")
-                if decision.computed_price_toman is not None
-                else None
-            ),
+            "computed_price_toman": _decimal_text(decision.computed_price_toman) or None,
+            "selected_price_toman": _decimal_text(decision.selected_price_toman) or None,
             "final_price_toman": decision.final_price_toman,
             "regular_price_toman": decision.regular_price_toman,
             "price_source": decision.price_source,
+            "pricing_mode": decision.pricing_mode,
+            "radman_legacy_price_exact_toman": _decimal_text(
+                decision.excel_price_toman
+            ),
+            "radman_computed_floor_exact_toman": _decimal_text(
+                decision.computed_price_toman
+            ),
+            "radman_final_price_exact_toman": str(
+                decision.final_price_toman or ""
+            ),
+            "radman_price_rounding_policy": decision.rounding_policy,
+            "radman_price_selection_reason": decision.selection_reason,
         }
     )
 
@@ -1417,8 +1469,10 @@ def apply_specs_to_record(
     elif live_weight is not None:
         record["weight_source"] = "LIVE_PAGE"
         _apply_pricing_to_record(record, live_weight)
-        record["live_weight_floor_toman"] = round_up_toman(
-            live_weight * Decimal(int(record["rate_used"])), ROUNDING_STEP
+        exact_live_floor = live_weight * Decimal(int(record["rate_used"]))
+        record["live_weight_floor_toman"] = _ceil_whole_toman(exact_live_floor)
+        record["radman_computed_floor_exact_toman"] = _decimal_text(
+            exact_live_floor
         )
         record["price_reconciled_from_live_weight"] = True
         flags.append("LIVE_PAGE_WEIGHT_USED_FOR_PRICING")
@@ -1604,14 +1658,27 @@ def load_excel_records(
                     "live_weight_floor_toman": None,
                     "stone_class": pricing.stone_class,
                     "rate_used": pricing.rate_used,
-                    "computed_price_toman": (
-                        format(pricing.computed_price_toman, "f")
-                        if pricing.computed_price_toman is not None
-                        else None
-                    ),
+                    "computed_price_toman": _decimal_text(
+                        pricing.computed_price_toman
+                    ) or None,
+                    "selected_price_toman": _decimal_text(
+                        pricing.selected_price_toman
+                    ) or None,
                     "final_price_toman": pricing.final_price_toman,
                     "regular_price_toman": pricing.regular_price_toman,
                     "price_source": pricing.price_source,
+                    "pricing_mode": pricing.pricing_mode,
+                    "radman_legacy_price_exact_toman": _decimal_text(
+                        pricing.excel_price_toman
+                    ),
+                    "radman_computed_floor_exact_toman": _decimal_text(
+                        pricing.computed_price_toman
+                    ),
+                    "radman_final_price_exact_toman": str(
+                        pricing.final_price_toman or ""
+                    ),
+                    "radman_price_rounding_policy": pricing.rounding_policy,
+                    "radman_price_selection_reason": pricing.selection_reason,
                     "review_flags": list(dict.fromkeys(review_flags)),
                     "eligible": bool(active is True and availability != "ناموجود"),
                     "legacy_url": "",
@@ -2395,7 +2462,15 @@ foreach ($q->posts as $id) {{
   'product_id'=>(int)$id,
   'legacy_id'=>(string)get_post_meta($id,'legacy_product_id',true),
   'public_title'=>(string)$p->get_name('edit'),
+  'description'=>(string)$p->get_description('edit'),
+  'short_description'=>(string)$p->get_short_description('edit'),
+  'status'=>(string)$p->get_status('edit'),
   'sku'=>(string)$p->get_sku('edit'),
+  'stock_quantity'=>$p->get_stock_quantity('edit'),
+  'stock_status'=>(string)$p->get_stock_status('edit'),
+  'category_ids'=>array_map('intval',$p->get_category_ids('edit')),
+  'featured_image_id'=>(int)$p->get_image_id('edit'),
+  'gallery_image_ids'=>array_map('intval',$p->get_gallery_image_ids('edit')),
   'legacy_raw_code'=>(string)get_post_meta($id,'legacy_raw_code',true),
   'legacy_url'=>(string)get_post_meta($id,'legacy_url',true),
   'legacy_original_title'=>(string)get_post_meta($id,'legacy_original_title',true),
@@ -2403,8 +2478,21 @@ foreach ($q->posts as $id) {{
   'title_cleanup_status'=>(string)get_post_meta($id,'legacy_title_cleanup_status',true),
   'title_cleanup_timestamp'=>(string)get_post_meta($id,'legacy_title_cleanup_timestamp',true),
   'review_flags'=>(string)get_post_meta($id,'radman_review_flags',true),
+  'legacy_specs'=>(string)get_post_meta($id,'radman_legacy_specs',true),
+  'spec_weight'=>(string)get_post_meta($id,'radman_spec_weight_grams',true),
+  'spec_purity'=>(string)get_post_meta($id,'radman_spec_silver_purity',true),
+  'spec_stone_type'=>(string)get_post_meta($id,'radman_spec_stone_type',true),
+  'spec_stone_color'=>(string)get_post_meta($id,'radman_spec_stone_color',true),
+  'spec_setting_type'=>(string)get_post_meta($id,'radman_spec_band_type',true),
+  'spec_dimensions'=>(string)get_post_meta($id,'radman_spec_dimensions',true),
+  'rank_math_title'=>(string)get_post_meta($id,'rank_math_title',true),
+  'rank_math_description'=>(string)get_post_meta($id,'rank_math_description',true),
+  'seo_package'=>(string)get_post_meta($id,'radman_product_seo_package',true),
   'price'=>(string)$p->get_price('edit'),
-  'regular_price'=>(string)$p->get_regular_price('edit')
+  'regular_price'=>(string)$p->get_regular_price('edit'),
+  'sale_price_readonly'=>(string)$p->get_sale_price('edit'),
+  'currency'=>(string)get_option('woocommerce_currency',''),
+  'visibility'=>(string)$p->get_catalog_visibility('edit')
  );
 }}
 echo wp_json_encode($out);
@@ -2469,6 +2557,23 @@ echo wp_json_encode($out);
                 record.get("live_weight_floor_toman") or ""
             ),
             "final_price": str(record.get("final_price_toman") or ""),
+            "radman_legacy_price_exact_toman": str(
+                record.get("radman_legacy_price_exact_toman")
+                or record.get("excel_price_toman")
+                or ""
+            ),
+            "radman_computed_floor_exact_toman": str(
+                record.get("radman_computed_floor_exact_toman") or ""
+            ),
+            "radman_final_price_exact_toman": str(
+                record.get("final_price_toman") or ""
+            ),
+            "radman_price_rounding_policy": EXACT_ROUNDING_POLICY,
+            "radman_price_selection_reason": str(
+                record.get("radman_price_selection_reason")
+                or record.get("price_source")
+                or ""
+            ),
             "radman_review_flags": " | ".join(record.get("review_flags", [])),
         }
         payload = {
@@ -2499,6 +2604,8 @@ $p->set_price($luxury_regular);
 foreach ($d['meta'] as $key=>$value) {{ $p->update_meta_data($key, (string)$value); }}
 $id=$p->save();
 delete_post_meta($id, '_sale_price');
+delete_post_meta($id, '_sale_price_dates_from');
+delete_post_meta($id, '_sale_price_dates_to');
 update_post_meta($id, '_price', $luxury_regular);
 wc_delete_product_transients($id);
 echo wp_json_encode(array(
@@ -2511,6 +2618,158 @@ echo wp_json_encode(array(
         result = self.eval_json(php)
         if not isinstance(result, dict) or result.get("status") != "draft":
             raise WPCliError(f"invalid enrichment result for {record['legacy_id']}")
+        return dict(result)
+
+    def reprice_existing_draft_exact(
+        self,
+        record: Mapping[str, Any],
+        product_id: int,
+    ) -> Dict[str, Any]:
+        payload = {
+            "product_id": int(product_id),
+            "legacy_id": str(record["legacy_id"]),
+            "final_price": int(record["final_price_toman"]),
+            "meta": {
+                "pricing_mode": str(record.get("pricing_mode") or "legacy_mirror"),
+                "radman_legacy_price_exact_toman": str(
+                    record.get("radman_legacy_price_exact_toman") or ""
+                ),
+                "radman_computed_floor_exact_toman": str(
+                    record.get("radman_computed_floor_exact_toman") or ""
+                ),
+                "radman_final_price_exact_toman": str(record["final_price_toman"]),
+                "radman_price_rounding_policy": EXACT_ROUNDING_POLICY,
+                "radman_price_selection_reason": str(
+                    record.get("radman_price_selection_reason") or ""
+                ),
+            },
+        }
+        encoded = _b64(
+            json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+        )
+        php = f"""
+$d=json_decode(base64_decode('{encoded}'), true);
+$p=wc_get_product((int)$d['product_id']);
+if (!$p || $p->get_status('edit') !== 'draft') {{ fwrite(STDERR, 'Draft product not found'); exit(21); }}
+$legacy=(string)$p->get_meta('legacy_product_id', true, 'edit');
+if ($legacy !== (string)$d['legacy_id']) {{ fwrite(STDERR, 'legacy ID mismatch'); exit(22); }}
+$protected_before=wp_json_encode(array(
+ 'name'=>$p->get_name('edit'),'sku'=>$p->get_sku('edit'),'status'=>$p->get_status('edit'),
+ 'description'=>$p->get_description('edit'),'short_description'=>$p->get_short_description('edit'),
+ 'stock'=>$p->get_stock_quantity('edit'),'stock_status'=>$p->get_stock_status('edit'),
+ 'categories'=>$p->get_category_ids('edit'),'image'=>$p->get_image_id('edit'),
+ 'gallery'=>$p->get_gallery_image_ids('edit')
+));
+$before=(string)$p->get_price('edit');
+$p->set_regular_price((string)$d['final_price']);
+$p->set_price((string)$d['final_price']);
+foreach ($d['meta'] as $key=>$value) {{ $p->update_meta_data($key,(string)$value); }}
+$id=$p->save();
+delete_post_meta($id, '_sale_price');
+delete_post_meta($id, '_sale_price_dates_from');
+delete_post_meta($id, '_sale_price_dates_to');
+update_post_meta($id, '_regular_price', (string)$d['final_price']);
+update_post_meta($id, '_price', (string)$d['final_price']);
+wc_delete_product_transients($id);
+$p=wc_get_product($id);
+$protected_after=wp_json_encode(array(
+ 'name'=>$p->get_name('edit'),'sku'=>$p->get_sku('edit'),'status'=>$p->get_status('edit'),
+ 'description'=>$p->get_description('edit'),'short_description'=>$p->get_short_description('edit'),
+ 'stock'=>$p->get_stock_quantity('edit'),'stock_status'=>$p->get_stock_status('edit'),
+ 'categories'=>$p->get_category_ids('edit'),'image'=>$p->get_image_id('edit'),
+ 'gallery'=>$p->get_gallery_image_ids('edit')
+));
+if ($protected_before !== $protected_after) {{ fwrite(STDERR, 'protected product fields changed'); exit(23); }}
+$regular=(string)get_post_meta($id,'_regular_price',true);
+$current=(string)get_post_meta($id,'_price',true);
+$sale=(string)get_post_meta($id,'_sale_price',true);
+if ($regular !== (string)$d['final_price'] || $current !== $regular || $sale !== '') {{
+ fwrite(STDERR, 'exact price verification failed'); exit(24);
+}}
+echo wp_json_encode(array(
+ 'id'=>(int)$id,'status'=>$p->get_status('edit'),'before'=>$before,
+ 'after'=>$current,'regular'=>$regular,'sale_meta_after_cleanup'=>$sale,
+ 'protected_unchanged'=>true
+));
+"""
+        result = self.eval_json(php)
+        if not isinstance(result, dict) or result.get("status") != "draft":
+            raise WPCliError(f"invalid exact repricing result for {record['legacy_id']}")
+        return dict(result)
+
+    def update_product_seo_draft(
+        self,
+        record: Mapping[str, Any],
+        package: Mapping[str, Any],
+    ) -> Dict[str, Any]:
+        payload = {
+            "product_id": int(record["product_id"]),
+            "legacy_id": str(record["legacy_id"]),
+            "short_description": str(package["short_description"]),
+            "rank_math_meta": dict(package["rank_math_meta"]),
+            "seo_package": json.dumps(package, ensure_ascii=False),
+            "internal_links": json.dumps(package["internal_links"], ensure_ascii=False),
+            "entities": dict(package["search_entities"]),
+            "attributes": dict(package["woo_attributes"]),
+            "alt_plan": list(package["image_alt_plan"]),
+        }
+        encoded = _b64(
+            json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+        )
+        php = f"""
+$d=json_decode(base64_decode('{encoded}'),true);
+$p=wc_get_product((int)$d['product_id']);
+if (!$p || $p->get_status('edit') !== 'draft') {{ fwrite(STDERR,'Draft product not found'); exit(31); }}
+if ((string)$p->get_meta('legacy_product_id',true,'edit') !== (string)$d['legacy_id']) {{ fwrite(STDERR,'legacy ID mismatch'); exit(32); }}
+$before=wp_json_encode(array(
+ 'name'=>$p->get_name('edit'),'sku'=>$p->get_sku('edit'),'status'=>$p->get_status('edit'),
+ 'description'=>$p->get_description('edit'),'stock'=>$p->get_stock_quantity('edit'),
+ 'stock_status'=>$p->get_stock_status('edit'),'categories'=>$p->get_category_ids('edit'),
+ 'image'=>$p->get_image_id('edit'),'gallery'=>$p->get_gallery_image_ids('edit'),
+ 'regular'=>$p->get_regular_price('edit'),'price'=>$p->get_price('edit')
+));
+$p->set_short_description((string)$d['short_description']);
+foreach ($d['rank_math_meta'] as $key=>$value) {{ $p->update_meta_data($key,(string)$value); }}
+$p->update_meta_data('radman_product_seo_package',(string)$d['seo_package']);
+$p->update_meta_data('radman_internal_link_recommendations',(string)$d['internal_links']);
+$p->update_meta_data('radman_search_entity_brand',(string)$d['entities']['brand']);
+$p->update_meta_data('radman_search_entity_material',(string)$d['entities']['material']);
+foreach (array('purity','color','gemstone','weight','audience') as $entity) {{
+ $p->update_meta_data('radman_search_entity_'.$entity,(string)($d['entities'][$entity] ?? ''));
+}}
+$attrs=$p->get_attributes('edit');
+foreach ($d['attributes'] as $name=>$value) {{
+ $attr=new WC_Product_Attribute();
+ $attr->set_id(0); $attr->set_name((string)$name); $attr->set_options(array((string)$value));
+ $attr->set_position(count($attrs)); $attr->set_visible(true); $attr->set_variation(false);
+ $attrs[sanitize_title((string)$name)]=$attr;
+}}
+$p->set_attributes($attrs);
+$id=$p->save();
+foreach ($d['alt_plan'] as $item) {{
+ $attachment=(int)($item['attachment_id'] ?? 0);
+ if ($attachment>0 && get_post_type($attachment)==='attachment') {{
+  update_post_meta($attachment,'_wp_attachment_image_alt',sanitize_text_field((string)$item['alt']));
+ }}
+}}
+$p=wc_get_product($id);
+$after=wp_json_encode(array(
+ 'name'=>$p->get_name('edit'),'sku'=>$p->get_sku('edit'),'status'=>$p->get_status('edit'),
+ 'description'=>$p->get_description('edit'),'stock'=>$p->get_stock_quantity('edit'),
+ 'stock_status'=>$p->get_stock_status('edit'),'categories'=>$p->get_category_ids('edit'),
+ 'image'=>$p->get_image_id('edit'),'gallery'=>$p->get_gallery_image_ids('edit'),
+ 'regular'=>$p->get_regular_price('edit'),'price'=>$p->get_price('edit')
+));
+if ($before !== $after) {{ fwrite(STDERR,'protected product fields changed during SEO'); exit(33); }}
+echo wp_json_encode(array(
+ 'id'=>(int)$id,'status'=>$p->get_status('edit'),'protected_unchanged'=>true,
+ 'rank_math_title'=>(string)$p->get_meta('rank_math_title',true,'edit'),
+ 'rank_math_description'=>(string)$p->get_meta('rank_math_description',true,'edit')
+));
+"""
+        result = self.eval_json(php)
+        if not isinstance(result, dict) or result.get("status") != "draft":
+            raise WPCliError(f"invalid SEO update result for {record['legacy_id']}")
         return dict(result)
 
     def create_excel_draft(self, record: Mapping[str, Any], category_id: int) -> int:
@@ -2577,10 +2836,20 @@ echo wp_json_encode(array(
             "radman_import_source": "excel_1000_pipeline",
             "radman_import_version": PIPELINE_VERSION,
             "radman_review_flags": " | ".join(record.get("review_flags", [])),
-            "pricing_mode": "manual_locked",
+            "pricing_mode": str(record.get("pricing_mode") or "legacy_mirror"),
             "manual_price_toman": str(record["final_price_toman"]),
             "price_locked": "1",
-            "rounding_step_toman": str(ROUNDING_STEP),
+            "radman_legacy_price_exact_toman": str(
+                record.get("radman_legacy_price_exact_toman") or ""
+            ),
+            "radman_computed_floor_exact_toman": str(
+                record.get("radman_computed_floor_exact_toman") or ""
+            ),
+            "radman_final_price_exact_toman": str(record["final_price_toman"]),
+            "radman_price_rounding_policy": EXACT_ROUNDING_POLICY,
+            "radman_price_selection_reason": str(
+                record.get("radman_price_selection_reason") or ""
+            ),
         }
         payload = {
             "sku": record["sku"],
@@ -2956,6 +3225,365 @@ def prepare_existing_enrichment(
     return matched, missing
 
 
+def prepare_existing_exact_repricing(
+    all_excel_records: Sequence[Dict[str, Any]],
+    gateway: ExcelDraftGateway,
+    max_products: int,
+) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    existing = gateway.list_draft_legacy_products(max_products)
+    by_legacy_id = {str(row["legacy_id"]): dict(row) for row in all_excel_records}
+    prepared: List[Dict[str, Any]] = []
+    skipped: List[Dict[str, Any]] = []
+    for item in existing:
+        legacy_id = str(item.get("legacy_id") or "")
+        excel = by_legacy_id.get(legacy_id)
+        if excel is None:
+            skipped.append(
+                {
+                    "legacy_id": legacy_id,
+                    "product_id": item.get("product_id"),
+                    "action": "SKIP_LEGACY_ID_NOT_IN_EXCEL",
+                }
+            )
+            continue
+        weight = parse_weight(excel.get("excel_weight_grams"))
+        weight_source = "EXCEL" if weight is not None else "MISSING"
+        if weight is None:
+            weight = parse_weight(item.get("spec_weight"))
+            if weight is not None:
+                weight_source = "VERIFIED_SPEC_META"
+        decision = calculate_pricing(
+            title=str(excel.get("title") or item.get("public_title") or ""),
+            excel_price=excel.get("excel_price_toman"),
+            pre_discount_price=excel.get("pre_discount_price_toman"),
+            weight=weight,
+        )
+        if decision.final_price_toman is None:
+            skipped.append(
+                {
+                    "legacy_id": legacy_id,
+                    "product_id": item.get("product_id"),
+                    "action": "SKIP_INVALID_EXACT_PRICE",
+                }
+            )
+            continue
+        record = dict(excel)
+        record.update(
+            {
+                "wordpress_product_id": int(item["product_id"]),
+                "wordpress_current_price": item.get("price"),
+                "wordpress_regular_price": item.get("regular_price"),
+                "wordpress_sale_price": item.get("sale_price_readonly"),
+                "reprice_weight_grams": _decimal_text(weight),
+                "reprice_weight_source": weight_source,
+                "computed_price_toman": _decimal_text(
+                    decision.computed_price_toman
+                ) or None,
+                "selected_price_toman": _decimal_text(
+                    decision.selected_price_toman
+                ) or None,
+                "final_price_toman": decision.final_price_toman,
+                "regular_price_toman": decision.final_price_toman,
+                "price_source": decision.price_source,
+                "pricing_mode": decision.pricing_mode,
+                "radman_legacy_price_exact_toman": _decimal_text(
+                    decision.excel_price_toman
+                ),
+                "radman_computed_floor_exact_toman": _decimal_text(
+                    decision.computed_price_toman
+                ),
+                "radman_final_price_exact_toman": str(
+                    decision.final_price_toman
+                ),
+                "radman_price_rounding_policy": decision.rounding_policy,
+                "radman_price_selection_reason": decision.selection_reason,
+                "protected_snapshot": {
+                    "title": item.get("public_title"),
+                    "sku": item.get("sku"),
+                    "status": item.get("status"),
+                    "description": item.get("description"),
+                    "short_description": item.get("short_description"),
+                    "stock_quantity": item.get("stock_quantity"),
+                    "stock_status": item.get("stock_status"),
+                    "category_ids": item.get("category_ids", []),
+                    "featured_image_id": item.get("featured_image_id"),
+                    "gallery_image_ids": item.get("gallery_image_ids", []),
+                },
+            }
+        )
+        prepared.append(record)
+    return prepared, skipped
+
+
+def write_exact_reprice_before_backup(
+    records: Sequence[Mapping[str, Any]], run_dir: Path
+) -> Path:
+    run_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
+    path = run_dir / "exact-reprice-before.csv"
+    columns = (
+        "wp_id", "legacy_id", "sku", "status", "price", "regular_price",
+        "sale_meta_before_readonly", "title", "stock_quantity", "category_ids",
+        "featured_image_id", "gallery_image_ids", "protected_snapshot_json",
+    )
+    with path.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=columns)
+        writer.writeheader()
+        for record in records:
+            snapshot = dict(record.get("protected_snapshot", {}))
+            writer.writerow(
+                {
+                    "wp_id": record.get("wordpress_product_id"),
+                    "legacy_id": record.get("legacy_id"),
+                    "sku": snapshot.get("sku"),
+                    "status": snapshot.get("status"),
+                    "price": record.get("wordpress_current_price"),
+                    "regular_price": record.get("wordpress_regular_price"),
+                    "sale_meta_before_readonly": record.get("wordpress_sale_price"),
+                    "title": snapshot.get("title"),
+                    "stock_quantity": snapshot.get("stock_quantity"),
+                    "category_ids": json.dumps(snapshot.get("category_ids", [])),
+                    "featured_image_id": snapshot.get("featured_image_id"),
+                    "gallery_image_ids": json.dumps(snapshot.get("gallery_image_ids", [])),
+                    "protected_snapshot_json": json.dumps(snapshot, ensure_ascii=False),
+                }
+            )
+    os.chmod(path, 0o600)
+    txt_path = run_dir / "exact-reprice-before-fa.txt"
+    lines = [
+        "پشتیبان قبل از قیمت گذاری دقیق محصولات Draft",
+        "wp_id | legacy_id | SKU | قیمت | regular | sale | status",
+    ]
+    for record in records:
+        snapshot = dict(record.get("protected_snapshot", {}))
+        lines.append(
+            f"{record.get('wordpress_product_id')} | {record.get('legacy_id')} | "
+            f"{snapshot.get('sku')} | {record.get('wordpress_current_price')} | "
+            f"{record.get('wordpress_regular_price')} | "
+            f"{record.get('wordpress_sale_price') or '—'} | {snapshot.get('status')}"
+        )
+    txt_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    os.chmod(txt_path, 0o600)
+    return path
+
+
+def reprice_existing_exact(
+    records: Sequence[Dict[str, Any]],
+    gateway: ExcelDraftGateway,
+    *,
+    dry_run: bool,
+) -> List[Dict[str, Any]]:
+    actions: List[Dict[str, Any]] = []
+    for record in records:
+        if dry_run:
+            result = {
+                "before": str(record.get("wordpress_current_price") or ""),
+                "after": str(record["final_price_toman"]),
+                "regular": str(record["final_price_toman"]),
+                "sale_meta_after_cleanup": "",
+                "protected_unchanged": True,
+            }
+            action = "PREVIEW_EXACT_REPRICE"
+        else:
+            result = gateway.reprice_existing_draft_exact(
+                record, int(record["wordpress_product_id"])
+            )
+            action = "REPRICED_DRAFT_EXACT"
+        record["action"] = action
+        record["price_changed"] = (
+            str(result.get("before") or "") != str(result.get("after") or "")
+        )
+        actions.append(
+            {
+                "wp_id": record["wordpress_product_id"],
+                "legacy_id": record["legacy_id"],
+                "sku": record["sku"],
+                "action": action,
+                "before": result.get("before"),
+                "legacy_price_exact": record.get("radman_legacy_price_exact_toman"),
+                "computed_floor_exact": record.get("radman_computed_floor_exact_toman"),
+                "after": result.get("after"),
+                "selection_reason": record.get("radman_price_selection_reason"),
+                "pricing_mode": record.get("pricing_mode"),
+                "rounding_policy": EXACT_ROUNDING_POLICY,
+                "sale_meta_after_cleanup": result.get("sale_meta_after_cleanup", ""),
+                "protected_unchanged": bool(result.get("protected_unchanged")),
+            }
+        )
+    return actions
+
+
+def write_exact_reprice_reports(
+    records: Sequence[Mapping[str, Any]],
+    actions: Sequence[Mapping[str, Any]],
+    skipped: Sequence[Mapping[str, Any]],
+    run_dir: Path,
+) -> Tuple[Path, Path]:
+    run_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
+    csv_path = run_dir / "exact-reprice-after.csv"
+    txt_path = run_dir / "exact-reprice-after-fa.txt"
+    columns = (
+        "wp_id", "legacy_id", "sku", "action", "before",
+        "legacy_price_exact", "computed_floor_exact", "after",
+        "selection_reason", "pricing_mode", "rounding_policy",
+        "sale_meta_after_cleanup", "protected_unchanged",
+    )
+    with csv_path.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=columns)
+        writer.writeheader()
+        for action in actions:
+            writer.writerow({key: action.get(key, "") for key in columns})
+    os.chmod(csv_path, 0o600)
+    lines = [
+        "گزارش قیمت گذاری دقیق محصولات Draft رادمان",
+        f"سیاست: {EXACT_ROUNDING_POLICY}",
+        "wp_id | legacy_id | SKU | قبل | legacy exact | floor exact | بعد | دلیل | اقدام",
+    ]
+    for action in actions:
+        lines.append(
+            f"{action.get('wp_id')} | {action.get('legacy_id')} | {action.get('sku')} | "
+            f"{action.get('before')} | {action.get('legacy_price_exact')} | "
+            f"{action.get('computed_floor_exact') or '—'} | {action.get('after')} | "
+            f"{action.get('selection_reason')} | {action.get('action')}"
+        )
+    if skipped:
+        lines.append(f"ردشده: {len(skipped)}")
+    txt_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    os.chmod(txt_path, 0o600)
+    write_json_atomic(run_dir / "exact-reprice-actions.json", [*actions, *skipped])
+    return csv_path, txt_path
+
+
+def prepare_existing_seo_records(
+    all_excel_records: Sequence[Dict[str, Any]],
+    gateway: ExcelDraftGateway,
+    max_products: int,
+) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    existing = gateway.list_draft_legacy_products(max_products)
+    by_legacy_id = {str(row["legacy_id"]): row for row in all_excel_records}
+    prepared: List[Dict[str, Any]] = []
+    skipped: List[Dict[str, Any]] = []
+    for item in existing:
+        legacy_id = str(item.get("legacy_id") or "")
+        excel = by_legacy_id.get(legacy_id)
+        if excel is None:
+            skipped.append(
+                {
+                    "legacy_id": legacy_id,
+                    "product_id": item.get("product_id"),
+                    "action": "SKIP_LEGACY_ID_NOT_IN_EXCEL",
+                }
+            )
+            continue
+        record = {**dict(item), **{
+            "legacy_id": legacy_id,
+            "title": str(item.get("public_title") or excel.get("title") or ""),
+            "category": excel.get("category"),
+            "category_raw": excel.get("category_raw"),
+            "spec_weight_grams": item.get("spec_weight"),
+            "spec_silver_purity": item.get("spec_purity"),
+            "spec_stone_type": item.get("spec_stone_type"),
+            "spec_stone_color": item.get("spec_stone_color"),
+            "spec_band_type": item.get("spec_setting_type"),
+            "spec_dimensions": item.get("spec_dimensions"),
+            "schema_price": item.get("price"),
+            "schema_currency": item.get("currency"),
+            "schema_availability": item.get("stock_status"),
+        }}
+        prepared.append(record)
+    return prepared, skipped
+
+
+def generate_seo_packages(
+    records: Sequence[Mapping[str, Any]],
+) -> List[Dict[str, Any]]:
+    return [generate_seo_package(record) for record in records]
+
+
+def write_seo_plan_reports(
+    records: Sequence[Mapping[str, Any]],
+    packages: Sequence[Mapping[str, Any]],
+    skipped: Sequence[Mapping[str, Any]],
+    run_dir: Path,
+) -> Tuple[Path, Path, Path]:
+    run_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
+    json_path = run_dir / "product-seo-plan.json"
+    csv_path = run_dir / "product-seo-plan.csv"
+    txt_path = run_dir / "product-seo-plan-fa.txt"
+    write_json_atomic(
+        json_path,
+        {"packages": list(packages), "skipped": list(skipped), "publish": False},
+    )
+    columns = (
+        "legacy_id", "sku", "title", "category", "seo_title",
+        "meta_description", "short_description", "alt_count",
+        "internal_link_count", "quality_status",
+    )
+    with csv_path.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=columns)
+        writer.writeheader()
+        for package in packages:
+            writer.writerow(
+                {
+                    "legacy_id": package.get("legacy_id"),
+                    "sku": package.get("sku"),
+                    "title": package.get("title"),
+                    "category": package.get("category"),
+                    "seo_title": package.get("seo_title"),
+                    "meta_description": package.get("meta_description"),
+                    "short_description": package.get("short_description"),
+                    "alt_count": len(package.get("image_alt_plan", [])),
+                    "internal_link_count": len(package.get("internal_links", [])),
+                    "quality_status": package.get("quality_status"),
+                }
+            )
+    os.chmod(csv_path, 0o600)
+    lines = [
+        "برنامه SEO محصولات Draft رادمان",
+        f"تعداد: {len(packages)} | ردشده: {len(skipped)}",
+        "این گزارش read-only است و هیچ محصولی publish نمی شود.",
+        "",
+    ]
+    for package in packages:
+        lines.append(
+            f"{package.get('legacy_id')} | {package.get('sku')} | {package.get('seo_title')}"
+        )
+    txt_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    os.chmod(txt_path, 0o600)
+    return json_path, csv_path, txt_path
+
+
+def apply_seo_packages(
+    records: Sequence[Dict[str, Any]],
+    packages: Sequence[Mapping[str, Any]],
+    gateway: ExcelDraftGateway,
+) -> List[Dict[str, Any]]:
+    actions: List[Dict[str, Any]] = []
+    for record, package in zip(records, packages):
+        result = gateway.update_product_seo_draft(record, package)
+        record["seo_package"] = dict(package)
+        record["rank_math_title"] = package["seo_title"]
+        record["rank_math_description"] = package["meta_description"]
+        record["short_description"] = package["short_description"]
+        actions.append(
+            {
+                "product_id": record.get("product_id"),
+                "legacy_id": record.get("legacy_id"),
+                "sku": record.get("sku"),
+                "action": "SEO_ENRICHED_DRAFT",
+                "status": result.get("status"),
+                "protected_unchanged": bool(result.get("protected_unchanged")),
+                "publish": False,
+            }
+        )
+    return actions
+
+
+def write_seo_actions(actions: Sequence[Mapping[str, Any]], run_dir: Path) -> Path:
+    path = run_dir / "product-seo-actions.json"
+    write_json_atomic(path, list(actions))
+    return path
+
+
 def now_slug() -> str:
     return datetime.now(TEHRAN).strftime("%Y%m%dT%H%M%S%f%z")
 
@@ -3012,6 +3640,19 @@ def _report_row(record: Mapping[str, Any]) -> Dict[str, Any]:
         "final_price_toman": record.get("final_price_toman") or "",
         "regular_price_toman": record.get("regular_price_toman") or "",
         "price_source": record.get("price_source", ""),
+        "pricing_mode": record.get("pricing_mode", ""),
+        "legacy_price_exact_toman": record.get(
+            "radman_legacy_price_exact_toman", ""
+        ),
+        "computed_floor_exact_toman": record.get(
+            "radman_computed_floor_exact_toman", ""
+        ),
+        "price_rounding_policy": record.get(
+            "radman_price_rounding_policy", EXACT_ROUNDING_POLICY
+        ),
+        "price_selection_reason": record.get(
+            "radman_price_selection_reason", ""
+        ),
         "rate_used": record.get("rate_used", ""),
         "stone_class": record.get("stone_class", ""),
         "stone_type": record.get("spec_stone_type", ""),
@@ -3281,7 +3922,13 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     modes.add_argument("--import-drafts", action="store_true")
     modes.add_argument("--enrich-existing", action="store_true")
     modes.add_argument("--identity-report", action="store_true")
+    modes.add_argument("--reprice-existing-exact", action="store_true")
+    modes.add_argument("--seo-plan", action="store_true")
+    modes.add_argument("--seo-enrich-existing", action="store_true")
+    modes.add_argument("--seo-qa", action="store_true")
+    modes.add_argument("--seo-batch-ready", action="store_true")
     modes.add_argument("--full-pilot", action="store_true")
+    parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--excel", type=Path, default=DEFAULT_EXCEL_FILE)
     parser.add_argument("--max-products", type=int, default=DEFAULT_MAX_PRODUCTS)
     parser.add_argument("--private-dir", type=Path, required=True)
@@ -3313,6 +3960,87 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
         if args.inspect:
             inspect_excel(args.excel, args.max_products)
+            return 0
+
+        if args.dry_run and not args.reprice_existing_exact:
+            raise ExcelPipelineError("--dry-run فقط با --reprice-existing-exact مجاز است")
+
+        if args.reprice_existing_exact:
+            if args.dry_run:
+                require_readonly_wp_environment(args.wp_path)
+            else:
+                require_import_environment(args.wp_path)
+            all_records, _warnings = load_excel_records(args.excel)
+            gateway = ExcelDraftGateway(args.wp_path)
+            prepared, skipped = prepare_existing_exact_repricing(
+                all_records, gateway, args.max_products
+            )
+            if not prepared:
+                raise ExcelPipelineError("هیچ Draft معتبر برای قیمت گذاری دقیق پیدا نشد")
+            run_stamp = now_slug()
+            run_dir = (
+                private_dir / "legacy-cache" / "runs" / f"exact-reprice-{run_stamp}"
+            )
+            before_path = write_exact_reprice_before_backup(prepared, run_dir)
+            actions = reprice_existing_exact(
+                prepared, gateway, dry_run=bool(args.dry_run)
+            )
+            csv_path, txt_path = write_exact_reprice_reports(
+                prepared, actions, skipped, run_dir
+            )
+            print(f"[EXACT REPRICE] dry_run={args.dry_run} products={len(actions)}")
+            print(f"[CSV BACKUP] {before_path}")
+            print(f"[REPORT] {csv_path}")
+            print(f"[REPORT] {txt_path}")
+            print(f"[SAFETY] policy={EXACT_ROUNDING_POLICY}; publish=NEVER")
+            return 0
+
+        if (
+            args.seo_plan
+            or args.seo_enrich_existing
+            or args.seo_qa
+            or args.seo_batch_ready
+        ):
+            mutating_seo = bool(args.seo_enrich_existing or args.seo_batch_ready)
+            if mutating_seo:
+                require_import_environment(args.wp_path)
+            else:
+                require_readonly_wp_environment(args.wp_path)
+            all_records, _warnings = load_excel_records(args.excel)
+            gateway = ExcelDraftGateway(args.wp_path)
+            seo_records, skipped = prepare_existing_seo_records(
+                all_records, gateway, args.max_products
+            )
+            if not seo_records:
+                raise ExcelPipelineError("هیچ Draft معتبر برای SEO پیدا نشد")
+            run_stamp = now_slug()
+            run_dir = private_dir / "legacy-cache" / "runs" / f"product-seo-{run_stamp}"
+            packages: List[Dict[str, Any]] = []
+            if not args.seo_qa:
+                packages = generate_seo_packages(seo_records)
+                plan_json, plan_csv, plan_txt = write_seo_plan_reports(
+                    seo_records, packages, skipped, run_dir
+                )
+                print(f"[SEO PLAN] {plan_json}")
+                print(f"[SEO PLAN] {plan_csv}")
+                print(f"[SEO PLAN] {plan_txt}")
+            if args.seo_plan:
+                print("[SAFETY] SEO plan is read-only; publish=NEVER")
+                return 0
+            if mutating_seo:
+                actions = apply_seo_packages(seo_records, packages, gateway)
+                write_seo_actions(actions, run_dir)
+                print(f"[SEO ENRICH] Drafts updated={len(actions)} publish=NEVER")
+            if args.seo_qa or args.seo_batch_ready:
+                qa_payload = evaluate_products(seo_records)
+                paths = write_qa_reports(qa_payload, run_dir)
+                for path in paths.values():
+                    print(f"[SEO QA] {path}")
+                print(
+                    "[SEO QA SUMMARY] "
+                    + json.dumps(qa_payload["summary"], ensure_ascii=False)
+                )
+                print("[PUBLICATION] BLOCKED unless every critical QA field passes")
             return 0
 
         if args.enrich_existing:

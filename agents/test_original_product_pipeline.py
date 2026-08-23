@@ -23,7 +23,7 @@ import agent_legacy_catalog_pilot as catalog  # noqa: E402
 import agent_original_image_processor as image_processor  # noqa: E402
 import agent_original_product_pipeline as pipeline  # noqa: E402
 from lib.legacy_identity import duplicate_codes, map_legacy_code_to_sku  # noqa: E402
-from lib.legacy_pricing import calculate_safe_price, parse_toman, round_up_toman  # noqa: E402
+from lib.legacy_pricing import calculate_safe_price, parse_toman  # noqa: E402
 
 
 def test_decimal_pricing() -> None:
@@ -59,7 +59,7 @@ def test_decimal_pricing() -> None:
     )
     assert necklace.rate_toman_per_gram == 650_000
     assert necklace.selection_reason == "LEGACY_PRICE_HIGHER"
-    assert necklace.final_price_toman == 7_050_000
+    assert necklace.final_price_toman == 7_001_000
 
     assert parse_toman("۱۲٬۳۴۵٬۶۷۸ تومان") == 12_345_678
     assert parse_toman("12345678") == 12_345_678
@@ -68,8 +68,7 @@ def test_decimal_pricing() -> None:
     )
     assert mislabeled == 12_345_678
     assert "amount_toman" in mislabeled_source
-    assert round_up_toman(Decimal("5900001")) == 5_950_000
-    print("PASS: Decimal Toman floors, conservative rate, max selection, and upward rounding")
+    print("PASS: exact Decimal Toman floors, conservative rate, and max selection")
 
 
 def test_legacy_identity_mapping() -> None:
@@ -254,7 +253,14 @@ def test_mock_ten_product_scrape_and_reports() -> None:
         )
         assert len(records) == 10
         for record in records:
-            assert record["pricing"]["final_price_toman"] % 50_000 == 0
+            pricing = record["pricing"]
+            candidates = [
+                value for value in (
+                    pricing.get("legacy_price_toman"),
+                    pricing.get("calculated_price_toman"),
+                ) if value is not None
+            ]
+            assert pricing["final_price_toman"] == max(candidates)
             assert record["image_qa_status"] in {"PASS", "FAIL"}
             assert len(record["selected_import_paths"]) == 2
             assert record["import_action"] == "CREATE_DRAFT"

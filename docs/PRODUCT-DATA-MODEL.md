@@ -33,7 +33,7 @@ To support the 4-mode pricing engine and semi-automated gemstone calculation, ev
 | **`legacy_price_toman`** | Integer | Final price mirrored from old store (`noghrehmashhad.ir`) | `legacy_mirror` |
 | **`manual_price_toman`** | Integer | Explicit retail price set manually by owner | `manual_locked` |
 | **`price_locked`** | Boolean | `true` if price is locked against automation; `false` otherwise | **ALL PRODUCTS** |
-| **`rounding_step_toman`** | Integer | Default `10000` (round up to nearest 10,000 Toman) | **ALL PRODUCTS** |
+| **`price_rounding_policy`** | String | `EXACT_NO_CHARM_NO_50000_ROUNDING`; whole-Toman ceiling only for fractional results | **ALL PRODUCTS** |
 
 ---
 
@@ -97,10 +97,10 @@ The general eight-field pricing model above remains present. To protect the temp
 | `radman_gemstone_class` | `no_stone`, `small_stone`, `large_stone`, or `uncertain` |
 | `radman_gemstone_confidence`, `radman_gemstone_source` | Conservative classifier audit trail |
 | `radman_rate_toman_per_gram` | Temporary selected rate, `590000` or `650000` |
-| `radman_calculated_floor_toman` | Decimal weight floor before final comparison/rounding |
+| `radman_calculated_floor_toman` | Historical Decimal weight-floor trace before exact comparison |
 | `radman_final_price_toman` | Direct IRT/Toman WooCommerce price |
 | `radman_price_selection_reason` | Legacy-vs-floor decision reason |
-| `radman_rounding_step_toman` | `50000` for this overlay |
+| `radman_rounding_step_toman` | Deprecated historical PR-25 trace; ignored by PR-34 exact pricing |
 | `radman_requires_review`, `radman_review_reasons` | Human review state |
 | `radman_image_qa_status`, `radman_image_qa_sheet` | Image integrity result/evidence |
 | `radman_image_integrity_action`, `radman_image_fallback_used` | Optimized output or untouched-original fallback |
@@ -122,8 +122,13 @@ Required Draft metadata:
 | `weight_grams`, `silver_weight_grams` | Parsed COL 22 or blank |
 | `excel_price_toman` | Current Toman price, COL 9 |
 | `pre_discount_price_toman` | Trace-only COL 10 value; never used as storefront regular/sale pricing |
-| `price_source` | `EXCEL_ONLY`, `MAX_EXCEL`, or `MAX_CALCULATED` |
-| `rate_used`, `computed_price`, `final_price` | Decimal pricing audit trail |
+| `price_source` | `LEGACY_MIRROR`, `MAX_EXACT_LEGACY`, or `MAX_EXACT_COMPUTED_FLOOR` |
+| `rate_used`, `computed_price`, `final_price` | Exact Decimal pricing audit trail; whole-Toman ceiling only |
+| `radman_legacy_price_exact_toman` | Exact Excel current price |
+| `radman_computed_floor_exact_toman` | Exact verified-weight floor, if available |
+| `radman_final_price_exact_toman` | Exact selected final integer Toman price |
+| `radman_price_rounding_policy` | `EXACT_NO_CHARM_NO_50000_ROUNDING` |
+| `radman_price_selection_reason` | Deterministic max-selection reason |
 | `stone_class` | Title-only `large_stone`, `no_stone`, or conservative `uncertain` |
 | `image_status` | `READY` or importable `MISSING` |
 | `image_discovery_strategy` | Direct ID, site search, sitemap cache, or not found |
@@ -151,3 +156,10 @@ Every product has one storefront price: `_regular_price == _price == final_price
 Only an explicit trailing `کد` / `کد مدل` / `کد محصول` / `شناسه کالا` suffix is removed; meaningful numbers such as purity 925 remain. The normalized model code is preserved as WooCommerce SKU and shown as `کد مدل` in the technical description.
 
 Private mapping fields are mandatory: `legacy_product_id`, `radman_legacy_code`, `legacy_raw_code`, `legacy_original_title`, `legacy_url`, `legacy_identity_key`, `legacy_title_cleanup_status`, and `legacy_title_cleanup_timestamp`. `legacy_identity_key` is deterministic: `<legacy_product_id>:<SKU>`. Existing enrichment never silently changes an SKU; a title-code mismatch becomes `SKU_TITLE_MISMATCH` review.
+
+
+## 11. PR-34 deterministic product SEO and publication gate
+
+Rank Math-compatible fields are `rank_math_title`, `rank_math_description`, and `rank_math_focus_keyword`. The complete deterministic package is retained in `radman_product_seo_package`; internal-link recommendations and search entities use `radman_internal_link_recommendations` and `radman_search_entity_*` metadata.
+
+Verified weight, purity, gemstone, color, setting, audience and SKU are mapped to non-taxonomy WooCommerce product attributes without creating taxonomy terms. WooCommerce/Rank Math remain the single Product/Offer schema implementation. `SEO_BLOCKED` products must not be published; no PR-34 runner mode changes product status from Draft.

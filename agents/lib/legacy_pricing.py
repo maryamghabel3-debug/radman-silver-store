@@ -13,7 +13,6 @@ from typing import Any, Dict, Optional, Tuple
 
 STANDARD_RATE_TOMAN_PER_GRAM = 650_000
 LARGE_STONE_RATE_TOMAN_PER_GRAM = 590_000
-ROUNDING_STEP_TOMAN = 50_000
 LARGE_STONE_MIN_CONFIDENCE = Decimal("0.85")
 MIN_PLAUSIBLE_LEGACY_PRICE_TOMAN = 50_000
 MAX_PLAUSIBLE_LEGACY_PRICE_TOMAN = 10_000_000_000
@@ -108,13 +107,6 @@ def parse_confidence(value: Any) -> Decimal:
     if not confidence.is_finite():
         return Decimal("0")
     return min(Decimal("1"), max(Decimal("0"), confidence))
-
-
-def round_up_toman(value: Decimal, step: int = ROUNDING_STEP_TOMAN) -> int:
-    if value < 0:
-        raise ValueError("price cannot be negative")
-    units = (value / Decimal(step)).to_integral_value(rounding=ROUND_CEILING)
-    return int(units * Decimal(step))
 
 
 def choose_rate(
@@ -218,7 +210,7 @@ def calculate_safe_price(
         if selected is not None
         else None
     )
-    final_price = round_up_toman(selected) if selected is not None else None
+    final_price = selected_integer
 
     return PricingResult(
         category=str(category or "").strip().lower(),

@@ -47,10 +47,19 @@ def test_regular_price_always_equals_final() -> None:
     for decision in cases:
         assert decision.regular_price_toman == decision.final_price_toman
         assert not hasattr(decision, "sale_price_toman")
-    assert cases[0].regular_price_toman == 7_700_000
+    assert cases[0].regular_price_toman == 7_689_000
+    assert cases[0].pricing_mode == "legacy_mirror"
     assert cases[1].regular_price_toman == 1_300_000
     assert cases[2].regular_price_toman == 5_900_000
-    print("PASS: COL 10 is ignored and regular price always equals final")
+    fractional = excel.calculate_pricing(
+        title="انگشتر",
+        excel_price=1_000_000,
+        pre_discount_price=None,
+        weight=Decimal("2.000001"),
+    )
+    assert fractional.final_price_toman == 1_300_001
+    assert fractional.rounding_policy == "EXACT_NO_CHARM_NO_50000_ROUNDING"
+    print("PASS: exact legacy/floor pricing uses whole-Toman ceiling and regular equals final")
 
 
 def test_no_importer_sets_sale_price() -> None:
@@ -58,6 +67,8 @@ def test_no_importer_sets_sale_price() -> None:
     assert "set_sale_price" not in combined
     assert not re.search(r"[\"']sale_price[\"']\s*[:=]", combined)
     assert "sale_price_toman" not in combined
+    assert "ROUNDING_STEP" not in (REPO_ROOT / "agents" / "agent_excel_product_pipeline.py").read_text(encoding="utf-8")
+    assert "round_up_toman" not in (REPO_ROOT / "agents" / "agent_excel_product_pipeline.py").read_text(encoding="utf-8")
     assert "delete_post_meta($id, '_sale_price')" in combined
     assert "update_post_meta($id, '_price', $luxury_regular)" in combined
     assert "delete_post_meta({pid}, '_sale_price')" in combined
