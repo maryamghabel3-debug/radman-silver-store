@@ -1,6 +1,6 @@
 # راهنمای import هزار محصول جدیدتر از Excel با تصاویر اصلی
 
-**نسخه:** PR-32 (strict HTML validation)
+**نسخه:** PR-33 (clean public descriptions + strict HTML validation)
 
 **تصمیم قطعی منبع داده:** Excel منبع selection، price، stock و active flag است. API سایت قدیمی deferred است. برای `--enrich-existing`، صفحه HTML واقعی محصول پس از SKU search منبع اصلی مشخصات فنی allowlisted است؛ متن عمومی/SEO و contact وارد رادمان نمی‌شود.
 

@@ -75,7 +75,7 @@ EXPECTED_APP_ENV = "staging"
 EXPECTED_WP_URL = "https://staging.radmansilver.ir"
 EXPECTED_WP_PATH = "/home/radmansi/staging.radmansilver.ir"
 REQUIRED_CURRENCY = "IRT"
-PIPELINE_VERSION = "PR-32-STRICT-HTML"
+PIPELINE_VERSION = "PR-33-CLEAN-PUBLIC-DESCRIPTIONS"
 EXCEL_IMAGE_USER_AGENT = (
     "RadmanSilverExcelImageImporter/1.0 "
     "(+https://radmansilver.ir; owner-controlled original-gallery migration)"
@@ -223,6 +223,10 @@ SPEC_META_LABELS = {
     "engraving": "نوع حکاکی",
 }
 DISPLAY_MARKER_RE = re.compile(r"(?:نمایش\s*(?:بیشتر|کمتر)|show\s*(?:more|less))", re.I)
+REDUNDANT_PRODUCT_PREFIX_RE = re.compile(
+    r"^\s*(?:انگشتر|دستبند|گردنبند)\s*[:：]\s*",
+    re.I,
+)
 UNSAFE_SPEC_TERMS = (
     "شماره تماس", "تماس", "تلفن", "موبایل", "واتساپ", "تلگرام", "اینستاگرام",
     "ایمیل", "آدرس", "نشانی", "خیابان", "پلاک", "ارسال", "پست پیشتاز",
@@ -304,7 +308,8 @@ def _contains_contact_or_unsafe(value: Any) -> bool:
 def _clean_spec_value(value: Any) -> str:
     text = DISPLAY_MARKER_RE.sub("", html.unescape(str(value or "")))
     text = normalize_text(text).strip(" .،؛:：-–—|")
-    return text
+    text = REDUNDANT_PRODUCT_PREFIX_RE.sub("", text)
+    return text.strip(" .،؛:：-–—|")
 
 
 def _different_product_codes(value: Any, expected_sku: str) -> List[str]:
@@ -1321,7 +1326,6 @@ def generate_unique_description(
         f"{title}\n\n"
         "مشخصات فنی ثبت‌شده برای این قطعه از مجموعه رادمان سیلور:\n\n"
         + "\n".join(bullets)
-        + "\n\nاطلاعات فوق فقط از مشخصات فنی صفحه همان محصول استخراج شده است."
     )
     return description, "SPECS_TEMPLATE"
 

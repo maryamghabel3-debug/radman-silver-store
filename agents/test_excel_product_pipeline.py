@@ -21,6 +21,10 @@ FIXTURE = REPO_ROOT / "tests" / "fixtures" / "excel-import" / "excel_products.js
 SPEC_FIXTURE = REPO_ROOT / "tests" / "fixtures" / "legacy-specs" / "spec_blocks.json"
 LIVE_HTML_FIXTURE = REPO_ROOT / "tests" / "fixtures" / "legacy-specs" / "live_product_page.html"
 CONTAMINATION_FIXTURE = REPO_ROOT / "tests" / "fixtures" / "legacy-specs" / "contamination_cases.json"
+REJECTED_PUBLIC_DISCLAIMER = (
+    "اطلاعات فوق فقط از مشخصات فنی "
+    + "صفحه همان محصول استخراج شده است."
+)
 sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(HERE))
 
@@ -101,6 +105,28 @@ def test_real_spec_block_fixtures_and_html_section_parser() -> None:
     assert adjacent.stone_type == "فیروزه"
     assert adjacent.silver_purity == "925"
     print("PASS: strict table/dl/div/visible HTML extraction yields 5+ safe technical fields")
+
+
+def test_public_description_has_no_disclaimer_and_spec_prefixes_are_clean() -> None:
+    assert pipeline._clean_spec_value("انگشتر: 10 گرم") == "10 گرم"
+    assert pipeline._clean_spec_value("دستبند:14 × 10 میلی‌متر") == "14 × 10 میلی متر"
+    assert pipeline._clean_spec_value("گردنبند： عقیق") == "عقیق"
+
+    specs = pipeline.parse_spec_block_text(
+        "وزن: انگشتر: 10 گرم · نوع سنگ:گردنبند: عقیق · عیار:دستبند: 925",
+        expected_title="انگشتر عقیق",
+    )
+    assert specs.weight_display == "10 گرم"
+    assert specs.stone_type == "عقیق"
+    assert specs.silver_purity == "925"
+    description, source = pipeline.generate_unique_description(
+        {"title": "انگشتر عقیق", "sku": "1057"}, specs
+    )
+    assert source == "SPECS_TEMPLATE"
+    assert "انگشتر: 10 گرم" not in description
+    assert REJECTED_PUBLIC_DISCLAIMER not in description
+    assert description.endswith("- کد مدل: 1057")
+    print("PASS: redundant product prefixes and public system disclaimer are removed")
 
 
 def test_real_contamination_fixtures_are_strictly_validated() -> None:
@@ -224,6 +250,8 @@ def test_unique_descriptions_differ_and_omit_missing_fields() -> None:
         assert "موجودی محدود" not in description
         assert "اصل" not in description
         assert "ثبت سفارش" not in description
+        assert REJECTED_PUBLIC_DISCLAIMER not in description
+        assert description.endswith(f"- کد مدل: MODEL-{index}")
         descriptions.append(description)
     assert len(set(descriptions)) == 3
     assert "- نوع حکاکی: " not in descriptions[1]
@@ -1076,6 +1104,7 @@ def test_runner_plan_and_static_safety() -> None:
 
 def main() -> int:
     test_real_spec_block_fixtures_and_html_section_parser()
+    test_public_description_has_no_disclaimer_and_spec_prefixes_are_clean()
     test_real_contamination_fixtures_are_strictly_validated()
     test_unique_descriptions_differ_and_omit_missing_fields()
     test_excel_parsing_sku_pricing_and_categories()
