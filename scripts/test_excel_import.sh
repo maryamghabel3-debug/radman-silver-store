@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Offline PR-32 strict HTML-enrichment gates. No host, network, image download, or WP mutation.
+# Offline PR-33 clean-description gates. No host, network, image download, or WP mutation.
 set -euo pipefail
 
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
@@ -52,7 +52,15 @@ if grep -niE 'wp_delete_post|post[[:space:]]+delete|product[[:space:]]+delete' \
 fi
 
 if grep -n -- '--api-probe' scripts/run_excel_import.sh; then
-  echo '[FAIL] API probe must remain deferred in the PR-32 owner runner' >&2
+  echo '[FAIL] API probe must remain deferred in the PR-33 owner runner' >&2
+  exit 1
+fi
+
+REJECTED_PUBLIC_DISCLAIMER='اطلاعات فوق فقط از مشخصات فنی صفحه همان محصول استخراج شده است'
+REJECTED_PUBLIC_DISCLAIMER="$REJECTED_PUBLIC_DISCLAIMER."
+if grep -nF "$REJECTED_PUBLIC_DISCLAIMER" \
+  agents/agent_excel_product_pipeline.py README.md docs/HTML-SPEC-ENRICHMENT-RUNBOOK.md; then
+  echo '[FAIL] internal extraction disclaimer found in public-description sources' >&2
   exit 1
 fi
 
