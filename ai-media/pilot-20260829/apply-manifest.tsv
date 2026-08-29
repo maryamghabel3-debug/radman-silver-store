@@ -1,0 +1,11 @@
+product_id	sku	role	attachment_id	original_filename	cleaned_filename	status
+300	NM-3574	featured	301	product-300-sku-NM-3574-featured-attachment-301.webp	product-300-sku-NM-3574-featured-attachment-301.webp	READY
+211	NM-3603	featured	212	product-211-sku-NM-3603-featured-attachment-212.webp	product-211-sku-NM-3603-featured-attachment-212.webp	READY
+363	NM-3553	featured	364	product-363-sku-NM-3553-featured-attachment-364.webp	product-363-sku-NM-3553-featured-attachment-364.webp	READY
+175	NM-3615	featured	176	product-175-sku-NM-3615-featured-attachment-176.webp	product-175-sku-NM-3615-featured-attachment-176.webp	READY
+184	NM-3612	featured	185	product-184-sku-NM-3612-featured-attachment-185.webp	product-184-sku-NM-3612-featured-attachment-185.webp	READY
+390	13204540	gallery-1	392	product-390-sku-13204540-gallery-1-attachment-392.webp	product-390-sku-13204540-gallery-1-attachment-392.webp	READY
+278	NM-3581	gallery-1	280	product-278-sku-NM-3581-gallery-1-attachment-280.webp	product-278-sku-NM-3581-gallery-1-attachment-280.webp	READY
+214	NM-3602	featured	215	product-214-sku-NM-3602-featured-attachment-215.webp	product-214-sku-NM-3602-featured-attachment-215.webp	READY
+265	12184564	featured	266	product-265-sku-12184564-featured-attachment-266.webp	product-265-sku-12184564-featured-attachment-266.webp	CONTROL_CLEAN
+117	1009	gallery-1	119	product-117-sku-1009-gallery-1-attachment-119.webp	product-117-sku-1009-gallery-1-attachment-119.webp	CONTROL_CLEAN
