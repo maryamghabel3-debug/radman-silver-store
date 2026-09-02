@@ -1,0 +1,85 @@
+{
+  "version": "1.0.0",
+  "brand": "RADMAN SILVER 925",
+  "currency": {
+    "code": "IRT",
+    "name_fa": "تومان",
+    "name_en": "Toman",
+    "rial_toman_conversion_permitted": false
+  },
+  "pricing": {
+    "sale_price_permitted": false,
+    "strikethrough_permitted": false,
+    "price_formula": "max(legacy_price, weight_grams * gram_rate)",
+    "gram_rates_toman": {
+      "standard_rate": 650000,
+      "large_stone_rate": 590000,
+      "unknown_or_small_stone_rate": 650000
+    },
+    "rounding_rule": "whole_toman_ceiling",
+    "max_allowed_automated_price_variance_ratio": 0.05
+  },
+  "inventory": {
+    "stock_model": "one_to_one",
+    "default_stock_quantity": 1,
+    "manage_stock": true,
+    "allow_backorders": false
+  },
+  "lifecycle": {
+    "default_product_status": "draft",
+    "auto_publish_permitted": false,
+    "publish_requires_owner_approval": true
+  },
+  "content_safety": {
+    "prohibited_patterns_in_descriptions": [
+      {
+        "category": "phone_numbers",
+        "description": "No direct phone numbers in public descriptions",
+        "regex_patterns": [
+          "09[0-9]{9}",
+          "\\+98[0-9]{10}",
+          "۰۹[۰-۹]{9}"
+        ]
+      },
+      {
+        "category": "shipping_promises",
+        "description": "No hard delivery time commitments in descriptions",
+        "keywords": [
+          "ارسال فوری تضمینی",
+          "تحویل ۲۴ ساعته",
+          "ارسال همان روز",
+          "ارسال ۱ ساعته",
+          "تحویل فوری قطعی"
+        ]
+      },
+      {
+        "category": "guarantee_claims",
+        "description": "No absolute guarantee or permanent warranty claims in descriptions",
+        "keywords": [
+          "گارانتی مادام‌العمر",
+          "ضمانت همیشگی",
+          "تضمین ۱۰۰٪ بدون تغییر رنگ",
+          "غیر قابل شکستن",
+          "ضمانت بی‌قید و شرط"
+        ]
+      }
+    ],
+    "brand_voice": {
+      "tone": "luxury_persian_authentic",
+      "silver_hallmark_standard": "نقره ۹۲۵ اصل",
+      "product_truth_over_ai_creativity": true
+    }
+  },
+  "media_governance": {
+    "ai_hallucination_replacement_permitted": false,
+    "geometry_locked_fidelity_required": true,
+    "media_replacement_requires_owner_approval": true,
+    "real_product_truth_priority": true
+  },
+  "governance_thresholds": {
+    "publish_action_gate": "GATE_PUBLISH_PRODUCT",
+    "price_change_above_5_percent_gate": "GATE_PRICE_CHANGE_LARGE",
+    "media_replacement_gate": "GATE_MEDIA_REPLACE",
+    "ai_image_replacement_gate": "GATE_AI_IMAGE_REPLACE"
+  }
+}

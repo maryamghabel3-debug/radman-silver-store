@@ -1,0 +1,209 @@
+{
+  "version": "1.0.0",
+  "platform": "RADMAN-AGENT-PLATFORM",
+  "description": "Skill and agent registry for RADMAN SILVER 925 autonomous workflows",
+  "skills": {
+    "radman-orchestrator": {
+      "name": "RADMAN Master Orchestrator",
+      "version": "1.0.0",
+      "risk_level": "LOW",
+      "requires_owner_approval": false,
+      "description": "Routes tasks to specialized skills, enforces approval gates, generates structured execution plans, and coordinates multi-skill workflows without direct state mutation.",
+      "capabilities": [
+        "task_routing",
+        "plan_generation",
+        "approval_gate_enforcement",
+        "dependency_resolution",
+        "artifact_manifest_tracking"
+      ],
+      "input_schema": {
+        "task_id": "string",
+        "objective": "string",
+        "target_skill": "string",
+        "context": "object"
+      },
+      "output_schema": {
+        "task_plan": "object",
+        "routed_skill": "string",
+        "required_gates": "array",
+        "status": "string"
+      },
+      "skill_doc": ".agents/skills/radman-orchestrator/SKILL.md",
+      "entry_point": "agents.platform.task_contract"
+    },
+    "radman-seo-agent": {
+      "name": "RADMAN SEO & AI Visibility Agent",
+      "version": "1.0.0",
+      "risk_level": "LOW",
+      "requires_owner_approval": false,
+      "description": "Generates Persian luxury SEO titles, meta descriptions, focus keywords, Rank Math schema suggestions, duplicate content checks, and search engine readiness audits without publishing.",
+      "capabilities": [
+        "title_generation",
+        "meta_description_generation",
+        "keyword_stuffing_detection",
+        "duplicate_content_check",
+        "rank_math_metadata_contract",
+        "search_console_readiness_audit"
+      ],
+      "input_schema": {
+        "product_id": "integer|string",
+        "title": "string",
+        "category": "string",
+        "specs": "object"
+      },
+      "output_schema": {
+        "seo_title": "string",
+        "meta_description": "string",
+        "focus_keyword": "string",
+        "rank_math_meta": "object",
+        "qa_status": "string"
+      },
+      "skill_doc": ".agents/skills/radman-seo-agent/SKILL.md",
+      "entry_point": "agents.agent_product_seo"
+    },
+    "radman-content-agent": {
+      "name": "RADMAN Brand Content Agent",
+      "version": "1.0.0",
+      "risk_level": "LOW",
+      "requires_owner_approval": false,
+      "description": "Drafts Persian-first luxury editorial content, educational articles on 925 sterling silver and natural gemstones, Instagram captions, and size care guides adhering strictly to brand voice.",
+      "capabilities": [
+        "blog_post_drafting",
+        "instagram_caption_generation",
+        "product_care_guide_drafting",
+        "gemstone_education_content",
+        "persian_luxury_copywriting",
+        "bilingual_en_fa_translation"
+      ],
+      "input_schema": {
+        "topic": "string",
+        "content_type": "string",
+        "target_audience": "string",
+        "product_context": "object"
+      },
+      "output_schema": {
+        "title": "string",
+        "body_persian": "string",
+        "instagram_caption": "string",
+        "tags": "array",
+        "read_time_minutes": "integer"
+      },
+      "skill_doc": ".agents/skills/radman-content-agent/SKILL.md",
+      "entry_point": "agents.platform.task_contract"
+    },
+    "radman-sales-agent": {
+      "name": "RADMAN Advisory Sales & Support Agent",
+      "version": "1.0.0",
+      "risk_level": "LOW",
+      "requires_owner_approval": false,
+      "description": "Drafts consultative responses to customer inquiries regarding ring sizing, silver hallmark 925 authenticity, natural gemstone care, and order status inquiry drafts with uncertainty escalation.",
+      "capabilities": [
+        "customer_inquiry_drafting",
+        "ring_size_guidance",
+        "silver_gemstone_consultation",
+        "order_status_response_drafting",
+        "uncertainty_escalation"
+      ],
+      "input_schema": {
+        "inquiry_id": "string",
+        "customer_query": "string",
+        "inquiry_type": "string",
+        "context": "object"
+      },
+      "output_schema": {
+        "suggested_response": "string",
+        "escalation_required": "boolean",
+        "escalation_reason": "string",
+        "recommended_products": "array"
+      },
+      "skill_doc": ".agents/skills/radman-sales-agent/SKILL.md",
+      "entry_point": "agents.platform.task_contract"
+    },
+    "radman-media-agent": {
+      "name": "RADMAN Media Governance Agent",
+      "version": "1.0.0",
+      "risk_level": "MEDIUM",
+      "requires_owner_approval": true,
+      "description": "Governs product imagery fidelity, enforces watermark removal guidelines, verifies geometry locks, manages media manifests, and prohibits synthetic replacement of authentic jewelry truth.",
+      "capabilities": [
+        "media_manifest_verification",
+        "watermark_policy_audit",
+        "product_truth_fidelity_check",
+        "image_classification_ecommerce_gallery_social",
+        "geometry_preservation_audit"
+      ],
+      "input_schema": {
+        "product_id": "integer|string",
+        "image_candidates": "array",
+        "spec_context": "object"
+      },
+      "output_schema": {
+        "approved_manifest": "object",
+        "fidelity_verdict": "string",
+        "requires_owner_review": "boolean",
+        "warnings": "array"
+      },
+      "skill_doc": ".agents/skills/radman-media-agent/SKILL.md",
+      "entry_point": "agents.platform.artifact_manifest"
+    },
+    "radman-qa-guard": {
+      "name": "RADMAN Preflight QA Guard",
+      "version": "1.0.0",
+      "risk_level": "LOW",
+      "requires_owner_approval": false,
+      "description": "Performs strict preflight audits against RADMAN business rules, checks price floors, verifies 1:1 stock, audits prohibited claims, and reports blockers before staging apply.",
+      "capabilities": [
+        "business_rule_compliance_audit",
+        "price_floor_verification",
+        "prohibited_claims_scan",
+        "approval_gate_validation",
+        "preflight_readiness_reporting"
+      ],
+      "input_schema": {
+        "target_type": "string",
+        "payload": "object"
+      },
+      "output_schema": {
+        "verdict": "string",
+        "passed_checks": "array",
+        "violations": "array",
+        "blockers": "array",
+        "requires_gate": "string"
+      },
+      "skill_doc": ".agents/skills/radman-qa-guard/SKILL.md",
+      "entry_point": "agents.platform.business_rules"
+    }
+  },
+  "standalone_agents": {
+    "order_watch": {
+      "file": "agents/agent_order_watch.py",
+      "schedule": "cron: every 5 minutes",
+      "purpose": "Polls WooCommerce for processing/on-hold orders, writes outbox notification, optional SMS"
+    },
+    "price_engine": {
+      "file": "agents/agent_price_engine.py",
+      "schedule": "manual / cron trigger",
+      "purpose": "Recomputes prices based on daily silver rate across four pricing modes (DRY_RUN default)"
+    },
+    "stock_guard": {
+      "file": "agents/agent_stock_guard.py",
+      "schedule": "cron: hourly",
+      "purpose": "Audits WooCommerce stock anomalies, 0-quantity catalog items, negative stock, missing weight meta"
+    },
+    "excel_product_pipeline": {
+      "file": "agents/agent_excel_product_pipeline.py",
+      "schedule": "on-demand runner",
+      "purpose": "1000-product Excel ingestion, exact pricing calculation, HTML spec extraction, draft management"
+    },
+    "product_seo": {
+      "file": "agents/agent_product_seo.py",
+      "schedule": "on-demand pipeline",
+      "purpose": "Deterministic luxury Persian SEO title, meta, focus keyword generator"
+    },
+    "product_seo_qa": {
+      "file": "agents/agent_product_seo_qa.py",
+      "schedule": "pre-publication gate",
+      "purpose": "Audits draft products for SEO completeness and quality before publication readiness"
+    }
+  }
+}

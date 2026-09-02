@@ -1,0 +1,78 @@
+{
+  "version": "1.0.0",
+  "platform": "RADMAN-AGENT-PLATFORM",
+  "approval_gates": {
+    "GATE_PUBLISH_PRODUCT": {
+      "gate_id": "GATE_PUBLISH_PRODUCT",
+      "name": "Product Publication Gate",
+      "risk_level": "HIGH",
+      "approver": "store_owner",
+      "description": "Triggered whenever a product draft is nominated for transition from Draft to Published state.",
+      "blocking": true,
+      "required_evidence": [
+        "seo_qa_pass_report",
+        "exact_price_verification",
+        "stock_1_to_1_verification",
+        "content_safety_check_pass",
+        "owner_signoff"
+      ]
+    },
+    "GATE_PRICE_CHANGE_LARGE": {
+      "gate_id": "GATE_PRICE_CHANGE_LARGE",
+      "name": "Large Price Variance Gate (>5%)",
+      "risk_level": "HIGH",
+      "approver": "store_owner",
+      "description": "Triggered whenever a suggested or calculated price differs from the baseline product price by more than 5%.",
+      "blocking": true,
+      "threshold_variance_ratio": 0.05,
+      "required_evidence": [
+        "price_calculation_breakdown",
+        "silver_gram_rate_basis",
+        "variance_percentage_diff",
+        "owner_signoff"
+      ]
+    },
+    "GATE_MEDIA_REPLACE": {
+      "gate_id": "GATE_MEDIA_REPLACE",
+      "name": "Product Media Replacement Gate",
+      "risk_level": "MEDIUM",
+      "approver": "store_owner",
+      "description": "Triggered whenever a primary catalog image or gallery image set is replaced or re-ordered.",
+      "blocking": true,
+      "required_evidence": [
+        "before_after_visual_manifest",
+        "resolution_aspect_ratio_check",
+        "product_fidelity_confirmation",
+        "owner_signoff"
+      ]
+    },
+    "GATE_AI_IMAGE_REPLACE": {
+      "gate_id": "GATE_AI_IMAGE_REPLACE",
+      "name": "AI Image Replacement Gate",
+      "risk_level": "HIGH",
+      "approver": "store_owner",
+      "description": "Triggered if any AI-cleaned or AI-processed image is proposed to replace an authentic real product photo.",
+      "blocking": true,
+      "required_evidence": [
+        "geometry_lock_audit",
+        "hallucination_absence_verification",
+        "side_by_side_comparison",
+        "explicit_owner_approval"
+      ]
+    },
+    "GATE_DIRECT_MUTATION": {
+      "gate_id": "GATE_DIRECT_MUTATION",
+      "name": "Direct Host / Database Mutation Gate",
+      "risk_level": "CRITICAL",
+      "approver": "store_owner",
+      "description": "Triggered for any action that mutates live production database or writes non-staged files.",
+      "blocking": true,
+      "required_evidence": [
+        "full_staging_backup_tarball",
+        "dry_run_execution_log",
+        "rollback_command_script",
+        "owner_signoff"
+      ]
+    }
+  }
+}
