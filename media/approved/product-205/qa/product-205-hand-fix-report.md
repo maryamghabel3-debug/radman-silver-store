@@ -1,25 +1,25 @@
-# Product 205 — Final Hand Fix Report
+# Product 205 — Final QA Report (right hand redone)
 
 **Product:** 205 · **SKU:** NM-3605
 **Title:** انگشتر نقره مردانه عقیق باباقوری (Men's silver ring, babaghori agate)
 **Date:** 2026-09-02
-**Scope:** `step4-on-finger.webp` for angle A only. Angle B's step4 was already good and was **kept unchanged**. `step1`, `step2` and `step3` were **not** regenerated for either angle.
 
-## Permanent hand rule
+## Problem reported by owner
 
-| Angle | Ring orientation | Required hand |
-|---|---|---|
-| A (att 206) | right-facing | **RIGHT** male hand |
-| B (att 207) | left-facing | **LEFT** male hand |
+The previous right-hand image for angle A showed a **changed ring** — a simplified bezel instead of the ring's distinctive long curved silver claw prongs. Root cause: the product reference was not faithfully re-attached/respected for that call.
 
-## Hand-side verification method
+## Corrective action
 
-Determined geometrically from the dorsal view using finger direction plus thumb position:
+1. Attachment 206's original was **re-downloaded from release `media-originals-v1`**, extracting only that single file; the ZIP was deleted immediately.
+2. That freshly downloaded original was **re-attached to the generation call** as the product reference.
+3. The result was compared against the original before acceptance.
 
-| Finger direction | Thumb position | Hand |
-|---|---|---|
-| pointing left | thumb in foreground (near camera) | **RIGHT** |
-| pointing right | thumb in foreground (near camera) | **LEFT** |
+**Attempts required: 1 of a maximum 3.**
+
+## Permanent rules applied
+
+- **Band is always closed.** Radman rings are closed-band rings; an apparent opening in an original is only the display box hiding part of the shank. Every generated output must render a complete continuous closed shank.
+- **Original re-attached before every AI call.** No generated output is ever used as the product reference.
 
 ---
 
@@ -27,53 +27,42 @@ Determined geometrically from the dorsal view using finger direction plus thumb 
 
 | Check | Result |
 |---|---|
-| **Hand side** | **RIGHT hand** |
-| Required | RIGHT |
-| Correct? | YES |
-| **Ring identity preserved?** | **YES** |
-| Anatomy / finger count correct? | YES |
-| Ring scale correct? | YES |
-| Premium masculine lifestyle style? | YES |
-| Dark refined setting / suit cuff? | YES — dark tailored suit cuff at the wrist |
-| Warm controlled commercial lighting? | YES |
-| Shallow depth of field? | YES |
-| Face / text / logo / watermark? | NONE |
-| **Status** | **READY** |
+| ORIGINAL_REATTACHED | **YES** (re-downloaded from media-originals-v1) |
+| RING_IDENTITY_PRESERVED | **YES** |
+| BAND_CLOSED | **YES** |
+| HAND_SIDE | **RIGHT** |
+| STATUS | **READY** |
 
-**Notes:** Hand enters from the right with fingers pointing left and the thumb resting in the foreground ⇒ right hand. The weak, flat look of the earlier attempt is gone: this render has a dark tailored suit cuff, warm controlled commercial lighting, a rich dark interior background and genuine shallow depth of field. Ring identity is preserved — the honey/caramel agate cabochon with pale cream banding, the all-silver claw prong setting and the openwork silver shoulders, with no gold anywhere. Generated with the real angle-A original re-sent as the direct ring reference.
+**Notes:** The distinctive ring features are back and correct — the large honey/caramel-amber agate cabochon fading to pale cream at its base, the dense row of long curved polished silver claw prongs, the openwork pierced silver shoulders, and no gold anywhere. Verified against the re-downloaded original side by side. Hand enters from the right, fingers point left, thumb in the foreground ⇒ right hand. Style matches the approved angle B image: dark moody background, soft studio lighting, shallow depth of field. No face, text, logo or watermark.
 
----
-
-## angle-B/step4-on-finger.webp — attachment 207 — KEPT UNCHANGED
+## angle-B/step4-on-finger.webp — attachment 207 — UNCHANGED
 
 | Check | Result |
 |---|---|
-| **Hand side** | **LEFT hand** |
-| Required | LEFT |
-| Correct? | YES |
-| **Ring identity preserved?** | **YES** |
-| Anatomy / finger count correct? | YES |
-| Ring scale correct? | YES |
-| Face / text / logo / watermark? | NONE |
-| **Status** | **READY** |
+| ORIGINAL_REATTACHED | YES (at time of generation) |
+| RING_IDENTITY_PRESERVED | **YES** |
+| BAND_CLOSED | **YES** |
+| HAND_SIDE | **LEFT** |
+| STATUS | **READY** |
 
-**Notes:** Already approved as good by the owner, so it was deliberately not regenerated. Hand enters from the left, fingers point right, thumb in the foreground ⇒ left hand. Ring identity preserved.
+Kept exactly as approved by the owner; deliberately not regenerated.
 
----
+## Remaining outputs — unchanged from pilot v3
+
+| Output | ORIGINAL_REATTACHED | RING_IDENTITY_PRESERVED | BAND_CLOSED | STATUS |
+|---|---|---|---|---|
+| angle-A/step1-no-watermark.webp | YES | YES | YES (shank hidden by box, no opening rendered) | READY |
+| angle-A/step2-black-background.webp | YES | YES | YES (shank hidden by box, no opening rendered) | READY |
+| angle-A/step3-luxury-promo.webp | YES | YES | YES — continuous closed shank | READY |
+| angle-B/step1-no-watermark.webp | YES | YES | YES (shank hidden by box, no opening rendered) | READY |
+| angle-B/step2-black-background.webp | YES | YES | YES (shank hidden by box, no opening rendered) | READY |
+| angle-B/step3-luxury-promo.webp | YES | YES | YES — continuous closed shank | READY |
 
 ## Summary
 
-| Angle | Attachment | Hand | Required | Ring identity | Status |
+| Angle | Attachment | Hand | Ring identity | Band closed | Status |
 |---|---|---|---|---|---|
-| A | 206 | **RIGHT** | RIGHT | preserved | **READY** |
-| B | 207 | **LEFT** | LEFT | preserved | **READY** |
+| A | 206 | **RIGHT** | preserved | YES | **READY** |
+| B | 207 | **LEFT** | preserved | YES | **READY** |
 
-The two on-finger images use **opposite hands**, satisfying the permanent hand rule. Product 205 is complete — no output is left in pending or review status.
-
-## Untouched outputs
-
-`step1`, `step2` and `step3` for both angles remain exactly as produced in pilot v3.
-
-## Contact sheet
-
-`qa/product-205-hand-fix-contact-sheet.jpg` — original angle A | final step4 A (RIGHT) | original angle B | final step4 B (LEFT), with the hand sides and identity verdict printed in the header.
+All eight outputs are READY. No output has `BAND_CLOSED=NO` or `RING_IDENTITY_PRESERVED=NO`, so nothing was withheld. Product 205 is complete and not left pending.
