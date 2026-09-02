@@ -1,4 +1,4 @@
-# Approval Summary — Product 205 (FINAL)
+# Approval Summary — Product 205 (FINAL, fully approved)
 
 **Product:** 205 · **SKU:** NM-3605
 **Title:** انگشتر نقره مردانه عقیق باباقوری (Men's silver ring, babaghori agate)
@@ -9,32 +9,28 @@
 
 ## ✅ Owner decision
 
-**Product 205 is fully approved.** All eight outputs across both angles may be used on the website. Nothing for this product remains pending or in review.
+**Product 205 is fully approved by the owner.** All eight outputs across both angles may be used on the website. Nothing for this product remains pending or in review.
 
-## Correction applied in this run
-
-The owner found that the previous angle-A right-hand image showed a **changed ring** (a simplified bezel instead of the ring's long curved silver claw prongs), which indicated the original had not been properly used as reference.
-
-Fix:
-1. Attachment 206's original was **re-downloaded from release `media-originals-v1`** (only that file extracted; ZIP deleted immediately).
-2. It was **re-attached to the generation call** as the product reference.
-3. The output was compared against the original before acceptance.
-
-**Result: ring identity preserved, accepted on attempt 1 of 3.** The fallback to a "medium quality, ring preserved" image was **not** needed.
-
-The approved angle-B left-hand image was **kept unchanged**.
-
-## Permanent rules now in force
-
-- **Band is always closed.** Radman rings are closed-band rings throughout the catalogue. An apparent opening in an original photo is only the display box hiding part of the shank. Every generated output renders a complete, continuous, closed shank — never a gap, split or open ends. Verified on all eight outputs.
-- **Original re-attached before every AI call.** The real original of that exact angle is re-read/re-downloaded and attached for every generation. No generated output is ever used as the product reference. Logged as `ORIGINAL_REATTACHED=YES` for every output in the QA report.
-
-## Hand rule satisfied
+## ✅ Left / right hand rule satisfied
 
 | Angle | Attachment | Ring orientation | Hand used | Required | Correct |
 |---|---|---|---|---|---|
 | A | 206 | right-facing | **RIGHT** male hand | RIGHT | ✅ |
 | B | 207 | left-facing | **LEFT** male hand | LEFT | ✅ |
+
+## ✅ Closed-band rule satisfied
+
+RADMAN rings are always closed-band rings; any apparent opening in an original photo is only the display box hiding part of the shank. Every one of the eight stored outputs was re-verified this run: **BAND_CLOSED=YES for all**. No output renders a gap, split or open ends.
+
+## ✅ Original re-attached on every generation
+
+`ORIGINAL_REATTACHED=YES` for every call. Attachment 206 was re-downloaded fresh from release `media-originals-v1` before the right-hand redo. No generated output was ever used as a product reference.
+
+## Right-hand redo
+
+The earlier right-hand image was rejected by the owner because the ring had changed. It was regenerated with the freshly re-downloaded original attached and a tighter close-up framing so the ring's detail is readable. **Accepted on attempt 2 of a maximum 3**; the medium-quality fallback was not needed. Ring identity — large oval honey→cream banded agate cabochon, many long curved **silver** claw prongs, openwork pierced silver shoulders, no gold — is faithfully reproduced.
+
+Angle B's approved LEFT-hand image was kept unchanged.
 
 ## Angle coverage — complete
 
@@ -56,17 +52,14 @@ The approved angle-B left-hand image was **kept unchanged**.
 | angle-A/step4-on-finger.webp | `gallery/on-finger-a.webp` | `add_gallery_image` |
 | angle-B/step4-on-finger.webp | `gallery/on-finger-b.webp` | `add_gallery_image` |
 
-**All outputs may be used on the website.** Quality note: the regenerated right-hand image is full premium quality with ring identity verified — it is *not* a medium-quality fallback.
-
-## Rejected outputs
-
-None. No output had `BAND_CLOSED=NO` or `RING_IDENTITY_PRESERVED=NO`.
+**All outputs may be used on the website.** Rejected outputs: none.
 
 ## Intended WordPress action
 
-Executed later by the WordPress host from `apply-manifest.tsv`. **No WordPress or hosting change has been made.** Only `main-black-bg-a.webp` carries `replace_featured_image` (attachment 206); all others are gallery additions.
+To be executed later by the WordPress host from `apply-manifest.tsv`. **No WordPress or hosting change has been made.** Only `main-black-bg-a.webp` carries `replace_featured_image` (attachment 206); everything else is added as a gallery image.
 
-## QA artefacts
+## QA notes
 
-- `qa/product-205-hand-fix-report.md`
-- `qa/product-205-hand-fix-contact-sheet.jpg`
+- Full detail in `qa/product-205-hand-fix-report.md` and `qa/product-205-hand-fix-contact-sheet.jpg`.
+- Output format: WebP quality 90.
+- Pull request #36 **not merged**.

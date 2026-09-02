@@ -1,43 +1,50 @@
-# Product 205 — Final QA Report (right hand redone)
+# Product 205 — Final Right-Hand Redo Report
 
-**Product:** 205 · **SKU:** NM-3605
-**Title:** انگشتر نقره مردانه عقیق باباقوری (Men's silver ring, babaghori agate)
+**Product:** 205 · **SKU:** NM-3605 · **Title:** انگشتر نقره مردانه عقیق باباقوری
 **Date:** 2026-09-02
+**Scope:** `angle-A/step4-on-finger.webp` only. Angle B's approved LEFT-hand image was kept unchanged. `step1`, `step2`, `step3` untouched for both angles.
 
-## Problem reported by owner
+## Root cause of the rejected image
 
-The previous right-hand image for angle A showed a **changed ring** — a simplified bezel instead of the ring's distinctive long curved silver claw prongs. Root cause: the product reference was not faithfully re-attached/respected for that call.
+The previous right-hand render changed the ring. The reference image had been re-derived from a cached working copy rather than freshly re-read, and the framing was wide enough that the ring occupied only a small part of the frame, so the model reconstructed a generic mount instead of reproducing the real one.
 
-## Corrective action
-
-1. Attachment 206's original was **re-downloaded from release `media-originals-v1`**, extracting only that single file; the ZIP was deleted immediately.
-2. That freshly downloaded original was **re-attached to the generation call** as the product reference.
-3. The result was compared against the original before acceptance.
-
-**Attempts required: 1 of a maximum 3.**
+**Both causes are now fixed:**
+1. Attachment 206 was **re-downloaded from release `media-originals-v1`**, extracted alone, the ZIP deleted, and that fresh file attached to every generation call.
+2. The framing was tightened so the ring is large and its details are readable.
 
 ## Permanent rules applied
 
-- **Band is always closed.** Radman rings are closed-band rings; an apparent opening in an original is only the display box hiding part of the shank. Every generated output must render a complete continuous closed shank.
-- **Original re-attached before every AI call.** No generated output is ever used as the product reference.
+- `ORIGINAL_REATTACHED=YES` for every call — the real original of that exact angle was attached each time; no generated output was ever used as the product reference.
+- `BAND_CLOSED` — RADMAN rings are always closed-band. Every output must render a complete continuous shank with no gap, split or open ends.
+
+## Attempts
+
+| Attempt | Original re-attached | Result | Verdict |
+|---|---|---|---|
+| 1 | YES | Ring too small in frame; mount simplified, long silver claw prongs not reproduced | REJECTED — not stored |
+| 2 | YES | Close-up framing; large oval honey→cream cabochon, long curved silver claw prongs, openwork pierced shoulders, all-silver, closed band | **ACCEPTED** |
+
+**PRODUCT205_RIGHT_HAND_ATTEMPTS=2** (limit was 3; the fallback to the medium-quality image was not needed).
 
 ---
 
-## angle-A/step4-on-finger.webp — attachment 206 — REGENERATED
+## Output QA
 
-| Check | Result |
+### angle-A/step4-on-finger.webp — attachment 206 — REGENERATED
+
+| Field | Value |
 |---|---|
-| ORIGINAL_REATTACHED | **YES** (re-downloaded from media-originals-v1) |
+| ORIGINAL_REATTACHED | **YES** (attachment 206, freshly re-downloaded) |
 | RING_IDENTITY_PRESERVED | **YES** |
 | BAND_CLOSED | **YES** |
 | HAND_SIDE | **RIGHT** |
 | STATUS | **READY** |
 
-**Notes:** The distinctive ring features are back and correct — the large honey/caramel-amber agate cabochon fading to pale cream at its base, the dense row of long curved polished silver claw prongs, the openwork pierced silver shoulders, and no gold anywhere. Verified against the re-downloaded original side by side. Hand enters from the right, fingers point left, thumb in the foreground ⇒ right hand. Style matches the approved angle B image: dark moody background, soft studio lighting, shallow depth of field. No face, text, logo or watermark.
+**Notes:** Hand enters from the right, fingers pointing left, thumb in the foreground ⇒ right hand. Ring matches the original: one large oval banded-agate cabochon, honey/caramel-amber fading to pale cream, gripped by many long slender curved **silver** claw prongs, openwork pierced silver shoulders, no gold anywhere. Band is a complete closed shank. Premium masculine styling with dark suit cuff, warm controlled commercial lighting and shallow depth of field, matching the approved angle-B image. No face, text, logo or watermark.
 
-## angle-B/step4-on-finger.webp — attachment 207 — UNCHANGED
+### angle-B/step4-on-finger.webp — attachment 207 — UNCHANGED
 
-| Check | Result |
+| Field | Value |
 |---|---|
 | ORIGINAL_REATTACHED | YES (at time of generation) |
 | RING_IDENTITY_PRESERVED | **YES** |
@@ -45,18 +52,18 @@ The previous right-hand image for angle A showed a **changed ring** — a simpli
 | HAND_SIDE | **LEFT** |
 | STATUS | **READY** |
 
-Kept exactly as approved by the owner; deliberately not regenerated.
+### Previously stored outputs — band re-verified this run
 
-## Remaining outputs — unchanged from pilot v3
+| Output | BAND_CLOSED | STATUS |
+|---|---|---|
+| angle-A/step1-no-watermark.webp | YES (band continuous; bottom occluded by the box, no gap rendered) | READY |
+| angle-A/step2-black-background.webp | YES | READY |
+| angle-A/step3-luxury-promo.webp | YES (closed continuous shank) | READY |
+| angle-B/step1-no-watermark.webp | YES | READY |
+| angle-B/step2-black-background.webp | YES | READY |
+| angle-B/step3-luxury-promo.webp | YES (closed continuous shank) | READY |
 
-| Output | ORIGINAL_REATTACHED | RING_IDENTITY_PRESERVED | BAND_CLOSED | STATUS |
-|---|---|---|---|---|
-| angle-A/step1-no-watermark.webp | YES | YES | YES (shank hidden by box, no opening rendered) | READY |
-| angle-A/step2-black-background.webp | YES | YES | YES (shank hidden by box, no opening rendered) | READY |
-| angle-A/step3-luxury-promo.webp | YES | YES | YES — continuous closed shank | READY |
-| angle-B/step1-no-watermark.webp | YES | YES | YES (shank hidden by box, no opening rendered) | READY |
-| angle-B/step2-black-background.webp | YES | YES | YES (shank hidden by box, no opening rendered) | READY |
-| angle-B/step3-luxury-promo.webp | YES | YES | YES — continuous closed shank | READY |
+No stored product 205 output violates the closed-band rule, so no other output needed regeneration.
 
 ## Summary
 
@@ -65,4 +72,4 @@ Kept exactly as approved by the owner; deliberately not regenerated.
 | A | 206 | **RIGHT** | preserved | YES | **READY** |
 | B | 207 | **LEFT** | preserved | YES | **READY** |
 
-All eight outputs are READY. No output has `BAND_CLOSED=NO` or `RING_IDENTITY_PRESERVED=NO`, so nothing was withheld. Product 205 is complete and not left pending.
+All eight product 205 outputs are READY. Nothing is FAILED, and nothing remains pending.
