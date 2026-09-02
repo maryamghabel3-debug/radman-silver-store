@@ -1,0 +1,61 @@
+name: Agent Platform & Quality Gate Check
+
+on:
+  push:
+    branches:
+      - main
+      - agent-platform-foundation
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  agent-platform-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest tinycss2 openpyxl pillow
+
+      - name: Validate Agent Platform Registry & JSON Configs
+        run: |
+          python -c '
+          import json, pathlib
+          configs = [
+              ".agents/config/agent-registry.json",
+              ".agents/config/radman-business-rules.json",
+              ".agents/config/approval-gates.json"
+          ]
+          for c in configs:
+              p = pathlib.Path(c)
+              assert p.exists(), f"Missing config: {c}"
+              with open(p, "r", encoding="utf-8") as f:
+                  data = json.load(f)
+                  print(f"✓ Valid JSON config: {c}")
+          '
+
+      - name: Run Agent Platform Foundation Tests
+        run: |
+          python tests/test_agent_platform_foundation.py
+          pytest tests/test_agent_platform_foundation.py
+
+      - name: Run Agent Platform Dry-Run Demonstration
+        run: |
+          python -m agents.platform.dry_run
+
+      - name: Run Excel & Original Product Pipeline Acceptance Gates
+        run: |
+          bash scripts/test_excel_import.sh
+
+      - name: Run Storefront Batch Gates
+        run: |
+          bash scripts/test_storefront_batch.sh

@@ -159,11 +159,11 @@ cat > "$FIXTURE_PAGES/test-link.md" <<'MD'
 متن عادی با بیضی … در وسط جمله.
 MD
 # Render just this one file using a tiny Python harness
-python3 - "$FIXTURE_PAGES" "$FIXTURE_OUT" <<'PY'
+python3 - "$FIXTURE_PAGES" "$FIXTURE_OUT" "$REPO_ROOT/scripts" <<'PY'
 import sys, pathlib
-sys.path.insert(0, str(pathlib.Path(sys.argv[1]).parent.parent / "home" / "user" / "radman-silver-store" / "scripts"))
-# Simpler: just inline the renderer import via path trickery
-sys.path.insert(0, "/home/user/radman-silver-store/scripts")
+scripts_dir = sys.argv[3]
+if scripts_dir not in sys.path:
+    sys.path.insert(0, scripts_dir)
 import render_static_pages as rsp
 src_dir = pathlib.Path(sys.argv[1])
 out_dir = pathlib.Path(sys.argv[2])
