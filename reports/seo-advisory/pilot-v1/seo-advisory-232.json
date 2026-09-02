@@ -1,0 +1,59 @@
+{
+  "product_id": 232,
+  "sku": "NM-3596",
+  "legacy_title": "انگشتر نقره مردانه آماتیست طبیعی دامله",
+  "current_title_assessment": "عنوان شامل نوع تراش است ولی نیازمند اتصال به ساختار برند و کلمات کلیدی تراکنش است.",
+  "suggested_seo_title": "انگشتر نقره مردانه آماتیست دامله | رادمان سیلور",
+  "suggested_meta_description": "خرید انگشتر مردانه نقره ۹۲۵ آماتیست طبیعی دامله با رکاب صفوی دست‌ساز در گالری رادمان سیلور. سنگ معدنی بنفش اصل با درخشش فاخر و شناسنامه.",
+  "title_length": 47,
+  "meta_description_length": 136,
+  "suggested_focus_keyword": "انگشتر نقره مردانه آماتیست",
+  "secondary_keywords": [
+    "انگشتر آماتیست طبیعی دامله",
+    "انگشتر نقره ۹۲۵ رکاب صفوی",
+    "خرید انگشتر سنگ آماتیست اصل"
+  ],
+  "internal_link_suggestions": [
+    {
+      "target_product_id": 275,
+      "target_sku": "NM-3582",
+      "target_title": "انگشتر نقره مردانه عقیق سرخ ظریف",
+      "suggested_anchor_text": "انگشتر نقره مردانه عقیق سرخ"
+    },
+    {
+      "target_product_id": 390,
+      "target_sku": "13204540",
+      "target_title": "انگشتر نقره مردانه شجر طبیعی نقش آهو",
+      "suggested_anchor_text": "انگشتر نقره مردانه شجر طبیعی"
+    }
+  ],
+  "schema_recommendations": {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "انگشتر نقره مردانه آماتیست دامله | رادمان سیلور",
+    "sku": "NM-3596",
+    "category": "Jewelry > Rings > Silver Rings",
+    "material": "Sterling Silver 925",
+    "description": "خرید انگشتر مردانه نقره ۹۲۵ آماتیست طبیعی دامله با رکاب صفوی دست‌ساز در گالری رادمان سیلور. سنگ معدنی بنفش اصل با درخشش فاخر و شناسنامه.",
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "IRT",
+      "price": 7800000,
+      "priceValidUntil": "2027-12-31",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "seller": {
+        "@type": "Organization",
+        "name": "RADMAN SILVER 925"
+      }
+    }
+  },
+  "duplicate_content_risk": "LOW",
+  "duplicate_content_reason": "Unique mineralogy, specific gemstone cut, and distinct craftsmanship prevent duplication across catalog.",
+  "keyword_stuffing_risk": "LOW",
+  "forbidden_claims_found": [],
+  "confidence": 95,
+  "price_toman": 7800000,
+  "status": "draft",
+  "qa_verdict": "PASS"
+}

@@ -1,0 +1,59 @@
+{
+  "product_id": 205,
+  "sku": "NM-3605",
+  "legacy_title": "انگشتر نقره مردانه عقیق باباقوری",
+  "current_title_assessment": "عنوان کلی است و عیار استاندارد نقره و سبک رکاب کلاسیک در آن منعکس نشده است.",
+  "suggested_seo_title": "انگشتر نقره مردانه عقیق باباقوری | رادمان سیلور",
+  "suggested_meta_description": "خرید انگشتر مردانه نقره ۹۲۵ عقیق باباقوری سه پوست طبیعی با رکاب فیلی دست‌ساز در گالری رادمان سیلور. نگین معدنی کلکسیونی با شناسنامه اصالت سنگ.",
+  "title_length": 47,
+  "meta_description_length": 142,
+  "suggested_focus_keyword": "انگشتر نقره مردانه عقیق باباقوری",
+  "secondary_keywords": [
+    "انگشتر عقیق باباقوری سه پوست",
+    "انگشتر نقره ۹۲۵ رکاب فیلی",
+    "خرید انگشتر عقیق کلکسیونی"
+  ],
+  "internal_link_suggestions": [
+    {
+      "target_product_id": 390,
+      "target_sku": "13204540",
+      "target_title": "انگشتر نقره مردانه شجر طبیعی نقش آهو",
+      "suggested_anchor_text": "انگشتر نقره مردانه شجر طبیعی"
+    },
+    {
+      "target_product_id": 137,
+      "target_sku": "1003",
+      "target_title": "انگشتر نقره مردانه عقیق زرد فرم چهارگوش",
+      "suggested_anchor_text": "انگشتر نقره مردانه عقیق زرد"
+    }
+  ],
+  "schema_recommendations": {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "انگشتر نقره مردانه عقیق باباقوری | رادمان سیلور",
+    "sku": "NM-3605",
+    "category": "Jewelry > Rings > Silver Rings",
+    "material": "Sterling Silver 925",
+    "description": "خرید انگشتر مردانه نقره ۹۲۵ عقیق باباقوری سه پوست طبیعی با رکاب فیلی دست‌ساز در گالری رادمان سیلور. نگین معدنی کلکسیونی با شناسنامه اصالت سنگ.",
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "IRT",
+      "price": 8580000,
+      "priceValidUntil": "2027-12-31",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "seller": {
+        "@type": "Organization",
+        "name": "RADMAN SILVER 925"
+      }
+    }
+  },
+  "duplicate_content_risk": "LOW",
+  "duplicate_content_reason": "Unique mineralogy, specific gemstone cut, and distinct craftsmanship prevent duplication across catalog.",
+  "keyword_stuffing_risk": "LOW",
+  "forbidden_claims_found": [],
+  "confidence": 95,
+  "price_toman": 8580000,
+  "status": "draft",
+  "qa_verdict": "PASS"
+}
