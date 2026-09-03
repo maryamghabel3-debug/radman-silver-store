@@ -23,6 +23,20 @@
         "release": "media-image-pipeline-v1-p384-b",
         "approved_date": "2026-09-03"
       }
+    },
+    "390": {
+      "A": {
+        "status": "IN_REVIEW",
+        "attachment_id": 391,
+        "release": "media-image-pipeline-v1-p390-a",
+        "approved_date": null
+      },
+      "B": {
+        "status": "QUEUED",
+        "attachment_id": 392,
+        "release": null,
+        "approved_date": null
+      }
     }
   },
   "pending_angle": "B",
@@ -86,7 +100,7 @@
     "217",
     "214"
   ],
-  "last_release": "media-image-pipeline-v1-p384-b",
-  "last_commit": "d57b245c082d6c8cf1d1d6a834e3b288ded7547e",
-  "next_action": "PROCESS_PRODUCT_390_ANGLE_A"
+  "last_release": "media-image-pipeline-v1-p390-a",
+  "last_commit": "0c2c149fc167b3a14391ae965800d3d9310df567",
+  "next_action": "WAIT_FOR_OWNER_REVIEW"
 }
