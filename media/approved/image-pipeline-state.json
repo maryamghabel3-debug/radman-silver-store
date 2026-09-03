@@ -32,10 +32,11 @@
         "approved_date": "2026-09-03"
       },
       "B": {
-        "status": "FAILED_STEP4_AWAIT_OWNER_DECISION",
+        "status": "IN_REVIEW",
         "attachment_id": 392,
-        "release": null,
-        "approved_date": null
+        "release": "media-image-pipeline-v1-p390-b",
+        "approved_date": null,
+        "note": "step4 corrected on dedicated retry v3 (ring on ring finger, LEFT hand); sheet uploaded; awaiting owner review"
       }
     }
   },
@@ -100,9 +101,9 @@
     "217",
     "214"
   ],
-  "last_release": "media-image-pipeline-v1-p390-a",
-  "last_commit": "b0af28cd36ef31114199ed1f0ffc4c2b998759cf",
-  "next_action": "WAIT_FOR_OWNER_DECISION_ON_390_B",
+  "last_release": "media-image-pipeline-v1-p390-b",
+  "last_commit": "8a4c4dd70f023fe10864bc4b76b7bca40db558fb",
+  "next_action": "WAIT_FOR_OWNER_REVIEW_390_B",
   "review_pack_rule": {
     "mandatory": true,
     "contact_sheet": "required per angle (original|step1|step2|step3|step4, labels outside, max 1600px wide, separate browser-viewable asset on the angle's pre-release, direct URL posted to response + PR #36)",
@@ -120,9 +121,9 @@
         "asset": "contact-sheet-390-a.jpg"
       },
       "390-B": {
-        "release": "media-image-pipeline-v1-p390-b-review",
-        "asset": "contact-sheet-390-b-FAILED.jpg",
-        "status": "FAILED_STEP4_AWAITING_DECISION"
+        "release": "media-image-pipeline-v1-p390-b",
+        "asset": "contact-sheet-390-b.jpg",
+        "status": "READY_IN_REVIEW"
       }
     }
   }
