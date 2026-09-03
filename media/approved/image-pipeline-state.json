@@ -16,14 +16,14 @@
         "approved_date": "2026-09-03"
       },
       "B": {
-        "status": "IN_PRODUCTION",
+        "status": "IN_REVIEW",
         "attachment_id": 386,
         "release": "media-image-pipeline-v1-p384-b",
         "approved_date": null
       }
     }
   },
-  "pending_angle": "B",
+  "pending_angle": null,
   "queue": [
     "390",
     "387",
@@ -84,7 +84,7 @@
     "217",
     "214"
   ],
-  "last_release": "media-image-pipeline-v1-p384-a",
-  "last_commit": "",
-  "next_action": "PROCESS_ANGLE_B"
+  "last_release": "media-image-pipeline-v1-p384-b",
+  "last_commit": "d57b245c082d6c8cf1d1d6a834e3b288ded7547e",
+  "next_action": "WAIT_FOR_OWNER_REVIEW"
 }
