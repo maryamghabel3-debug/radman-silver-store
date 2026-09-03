@@ -5,6 +5,8 @@ on:
     branches:
       - main
       - agent-platform-foundation
+      - "seo-agent-*"
+      - "**"
   pull_request:
     branches:
       - main
@@ -48,9 +50,18 @@ jobs:
           python tests/test_agent_platform_foundation.py
           pytest tests/test_agent_platform_foundation.py
 
+      - name: Run SEO Advisory Pilot Tests
+        run: |
+          python tests/test_seo_advisory_pilot.py
+          pytest tests/test_seo_advisory_pilot.py
+
       - name: Run Agent Platform Dry-Run Demonstration
         run: |
           python -m agents.platform.dry_run
+
+      - name: Run SEO Advisory Pilot Runner
+        run: |
+          python -m agents.platform.run_seo_advisory --products 390,275,232,205,137 --dry-run
 
       - name: Run Excel & Original Product Pipeline Acceptance Gates
         run: |

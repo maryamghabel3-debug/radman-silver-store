@@ -1,0 +1,81 @@
+{
+  "version": "1.0.0",
+  "pilot": "SEO-ADVISORY-PILOT-V1",
+  "products": [
+    {
+      "product_id": 390,
+      "sku": "13204540",
+      "legacy_title": "انگشتر نقره مردانه شجر طبیعی نقش آهو",
+      "category": "انگشتر مردانه",
+      "stone_name": "شجر طبیعی نقش آهو",
+      "stone_type": "standard",
+      "weight_grams": 14.5,
+      "price_toman": 9425000,
+      "silver_hallmark": "925",
+      "ring_size": "63",
+      "craftsmanship": "رکاب دست‌ساز شیرازی با قلم‌زنی اسلیمی",
+      "status": "draft",
+      "stock_quantity": 1
+    },
+    {
+      "product_id": 275,
+      "sku": "NM-3582",
+      "legacy_title": "انگشتر نقره مردانه عقیق سرخ ظریف",
+      "category": "انگشتر مردانه",
+      "stone_name": "عقیق سرخ طبیعی",
+      "stone_type": "standard",
+      "weight_grams": 8.8,
+      "price_toman": 5720000,
+      "silver_hallmark": "925",
+      "ring_size": "60",
+      "craftsmanship": "رکاب شبکه با نقره عیار ۹۲۵ اصل",
+      "status": "draft",
+      "stock_quantity": 1
+    },
+    {
+      "product_id": 232,
+      "sku": "NM-3596",
+      "legacy_title": "انگشتر نقره مردانه آماتیست طبیعی دامله",
+      "category": "انگشتر مردانه",
+      "stone_name": "آماتیست طبیعی تراش دامله",
+      "stone_type": "standard",
+      "weight_grams": 12.0,
+      "price_toman": 7800000,
+      "silver_hallmark": "925",
+      "ring_size": "62",
+      "craftsmanship": "رکاب صفوی دست‌ساز نقره ۹۲۵",
+      "status": "draft",
+      "stock_quantity": 1
+    },
+    {
+      "product_id": 205,
+      "sku": "NM-3605",
+      "legacy_title": "انگشتر نقره مردانه عقیق باباقوری",
+      "category": "انگشتر مردانه",
+      "stone_name": "عقیق باباقوری سه پوست طبیعی",
+      "stone_type": "standard",
+      "weight_grams": 13.2,
+      "price_toman": 8580000,
+      "silver_hallmark": "925",
+      "ring_size": "64",
+      "craftsmanship": "رکاب فیلی دست‌ساز کلاسیک",
+      "status": "draft",
+      "stock_quantity": 1
+    },
+    {
+      "product_id": 137,
+      "sku": "1003",
+      "legacy_title": "انگشتر نقره مردانه عقیق زرد فرم چهارگوش",
+      "category": "انگشتر مردانه",
+      "stone_name": "عقیق زرد طبیعی آبدار",
+      "stone_type": "standard",
+      "weight_grams": 10.5,
+      "price_toman": 6825000,
+      "silver_hallmark": "925",
+      "ring_size": "61",
+      "craftsmanship": "رکاب دست‌ساز چهارگوش فاخر",
+      "status": "draft",
+      "stock_quantity": 1
+    }
+  ]
+}

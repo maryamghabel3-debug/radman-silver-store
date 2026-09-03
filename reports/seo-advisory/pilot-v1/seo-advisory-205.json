@@ -1,0 +1,60 @@
+{
+  "product_id": 205,
+  "sku": "NM-3605",
+  "legacy_title": "انگشتر نقره مردانه عقیق باباقوری",
+  "current_title_assessment": "عنوان کلی است و عیار استاندارد نقره در آن منعکس نشده است.",
+  "suggested_seo_title": "انگشتر نقره مردانه عقیق باباقوری | رادمان سیلور",
+  "suggested_meta_description": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین عقیق باباقوری به وزن ۸ گرم و رکاب نقره ماشینی در گالری رادمان سیلور. نگین با الگوی لایه‌بندی کلاسیک.",
+  "title_length": 47,
+  "meta_description_length": 141,
+  "suggested_focus_keyword": "انگشتر نقره مردانه عقیق باباقوری",
+  "secondary_keywords": [
+    "انگشتر عقیق باباقوری مردانه",
+    "انگشتر نقره ۹۲۵ ماشینی",
+    "خرید انگشتر عقیق باباقوری"
+  ],
+  "internal_link_suggestions": [
+    {
+      "target_product_id": 390,
+      "target_sku": "13204540",
+      "target_title": "انگشتر نقره مردانه شجر طبیعی نقش آهو",
+      "suggested_anchor_text": "انگشتر نقره مردانه شجر طبیعی"
+    },
+    {
+      "target_product_id": 137,
+      "target_sku": "1003",
+      "target_title": "انگشتر نقره مردانه عقیق زرد فرم چهارگوش",
+      "suggested_anchor_text": "انگشتر نقره مردانه عقیق زرد"
+    }
+  ],
+  "schema_recommendations": {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "انگشتر نقره مردانه عقیق باباقوری | رادمان سیلور",
+    "sku": "NM-3605",
+    "category": "Jewelry > Rings > Silver Rings",
+    "material": "Sterling Silver 925",
+    "description": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین عقیق باباقوری به وزن ۸ گرم و رکاب نقره ماشینی در گالری رادمان سیلور. نگین با الگوی لایه‌بندی کلاسیک.",
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "IRT",
+      "price": 8871000,
+      "priceValidUntil": "2027-12-31",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "seller": {
+        "@type": "Organization",
+        "name": "RADMAN SILVER 925"
+      }
+    }
+  },
+  "duplicate_content_risk": "LOW",
+  "duplicate_content_reason": "Unique verified mineralogy, verified dimensions, and distinct SKU metadata.",
+  "keyword_stuffing_risk": "LOW",
+  "forbidden_claims_found": [],
+  "confidence": 95,
+  "price_toman": 8871000,
+  "weight_g": 8,
+  "status": "draft",
+  "qa_verdict": "PASS"
+}

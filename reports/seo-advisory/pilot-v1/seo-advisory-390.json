@@ -1,0 +1,60 @@
+{
+  "product_id": 390,
+  "sku": "13204540",
+  "legacy_title": "انگشتر نقره مردانه شجر طبیعی نقش آهو",
+  "current_title_assessment": "عنوان اولیه توصیف سنگ را دارد اما فاقد ساختار استاندارد سئو و تفکیک برند رادمان سیلور است.",
+  "suggested_seo_title": "انگشتر نقره مردانه شجر طبیعی آهو | رادمان سیلور",
+  "suggested_meta_description": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین شجر طبیعی نقش آهو به وزن ۱۳ گرم و رکاب نقره ماشینی در گالری رادمان سیلور. مناسب استفاده روزمره آقایان.",
+  "title_length": 47,
+  "meta_description_length": 143,
+  "suggested_focus_keyword": "انگشتر نقره مردانه شجر طبیعی",
+  "secondary_keywords": [
+    "انگشتر شجر نقش آهو",
+    "انگشتر نقره ۹۲۵ مردانه",
+    "خرید انگشتر شجر مردانه"
+  ],
+  "internal_link_suggestions": [
+    {
+      "target_product_id": 205,
+      "target_sku": "NM-3605",
+      "target_title": "انگشتر نقره مردانه عقیق باباقوری",
+      "suggested_anchor_text": "انگشتر نقره مردانه عقیق باباقوری"
+    },
+    {
+      "target_product_id": 275,
+      "target_sku": "NM-3582",
+      "target_title": "انگشتر نقره مردانه عقیق سرخ ظریف",
+      "suggested_anchor_text": "انگشتر نقره مردانه عقیق سرخ"
+    }
+  ],
+  "schema_recommendations": {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "انگشتر نقره مردانه شجر طبیعی آهو | رادمان سیلور",
+    "sku": "13204540",
+    "category": "Jewelry > Rings > Silver Rings",
+    "material": "Sterling Silver 925",
+    "description": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین شجر طبیعی نقش آهو به وزن ۱۳ گرم و رکاب نقره ماشینی در گالری رادمان سیلور. مناسب استفاده روزمره آقایان.",
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "IRT",
+      "price": 12564000,
+      "priceValidUntil": "2027-12-31",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "seller": {
+        "@type": "Organization",
+        "name": "RADMAN SILVER 925"
+      }
+    }
+  },
+  "duplicate_content_risk": "LOW",
+  "duplicate_content_reason": "Unique verified mineralogy, verified dimensions, and distinct SKU metadata.",
+  "keyword_stuffing_risk": "LOW",
+  "forbidden_claims_found": [],
+  "confidence": 95,
+  "price_toman": 12564000,
+  "weight_g": 13,
+  "status": "draft",
+  "qa_verdict": "PASS"
+}

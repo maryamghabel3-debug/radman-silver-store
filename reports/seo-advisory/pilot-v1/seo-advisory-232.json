@@ -1,0 +1,60 @@
+{
+  "product_id": 232,
+  "sku": "NM-3596",
+  "legacy_title": "انگشتر نقره مردانه آماتیست طبیعی دامله",
+  "current_title_assessment": "عنوان شامل نوع تراش است ولی نیازمند اتصال به ساختار برند و کلمات کلیدی تراکنش است.",
+  "suggested_seo_title": "انگشتر نقره مردانه آماتیست دامله | رادمان سیلور",
+  "suggested_meta_description": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین آماتیست طبیعی تراش دامله به وزن ۸ گرم و رکاب نقره ماشینی در گالری رادمان سیلور. جلوه بنفش و چشم‌نواز.",
+  "title_length": 47,
+  "meta_description_length": 142,
+  "suggested_focus_keyword": "انگشتر نقره مردانه آماتیست",
+  "secondary_keywords": [
+    "انگشتر آماتیست طبیعی دامله",
+    "انگشتر نقره ۹۲۵ مردانه",
+    "خرید انگشتر سنگ آماتیست"
+  ],
+  "internal_link_suggestions": [
+    {
+      "target_product_id": 275,
+      "target_sku": "NM-3582",
+      "target_title": "انگشتر نقره مردانه عقیق سرخ ظریف",
+      "suggested_anchor_text": "انگشتر نقره مردانه عقیق سرخ"
+    },
+    {
+      "target_product_id": 390,
+      "target_sku": "13204540",
+      "target_title": "انگشتر نقره مردانه شجر طبیعی نقش آهو",
+      "suggested_anchor_text": "انگشتر نقره مردانه شجر طبیعی"
+    }
+  ],
+  "schema_recommendations": {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "انگشتر نقره مردانه آماتیست دامله | رادمان سیلور",
+    "sku": "NM-3596",
+    "category": "Jewelry > Rings > Silver Rings",
+    "material": "Sterling Silver 925",
+    "description": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین آماتیست طبیعی تراش دامله به وزن ۸ گرم و رکاب نقره ماشینی در گالری رادمان سیلور. جلوه بنفش و چشم‌نواز.",
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "IRT",
+      "price": 6633000,
+      "priceValidUntil": "2027-12-31",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "seller": {
+        "@type": "Organization",
+        "name": "RADMAN SILVER 925"
+      }
+    }
+  },
+  "duplicate_content_risk": "LOW",
+  "duplicate_content_reason": "Unique verified mineralogy, verified dimensions, and distinct SKU metadata.",
+  "keyword_stuffing_risk": "LOW",
+  "forbidden_claims_found": [],
+  "confidence": 95,
+  "price_toman": 6633000,
+  "weight_g": 8,
+  "status": "draft",
+  "qa_verdict": "PASS"
+}

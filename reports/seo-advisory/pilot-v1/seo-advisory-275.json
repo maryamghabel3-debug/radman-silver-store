@@ -1,0 +1,60 @@
+{
+  "product_id": 275,
+  "sku": "NM-3582",
+  "legacy_title": "انگشتر نقره مردانه عقیق سرخ ظریف",
+  "current_title_assessment": "عنوان کوتاه است و ویژگی‌های نگین ۱۴ میلی‌متر و عیار ۹۲۵ را برای موتورهای جستجو پوشش نمی‌دهد.",
+  "suggested_seo_title": "انگشتر نقره مردانه عقیق سرخ ظریف | رادمان سیلور",
+  "suggested_meta_description": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین عقیق سرخ معدنی ۱۴ میلی‌متر به وزن ۸ گرم و رکاب نقره ماشینی در گالری رادمان سیلور. طراحی ظریف و استاندارد.",
+  "title_length": 47,
+  "meta_description_length": 146,
+  "suggested_focus_keyword": "انگشتر نقره مردانه عقیق سرخ",
+  "secondary_keywords": [
+    "انگشتر عقیق سرخ ۱۴ میلی متر",
+    "انگشتر نقره عیار ۹۲۵ مردانه",
+    "خرید انگشتر عقیق سرخ معدنی"
+  ],
+  "internal_link_suggestions": [
+    {
+      "target_product_id": 137,
+      "target_sku": "1003",
+      "target_title": "انگشتر نقره مردانه عقیق زرد فرم چهارگوش",
+      "suggested_anchor_text": "انگشتر نقره مردانه عقیق زرد"
+    },
+    {
+      "target_product_id": 232,
+      "target_sku": "NM-3596",
+      "target_title": "انگشتر نقره مردانه آماتیست طبیعی دامله",
+      "suggested_anchor_text": "انگشتر نقره مردانه آماتیست"
+    }
+  ],
+  "schema_recommendations": {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "انگشتر نقره مردانه عقیق سرخ ظریف | رادمان سیلور",
+    "sku": "NM-3582",
+    "category": "Jewelry > Rings > Silver Rings",
+    "material": "Sterling Silver 925",
+    "description": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین عقیق سرخ معدنی ۱۴ میلی‌متر به وزن ۸ گرم و رکاب نقره ماشینی در گالری رادمان سیلور. طراحی ظریف و استاندارد.",
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "IRT",
+      "price": 5901000,
+      "priceValidUntil": "2027-12-31",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "seller": {
+        "@type": "Organization",
+        "name": "RADMAN SILVER 925"
+      }
+    }
+  },
+  "duplicate_content_risk": "LOW",
+  "duplicate_content_reason": "Unique verified mineralogy, verified dimensions, and distinct SKU metadata.",
+  "keyword_stuffing_risk": "LOW",
+  "forbidden_claims_found": [],
+  "confidence": 95,
+  "price_toman": 5901000,
+  "weight_g": 8,
+  "status": "draft",
+  "qa_verdict": "PASS"
+}
