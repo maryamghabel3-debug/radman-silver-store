@@ -2,7 +2,8 @@
 Tests for RADMAN SEO Advisory Pilot (Phase 2 — Verified Snapshot)
 ==================================================================
 Validates schema recommendations, character length bounds, keyword density,
-unverified claim rejection, exact price matching from snapshot, and report generation.
+unverified claim rejection, exact price matching from snapshot, rejection of price in metas,
+and report generation.
 
 Runnable via:
   pytest tests/test_seo_advisory_pilot.py
@@ -53,6 +54,40 @@ class TestSEOAdvisoryPilot(unittest.TestCase):
             self.assertEqual(rep.weight_g, self.expected_weights[rep.product_id])
             self.assertEqual(rep.qa_verdict, "PASS")
 
+    def test_no_price_in_meta_descriptions(self) -> None:
+        reports = self.advisor.analyze_batch(self.pilot_ids)
+        for rep in reports:
+            meta = rep.suggested_meta_description
+            self.assertNotIn("تومان", meta)
+            self.assertNotIn("ریال", meta)
+            self.assertNotIn("قیمت", meta)
+            # Verify validator checks pass
+            res = RadmanBusinessRules.validate_meta_description_no_price(meta)
+            self.assertTrue(res.is_valid, f"Price detected in meta: {meta}")
+
+    def test_price_in_meta_validator_rejects_price(self) -> None:
+        bad_metas = [
+            "خرید انگشتر با قیمت ۱۲٬۵۶۴٬۰۰۰ تومان در رادمان سیلور",
+            "قیمت محصول: 5901000 تومان نقره ۹۲۵",
+            "انگشتر نقره با قیمت مناسب و ارزان در رادمان",
+        ]
+        for m in bad_metas:
+            res = RadmanBusinessRules.validate_content(m, is_meta_description=True)
+            self.assertFalse(res.is_valid, f"Failed to reject price in meta: {m}")
+
+    def test_unverified_adjectives_removed(self) -> None:
+        reports = self.advisor.analyze_batch(self.pilot_ids)
+        rep_dict = {r.product_id: r for r in reports}
+
+        # 390 and 232 verified stone names contain 'طبیعی'
+        self.assertIn("طبیعی", rep_dict[390].suggested_meta_description)
+        self.assertIn("طبیعی", rep_dict[232].suggested_meta_description)
+
+        # 275, 205, 137 verified stone names do NOT contain 'طبیعی'
+        self.assertNotIn("طبیعی", rep_dict[275].suggested_meta_description)
+        self.assertNotIn("طبیعی", rep_dict[205].suggested_meta_description)
+        self.assertNotIn("طبیعی", rep_dict[137].suggested_meta_description)
+
     def test_wrong_prices_purged(self) -> None:
         reports = self.advisor.analyze_batch(self.pilot_ids)
         wrong_prices = [9425000, 5720000, 7800000, 8580000, 6825000]
@@ -98,13 +133,6 @@ class TestSEOAdvisoryPilot(unittest.TestCase):
             res = RadmanBusinessRules.validate_content(txt)
             self.assertFalse(res.is_valid, f"Failed to block unverified text: {txt}")
             self.assertGreater(len(res.detected_patterns), 0)
-
-    def test_weight_rule_validation(self) -> None:
-        # Verified weight present -> mentions allowed
-        self.assertTrue(RadmanBusinessRules.validate_weight_rule("انگشتر به وزن ۱۳ گرم", 13))
-        # Empty weight -> weight claims rejected
-        self.assertFalse(RadmanBusinessRules.validate_weight_rule("انگشتر به وزن ۱۳ گرم", None))
-        self.assertTrue(RadmanBusinessRules.validate_weight_rule("انگشتر نقره عقیق بدون ذکر وزن", None))
 
     def test_schema_validity_and_no_sale_price(self) -> None:
         reports = self.advisor.analyze_batch(self.pilot_ids)

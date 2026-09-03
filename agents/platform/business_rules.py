@@ -7,8 +7,10 @@ and factual provenance against RADMAN SILVER 925 verified business rules.
 Authoritative Data-Source Rules (2026-09-03):
 1. Weight comes ONLY from WooCommerce meta _weight (or snapshot). Never infer or derive from price.
 2. Price comes ONLY from WooCommerce _regular_price. Never compute, round, or alter in SEO/GEO/AEO.
-3. Every factual claim must have verified provenance {value, source_field, verified=True}.
-4. Forbidden unless verified: دست‌ساز, شناسنامه, اصالت‌نامه, بسته‌بندی, گارانتی, ضمانت, آبدار, سه پوست, نرخ مصوب, نرخ روز, عرضه مستقیم.
+3. PRICE_IN_META_DESCRIPTION = FORBIDDEN: Fixed prices in <meta description> go stale and are rejected.
+4. Adjectives like 'طبیعی' or stone specifics are ONLY allowed if present in the verified stone field.
+5. Every factual claim must have verified provenance {value, source_field, verified=True}.
+6. Forbidden unless verified: دست‌ساز, شناسنامه, اصالت‌نامه, بسته‌بندی, گارانتی, ضمانت, آبدار, سه پوست, نرخ مصوب, نرخ روز, عرضه مستقیم.
 """
 
 from __future__ import annotations
@@ -60,6 +62,7 @@ class RadmanBusinessRules:
     STANDARD_GRAM_RATE = 650_000
     LARGE_STONE_GRAM_RATE = 590_000
     PRICE_VARIANCE_GATE_THRESHOLD = 0.05  # 5%
+    PRICE_IN_META_DESCRIPTION = "FORBIDDEN"
 
     PHONE_PATTERNS = [
         re.compile(r"09\d{9}"),
@@ -99,6 +102,11 @@ class RadmanBusinessRules:
         "نرخ مصوب",
         "نرخ روز",
         "عرضه مستقیم",
+    ]
+
+    PRICE_IN_META_PATTERNS = [
+        re.compile(r"\d+([,،]\d+)*\s*(تومان|ریال|IRT|IRR)", re.I),
+        re.compile(r"قیمت", re.I),
     ]
 
     def __init__(self, config_path: Optional[Path] = None, snapshot_path: Optional[Path] = None) -> None:
@@ -204,13 +212,44 @@ class RadmanBusinessRules:
         return proposed_price == verified_regular_price
 
     @classmethod
-    def validate_content(cls, text: str) -> ContentValidationResult:
+    def validate_meta_description_no_price(cls, meta_text: str) -> ContentValidationResult:
+        """Rule 3: Price in meta description is strictly forbidden (goes stale in Google)."""
+        violations: List[str] = []
+        detected: List[str] = []
+
+        for pat in cls.PRICE_IN_META_PATTERNS:
+            matches = pat.findall(meta_text)
+            if matches:
+                violations.append("BR-META-01: Price detected in meta description. Prices in meta descriptions go stale and are strictly forbidden.")
+                detected.extend([str(m) for m in matches])
+
+        if "تومان" in meta_text or "ریال" in meta_text:
+            violations.append("BR-META-02: Currency token (تومان/ریال) detected in meta description.")
+            detected.append("currency_token")
+
+        is_valid = len(violations) == 0
+        return ContentValidationResult(
+            is_valid=is_valid,
+            violations=violations,
+            detected_patterns=detected,
+            clean_text=meta_text,
+        )
+
+    @classmethod
+    def validate_content(cls, text: str, is_meta_description: bool = False) -> ContentValidationResult:
         """Audits public description or copy for prohibited claims, phone numbers, and unverified words."""
         violations: List[str] = []
         detected_patterns: List[str] = []
 
         if not text:
             return ContentValidationResult(is_valid=True, clean_text="")
+
+        # Check price in meta description
+        if is_meta_description:
+            price_meta_res = cls.validate_meta_description_no_price(text)
+            if not price_meta_res.is_valid:
+                violations.extend(price_meta_res.violations)
+                detected_patterns.extend(price_meta_res.detected_patterns)
 
         # Check phone numbers
         for pat in cls.PHONE_PATTERNS:
@@ -249,7 +288,6 @@ class RadmanBusinessRules:
     def validate_weight_rule(cls, text: str, verified_weight_g: Optional[int]) -> bool:
         """Rule 1: Weight must come from verified field or be omitted entirely."""
         if not verified_weight_g:
-            # If weight is missing, text must NOT contain any gram weight claim
             if re.search(r"\d+(\.\d+)?\s*(گرم|g|gram)", text, re.I):
                 return False
         return True
