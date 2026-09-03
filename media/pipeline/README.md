@@ -9,13 +9,14 @@ and are only written after the owner's approval command (`خوبه، برو بع
 
 | Run | Date | Product | Angle | Release | Status |
 |---|---|---|---|---|---|
-| 1 | 2026-09-03 | 384 (SKU 17224539) | A | media-image-pipeline-v1-p384-a | awaiting owner review |
+| 1 | 2026-09-03 | 384 (SKU 17224539) | A | media-image-pipeline-v1-p384-a | owner APPROVED 2026-09-03 → `media/approved/product-384/` |
+| 2 | 2026-09-03 | 384 (SKU 17224539) | B | media-image-pipeline-v1-p384-b | awaiting owner review |
 
 ## Per-run files
 
 - `selected-product-{id}-angle-{x}.md` — why the product/angle was chosen.
 - `qa-report-{id}-angle-{x}.md` — per-output QA records (ORIGINAL_REATTACHED, VIEWPOINT, RING_IDENTITY, BAND_CLOSED, HAND_SIDE, STATUS).
-- `image-pipeline-state.json` — draft state (approved state is maintained at `media/approved/image-pipeline-state.json`).
+- State: canonical `media/approved/image-pipeline-state.json` (maintained on owner approvals; drafts are not kept here).
 
 ## Package
 

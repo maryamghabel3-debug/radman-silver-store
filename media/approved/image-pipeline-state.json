@@ -6,8 +6,23 @@
   "completed_products": [],
   "current_product": "384",
   "current_product_sku": "17224539",
-  "current_angle": "A",
-  "approved_angles": [],
+  "current_angle": "B",
+  "approved_angles": {
+    "384": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 385,
+        "release": "media-image-pipeline-v1-p384-a",
+        "approved_date": "2026-09-03"
+      },
+      "B": {
+        "status": "IN_PRODUCTION",
+        "attachment_id": 386,
+        "release": "media-image-pipeline-v1-p384-b",
+        "approved_date": null
+      }
+    }
+  },
   "pending_angle": "B",
   "queue": [
     "390",
@@ -70,7 +85,6 @@
     "214"
   ],
   "last_release": "media-image-pipeline-v1-p384-a",
-  "last_commit": "be8537b3bffae3b5eaf8ec49070760f47ff57a25",
-  "next_action": "WAIT_FOR_OWNER_REVIEW",
-  "note": "Draft state — not stored under media/approved. Will be created at media/approved/image-pipeline-state.json by the owner-approval command."
+  "last_commit": "",
+  "next_action": "PROCESS_ANGLE_B"
 }
