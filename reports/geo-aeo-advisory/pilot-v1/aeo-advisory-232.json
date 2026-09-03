@@ -1,0 +1,73 @@
+{
+  "product_id": 232,
+  "sku": "NM-3596",
+  "legacy_title": "انگشتر نقره مردانه آماتیست طبیعی دامله",
+  "aeo_readiness_score": 89,
+  "questions_mapped": 3,
+  "direct_answers_drafted": 3,
+  "faq_schema_ready": "YES",
+  "faq_schema": {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "مشخصات سنگ آماتیست و رکاب این انگشتر چیست؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "این اثر از سنگ آماتیست طبیعی با تراش گنبدی دامله و رکاب نقره عیار ۹۲۵ ماشینی به وزن ۸ گرم با قیمت ۶٬۶۳۳٬۰۰۰ تومان ساخته شده است."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "تراش دامله چیست و چه کاربردی در نگین آماتیست دارد؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "تراش دامله حالتی محدب و صیقلی است که عمق رنگ بنفش سنگ آماتیست طبیعی را در نور به نمایش می‌گذارد."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "شرایط استفاده و نگهداری از انگشتر آماتیست چیست؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "سنگ آماتیست با درجه سختی ۷ برای استفاده روزمره مناسب است؛ توصیه می‌شود از برخورد شدید با سطوح سخت محافظت شود."
+        }
+      }
+    ]
+  },
+  "qa_pairs": [
+    {
+      "question": "مشخصات سنگ آماتیست و رکاب این انگشتر چیست؟",
+      "direct_answer": "این اثر از سنگ آماتیست طبیعی با تراش گنبدی دامله و رکاب نقره عیار ۹۲۵ ماشینی به وزن ۸ گرم با قیمت ۶٬۶۳۳٬۰۰۰ تومان ساخته شده است.",
+      "category": "technical_specs",
+      "speakable": true
+    },
+    {
+      "question": "تراش دامله چیست و چه کاربردی در نگین آماتیست دارد؟",
+      "direct_answer": "تراش دامله حالتی محدب و صیقلی است که عمق رنگ بنفش سنگ آماتیست طبیعی را در نور به نمایش می‌گذارد.",
+      "category": "gemstone_authenticity",
+      "speakable": true
+    },
+    {
+      "question": "شرایط استفاده و نگهداری از انگشتر آماتیست چیست؟",
+      "direct_answer": "سنگ آماتیست با درجه سختی ۷ برای استفاده روزمره مناسب است؛ توصیه می‌شود از برخورد شدید با سطوح سخت محافظت شود.",
+      "category": "care_instructions",
+      "speakable": true
+    }
+  ],
+  "speakable_candidates": 3,
+  "snippet_quality": "GOOD",
+  "intent_coverage": [
+    "خرید انگشتر آماتیست طبیعی",
+    "قیمت انگشتر نقره آماتیست دامله",
+    "مشخصات سنگ کوارتز آماتیست بنفش",
+    "انگشتر نقره ۹۲۵ مردانه"
+  ],
+  "english_readiness_flag": true,
+  "confidence": 95,
+  "price_toman": 6633000,
+  "weight_g": 8,
+  "status": "draft",
+  "qa_verdict": "PASS"
+}

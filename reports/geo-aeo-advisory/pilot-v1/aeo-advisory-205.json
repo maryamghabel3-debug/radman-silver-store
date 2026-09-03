@@ -1,0 +1,73 @@
+{
+  "product_id": 205,
+  "sku": "NM-3605",
+  "legacy_title": "انگشتر نقره مردانه عقیق باباقوری",
+  "aeo_readiness_score": 88,
+  "questions_mapped": 3,
+  "direct_answers_drafted": 3,
+  "faq_schema_ready": "YES",
+  "faq_schema": {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "انگشتر عقیق باباقوری کد NM-3605 چه خصوصیاتی دارد؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "این اثر دارای نگین عقیق باباقوری طبیعی بر روی رکاب نقره عیار ۹۲۵ ماشینی با وزن ۸ گرم و قیمت ۸٬۸۷۱٬۰۰۰ تومان است."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "عقیق باباقوری چه ویژگی ساختاری دارد؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "عقیق باباقوری به دلیل خطوط و لایه‌بندی دوار درون بافت کانی شناخته می‌شود که ساختاری طبیعی در خانواده عقیق‌ها است."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "نوع رکاب و عیار فلز این محصول چیست؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "بدنه این انگشتر از نقره با عیار استاندارد ۹۲۵ به صورت ماشینی ساخته شده و وزن کل آن ۸ گرم می‌باشد."
+        }
+      }
+    ]
+  },
+  "qa_pairs": [
+    {
+      "question": "انگشتر عقیق باباقوری کد NM-3605 چه خصوصیاتی دارد؟",
+      "direct_answer": "این اثر دارای نگین عقیق باباقوری طبیعی بر روی رکاب نقره عیار ۹۲۵ ماشینی با وزن ۸ گرم و قیمت ۸٬۸۷۱٬۰۰۰ تومان است.",
+      "category": "technical_specs",
+      "speakable": true
+    },
+    {
+      "question": "عقیق باباقوری چه ویژگی ساختاری دارد؟",
+      "direct_answer": "عقیق باباقوری به دلیل خطوط و لایه‌بندی دوار درون بافت کانی شناخته می‌شود که ساختاری طبیعی در خانواده عقیق‌ها است.",
+      "category": "gemstone_authenticity",
+      "speakable": true
+    },
+    {
+      "question": "نوع رکاب و عیار فلز این محصول چیست؟",
+      "direct_answer": "بدنه این انگشتر از نقره با عیار استاندارد ۹۲۵ به صورت ماشینی ساخته شده و وزن کل آن ۸ گرم می‌باشد.",
+      "category": "technical_specs",
+      "speakable": true
+    }
+  ],
+  "speakable_candidates": 3,
+  "snippet_quality": "GOOD",
+  "intent_coverage": [
+    "خرید انگشتر عقیق باباقوری",
+    "قیمت انگشتر نقره باباقوری",
+    "مشخصات عقیق باباقوری طبیعی",
+    "انگشتر نقره مردانه عیار ۹۲۵"
+  ],
+  "english_readiness_flag": true,
+  "confidence": 95,
+  "price_toman": 8871000,
+  "weight_g": 8,
+  "status": "draft",
+  "qa_verdict": "PASS"
+}

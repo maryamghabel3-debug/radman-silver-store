@@ -138,10 +138,12 @@ class AgentRegistry:
         return list(self._standalone_agents.keys())
 
     def validate_registry(self) -> bool:
-        """Verifies that all 6 required skills and core agents are present."""
+        """Verifies that all core skills and standalone agents are present."""
         required_skills = [
             "radman-orchestrator",
             "radman-seo-agent",
+            "radman-geo-agent",
+            "radman-aeo-agent",
             "radman-content-agent",
             "radman-sales-agent",
             "radman-media-agent",
@@ -173,6 +175,10 @@ class AgentRegistry:
         obj_lower = objective.lower()
 
         # Check explicit keywords
+        if any(k in obj_lower for k in ["geo", "generative engine", "ai overview", "gemini", "perplexity", "citation"]):
+            return "radman-geo-agent"
+        if any(k in obj_lower for k in ["aeo", "answer engine", "chatgpt", "faq schema", "voice assistant", "direct answer"]):
+            return "radman-aeo-agent"
         if any(k in obj_lower for k in ["seo", "rank math", "meta description", "focus keyword", "search console"]):
             return "radman-seo-agent"
         if any(k in obj_lower for k in ["content", "blog", "instagram", "caption", "article", "editorial", "story"]):

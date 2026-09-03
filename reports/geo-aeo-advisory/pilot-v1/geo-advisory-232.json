@@ -1,0 +1,32 @@
+{
+  "product_id": 232,
+  "sku": "NM-3596",
+  "legacy_title": "انگشتر نقره مردانه آماتیست طبیعی دامله",
+  "geo_readiness_score": 89,
+  "citation_ready": "YES",
+  "entity_clarity": "YES",
+  "schema_gaps": [
+    "ثبت تراش دامله (Cabochon Cut) در فیلد gemstoneCut اسکیما",
+    "لینک به راهنمای کانی کوارتز آماتیست طبیعی رادمان",
+    "ثبت وزن ۸ گرم در متادیتا"
+  ],
+  "content_suggestions": [
+    "توضیح کوتاه درباره کوارتز بنفش طبیعی آماتیست و تراش محدب دامله.",
+    "درج اطلاعات رکاب نقره ماشینی در خلاصه متن."
+  ],
+  "supporting_content_needed": [
+    "شناخت سنگ آماتیست طبیعی معدنی",
+    "اصول نگهداری نگین‌های خانواده کوارتز"
+  ],
+  "e_e_a_t_signals": {
+    "author_attribution": "کارشناس کانی‌شناسی رادمان",
+    "authenticity_proof": "سنگ آماتیست طبیعی معدنی با عیار ۹۲۵ نقره",
+    "physical_evidence": "نمایش بازتاب نور طبیعی در تراش دامله"
+  },
+  "comparative_positioning": "استفاده از سنگ آماتیست طبیعی با تراش دامله بر روی نقره عیار ۹۲۵ ماشینی به وزن ۸ گرم با قیمت ۶٬۶۳۳٬۰۰۰ تومان.",
+  "confidence": 95,
+  "price_toman": 6633000,
+  "weight_g": 8,
+  "status": "draft",
+  "qa_verdict": "PASS"
+}

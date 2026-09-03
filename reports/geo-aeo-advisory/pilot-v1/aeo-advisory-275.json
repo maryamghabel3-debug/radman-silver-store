@@ -1,0 +1,73 @@
+{
+  "product_id": 275,
+  "sku": "NM-3582",
+  "legacy_title": "انگشتر نقره مردانه عقیق سرخ ظریف",
+  "aeo_readiness_score": 87,
+  "questions_mapped": 3,
+  "direct_answers_drafted": 3,
+  "faq_schema_ready": "YES",
+  "faq_schema": {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "ویژگی‌های اصلی انگشتر نقره عقیق سرخ کد NM-3582 چیست؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "این انگشتر دارای نگین عقیق سرخ معدنی به قطر ۱۴ میلی‌متر بر روی رکاب نقره عیار ۹۲۵ ماشینی با وزن ۸ گرم و قیمت ۵٬۹۰۱٬۰۰۰ تومان است."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "مشخصات سنگ نگین این انگشتر چیست؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "سنگ این انگشتر از نوع عقیق سرخ معدنی طبیعی با قطر نگین ۱۴ میلی‌متر است که بر روی پایه نقره ۹۲۵ سوار شده است."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "روش نگهداری و تمیز کردن این انگشتر نقره چگونه است؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "برای حفظ جلای نقره ۹۲۵، از تماس با شوینده‌های اسیدی خودداری کرده و برای پاک‌سازی از دستمال نرم مخصوص نقره استفاده نمایید."
+        }
+      }
+    ]
+  },
+  "qa_pairs": [
+    {
+      "question": "ویژگی‌های اصلی انگشتر نقره عقیق سرخ کد NM-3582 چیست؟",
+      "direct_answer": "این انگشتر دارای نگین عقیق سرخ معدنی به قطر ۱۴ میلی‌متر بر روی رکاب نقره عیار ۹۲۵ ماشینی با وزن ۸ گرم و قیمت ۵٬۹۰۱٬۰۰۰ تومان است.",
+      "category": "technical_specs",
+      "speakable": true
+    },
+    {
+      "question": "مشخصات سنگ نگین این انگشتر چیست؟",
+      "direct_answer": "سنگ این انگشتر از نوع عقیق سرخ معدنی طبیعی با قطر نگین ۱۴ میلی‌متر است که بر روی پایه نقره ۹۲۵ سوار شده است.",
+      "category": "gemstone_authenticity",
+      "speakable": true
+    },
+    {
+      "question": "روش نگهداری و تمیز کردن این انگشتر نقره چگونه است؟",
+      "direct_answer": "برای حفظ جلای نقره ۹۲۵، از تماس با شوینده‌های اسیدی خودداری کرده و برای پاک‌سازی از دستمال نرم مخصوص نقره استفاده نمایید.",
+      "category": "care_instructions",
+      "speakable": true
+    }
+  ],
+  "speakable_candidates": 3,
+  "snippet_quality": "GOOD",
+  "intent_coverage": [
+    "خرید انگشتر عقیق سرخ معدنی",
+    "قیمت انگشتر نقره ۹۲۵ مردانه",
+    "انگشتر عقیق سرخ ۱۴ میلی متری",
+    "انگشتر نقره ماشینی سبک"
+  ],
+  "english_readiness_flag": true,
+  "confidence": 95,
+  "price_toman": 5901000,
+  "weight_g": 8,
+  "status": "draft",
+  "qa_verdict": "PASS"
+}

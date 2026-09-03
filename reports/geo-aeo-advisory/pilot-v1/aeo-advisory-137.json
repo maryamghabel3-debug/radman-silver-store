@@ -1,0 +1,73 @@
+{
+  "product_id": 137,
+  "sku": "1003",
+  "legacy_title": "انگشتر نقره مردانه عقیق زرد فرم چهارگوش",
+  "aeo_readiness_score": 88,
+  "questions_mapped": 3,
+  "direct_answers_drafted": 3,
+  "faq_schema_ready": "YES",
+  "faq_schema": {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "مشخصات نگین و طراحی انگشتر عقیق زرد کد ۱۰۰۳ چیست؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "این انگشتر از نگین عقیق زرد طبیعی با فرم چهارگوش بر روی رکاب نقره ۹۲۵ ماشینی به وزن ۸ گرم با قیمت ۵٬۹۲۹٬۰۰۰ تومان ساخته شده است."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "فرم هندسی رکاب این انگشتر چگونه است؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "رکاب این انگشتر با قالب چهارگوش منظم و استاندارد برای قرارگیری راحت روی انگشت طراحی و پرداخت شده است."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "روش نگهداری عقیق زرد و رکاب نقره چیست؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "این محصول در برابر آب مقاوم است؛ برای حفظ درخشش، از تماس با مواد شوینده شیمیایی قوی اجتناب فرمایید."
+        }
+      }
+    ]
+  },
+  "qa_pairs": [
+    {
+      "question": "مشخصات نگین و طراحی انگشتر عقیق زرد کد ۱۰۰۳ چیست؟",
+      "direct_answer": "این انگشتر از نگین عقیق زرد طبیعی با فرم چهارگوش بر روی رکاب نقره ۹۲۵ ماشینی به وزن ۸ گرم با قیمت ۵٬۹۲۹٬۰۰۰ تومان ساخته شده است.",
+      "category": "technical_specs",
+      "speakable": true
+    },
+    {
+      "question": "فرم هندسی رکاب این انگشتر چگونه است؟",
+      "direct_answer": "رکاب این انگشتر با قالب چهارگوش منظم و استاندارد برای قرارگیری راحت روی انگشت طراحی و پرداخت شده است.",
+      "category": "sizing_guidance",
+      "speakable": true
+    },
+    {
+      "question": "روش نگهداری عقیق زرد و رکاب نقره چیست؟",
+      "direct_answer": "این محصول در برابر آب مقاوم است؛ برای حفظ درخشش، از تماس با مواد شوینده شیمیایی قوی اجتناب فرمایید.",
+      "category": "care_instructions",
+      "speakable": true
+    }
+  ],
+  "speakable_candidates": 3,
+  "snippet_quality": "GOOD",
+  "intent_coverage": [
+    "خرید انگشتر عقیق زرد چهارگوش",
+    "قیمت انگشتر نقره عقیق زرد",
+    "انگشتر نقره مردانه فرم هندسی",
+    "سنگ عقیق زرد طبیعی"
+  ],
+  "english_readiness_flag": true,
+  "confidence": 95,
+  "price_toman": 5929000,
+  "weight_g": 8,
+  "status": "draft",
+  "qa_verdict": "PASS"
+}

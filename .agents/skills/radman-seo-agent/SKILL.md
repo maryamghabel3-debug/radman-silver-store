@@ -12,7 +12,7 @@ It generates search-optimized, brand-compliant product titles, Persian meta desc
 ## 2. Capabilities
 - **Persian Luxury SEO Titles:** Formats titles matching the proven standard:  
   `[نام تمیز محصول] | خرید [نوع محصول] نقره ۹۲۵ اصل | رادمان سیلور`
-- **Persian Meta Descriptions:** Crafts persuasive, luxury-tone meta descriptions between 130–160 characters highlighting authentic 925 hallmark, craftsmanship, and gemstone purity.
+- **Persian Meta Descriptions:** Crafts persuasive, luxury-tone meta descriptions between 120–155 characters highlighting authentic 925 hallmark, craftsmanship, and gemstone purity.
 - **Rank Math Metadata Contract:** Emits structured JSON compatible with Rank Math SEO WordPress fields (`rank_math_title`, `rank_math_description`, `rank_math_focus_keyword`, `rank_math_robots`).
 - **Keyword Stuffing & Repetition Checks:** Analyzes keyword density to prevent search engine penalties.
 - **Duplicate Content Audit:** Cross-references proposed descriptions against existing catalog archives to guarantee uniqueness.
@@ -27,7 +27,35 @@ This skill wraps and extends the deterministic logic from:
 
 ---
 
-## 4. Input & Output Contract
+## 4. Coordination Between SEO + GEO + AEO Agents
+
+The three search optimization agents operate as a unified, complementary team covering the entire modern discovery landscape:
+
+```text
++---------------------------------------------------------------------------------------------------+
+|                                  UNIFIED RADMAN SEARCH OPTIMIZATION TEAM                          |
++------------------------------------+--------------------------------+-----------------------------+
+|        radman-seo-agent            |        radman-geo-agent        |       radman-aeo-agent      |
++------------------------------------+--------------------------------+-----------------------------+
+| • Traditional search ranking       | • Generative AI citations      | • Conversational AI answers |
+| • Keyword research & density       | • Entity clarity & disambig.   | • FAQ schema generation     |
+| • Title & meta tag optimization    | • Schema.org enrichment        | • Voice search readiness    |
+| • Duplicate content prevention     | • Topical authority signals    | • Intent pattern matching   |
+| • Rank Math SEO contracts          | • E-E-A-T brand credibility    | • Direct answer blocks      |
++------------------------------------+--------------------------------+-----------------------------+
+```
+
+### Unified Multi-Agent Optimization Workflow:
+1. **Step 1 (SEO Agent):** Analyzes target products for keywords, luxury Persian titles, meta descriptions, and duplicate content risks.
+2. **Step 2 (GEO Agent):** Scans for citation readiness, entity disambiguation, and structured data completeness for AI overviews (Gemini, Perplexity, Copilot).
+3. **Step 3 (AEO Agent):** Maps customer purchase-intent questions, drafts quotable direct answer blocks, and builds `FAQPage` schemas.
+4. **Step 4 (Synthesis):** Combines SEO, GEO, and AEO deliverables into a single unified recommendation manifest.
+5. **Step 5 (HITL Review):** Store owner reviews the unified manifest against `.agents/config/radman-business-rules.json`.
+6. **Step 6 (Controlled Apply):** Staging applies approved metadata in a single transactional batch.
+
+---
+
+## 5. Input & Output Contract
 
 ### Input
 ```json
@@ -49,11 +77,11 @@ This skill wraps and extends the deterministic logic from:
 {
   "product_id": 65,
   "seo_title": "انگشتر مردانه نقره ۹۲۵ عقیق سرخ یمنی | خرید انگشتر مردانه نقره ۹۲۵ اصل | رادمان سیلور",
-  "meta_description": "خرید انگشتر مردانه نقره ۹۲5 عقیق سرخ یمنی اصل با عیار استاندارد ۹۲۵، نگین طبیعی و رکاب دست‌ساز فاخر در گالری رادمان سیلور. ارسال با بسته‌بندی نفیس.",
+  "meta_description": "خرید انگشتر مردانه نقره ۹۲۵ عقیق سرخ یمنی اصل با عیار استاندارد ۹۲۵، نگین طبیعی و رکاب دست‌ساز فاخر در گالری رادمان سیلور. ارسال با بسته‌بندی نفیس.",
   "focus_keyword": "انگشتر مردانه نقره عقیق سرخ یمنی",
   "rank_math_meta": {
     "rank_math_title": "انگشتر مردانه نقره ۹۲۵ عقیق سرخ یمنی | خرید انگشتر مردانه نقره ۹۲۵ اصل | رادمان سیلور",
-    "rank_math_description": "خرید انگشتر مردانه نقره ۹۲5 عقیق سرخ یمنی اصل با عیار استاندارد ۹۲۵، نگین طبیعی و رکاب دست‌ساز فاخر در گالری رادمان سیلور. ارسال با بسته‌بندی نفیس.",
+    "rank_math_description": "خرید انگشتر مردانه نقره ۹۲۵ عقیق سرخ یمنی اصل با عیار استاندارد ۹۲۵، نگین طبیعی و رکاب دست‌ساز فاخر در گالری رادمان سیلور. ارسال با بسته‌بندی نفیس.",
     "rank_math_focus_keyword": "انگشتر مردانه نقره عقیق سرخ یمنی",
     "rank_math_robots": ["index", "follow"]
   },
@@ -65,10 +93,10 @@ This skill wraps and extends the deterministic logic from:
 
 ---
 
-## 5. Sample Task Brief
+## 6. Sample Task Brief
 ```markdown
 # Task Brief: SEO Optimization for Ring 65
 - Skill: radman-seo-agent
 - Objective: Generate luxury Persian SEO title, description, and Rank Math schema for Men's Yemeni Carnelian Silver Ring
-- Constraints: No phone numbers, no shipping promises, character count within 130-160
+- Constraints: No phone numbers, no shipping promises, character count within 120-155
 ```
