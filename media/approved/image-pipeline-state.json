@@ -8,7 +8,7 @@
   ],
   "current_product": "390",
   "current_product_sku": "13204540",
-  "current_angle": "A",
+  "current_angle": "B",
   "approved_angles": {
     "384": {
       "A": {
@@ -26,10 +26,10 @@
     },
     "390": {
       "A": {
-        "status": "IN_REVIEW",
+        "status": "APPROVED",
         "attachment_id": 391,
         "release": "media-image-pipeline-v1-p390-a",
-        "approved_date": null
+        "approved_date": "2026-09-03"
       },
       "B": {
         "status": "QUEUED",
@@ -101,6 +101,6 @@
     "214"
   ],
   "last_release": "media-image-pipeline-v1-p390-a",
-  "last_commit": "0c2c149fc167b3a14391ae965800d3d9310df567",
-  "next_action": "WAIT_FOR_OWNER_REVIEW"
+  "last_commit": "b0af28cd36ef31114199ed1f0ffc4c2b998759cf",
+  "next_action": "PROCESS_PRODUCT_390_ANGLE_B"
 }
