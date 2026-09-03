@@ -200,7 +200,7 @@ class TestRadmanBusinessRules(unittest.TestCase):
             self.assertTrue(any("warranty claim" in v for v in res.violations))
 
     def test_content_safety_clean_text_passes(self) -> None:
-        clean_text = "انگشتر نقره مردانه دست‌ساز عقیق سرخ یمنی با عیار ۹۲۵ اصل و طراحی فاخر رادمان سیلور."
+        clean_text = "انگشتر نقره مردانه عقیق سرخ یمنی با عیار ۹۲۵ و طراحی فاخر رادمان سیلور."
         res = self.rules.validate_content(clean_text)
         self.assertTrue(res.is_valid)
         self.assertEqual(len(res.violations), 0)

@@ -1,8 +1,14 @@
 """
-Business Rules Engine
-=====================
-Validates catalog items, pricing calculations, inventory settings, and
-content descriptions against RADMAN SILVER 925 business rules.
+Business Rules & Data Source Verification Engine
+=================================================
+Validates catalog items, pricing, inventory settings, content descriptions,
+and factual provenance against RADMAN SILVER 925 verified business rules.
+
+Authoritative Data-Source Rules (2026-09-03):
+1. Weight comes ONLY from WooCommerce meta _weight (or snapshot). Never infer or derive from price.
+2. Price comes ONLY from WooCommerce _regular_price. Never compute, round, or alter in SEO/GEO/AEO.
+3. Every factual claim must have verified provenance {value, source_field, verified=True}.
+4. Forbidden unless verified: دست‌ساز, شناسنامه, اصالت‌نامه, بسته‌بندی, گارانتی, ضمانت, آبدار, سه پوست, نرخ مصوب, نرخ روز, عرضه مستقیم.
 """
 
 from __future__ import annotations
@@ -46,9 +52,10 @@ class ProductValidationResult:
 
 
 class RadmanBusinessRules:
-    """Core business rule validator for RADMAN SILVER 925."""
+    """Core business rule & provenance validator for RADMAN SILVER 925."""
 
     DEFAULT_RULES_PATH = Path(".agents/config/radman-business-rules.json")
+    DEFAULT_SNAPSHOT_PATH = Path("data/verified-product-snapshot-20260903.json")
 
     STANDARD_GRAM_RATE = 650_000
     LARGE_STONE_GRAM_RATE = 590_000
@@ -74,30 +81,53 @@ class RadmanBusinessRules:
         "تضمین ۱۰۰٪ بدون تغییر رنگ",
         "غیر قابل شکستن",
         "ضمانت بی‌قید و شرط",
+        "ضمانت اصالت",
     ]
 
-    def __init__(self, config_path: Optional[Path] = None) -> None:
-        self.config_path = config_path or self._resolve_default_path()
+    FORBIDDEN_UNVERIFIED_CLAIMS = [
+        "دست‌ساز",
+        "دست ساز",
+        "شناسنامه",
+        "اصالت‌نامه",
+        "اصالت نامه",
+        "بسته‌بندی",
+        "بسته بندی",
+        "گارانتی",
+        "ضمانت",
+        "آبدار",
+        "سه پوست",
+        "نرخ مصوب",
+        "نرخ روز",
+        "عرضه مستقیم",
+    ]
+
+    def __init__(self, config_path: Optional[Path] = None, snapshot_path: Optional[Path] = None) -> None:
+        self.config_path = config_path or self._resolve_path(self.DEFAULT_RULES_PATH)
+        self.snapshot_path = snapshot_path or self._resolve_path(self.DEFAULT_SNAPSHOT_PATH)
         self.rules_data: Dict[str, Any] = {}
+        self.snapshot_data: Dict[str, Any] = {}
         self.load()
 
-    def _resolve_default_path(self) -> Path:
+    def _resolve_path(self, default_rel: Path) -> Path:
         cwd = Path.cwd()
-        candidate = cwd / self.DEFAULT_RULES_PATH
+        candidate = cwd / default_rel
         if candidate.exists():
             return candidate
 
         repo_root = Path(__file__).resolve().parent.parent.parent
-        candidate = repo_root / self.DEFAULT_RULES_PATH
+        candidate = repo_root / default_rel
         if candidate.exists():
             return candidate
 
-        return Path(self.DEFAULT_RULES_PATH)
+        return Path(default_rel)
 
     def load(self) -> None:
         if self.config_path.exists():
             with open(self.config_path, "r", encoding="utf-8") as f:
                 self.rules_data = json.load(f)
+        if self.snapshot_path.exists():
+            with open(self.snapshot_path, "r", encoding="utf-8") as f:
+                self.snapshot_data = json.load(f)
 
     @classmethod
     def get_gram_rate(cls, stone_type: str = "standard") -> int:
@@ -169,8 +199,13 @@ class RadmanBusinessRules:
         )
 
     @classmethod
+    def validate_data_source_price(cls, proposed_price: int, verified_regular_price: int) -> bool:
+        """Rule 2: Price must match verified WooCommerce _regular_price exactly."""
+        return proposed_price == verified_regular_price
+
+    @classmethod
     def validate_content(cls, text: str) -> ContentValidationResult:
-        """Audits public description or copy for prohibited claims and phone numbers."""
+        """Audits public description or copy for prohibited claims, phone numbers, and unverified words."""
         violations: List[str] = []
         detected_patterns: List[str] = []
 
@@ -196,6 +231,12 @@ class RadmanBusinessRules:
                 violations.append(f"BR-CNT-03: Prohibited absolute warranty claim detected: '{kw}'.")
                 detected_patterns.append(kw)
 
+        # Check unverified claims
+        for uw in cls.FORBIDDEN_UNVERIFIED_CLAIMS:
+            if uw in text:
+                violations.append(f"BR-FACT-01: Prohibited unverified factual claim detected: '{uw}'.")
+                detected_patterns.append(uw)
+
         is_valid = len(violations) == 0
         return ContentValidationResult(
             is_valid=is_valid,
@@ -203,6 +244,15 @@ class RadmanBusinessRules:
             detected_patterns=detected_patterns,
             clean_text=text,
         )
+
+    @classmethod
+    def validate_weight_rule(cls, text: str, verified_weight_g: Optional[int]) -> bool:
+        """Rule 1: Weight must come from verified field or be omitted entirely."""
+        if not verified_weight_g:
+            # If weight is missing, text must NOT contain any gram weight claim
+            if re.search(r"\d+(\.\d+)?\s*(گرم|g|gram)", text, re.I):
+                return False
+        return True
 
     @classmethod
     def validate_product_payload(
@@ -241,8 +291,8 @@ class RadmanBusinessRules:
             passed_checks.append("CHECK_DRAFT_STATUS")
 
         # 4. Check price floor
-        weight = float(payload.get("weight_grams", payload.get("weight", 0.0)))
-        proposed_price = int(payload.get("price", payload.get("regular_price", 0)))
+        weight = float(payload.get("weight_grams", payload.get("weight", payload.get("weight_g", 0.0))))
+        proposed_price = int(payload.get("price", payload.get("regular_price", payload.get("regular_price_IRT", 0))))
         stone_type = payload.get("stone_type", "standard")
         legacy_price = payload.get("legacy_price")
 

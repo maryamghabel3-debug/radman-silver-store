@@ -4,14 +4,14 @@
   "legacy_title": "انگشتر نقره مردانه عقیق زرد فرم چهارگوش",
   "current_title_assessment": "عنوان اولیه به فرم رکاب اشاره کرده اما برای جستجوی خرید نقره ۹۲۵ بهینه‌سازی نشده است.",
   "suggested_seo_title": "انگشتر نقره مردانه عقیق زرد چهارگوش | رادمان",
-  "suggested_meta_description": "خرید انگشتر مردانه نقره ۹۲۵ عقیق زرد چهارگوش آبدار با رکاب دست‌ساز کلاسیک در گالری رادمان سیلور. نگین معدنی طبیعی همراه با شناسنامه معتبر.",
+  "suggested_meta_description": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین عقیق زرد طبیعی فرم چهارگوش به وزن ۸ گرم در گالری رادمان سیلور. قیمت ۵٬۹۲۹٬۰۰۰ تومان با رکاب نقره ماشینی.",
   "title_length": 44,
-  "meta_description_length": 138,
+  "meta_description_length": 145,
   "suggested_focus_keyword": "انگشتر نقره مردانه عقیق زرد",
   "secondary_keywords": [
     "انگشتر عقیق زرد چهارگوش",
-    "انگشتر نقره ۹۲۵ مردانه کلاسیک",
-    "خرید انگشتر عقیق زرد آبدار"
+    "انگشتر نقره ۹۲۵ مردانه",
+    "خرید انگشتر عقیق زرد"
   ],
   "internal_link_suggestions": [
     {
@@ -34,11 +34,11 @@
     "sku": "1003",
     "category": "Jewelry > Rings > Silver Rings",
     "material": "Sterling Silver 925",
-    "description": "خرید انگشتر مردانه نقره ۹۲۵ عقیق زرد چهارگوش آبدار با رکاب دست‌ساز کلاسیک در گالری رادمان سیلور. نگین معدنی طبیعی همراه با شناسنامه معتبر.",
+    "description": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین عقیق زرد طبیعی فرم چهارگوش به وزن ۸ گرم در گالری رادمان سیلور. قیمت ۵٬۹۲۹٬۰۰۰ تومان با رکاب نقره ماشینی.",
     "offers": {
       "@type": "Offer",
       "priceCurrency": "IRT",
-      "price": 6825000,
+      "price": 5929000,
       "priceValidUntil": "2027-12-31",
       "availability": "https://schema.org/InStock",
       "itemCondition": "https://schema.org/NewCondition",
@@ -49,11 +49,12 @@
     }
   },
   "duplicate_content_risk": "LOW",
-  "duplicate_content_reason": "Unique mineralogy, specific gemstone cut, and distinct craftsmanship prevent duplication across catalog.",
+  "duplicate_content_reason": "Unique verified mineralogy, verified dimensions, and distinct SKU metadata.",
   "keyword_stuffing_risk": "LOW",
   "forbidden_claims_found": [],
   "confidence": 95,
-  "price_toman": 6825000,
+  "price_toman": 5929000,
+  "weight_g": 8,
   "status": "draft",
   "qa_verdict": "PASS"
 }

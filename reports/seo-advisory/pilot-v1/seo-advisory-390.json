@@ -4,14 +4,14 @@
   "legacy_title": "انگشتر نقره مردانه شجر طبیعی نقش آهو",
   "current_title_assessment": "عنوان اولیه توصیف سنگ را دارد اما فاقد ساختار استاندارد سئو و تفکیک برند رادمان سیلور است.",
   "suggested_seo_title": "انگشتر نقره مردانه شجر طبیعی آهو | رادمان سیلور",
-  "suggested_meta_description": "خرید انگشتر مردانه نقره ۹۲۵ شجر طبیعی با نقش کلکسیونی آهو و رکاب دست‌ساز فاخر در گالری رادمان سیلور. سنگ معدنی اصل با شناسنامه اصالت کالا.",
+  "suggested_meta_description": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین شجر طبیعی نقش آهو به وزن ۱۳ گرم در گالری رادمان سیلور. قیمت ۱۲٬۵۶۴٬۰۰۰ تومان با رکاب نقره ماشینی.",
   "title_length": 47,
   "meta_description_length": 138,
   "suggested_focus_keyword": "انگشتر نقره مردانه شجر طبیعی",
   "secondary_keywords": [
-    "انگشتر شجر اصل نقش آهو",
-    "انگشتر نقره ۹۲۵ مردانه دست‌ساز",
-    "خرید انگشتر شجر کلکسیونی"
+    "انگشتر شجر نقش آهو",
+    "انگشتر نقره ۹۲۵ مردانه",
+    "خرید انگشتر شجر مردانه"
   ],
   "internal_link_suggestions": [
     {
@@ -34,11 +34,11 @@
     "sku": "13204540",
     "category": "Jewelry > Rings > Silver Rings",
     "material": "Sterling Silver 925",
-    "description": "خرید انگشتر مردانه نقره ۹۲۵ شجر طبیعی با نقش کلکسیونی آهو و رکاب دست‌ساز فاخر در گالری رادمان سیلور. سنگ معدنی اصل با شناسنامه اصالت کالا.",
+    "description": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین شجر طبیعی نقش آهو به وزن ۱۳ گرم در گالری رادمان سیلور. قیمت ۱۲٬۵۶۴٬۰۰۰ تومان با رکاب نقره ماشینی.",
     "offers": {
       "@type": "Offer",
       "priceCurrency": "IRT",
-      "price": 9425000,
+      "price": 12564000,
       "priceValidUntil": "2027-12-31",
       "availability": "https://schema.org/InStock",
       "itemCondition": "https://schema.org/NewCondition",
@@ -49,11 +49,12 @@
     }
   },
   "duplicate_content_risk": "LOW",
-  "duplicate_content_reason": "Unique mineralogy, specific gemstone cut, and distinct craftsmanship prevent duplication across catalog.",
+  "duplicate_content_reason": "Unique verified mineralogy, verified dimensions, and distinct SKU metadata.",
   "keyword_stuffing_risk": "LOW",
   "forbidden_claims_found": [],
   "confidence": 95,
-  "price_toman": 9425000,
+  "price_toman": 12564000,
+  "weight_g": 13,
   "status": "draft",
   "qa_verdict": "PASS"
 }

@@ -4,14 +4,14 @@
   "legacy_title": "انگشتر نقره مردانه آماتیست طبیعی دامله",
   "current_title_assessment": "عنوان شامل نوع تراش است ولی نیازمند اتصال به ساختار برند و کلمات کلیدی تراکنش است.",
   "suggested_seo_title": "انگشتر نقره مردانه آماتیست دامله | رادمان سیلور",
-  "suggested_meta_description": "خرید انگشتر مردانه نقره ۹۲۵ آماتیست طبیعی دامله با رکاب صفوی دست‌ساز در گالری رادمان سیلور. سنگ معدنی بنفش اصل با درخشش فاخر و شناسنامه.",
+  "suggested_meta_description": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین آماتیست طبیعی تراش دامله به وزن ۸ گرم در گالری رادمان سیلور. قیمت ۶٬۶۳۳٬۰۰۰ تومان با رکاب نقره ماشینی.",
   "title_length": 47,
-  "meta_description_length": 136,
+  "meta_description_length": 143,
   "suggested_focus_keyword": "انگشتر نقره مردانه آماتیست",
   "secondary_keywords": [
     "انگشتر آماتیست طبیعی دامله",
-    "انگشتر نقره ۹۲۵ رکاب صفوی",
-    "خرید انگشتر سنگ آماتیست اصل"
+    "انگشتر نقره ۹۲۵ مردانه",
+    "خرید انگشتر سنگ آماتیست"
   ],
   "internal_link_suggestions": [
     {
@@ -34,11 +34,11 @@
     "sku": "NM-3596",
     "category": "Jewelry > Rings > Silver Rings",
     "material": "Sterling Silver 925",
-    "description": "خرید انگشتر مردانه نقره ۹۲۵ آماتیست طبیعی دامله با رکاب صفوی دست‌ساز در گالری رادمان سیلور. سنگ معدنی بنفش اصل با درخشش فاخر و شناسنامه.",
+    "description": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین آماتیست طبیعی تراش دامله به وزن ۸ گرم در گالری رادمان سیلور. قیمت ۶٬۶۳۳٬۰۰۰ تومان با رکاب نقره ماشینی.",
     "offers": {
       "@type": "Offer",
       "priceCurrency": "IRT",
-      "price": 7800000,
+      "price": 6633000,
       "priceValidUntil": "2027-12-31",
       "availability": "https://schema.org/InStock",
       "itemCondition": "https://schema.org/NewCondition",
@@ -49,11 +49,12 @@
     }
   },
   "duplicate_content_risk": "LOW",
-  "duplicate_content_reason": "Unique mineralogy, specific gemstone cut, and distinct craftsmanship prevent duplication across catalog.",
+  "duplicate_content_reason": "Unique verified mineralogy, verified dimensions, and distinct SKU metadata.",
   "keyword_stuffing_risk": "LOW",
   "forbidden_claims_found": [],
   "confidence": 95,
-  "price_toman": 7800000,
+  "price_toman": 6633000,
+  "weight_g": 8,
   "status": "draft",
   "qa_verdict": "PASS"
 }

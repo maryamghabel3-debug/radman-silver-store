@@ -2,16 +2,16 @@
   "product_id": 275,
   "sku": "NM-3582",
   "legacy_title": "انگشتر نقره مردانه عقیق سرخ ظریف",
-  "current_title_assessment": "عنوان کوتاه است و ویژگی‌های رکاب و عیار ۹۲۵ را برای موتورهای جستجو پوشش نمی‌دهد.",
+  "current_title_assessment": "عنوان کوتاه است و ویژگی‌های نگین ۱۴ میلی‌متر و عیار ۹۲۵ را برای موتورهای جستجو پوشش نمی‌دهد.",
   "suggested_seo_title": "انگشتر نقره مردانه عقیق سرخ ظریف | رادمان سیلور",
-  "suggested_meta_description": "خرید انگشتر مردانه نقره ۹۲۵ عقیق سرخ ظریف طبیعی با رکاب شبکه دست‌ساز در گالری رادمان سیلور. نگین معدنی آبدار همراه با بسته‌بندی نفیس هدیه.",
+  "suggested_meta_description": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین عقیق سرخ معدنی ۱۴ میلی‌متر به وزن ۸ گرم در گالری رادمان سیلور. قیمت ۵٬۹۰۱٬۰۰۰ تومان با رکاب نقره ماشینی.",
   "title_length": 47,
-  "meta_description_length": 138,
+  "meta_description_length": 145,
   "suggested_focus_keyword": "انگشتر نقره مردانه عقیق سرخ",
   "secondary_keywords": [
-    "انگشتر عقیق سرخ ظریف اصل",
+    "انگشتر عقیق سرخ ۱۴ میلی متر",
     "انگشتر نقره عیار ۹۲۵ مردانه",
-    "خرید انگشتر عقیق یمنی طبیعی"
+    "خرید انگشتر عقیق سرخ معدنی"
   ],
   "internal_link_suggestions": [
     {
@@ -34,11 +34,11 @@
     "sku": "NM-3582",
     "category": "Jewelry > Rings > Silver Rings",
     "material": "Sterling Silver 925",
-    "description": "خرید انگشتر مردانه نقره ۹۲۵ عقیق سرخ ظریف طبیعی با رکاب شبکه دست‌ساز در گالری رادمان سیلور. نگین معدنی آبدار همراه با بسته‌بندی نفیس هدیه.",
+    "description": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین عقیق سرخ معدنی ۱۴ میلی‌متر به وزن ۸ گرم در گالری رادمان سیلور. قیمت ۵٬۹۰۱٬۰۰۰ تومان با رکاب نقره ماشینی.",
     "offers": {
       "@type": "Offer",
       "priceCurrency": "IRT",
-      "price": 5720000,
+      "price": 5901000,
       "priceValidUntil": "2027-12-31",
       "availability": "https://schema.org/InStock",
       "itemCondition": "https://schema.org/NewCondition",
@@ -49,11 +49,12 @@
     }
   },
   "duplicate_content_risk": "LOW",
-  "duplicate_content_reason": "Unique mineralogy, specific gemstone cut, and distinct craftsmanship prevent duplication across catalog.",
+  "duplicate_content_reason": "Unique verified mineralogy, verified dimensions, and distinct SKU metadata.",
   "keyword_stuffing_risk": "LOW",
   "forbidden_claims_found": [],
   "confidence": 95,
-  "price_toman": 5720000,
+  "price_toman": 5901000,
+  "weight_g": 8,
   "status": "draft",
   "qa_verdict": "PASS"
 }

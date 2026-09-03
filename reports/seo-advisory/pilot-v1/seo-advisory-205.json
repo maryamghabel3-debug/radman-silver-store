@@ -2,16 +2,16 @@
   "product_id": 205,
   "sku": "NM-3605",
   "legacy_title": "انگشتر نقره مردانه عقیق باباقوری",
-  "current_title_assessment": "عنوان کلی است و عیار استاندارد نقره و سبک رکاب کلاسیک در آن منعکس نشده است.",
+  "current_title_assessment": "عنوان کلی است و عیار استاندارد نقره در آن منعکس نشده است.",
   "suggested_seo_title": "انگشتر نقره مردانه عقیق باباقوری | رادمان سیلور",
-  "suggested_meta_description": "خرید انگشتر مردانه نقره ۹۲۵ عقیق باباقوری سه پوست طبیعی با رکاب فیلی دست‌ساز در گالری رادمان سیلور. نگین معدنی کلکسیونی با شناسنامه اصالت سنگ.",
+  "suggested_meta_description": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین عقیق باباقوری طبیعی به وزن ۸ گرم در گالری رادمان سیلور. قیمت ۸٬۸۷۱٬۰۰۰ تومان با رکاب نقره ماشینی استاندارد.",
   "title_length": 47,
-  "meta_description_length": 142,
+  "meta_description_length": 148,
   "suggested_focus_keyword": "انگشتر نقره مردانه عقیق باباقوری",
   "secondary_keywords": [
-    "انگشتر عقیق باباقوری سه پوست",
-    "انگشتر نقره ۹۲۵ رکاب فیلی",
-    "خرید انگشتر عقیق کلکسیونی"
+    "انگشتر عقیق باباقوری مردانه",
+    "انگشتر نقره ۹۲۵ ماشینی",
+    "خرید انگشتر عقیق باباقوری"
   ],
   "internal_link_suggestions": [
     {
@@ -34,11 +34,11 @@
     "sku": "NM-3605",
     "category": "Jewelry > Rings > Silver Rings",
     "material": "Sterling Silver 925",
-    "description": "خرید انگشتر مردانه نقره ۹۲۵ عقیق باباقوری سه پوست طبیعی با رکاب فیلی دست‌ساز در گالری رادمان سیلور. نگین معدنی کلکسیونی با شناسنامه اصالت سنگ.",
+    "description": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین عقیق باباقوری طبیعی به وزن ۸ گرم در گالری رادمان سیلور. قیمت ۸٬۸۷۱٬۰۰۰ تومان با رکاب نقره ماشینی استاندارد.",
     "offers": {
       "@type": "Offer",
       "priceCurrency": "IRT",
-      "price": 8580000,
+      "price": 8871000,
       "priceValidUntil": "2027-12-31",
       "availability": "https://schema.org/InStock",
       "itemCondition": "https://schema.org/NewCondition",
@@ -49,11 +49,12 @@
     }
   },
   "duplicate_content_risk": "LOW",
-  "duplicate_content_reason": "Unique mineralogy, specific gemstone cut, and distinct craftsmanship prevent duplication across catalog.",
+  "duplicate_content_reason": "Unique verified mineralogy, verified dimensions, and distinct SKU metadata.",
   "keyword_stuffing_risk": "LOW",
   "forbidden_claims_found": [],
   "confidence": 95,
-  "price_toman": 8580000,
+  "price_toman": 8871000,
+  "weight_g": 8,
   "status": "draft",
   "qa_verdict": "PASS"
 }

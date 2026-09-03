@@ -4,13 +4,10 @@ RADMAN SEO Advisory Engine (Phase 2 Advisory Pilot)
 Produces comprehensive Persian SEO audits and recommendations in advisory
 (dry-run) mode for RADMAN SILVER 925 products.
 
-Features:
-- Title & meta description generation with strict character bounds
-- Focus and secondary keyword extraction
-- Schema.org JSON-LD recommendations (Product & Offer, currency IRT, no sale_price)
-- Duplicate content and keyword stuffing risk estimation
-- Business rule compliance audits (no phone numbers, shipping promises, or guarantee claims)
-- Multi-format report export: JSON per product, Persian Markdown summary, and CSV
+Authoritative Snapshot Integration (2026-09-03):
+- Weight comes strictly from verified WooCommerce _weight
+- Price comes strictly from verified WooCommerce _regular_price
+- All unverified claims (دست‌ساز, شناسنامه, بسته‌بندی, گارانتی, نرخ مصوب) strictly purged
 """
 
 from __future__ import annotations
@@ -59,6 +56,7 @@ class SEOAdvisoryReport:
     forbidden_claims_found: List[str]
     confidence: int  # 0-100
     price_toman: int
+    weight_g: Optional[int] = None
     status: str = "draft"
     qa_verdict: str = "PASS"
 
@@ -82,121 +80,132 @@ class SEOAdvisoryReport:
             "forbidden_claims_found": self.forbidden_claims_found,
             "confidence": self.confidence,
             "price_toman": self.price_toman,
+            "weight_g": self.weight_g,
             "status": self.status,
             "qa_verdict": self.qa_verdict,
         }
 
 
 class SEOAdvisoryAdvisor:
-    """Deterministic rule-based advisory engine with pluggable adapter interface."""
+    """Deterministic rule-based advisory engine using verified host snapshot."""
 
-    DEFAULT_FIXTURE_PATH = Path("tests/fixtures/seo-advisory/pilot_products.json")
+    DEFAULT_SNAPSHOT_PATH = Path("data/verified-product-snapshot-20260903.json")
 
-    # Catalog knowledge base for the 5 pilot products
-    PILOT_CATALOG: Dict[int, Dict[str, Any]] = {
+    # Authoritative verified catalog data (2026-09-03)
+    VERIFIED_CATALOG: Dict[int, Dict[str, Any]] = {
         390: {
             "sku": "13204540",
             "legacy_title": "انگشتر نقره مردانه شجر طبیعی نقش آهو",
             "category": "انگشتر مردانه",
-            "stone_name": "شجر طبیعی نقش آهو",
-            "price_toman": 9425000,
+            "stone": "شجر طبیعی نقش آهو",
+            "weight_g": 13,
+            "price_toman": 12564000,
+            "band": "نقره ماشینی",
             "assessment": "عنوان اولیه توصیف سنگ را دارد اما فاقد ساختار استاندارد سئو و تفکیک برند رادمان سیلور است.",
             "title": "انگشتر نقره مردانه شجر طبیعی آهو | رادمان سیلور",
-            "meta": "خرید انگشتر مردانه نقره ۹۲۵ شجر طبیعی با نقش کلکسیونی آهو و رکاب دست‌ساز فاخر در گالری رادمان سیلور. سنگ معدنی اصل با شناسنامه اصالت کالا.",
+            "meta": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین شجر طبیعی نقش آهو به وزن ۱۳ گرم در گالری رادمان سیلور. قیمت ۱۲٬۵۶۴٬۰۰۰ تومان با رکاب نقره ماشینی.",
             "focus": "انگشتر نقره مردانه شجر طبیعی",
-            "secondary": ["انگشتر شجر اصل نقش آهو", "انگشتر نقره ۹۲۵ مردانه دست‌ساز", "خرید انگشتر شجر کلکسیونی"],
+            "secondary": ["انگشتر شجر نقش آهو", "انگشتر نقره ۹۲۵ مردانه", "خرید انگشتر شجر مردانه"],
             "related_ids": [205, 275],
         },
         275: {
             "sku": "NM-3582",
             "legacy_title": "انگشتر نقره مردانه عقیق سرخ ظریف",
             "category": "انگشتر مردانه",
-            "stone_name": "عقیق سرخ طبیعی",
-            "price_toman": 5720000,
-            "assessment": "عنوان کوتاه است و ویژگی‌های رکاب و عیار ۹۲۵ را برای موتورهای جستجو پوشش نمی‌دهد.",
+            "stone": "عقیق سرخ معدنی، نگین ۱۴ میلی‌متر",
+            "weight_g": 8,
+            "price_toman": 5901000,
+            "band": "نقره ماشینی",
+            "assessment": "عنوان کوتاه است و ویژگی‌های نگین ۱۴ میلی‌متر و عیار ۹۲۵ را برای موتورهای جستجو پوشش نمی‌دهد.",
             "title": "انگشتر نقره مردانه عقیق سرخ ظریف | رادمان سیلور",
-            "meta": "خرید انگشتر مردانه نقره ۹۲۵ عقیق سرخ ظریف طبیعی با رکاب شبکه دست‌ساز در گالری رادمان سیلور. نگین معدنی آبدار همراه با بسته‌بندی نفیس هدیه.",
+            "meta": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین عقیق سرخ معدنی ۱۴ میلی‌متر به وزن ۸ گرم در گالری رادمان سیلور. قیمت ۵٬۹۰۱٬۰۰۰ تومان با رکاب نقره ماشینی.",
             "focus": "انگشتر نقره مردانه عقیق سرخ",
-            "secondary": ["انگشتر عقیق سرخ ظریف اصل", "انگشتر نقره عیار ۹۲۵ مردانه", "خرید انگشتر عقیق یمنی طبیعی"],
+            "secondary": ["انگشتر عقیق سرخ ۱۴ میلی متر", "انگشتر نقره عیار ۹۲۵ مردانه", "خرید انگشتر عقیق سرخ معدنی"],
             "related_ids": [137, 232],
         },
         232: {
             "sku": "NM-3596",
             "legacy_title": "انگشتر نقره مردانه آماتیست طبیعی دامله",
             "category": "انگشتر مردانه",
-            "stone_name": "آماتیست طبیعی دامله",
-            "price_toman": 7800000,
+            "stone": "آماتیست طبیعی دامله",
+            "weight_g": 8,
+            "price_toman": 6633000,
+            "band": "نقره ماشینی",
             "assessment": "عنوان شامل نوع تراش است ولی نیازمند اتصال به ساختار برند و کلمات کلیدی تراکنش است.",
             "title": "انگشتر نقره مردانه آماتیست دامله | رادمان سیلور",
-            "meta": "خرید انگشتر مردانه نقره ۹۲۵ آماتیست طبیعی دامله با رکاب صفوی دست‌ساز در گالری رادمان سیلور. سنگ معدنی بنفش اصل با درخشش فاخر و شناسنامه.",
+            "meta": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین آماتیست طبیعی تراش دامله به وزن ۸ گرم در گالری رادمان سیلور. قیمت ۶٬۶۳۳٬۰۰۰ تومان با رکاب نقره ماشینی.",
             "focus": "انگشتر نقره مردانه آماتیست",
-            "secondary": ["انگشتر آماتیست طبیعی دامله", "انگشتر نقره ۹۲۵ رکاب صفوی", "خرید انگشتر سنگ آماتیست اصل"],
+            "secondary": ["انگشتر آماتیست طبیعی دامله", "انگشتر نقره ۹۲۵ مردانه", "خرید انگشتر سنگ آماتیست"],
             "related_ids": [275, 390],
         },
         205: {
             "sku": "NM-3605",
             "legacy_title": "انگشتر نقره مردانه عقیق باباقوری",
             "category": "انگشتر مردانه",
-            "stone_name": "عقیق باباقوری سه پوست",
-            "price_toman": 8580000,
-            "assessment": "عنوان کلی است و عیار استاندارد نقره و سبک رکاب کلاسیک در آن منعکس نشده است.",
+            "stone": "عقیق باباقوری",
+            "weight_g": 8,
+            "price_toman": 8871000,
+            "band": "نقره ماشینی",
+            "assessment": "عنوان کلی است و عیار استاندارد نقره در آن منعکس نشده است.",
             "title": "انگشتر نقره مردانه عقیق باباقوری | رادمان سیلور",
-            "meta": "خرید انگشتر مردانه نقره ۹۲۵ عقیق باباقوری سه پوست طبیعی با رکاب فیلی دست‌ساز در گالری رادمان سیلور. نگین معدنی کلکسیونی با شناسنامه اصالت سنگ.",
+            "meta": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین عقیق باباقوری طبیعی به وزن ۸ گرم در گالری رادمان سیلور. قیمت ۸٬۸۷۱٬۰۰۰ تومان با رکاب نقره ماشینی استاندارد.",
             "focus": "انگشتر نقره مردانه عقیق باباقوری",
-            "secondary": ["انگشتر عقیق باباقوری سه پوست", "انگشتر نقره ۹۲۵ رکاب فیلی", "خرید انگشتر عقیق کلکسیونی"],
+            "secondary": ["انگشتر عقیق باباقوری مردانه", "انگشتر نقره ۹۲۵ ماشینی", "خرید انگشتر عقیق باباقوری"],
             "related_ids": [390, 137],
         },
         137: {
             "sku": "1003",
             "legacy_title": "انگشتر نقره مردانه عقیق زرد فرم چهارگوش",
             "category": "انگشتر مردانه",
-            "stone_name": "عقیق زرد آبدار",
-            "price_toman": 6825000,
+            "stone": "عقیق زرد چهارگوش",
+            "weight_g": 8,
+            "price_toman": 5929000,
+            "band": "نقره ماشینی",
             "assessment": "عنوان اولیه به فرم رکاب اشاره کرده اما برای جستجوی خرید نقره ۹۲۵ بهینه‌سازی نشده است.",
             "title": "انگشتر نقره مردانه عقیق زرد چهارگوش | رادمان",
-            "meta": "خرید انگشتر مردانه نقره ۹۲۵ عقیق زرد چهارگوش آبدار با رکاب دست‌ساز کلاسیک در گالری رادمان سیلور. نگین معدنی طبیعی همراه با شناسنامه معتبر.",
+            "meta": "خرید انگشتر مردانه نقره عیار ۹۲۵ با نگین عقیق زرد طبیعی فرم چهارگوش به وزن ۸ گرم در گالری رادمان سیلور. قیمت ۵٬۹۲۹٬۰۰۰ تومان با رکاب نقره ماشینی.",
             "focus": "انگشتر نقره مردانه عقیق زرد",
-            "secondary": ["انگشتر عقیق زرد چهارگوش", "انگشتر نقره ۹۲۵ مردانه کلاسیک", "خرید انگشتر عقیق زرد آبدار"],
+            "secondary": ["انگشتر عقیق زرد چهارگوش", "انگشتر نقره ۹۲۵ مردانه", "خرید انگشتر عقیق زرد"],
             "related_ids": [275, 205],
         },
     }
 
-    def __init__(self, fixture_path: Optional[Path] = None) -> None:
-        self.fixture_path = fixture_path or self.DEFAULT_FIXTURE_PATH
+    def __init__(self, snapshot_path: Optional[Path] = None) -> None:
+        self.snapshot_path = snapshot_path or self.DEFAULT_SNAPSHOT_PATH
         self.products: Dict[int, Dict[str, Any]] = {}
-        self.load_products()
+        self.load_snapshot()
 
-    def load_products(self) -> None:
-        """Loads product fixture data with fallback to PILOT_CATALOG."""
-        if self.fixture_path.exists():
-            with open(self.fixture_path, "r", encoding="utf-8") as f:
+    def load_snapshot(self) -> None:
+        """Loads verified product snapshot with fallback to VERIFIED_CATALOG."""
+        if self.snapshot_path.exists():
+            with open(self.snapshot_path, "r", encoding="utf-8") as f:
                 data = json.load(f)
-                for item in data.get("products", []):
-                    pid = int(item["product_id"])
+                for pid_str, item in data.get("products", {}).items():
+                    pid = int(pid_str)
                     self.products[pid] = item
         else:
-            # Populate from builtin pilot catalog
-            for pid, info in self.PILOT_CATALOG.items():
+            for pid, info in self.VERIFIED_CATALOG.items():
                 self.products[pid] = {
                     "product_id": pid,
                     "sku": info["sku"],
                     "legacy_title": info["legacy_title"],
-                    "category": info["category"],
-                    "stone_name": info["stone_name"],
-                    "price_toman": info["price_toman"],
-                    "status": "draft",
-                    "stock_quantity": 1,
+                    "weight_g": info["weight_g"],
+                    "regular_price_IRT": info["price_toman"],
+                    "stone": info["stone"],
+                    "band": info["band"],
+                    "sale_price": None,
                 }
 
     def analyze_product(self, product_id: int) -> SEOAdvisoryReport:
         """Analyzes a single product and generates an advisory report."""
-        if product_id not in self.PILOT_CATALOG:
-            raise ValueError(f"Product ID {product_id} is not part of the SEO advisory pilot.")
+        if product_id not in self.VERIFIED_CATALOG:
+            raise ValueError(f"Product ID {product_id} is not part of the verified catalog.")
 
-        item = self.PILOT_CATALOG[product_id]
+        item = self.VERIFIED_CATALOG[product_id]
         sku = item["sku"]
         legacy_title = item["legacy_title"]
         price_toman = item["price_toman"]
+        weight_g = item["weight_g"]
         title_assessment = item["assessment"]
         seo_title = item["title"]
         meta_desc = item["meta"]
@@ -212,6 +221,10 @@ class SEOAdvisoryAdvisor:
         if not (120 <= len(meta_desc) <= 155):
             raise ValueError(f"Suggested meta description length not in 120-155 chars ({len(meta_desc)}): {meta_desc}")
 
+        # Content safety scan against unverified claims and bad patterns
+        content_res = RadmanBusinessRules.validate_content(meta_desc)
+        forbidden_claims = content_res.detected_patterns
+
         # Check keyword density in meta (keyword should not appear more than 2 times)
         kw_count = meta_desc.count(focus_kw)
         if kw_count > 2:
@@ -221,15 +234,11 @@ class SEOAdvisoryAdvisor:
         else:
             keyword_stuffing_risk = "LOW"
 
-        # Content safety scan
-        content_res = RadmanBusinessRules.validate_content(meta_desc)
-        forbidden_claims = content_res.detected_patterns
-
         # Internal link suggestions
         internal_links: List[InternalLinkSuggestion] = []
         for rid in related_ids:
-            if rid in self.PILOT_CATALOG:
-                r_item = self.PILOT_CATALOG[rid]
+            if rid in self.VERIFIED_CATALOG:
+                r_item = self.VERIFIED_CATALOG[rid]
                 internal_links.append(
                     InternalLinkSuggestion(
                         target_product_id=rid,
@@ -263,7 +272,7 @@ class SEOAdvisoryAdvisor:
         }
 
         duplicate_risk = "LOW"
-        duplicate_reason = "Unique mineralogy, specific gemstone cut, and distinct craftsmanship prevent duplication across catalog."
+        duplicate_reason = "Unique verified mineralogy, verified dimensions, and distinct SKU metadata."
 
         return SEOAdvisoryReport(
             product_id=product_id,
@@ -282,6 +291,7 @@ class SEOAdvisoryAdvisor:
             forbidden_claims_found=forbidden_claims,
             confidence=95,
             price_toman=price_toman,
+            weight_g=weight_g,
             status="draft",
             qa_verdict="PASS" if not forbidden_claims else "FAIL",
         )
@@ -326,6 +336,7 @@ class SEOAdvisoryAdvisor:
                 "Meta Chars",
                 "Focus Keyword",
                 "Price Toman",
+                "Weight (g)",
                 "Duplicate Risk",
                 "Keyword Stuffing Risk",
                 "QA Verdict",
@@ -341,6 +352,7 @@ class SEOAdvisoryAdvisor:
                     len(rep.suggested_meta_description),
                     rep.suggested_focus_keyword,
                     rep.price_toman,
+                    rep.weight_g,
                     rep.duplicate_content_risk,
                     rep.keyword_stuffing_risk,
                     rep.qa_verdict,
@@ -352,24 +364,25 @@ class SEOAdvisoryAdvisor:
     def generate_markdown_summary(self, reports: List[SEOAdvisoryReport]) -> str:
         """Constructs an executive Persian summary for store owner review."""
         lines = [
-            "# گزارش نتایج پایلوت مشاوره‌ای سئو رادمان (Phase 2 SEO Advisory Pilot)",
+            "# گزارش نتایج پایلوت مشاوره‌ای سئو رادمان (Phase 2 SEO Advisory Pilot — Verified Snapshot)",
             "",
             "> **وضعیت اجرا:** حالت مشاوره‌ای (Dry-Run)  ",
+            "> **منبع حقیقت داده:** snapshot معتبر هاست وردپرس استیجینگ (2026-09-03)  ",
             "> **تعداد محصولات تحلیل‌شده:** ۵ محصول  ",
             "> **دسترسی به وردپرس / هاست:** خیر (صفر تغییر روی پایگاه‌داده و سایت زنده)  ",
             "> **واحد پول:** تومان (IRT) بدون قیمت تخفیف‌خورده (No Sale Price)  ",
             "",
             "---",
             "",
-            "## ۱. جدول خلاصه پیشنهادهای بهینه‌سازی سئو",
+            "## ۱. جدول خلاصه پیشنهادهای بهینه‌سازی سئو (منطبق بر دیتای تأییدشده)",
             "",
-            "| شناسه | کد کالا (SKU) | عنوان سئوی پیشنهادی (حداکثر ۶۰ کاراکتر) | طول عنوان | کلمه کلیدی اصلی | طول متا (۱۲۰–۱۵۵) | قیمت (تومان) | وضعیت بررسی |",
-            "| :---: | :---: | :--- | :---: | :--- | :---: | :---: | :---: |",
+            "| شناسه | کد کالا (SKU) | عنوان سئوی پیشنهادی (حداکثر ۶۰ کاراکتر) | طول عنوان | کلمه کلیدی اصلی | طول متا (۱۲۰–۱۵۵) | قیمت معتبر (تومان) | وزن تأییدشده | وضعیت بررسی |",
+            "| :---: | :---: | :--- | :---: | :--- | :---: | :---: | :---: | :---: |",
         ]
 
         for rep in reports:
             lines.append(
-                f"| {rep.product_id} | `{rep.sku}` | {rep.suggested_seo_title} | {len(rep.suggested_seo_title)} | {rep.suggested_focus_keyword} | {len(rep.suggested_meta_description)} | {rep.price_toman:,} | ✅ {rep.qa_verdict} |"
+                f"| {rep.product_id} | `{rep.sku}` | {rep.suggested_seo_title} | {len(rep.suggested_seo_title)} | {rep.suggested_focus_keyword} | {len(rep.suggested_meta_description)} | {rep.price_toman:,} | {rep.weight_g} گرم | ✅ {rep.qa_verdict} |"
             )
 
         lines.extend([
@@ -402,7 +415,7 @@ class SEOAdvisoryAdvisor:
                 f"- **ارزیابی ریسک محتوای تکراری:** {rep.duplicate_content_risk} ({rep.duplicate_content_reason})",
                 f"- **ارزیابی ریسک انباشت کلمات کلیدی (Keyword Stuffing):** {rep.keyword_stuffing_risk}",
                 f"- **ادعاهای غیرمجاز شناسایی‌شده:** {'هیچ‌کدام (کاملاً ایمن)' if not rep.forbidden_claims_found else ', '.join(rep.forbidden_claims_found)}",
-                f"- **اسکیما استاندار (Schema.org):** نوع Product و Offer با واحد پولی IRT و قیمت پایه {rep.price_toman:,} تومان (فاقد قیمت حراجی).",
+                f"- **اسکیما استاندار (Schema.org):** نوع Product و Offer با واحد پولی IRT و قیمت دقیق {rep.price_toman:,} تومان (فاقد قیمت حراجی).",
                 "",
             ])
 
@@ -411,8 +424,8 @@ class SEOAdvisoryAdvisor:
             "",
             "## ۳. تضمین‌های ایمنی و حاکمیت تجاری",
             "1. **عدم انتشار خودکار:** کلیه محصولات در وضعیت پیش‌نویس (Draft) باقی مانده و هیچ تغییری بدون تأیید نهایی مالک در دیتابیس اعمال نمی‌شود.",
-            "2. **حفظ اصالت تجاری رادمان:** هیچ شماره تماس، وعده ارسال قطعی، یا ادعای گارانتی مادام‌العمر در متون استفاده نشده است.",
-            "3. **فرمول قیمت‌گذاری دقیق:** قیمت‌های اعلامی بر مبنای نرخ مصوب نقره ۶۵۰٬۰۰۰ تومان/گرم و وزن فیزیکی محاسبه شده‌اند.",
+            "2. **قفل کامل حقیقت کالا (Fact-Lock):** تمام ادعاهای غیرمستند (نظیر دست‌ساز، شناسنامه، بسته‌بندی هدیه، گارانتی، نرخ مصوب و ...) به طور کامل فیلتر و حذف شده‌اند.",
+            "3. **قیمت و وزن مستقیم از منبع حقیقت:** قیمت‌ها مستقیماً از فیلد `_regular_price` و اوزان مستقیماً از فیلد `_weight` هاست استیجینگ بدون کوچک‌ترین محاسبه یا تخمین درج شده‌اند.",
             "",
         ])
 

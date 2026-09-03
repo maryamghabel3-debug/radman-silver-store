@@ -1,0 +1,92 @@
+{
+  "source": "wordpress_staging_host",
+  "snapshot_date": "2026-09-03",
+  "description": "Verified authoritative snapshot of staging catalog products",
+  "products": {
+    "390": {
+      "product_id": 390,
+      "sku": "13204540",
+      "weight_g": 13,
+      "regular_price_IRT": 12564000,
+      "stone": "شجر طبیعی نقش آهو",
+      "material": "نقره عیار ۹۲۵",
+      "band": "نقره ماشینی",
+      "sale_price": null,
+      "provenance": {
+        "weight_g": {"value": 13, "source_field": "_weight", "verified": true},
+        "regular_price_IRT": {"value": 12564000, "source_field": "_regular_price", "verified": true},
+        "stone": {"value": "شجر طبیعی نقش آهو", "source_field": "attribute_stone", "verified": true},
+        "material": {"value": "نقره عیار ۹۲۵", "source_field": "attribute_material", "verified": true},
+        "band": {"value": "نقره ماشینی", "source_field": "attribute_band", "verified": true}
+      }
+    },
+    "275": {
+      "product_id": 275,
+      "sku": "NM-3582",
+      "weight_g": 8,
+      "regular_price_IRT": 5901000,
+      "stone": "عقیق سرخ معدنی، نگین ۱۴ میلی‌متر",
+      "material": "نقره عیار ۹۲۵",
+      "band": "نقره ماشینی",
+      "sale_price": null,
+      "provenance": {
+        "weight_g": {"value": 8, "source_field": "_weight", "verified": true},
+        "regular_price_IRT": {"value": 5901000, "source_field": "_regular_price", "verified": true},
+        "stone": {"value": "عقیق سرخ معدنی، نگین ۱۴ میلی‌متر", "source_field": "attribute_stone", "verified": true},
+        "material": {"value": "نقره عیار ۹۲۵", "source_field": "attribute_material", "verified": true},
+        "band": {"value": "نقره ماشینی", "source_field": "attribute_band", "verified": true}
+      }
+    },
+    "232": {
+      "product_id": 232,
+      "sku": "NM-3596",
+      "weight_g": 8,
+      "regular_price_IRT": 6633000,
+      "stone": "آماتیست طبیعی دامله",
+      "material": "نقره عیار ۹۲۵",
+      "band": "نقره ماشینی",
+      "sale_price": null,
+      "provenance": {
+        "weight_g": {"value": 8, "source_field": "_weight", "verified": true},
+        "regular_price_IRT": {"value": 6633000, "source_field": "_regular_price", "verified": true},
+        "stone": {"value": "آماتیست طبیعی دامله", "source_field": "attribute_stone", "verified": true},
+        "material": {"value": "نقره عیار ۹۲۵", "source_field": "attribute_material", "verified": true},
+        "band": {"value": "نقره ماشینی", "source_field": "attribute_band", "verified": true}
+      }
+    },
+    "205": {
+      "product_id": 205,
+      "sku": "NM-3605",
+      "weight_g": 8,
+      "regular_price_IRT": 8871000,
+      "stone": "عقیق باباقوری",
+      "material": "نقره عیار ۹۲۵",
+      "band": "نقره ماشینی",
+      "sale_price": null,
+      "provenance": {
+        "weight_g": {"value": 8, "source_field": "_weight", "verified": true},
+        "regular_price_IRT": {"value": 8871000, "source_field": "_regular_price", "verified": true},
+        "stone": {"value": "عقیق باباقوری", "source_field": "attribute_stone", "verified": true},
+        "material": {"value": "نقره عیار ۹۲۵", "source_field": "attribute_material", "verified": true},
+        "band": {"value": "نقره ماشینی", "source_field": "attribute_band", "verified": true}
+      }
+    },
+    "137": {
+      "product_id": 137,
+      "sku": "1003",
+      "weight_g": 8,
+      "regular_price_IRT": 5929000,
+      "stone": "عقیق زرد چهارگوش",
+      "material": "نقره عیار ۹۲۵",
+      "band": "نقره ماشینی",
+      "sale_price": null,
+      "provenance": {
+        "weight_g": {"value": 8, "source_field": "_weight", "verified": true},
+        "regular_price_IRT": {"value": 5929000, "source_field": "_regular_price", "verified": true},
+        "stone": {"value": "عقیق زرد چهارگوش", "source_field": "attribute_stone", "verified": true},
+        "material": {"value": "نقره عیار ۹۲۵", "source_field": "attribute_material", "verified": true},
+        "band": {"value": "نقره ماشینی", "source_field": "attribute_band", "verified": true}
+      }
+    }
+  }
+}
