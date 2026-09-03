@@ -5,11 +5,13 @@
   "branch": "ai-media-cleaning-pilot-20260829",
   "completed_products": [
     "384",
-    "387"
+    "387",
+    "275",
+    "381"
   ],
-  "current_product": "275",
+  "current_product": "378",
   "current_product_sku": "NM-3549",
-  "current_angle": "B",
+  "current_angle": "A",
   "approved_angles": {
     "384": {
       "A": {
@@ -55,12 +57,39 @@
         "approved_date": "2026-09-04",
         "stored": "media/approved/product-387"
       }
+    },
+    "275": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 276,
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-275"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 277,
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-275",
+        "note": "step3 v3 reseated to natural reclined angle per owner"
+      }
+    },
+    "381": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 382,
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-381"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 383,
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-381"
+      }
     }
   },
   "pending_angle": "B",
   "queue": [
-    "390",
-    "381",
     "378",
     "375",
     "372",
@@ -95,7 +124,6 @@
     "284",
     "281",
     "278",
-    "275",
     "272",
     "269",
     "265",
@@ -109,9 +137,6 @@
     "241",
     "238",
     "235",
-    "232",
-    "229",
-    "226",
     "223",
     "220",
     "217",
@@ -119,7 +144,7 @@
   ],
   "last_release": "media-product-387-complete",
   "last_commit": "8a4c4dd70f023fe10864bc4b76b7bca40db558fb",
-  "next_action": "PROCESS_275_B_THEN_WAIT_FOR_REVIEW",
+  "next_action": "AUTONOMOUS: process queue head both angles, upload review, continue without waiting",
   "review_pack_rule": {
     "mandatory": true,
     "contact_sheet": "required per angle (original|step1|step2|step3|step4, labels outside, max 1600px wide, separate browser-viewable asset on the angle's pre-release, direct URL posted to response + PR #36)",
@@ -142,5 +167,7 @@
         "status": "READY_IN_REVIEW"
       }
     }
-  }
+  },
+  "mode": "AUTONOMOUS_BATCH",
+  "last_commit_note": "storing 275-B + 381 (both angles)"
 }

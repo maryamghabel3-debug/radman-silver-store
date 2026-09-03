@@ -1,6 +1,9 @@
-product_id	sku	attachment_id	target_role	source_output	approved_filename	wordpress_action	notes
-275	NM-3582	276	gallery	angle-a/step1-no-watermark.webp	ecommerce/original-clean-a.webp	add_gallery_image	Angle A (featured, attachment 276). Pink-background original with old noghrehmashhad watermark removed. Ring, gemstone, box, angle and crop unchanged. QA READY.
-275	NM-3582	276	featured	angle-a/step2-black-background.webp	ecommerce/main-black-bg-a.webp	replace_featured_image	Angle A (featured, attachment 276). Deep charcoal black ecommerce master. Watermark removed, white display box preserved, geometry faithful. QA READY. Intended replacement for attachment 276.
-275	NM-3582	276	gallery	angle-a/step3-luxury-promo.webp	gallery/luxury-promo-a.webp	add_gallery_image	Angle A (featured, attachment 276). Luxury dark still-life. No hands, text, logo or watermark. Band interpretation accepted per owner decision. QA READY.
-275	NM-3582	276	gallery	angle-a/step4-on-finger.webp	gallery/on-finger-a.webp	add_gallery_image	Angle A (featured, attachment 276). Ring on adult male hand, correct anatomy, finger count and scale. No face, text, logo or watermark. QA READY.
-275	NM-3582	277	pending	NOT_PROCESSED	NOT_PROCESSED	review_only	Angle B (gallery-1, attachment 277) exists in manifest.tsv but was generated BEFORE the multi-angle rule and has NOT been processed. Requires a dedicated future run. Do not apply anything for this attachment yet.
+product_id	sku	attachment_id	angle	step	approved_filename	wordpress_action
+275	NM-3582	276	A	step1	original-clean-a.webp	add_gallery_image
+275	NM-3582	276	A	step2	main-black-bg-a.webp	replace_featured_image
+275	NM-3582	276	A	step3	luxury-promo-a.webp	add_gallery_image
+275	NM-3582	276	A	step4	on-finger-a.webp	add_gallery_image
+275	NM-3582	277	B	step1	original-clean-b.webp	add_gallery_image
+275	NM-3582	277	B	step2	main-black-bg-b.webp	add_gallery_image
+275	NM-3582	277	B	step3	luxury-promo-b.webp	add_gallery_image
+275	NM-3582	277	B	step4	on-finger-b.webp	add_gallery_image

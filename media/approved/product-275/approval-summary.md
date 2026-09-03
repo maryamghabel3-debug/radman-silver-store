@@ -1,67 +1,17 @@
-# Approval Summary — Product 275
+# QA Report — Radman Product 275 · Angle B (4 outputs)
 
-**Product:** 275 · **SKU:** NM-3582
-**Title:** انگشتر نقره مردانه عقیق سرخ ظریف (Men's silver ring, fine red agate)
-**Date:** 2026-09-02
-**Pilot release:** [media-single-ring-light-v2](https://github.com/maryamghabel3-debug/radman-silver-store/releases/tag/media-single-ring-light-v2)
-**Pull request:** [#36](https://github.com/maryamghabel3-debug/radman-silver-store/pull/36) — not merged
+- Product 275 · SKU NM-3582 · انگشتر نقره مردانه عقیق سرخ ظریف (men's silver ring, delicate red agate/aqeeq)
+- Angle B = attachment 277 (gallery-1, ring→left, LEFT hand). SHA256 543bb0fa… verified vs source.
+- Date 2026-09-04 · Fidelity: generative best-effort (owner-approved).
+- Ring identity: oval red agate (aqeeq) cabochon in a gold multi-prong crown/claw setting; silver band with oxidized filigree scrollwork shoulders; closed shank. Presented on a white display pad (no jewelry box).
 
----
+| output | input_used | ORIGINAL_REATTACHED | WATERMARK_ABSENT | BOX_PRESERVED | RING_IDENTITY_PRESERVED | VIEWPOINT_UNCHANGED | BAND_CLOSED | HAND_SIDE | STATUS | retry_count | notes |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| step1-b | ORIGINAL_B | YES | YES | YES (white pad kept) | YES | YES | YES | NA | READY | 0 | corner logo retouched |
+| step2-b | step1-b | YES | YES | YES (white pad kept) | YES | YES | YES | NA | READY | 0 | pink→#1a1a1a, pad kept |
+| step3-b | ORIGINAL_B | YES | YES | N/A | YES | N/A | YES | NA | READY | 2 | v1 reproduced watermark (FAILED); v2 clean but ring stood too upright; v3 (owner request) reseated to natural reclined angle, left orientation kept → READY |
+| step4-b | ORIGINAL_B | YES | YES | N/A | YES | N/A | YES | LEFT | READY | 0 | left hand verified |
 
-## Owner approval
-
-Storage of the product 275 approved outputs was directed by the owner in the workflow update of 2026-09-02 (TASK A: "Finish product 275 approval storage if not already done"). All four pilot outputs for the processed angle were QA READY and are stored for website use.
-
-`APPROVED_OUTPUTS=step1,step2,step3,step4` (angle A only — see the angle coverage note below)
-
-## ⚠️ Angle coverage — incomplete
-
-Product 275 has **two** original images in `manifest.tsv`:
-
-| Angle | Role | attachment_id | Original filename | Processed? |
-|---|---|---|---|---|
-| **A** | featured | **276** | `product-275-sku-NM-3582-featured-attachment-276.webp` | ✅ Yes — full 4-step pipeline |
-| **B** | gallery-1 | **277** | `product-275-sku-NM-3582-gallery-1-attachment-277.webp` | ❌ **No** |
-
-The product 275 pilot was produced **before** the multi-angle rule was introduced, so only angle A was processed. **Angle B (attachment 277) has not been generated, reviewed or stored.** Because the workflow permits only one product per run, angle B was not processed in this run either — it requires a dedicated follow-up run.
-
-The `apply-manifest.tsv` carries an explicit `review_only` / `NOT_PROCESSED` row for attachment 277 so the WordPress apply step cannot mistake it for approved media.
-
-## Approved outputs and storage (angle A)
-
-| Source output | Stored as | wordpress_action |
-|---|---|---|
-| angle-a/step1-no-watermark.webp | `ecommerce/original-clean-a.webp` | `add_gallery_image` |
-| angle-a/step2-black-background.webp | `ecommerce/main-black-bg-a.webp` | `replace_featured_image` |
-| angle-a/step3-luxury-promo.webp | `gallery/luxury-promo-a.webp` | `add_gallery_image` |
-| angle-a/step4-on-finger.webp | `gallery/on-finger-a.webp` | `add_gallery_image` |
-
-## Rejected outputs
-
-None. All four angle-A outputs were QA READY.
-
-## Intended WordPress action
-
-To be executed later by the WordPress host from `apply-manifest.tsv`. **No WordPress or hosting change has been made.**
-
-- `ecommerce/original-clean-a.webp` → `add_gallery_image`
-- `ecommerce/main-black-bg-a.webp` → `replace_featured_image` (for attachment 276)
-- `gallery/luxury-promo-a.webp` → `add_gallery_image`
-- `gallery/on-finger-a.webp` → `add_gallery_image`
-- attachment 277 → `review_only`, nothing to apply
-
-## QA notes
-
-- All four outputs were generated directly from the angle-A original (`...featured-attachment-276.webp`, 1600×1600). No output was used as the product reference for another output.
-- **step1** — gold "نقره مشهد" emblem fully removed, white leather box texture cleanly reconstructed; ring, gemstone, box, pink background, angle and crop preserved.
-- **step2** — watermark removed, background swapped to deep charcoal black, white display box correctly kept white; stone colour/highlight, prong count, shoulder scrollwork and open band gap all match.
-- **step3** — dark still-life; no hands, text, logo or watermark. Band renders as a continuous shank rather than the open adjustable band; accepted per the owner's final decision that the band interpretation is correct.
-- **step4** — adult male hand, anatomy, finger count and ring scale verified correct; no face, text, logo or watermark.
-- Output format: WebP quality 90, 1024×1024.
-
-## Process constraints observed
-
-- One product per run.
-- Source ZIP deleted immediately after extracting the needed originals.
-- No WordPress or hosting-server modification.
-- Pull request #36 **not merged**.
+Summary: 4/4 READY, 0 FAILED (step3-b passed on its single allowed retry).
+Note: "BOX_PRESERVED" adapted to "white display pad preserved" since this product has no jewelry box.
+Contact sheet: contact-sheet-product-275-b.jpg (1 row, labels outside).
