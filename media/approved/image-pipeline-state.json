@@ -3,10 +3,12 @@
   "source_release": "media-originals-v1",
   "source_asset": "radman-product-images-20260829-052041.zip",
   "branch": "ai-media-cleaning-pilot-20260829",
-  "completed_products": [],
-  "current_product": "384",
-  "current_product_sku": "17224539",
-  "current_angle": "B",
+  "completed_products": [
+    "384"
+  ],
+  "current_product": "390",
+  "current_product_sku": "13204540",
+  "current_angle": "A",
   "approved_angles": {
     "384": {
       "A": {
@@ -16,14 +18,14 @@
         "approved_date": "2026-09-03"
       },
       "B": {
-        "status": "IN_REVIEW",
+        "status": "APPROVED",
         "attachment_id": 386,
         "release": "media-image-pipeline-v1-p384-b",
-        "approved_date": null
+        "approved_date": "2026-09-03"
       }
     }
   },
-  "pending_angle": null,
+  "pending_angle": "B",
   "queue": [
     "390",
     "387",
@@ -86,5 +88,5 @@
   ],
   "last_release": "media-image-pipeline-v1-p384-b",
   "last_commit": "d57b245c082d6c8cf1d1d6a834e3b288ded7547e",
-  "next_action": "WAIT_FOR_OWNER_REVIEW"
+  "next_action": "PROCESS_PRODUCT_390_ANGLE_A"
 }
