@@ -4,10 +4,11 @@
   "source_asset": "radman-product-images-20260829-052041.zip",
   "branch": "ai-media-cleaning-pilot-20260829",
   "completed_products": [
-    "384"
+    "384",
+    "387"
   ],
-  "current_product": "390",
-  "current_product_sku": "13204540",
+  "current_product": "275",
+  "current_product_sku": "NM-3549",
   "current_angle": "B",
   "approved_angles": {
     "384": {
@@ -38,12 +39,27 @@
         "approved_date": null,
         "note": "step4 corrected on dedicated retry v3 (ring on ring finger, LEFT hand); sheet uploaded; awaiting owner review"
       }
+    },
+    "387": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 391,
+        "release": "media-product-387-complete",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-387"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 389,
+        "release": "media-product-387-complete",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-387"
+      }
     }
   },
   "pending_angle": "B",
   "queue": [
     "390",
-    "387",
     "381",
     "378",
     "375",
@@ -101,9 +117,9 @@
     "217",
     "214"
   ],
-  "last_release": "media-image-pipeline-v1-p390-b",
+  "last_release": "media-product-387-complete",
   "last_commit": "8a4c4dd70f023fe10864bc4b76b7bca40db558fb",
-  "next_action": "WAIT_FOR_OWNER_REVIEW_390_B",
+  "next_action": "PROCESS_275_B_THEN_WAIT_FOR_REVIEW",
   "review_pack_rule": {
     "mandatory": true,
     "contact_sheet": "required per angle (original|step1|step2|step3|step4, labels outside, max 1600px wide, separate browser-viewable asset on the angle's pre-release, direct URL posted to response + PR #36)",
