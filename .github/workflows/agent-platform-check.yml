@@ -6,6 +6,7 @@ on:
       - main
       - agent-platform-foundation
       - "seo-agent-*"
+      - "geo-aeo-*"
       - "**"
   pull_request:
     branches:
@@ -55,6 +56,11 @@ jobs:
           python tests/test_seo_advisory_pilot.py
           pytest tests/test_seo_advisory_pilot.py
 
+      - name: Run GEO & AEO Advisory Tests
+        run: |
+          python tests/test_geo_aeo_advisory.py
+          pytest tests/test_geo_aeo_advisory.py
+
       - name: Run Agent Platform Dry-Run Demonstration
         run: |
           python -m agents.platform.dry_run
@@ -62,6 +68,10 @@ jobs:
       - name: Run SEO Advisory Pilot Runner
         run: |
           python -m agents.platform.run_seo_advisory --products 390,275,232,205,137 --dry-run
+
+      - name: Run GEO & AEO Advisory Pilot Runner
+        run: |
+          python -m agents.platform.run_geo_aeo_advisory --products 390,275,232,205,137 --dry-run
 
       - name: Run Excel & Original Product Pipeline Acceptance Gates
         run: |

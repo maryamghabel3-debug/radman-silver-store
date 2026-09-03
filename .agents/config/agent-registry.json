@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "platform": "RADMAN-AGENT-PLATFORM",
   "description": "Skill and agent registry for RADMAN SILVER 925 autonomous workflows",
   "skills": {
@@ -32,8 +32,8 @@
       "entry_point": "agents.platform.task_contract"
     },
     "radman-seo-agent": {
-      "name": "RADMAN SEO & AI Visibility Agent",
-      "version": "1.0.0",
+      "name": "RADMAN SEO & Search Optimization Agent",
+      "version": "1.1.0",
       "risk_level": "LOW",
       "requires_owner_approval": false,
       "description": "Generates Persian luxury SEO titles, meta descriptions, focus keywords, Rank Math schema suggestions, duplicate content checks, and search engine readiness audits without publishing.",
@@ -60,6 +60,71 @@
       },
       "skill_doc": ".agents/skills/radman-seo-agent/SKILL.md",
       "entry_point": "agents.agent_product_seo"
+    },
+    "radman-geo-agent": {
+      "name": "RADMAN Generative Engine Optimization Agent",
+      "version": "1.0.0",
+      "risk_level": "LOW",
+      "requires_owner_approval": false,
+      "description": "Optimizes product pages for AI search engines (Google AI Overviews, Gemini, Perplexity, Copilot) via citation readiness, entity disambiguation, and schema graph enrichment.",
+      "capabilities": [
+        "citation_readiness_audit",
+        "entity_clarity_verification",
+        "structured_data_enrichment",
+        "topical_authority_signals",
+        "e_e_a_t_signals_check",
+        "comparative_positioning_audit"
+      ],
+      "input_schema": {
+        "product_id": "integer|string",
+        "sku": "string",
+        "legacy_title": "string",
+        "category": "string",
+        "specs": "object"
+      },
+      "output_schema": {
+        "geo_readiness_score": "integer",
+        "citation_ready": "string",
+        "entity_clarity": "string",
+        "schema_gaps": "array",
+        "content_suggestions": "array",
+        "supporting_content_needed": "array"
+      },
+      "skill_doc": ".agents/skills/radman-geo-agent/SKILL.md",
+      "entry_point": "agents.platform.geo_advisory"
+    },
+    "radman-aeo-agent": {
+      "name": "RADMAN Answer Engine Optimization Agent",
+      "version": "1.0.0",
+      "risk_level": "LOW",
+      "requires_owner_approval": false,
+      "description": "Optimizes content for conversational AI assistants (ChatGPT Search, Copilot, voice assistants) by mapping questions, generating direct answer blocks, and producing FAQPage schemas.",
+      "capabilities": [
+        "question_answer_mapping",
+        "direct_answer_blocks_drafting",
+        "faq_schema_generation",
+        "speakable_schema_identification",
+        "conversational_snippet_optimization",
+        "intent_pattern_matching"
+      ],
+      "input_schema": {
+        "product_id": "integer|string",
+        "sku": "string",
+        "legacy_title": "string",
+        "category": "string",
+        "specs": "object"
+      },
+      "output_schema": {
+        "aeo_readiness_score": "integer",
+        "questions_mapped": "integer",
+        "direct_answers_drafted": "integer",
+        "faq_schema_ready": "string",
+        "speakable_candidates": "integer",
+        "snippet_quality": "string",
+        "intent_coverage": "array"
+      },
+      "skill_doc": ".agents/skills/radman-aeo-agent/SKILL.md",
+      "entry_point": "agents.platform.aeo_advisory"
     },
     "radman-content-agent": {
       "name": "RADMAN Brand Content Agent",
