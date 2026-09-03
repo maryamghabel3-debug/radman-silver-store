@@ -12,6 +12,7 @@ and are only written after the owner's approval command (`خوبه، برو بع
 | 1 | 2026-09-03 | 384 (SKU 17224539) | A | media-image-pipeline-v1-p384-a | owner APPROVED 2026-09-03 → `media/approved/product-384/` |
 | 2 | 2026-09-03 | 384 (SKU 17224539) | B | media-image-pipeline-v1-p384-b | owner APPROVED 2026-09-03 → product COMPLETE 8/8 |
 | 3 | 2026-09-03 | 390 (SKU 13204540) | A | media-image-pipeline-v1-p390-a | awaiting owner review |
+| 4 | 2026-09-03 | 223 (SKU NM-3599) | A | media-image-pipeline-v1-p223-a | awaiting owner review |
 
 ## Per-run files
 
