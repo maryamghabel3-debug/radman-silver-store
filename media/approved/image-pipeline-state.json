@@ -7,10 +7,11 @@
     "384",
     "387",
     "275",
-    "381"
+    "381",
+    "378"
   ],
-  "current_product": "378",
-  "current_product_sku": "NM-3549",
+  "current_product": "375",
+  "current_product_sku": null,
   "current_angle": "A",
   "approved_angles": {
     "384": {
@@ -86,11 +87,26 @@
         "approved_date": "2026-09-04",
         "stored": "media/approved/product-381"
       }
+    },
+    "378": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 379,
+        "release": "media-product-378-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-378"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 380,
+        "release": "media-product-378-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-378"
+      }
     }
   },
-  "pending_angle": "B",
+  "pending_angle": null,
   "queue": [
-    "378",
     "375",
     "372",
     "369",
@@ -142,9 +158,9 @@
     "217",
     "214"
   ],
-  "last_release": "media-product-387-complete",
+  "last_release": "media-product-378-review",
   "last_commit": "8a4c4dd70f023fe10864bc4b76b7bca40db558fb",
-  "next_action": "AUTONOMOUS: process queue head both angles, upload review, continue without waiting",
+  "next_action": "AUTONOMOUS: process queue head 375 both angles, upload review, continue without waiting",
   "review_pack_rule": {
     "mandatory": true,
     "contact_sheet": "required per angle (original|step1|step2|step3|step4, labels outside, max 1600px wide, separate browser-viewable asset on the angle's pre-release, direct URL posted to response + PR #36)",
@@ -169,5 +185,5 @@
     }
   },
   "mode": "AUTONOMOUS_BATCH",
-  "last_commit_note": "storing 275-B + 381 (both angles)"
+  "last_commit_note": "378 A+B complete (8 webp + manifest + summary); step3-b 1 retry (gold cast fix). SKU corrected NM-3549->NM-3548."
 }
