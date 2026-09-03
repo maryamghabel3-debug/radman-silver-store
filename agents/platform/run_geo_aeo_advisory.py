@@ -5,6 +5,10 @@ Executes both radman-geo-agent (Generative Engine Optimization) and
 radman-aeo-agent (Answer Engine Optimization) in advisory (dry-run) mode
 on 5 pilot products and exports reports to reports/geo-aeo-advisory/pilot-v1/.
 
+Authoritative Snapshot Integration (2026-09-03):
+- Strictly ground-truth specifications and verified prices from WooCommerce
+- Zero unverified claims across all generated JSON, Markdown, and CSV outputs
+
 Usage:
   python -m agents.platform.run_geo_aeo_advisory --products 390,275,232,205,137 --dry-run
 """
@@ -55,9 +59,10 @@ def generate_geo_aeo_summary_markdown(
     aeo_reports: List[AEOAdvisoryReport],
 ) -> str:
     lines = [
-        "# گزارش راهبردی هوش مصنوعی و بهینه‌سازی موتورهای پاسخگو (GEO & AEO Summary)",
+        "# گزارش راهبردی هوش مصنوعی و بهینه‌سازی موتورهای پاسخگو (GEO & AEO Summary — Verified Snapshot)",
         "",
         "> **وضعیت اجرا:** حالت مشاوره‌ای (Dry-Run Only)  ",
+        "> **منبع حقیقت داده:** snapshot معتبر هاست وردپرس استیجینگ (2026-09-03)  ",
         "> **تعداد محصولات تحلیل‌شده:** ۵ محصول منتخب  ",
         "> **اهداف استراتژیک:** آمادگی ارجاع در Google AI Overviews, Gemini, Perplexity و پاسخ‌گویی مستقیم در ChatGPT Search  ",
         "> **قوانین حاکمیت تجاری:** واحد پول تومان (IRT)، عدم اعمال sale_price، حفظ پیش‌نویس (Draft)  ",
@@ -66,13 +71,13 @@ def generate_geo_aeo_summary_markdown(
         "",
         "## ۱. جدول ارزیابی امتیازهای آمادگی هوش مصنوعی (GEO & AEO Scorecard)",
         "",
-        "| شناسه | کد کالا (SKU) | عنوان محصول | امتیاز GEO (استناد هوش مصنوعی) | امتیاز AEO (پاسخ مستقیم صوتی/چت) | تعداد سوالات نقشه‌برداری‌شده | اسکیما FAQ | وضعیت کلی |",
-        "| :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: |",
+        "| شناسه | کد کالا (SKU) | عنوان محصول | قیمت دقیق (تومان) | وزن تأییدشده | امتیاز GEO | امتیاز AEO | تعداد سوالات FAQ | وضعیت کلی |",
+        "| :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: |",
     ]
 
     for geo, aeo in zip(geo_reports, aeo_reports):
         lines.append(
-            f"| {geo.product_id} | `{geo.sku}` | {geo.legacy_title} | {geo.geo_readiness_score}/100 | {aeo.aeo_readiness_score}/100 | {aeo.questions_mapped} سوال | ✅ {aeo.faq_schema_ready} | ✅ {geo.qa_verdict} |"
+            f"| {geo.product_id} | `{geo.sku}` | {geo.legacy_title} | {geo.price_toman:,} | {geo.weight_g} گرم | {geo.geo_readiness_score}/100 | {aeo.aeo_readiness_score}/100 | {aeo.questions_mapped} سوال | ✅ {geo.qa_verdict} |"
         )
 
     lines.extend([
@@ -86,6 +91,8 @@ def generate_geo_aeo_summary_markdown(
     for geo in geo_reports:
         lines.extend([
             f"### 🌐 محصول {geo.product_id} — {geo.legacy_title} (SKU: `{geo.sku}`)",
+            f"- **قیمت دقیق (WooCommerce):** `{geo.price_toman:,} تومان`",
+            f"- **وزن تأییدشده:** `{geo.weight_g} گرم`",
             f"- **امتیاز آمادگی استناد (GEO Score):** `{geo.geo_readiness_score}/100`",
             f"- **آمادگی برای نقل‌قول مستقیم هوش مصنوعی:** {geo.citation_ready}",
             f"- **وضوح هویت محصول (Entity Clarity):** {geo.entity_clarity}",
@@ -141,9 +148,9 @@ def generate_unified_report(
     aeo_reports: List[AEOAdvisoryReport],
 ) -> str:
     lines = [
-        "# گزارش راهبرد یکپارچه بهینه‌سازی جستجو رادمان سیلور (SEO + GEO + AEO)",
+        "# گزارش راهبرد یکپارچه بهینه‌سازی جستجو رادمان سیلور (SEO + GEO + AEO — Verified Snapshot)",
         "",
-        "این گزارش سند هم‌افزایی سه عامل بهینه‌سازی جستجوی رادمان است:",
+        "این گزارش سند هم‌افزایی سه عامل بهینه‌سازی جستجوی رادمان بر مبنای دیتای تأییدشده است:",
         "1. **عامل SEO (سنتی):** بهینه‌سازی رتبه گوگل، عناوین فارسی و کلمات کلیدی تراکنشی.",
         "2. **عامل GEO (موتورهای مولد):** بهینه‌سازی استناد و نقل‌قول در Google AI Overviews, Gemini, Perplexity.",
         "3. **عامل AEO (دستیارهای مکالمه‌ای):** بهینه‌سازی پاسخ مستقیم در ChatGPT Search، کوپایلوت و دستیارهای صوتی.",
@@ -152,13 +159,13 @@ def generate_unified_report(
         "",
         "## ماتریس هم‌افزایی برای ۵ محصول پایلوت",
         "",
-        "| شناسه | محصول | کلیدواژه سئو | کلیدواژه استناد هوش مصنوعی | اولویت پاسخ صوتی/چت | وضعیت تجاری |",
-        "| :---: | :--- | :--- | :--- | :--- | :---: |",
+        "| شناسه | محصول | قیمت معتبر (تومان) | وزن (گرم) | کلیدواژه سئو | کلیدواژه استناد هوش مصنوعی | اولویت پاسخ صوتی/چت | وضعیت تجاری |",
+        "| :---: | :--- | :---: | :---: | :--- | :--- | :--- | :---: |",
     ]
 
     for geo, aeo in zip(geo_reports, aeo_reports):
         lines.append(
-            f"| {geo.product_id} | {geo.legacy_title} | نقره ۹۲۵ دست‌ساز | عقیق شجر/طبیعی معدنی | اصالت سنگ و عیار ۹۲۵ | بدون قیمت حراجی (تومان) |"
+            f"| {geo.product_id} | {geo.legacy_title} | {geo.price_toman:,} | {geo.weight_g} | نقره ۹۲۵ | عقیق / سنگ طبیعی | اصالت سنگ و عیار ۹۲۵ | بدون قیمت حراجی (تومان) |"
         )
 
     lines.extend([
@@ -166,7 +173,7 @@ def generate_unified_report(
         "---",
         "",
         "## توصیه‌های اجرایی برای فاز استیجینگ",
-        "1. بارگذاری متادیتای Rank Math تولیدشده توسط SEO Agent.",
+        "1. بارگذاری متادیتای Rank Math تولیدشده توسط SEO Agent با قیمت و وزن‌های جدید.",
         "2. افزودن اسکیماهای FAQPage تولیدشده توسط AEO Agent به قالب تک‌محصول.",
         "3. ایجاد صفحات راهنمای آموزشی گوهرشناسی بر اساس پیشنهادهای GEO Agent.",
         "",
@@ -191,7 +198,7 @@ def run_geo_aeo_pipeline(product_ids: List[int], out_dir: Path, dry_run: bool = 
     geo_advisor = GEOAdvisor()
     geo_reports = geo_advisor.analyze_batch(product_ids)
     for rep in geo_reports:
-        print(f"  ▸ GEO {rep.product_id} (`{rep.sku}`): Score={rep.geo_readiness_score}/100, Citation={rep.citation_ready}, Entity={rep.entity_clarity}")
+        print(f"  ▸ GEO {rep.product_id} (`{rep.sku}`): Score={rep.geo_readiness_score}/100, Price={rep.price_toman:,} Toman, Weight={rep.weight_g}g")
 
     print(f"\n[3/4] Running AEO Advisory Engine on Products {product_ids}...")
     aeo_advisor = AEOAdvisor()
@@ -224,13 +231,14 @@ def run_geo_aeo_pipeline(product_ids: List[int], out_dir: Path, dry_run: bool = 
             "Product ID",
             "SKU",
             "Legacy Title",
+            "Price Toman",
+            "Weight (g)",
             "GEO Score",
             "Citation Ready",
             "Entity Clarity",
             "AEO Score",
             "Questions Mapped",
             "FAQ Schema Ready",
-            "Price Toman",
             "QA Verdict",
         ])
         for geo, aeo in zip(geo_reports, aeo_reports):
@@ -238,13 +246,14 @@ def run_geo_aeo_pipeline(product_ids: List[int], out_dir: Path, dry_run: bool = 
                 geo.product_id,
                 geo.sku,
                 geo.legacy_title,
+                geo.price_toman,
+                geo.weight_g,
                 geo.geo_readiness_score,
                 geo.citation_ready,
                 geo.entity_clarity,
                 aeo.aeo_readiness_score,
                 aeo.questions_mapped,
                 aeo.faq_schema_ready,
-                geo.price_toman,
                 geo.qa_verdict,
             ])
     print(f"  ✓ CSV Summary: {csv_path}")

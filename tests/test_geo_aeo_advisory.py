@@ -3,7 +3,7 @@ Unit and Integration Tests for RADMAN GEO & AEO Advisory Engine
 ===============================================================
 Validates Generative Engine Optimization (GEO) and Answer Engine Optimization (AEO)
 capabilities, Schema.org FAQPage generation, citation readiness, business rules,
-and multi-format report exports.
+and verified snapshot provenance.
 
 Runnable via:
   pytest tests/test_geo_aeo_advisory.py
@@ -23,6 +23,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from agents.platform.aeo_advisory import AEOAdvisor, AEOAdvisoryReport
+from agents.platform.business_rules import RadmanBusinessRules
 from agents.platform.geo_advisory import GEOAdvisor, GEOAdvisoryReport
 from agents.platform.registry import AgentRegistry
 from agents.platform.run_geo_aeo_advisory import run_geo_aeo_pipeline
@@ -34,6 +35,20 @@ class TestGEOAEOAdvisory(unittest.TestCase):
         self.geo_advisor = GEOAdvisor()
         self.aeo_advisor = AEOAdvisor()
         self.pilot_ids = [390, 275, 232, 205, 137]
+        self.expected_prices = {
+            390: 12564000,
+            275: 5901000,
+            232: 6633000,
+            205: 8871000,
+            137: 5929000,
+        }
+        self.expected_weights = {
+            390: 13,
+            275: 8,
+            232: 8,
+            205: 8,
+            137: 8,
+        }
 
     def test_registry_contains_geo_and_aeo_skills(self) -> None:
         skills = self.registry.list_skills()
@@ -57,6 +72,8 @@ class TestGEOAEOAdvisory(unittest.TestCase):
 
         for rep in reports:
             self.assertIn(rep.product_id, self.pilot_ids)
+            self.assertEqual(rep.price_toman, self.expected_prices[rep.product_id])
+            self.assertEqual(rep.weight_g, self.expected_weights[rep.product_id])
             self.assertGreaterEqual(rep.geo_readiness_score, 80)
             self.assertLessEqual(rep.geo_readiness_score, 100)
             self.assertEqual(rep.citation_ready, "YES")
@@ -73,6 +90,8 @@ class TestGEOAEOAdvisory(unittest.TestCase):
 
         for rep in reports:
             self.assertIn(rep.product_id, self.pilot_ids)
+            self.assertEqual(rep.price_toman, self.expected_prices[rep.product_id])
+            self.assertEqual(rep.weight_g, self.expected_weights[rep.product_id])
             self.assertGreaterEqual(rep.aeo_readiness_score, 80)
             self.assertGreaterEqual(rep.questions_mapped, 3)
             self.assertGreaterEqual(rep.direct_answers_drafted, 3)
@@ -93,7 +112,17 @@ class TestGEOAEOAdvisory(unittest.TestCase):
                 self.assertEqual(ans.get("@type"), "Answer")
                 self.assertTrue(bool(ans.get("text")))
 
-    def test_business_rules_and_no_sale_price_in_geo_aeo(self) -> None:
+    def test_wrong_prices_purged(self) -> None:
+        geo_reps = self.geo_advisor.analyze_batch(self.pilot_ids)
+        aeo_reps = self.aeo_advisor.analyze_batch(self.pilot_ids)
+        wrong_prices = [9425000, 5720000, 7800000, 8580000, 6825000]
+
+        for g in geo_reps:
+            self.assertNotIn(g.price_toman, wrong_prices)
+        for a in aeo_reps:
+            self.assertNotIn(a.price_toman, wrong_prices)
+
+    def test_business_rules_and_unverified_claims_rejected(self) -> None:
         geo_reps = self.geo_advisor.analyze_batch(self.pilot_ids)
         aeo_reps = self.aeo_advisor.analyze_batch(self.pilot_ids)
 
@@ -109,12 +138,15 @@ class TestGEOAEOAdvisory(unittest.TestCase):
             self.assertNotIn("saleprice", a_str.lower())
             self.assertNotIn("discount", a_str.lower())
 
-            # Check direct answers for forbidden phone / shipping promises
+            # Check direct answers for forbidden claims
             for qp in a.qa_pairs:
                 ans = qp.direct_answer
                 self.assertNotIn("09", ans)
-                self.assertNotIn("ارسال فوری تضمینی", ans)
-                self.assertNotIn("گارانتی مادام‌العمر", ans)
+                self.assertNotIn("دست‌ساز", ans)
+                self.assertNotIn("شناسنامه", ans)
+                self.assertNotIn("بسته‌بندی", ans)
+                self.assertNotIn("گارانتی", ans)
+                self.assertNotIn("ضمانت", ans)
 
     def test_report_export_lifecycle(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -139,6 +171,7 @@ class TestGEOAEOAdvisory(unittest.TestCase):
             self.assertTrue(unified_md.exists())
 
             self.assertIn("GEO & AEO Summary", summary_md.read_text(encoding="utf-8"))
+            self.assertIn("12,564,000", summary_md.read_text(encoding="utf-8"))
             self.assertIn("SEO + GEO + AEO", unified_md.read_text(encoding="utf-8"))
 
 
