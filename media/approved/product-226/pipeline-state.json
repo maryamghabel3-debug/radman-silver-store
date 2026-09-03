@@ -1,0 +1,30 @@
+{
+  "pipeline": "radman-silver-store-media-cleaning-single-ring-pilot",
+  "repo": "maryamghabel3-debug/radman-silver-store",
+  "head_branch": "ai-media-cleaning-pilot-20260829",
+  "base_branch": "main",
+  "pull_request": 36,
+  "completed_products": [205, 232, 275, 229],
+  "current_product": 226,
+  "current_product_sku": "NM-3598",
+  "approved_angles": {
+    "205": ["A", "B"],
+    "226": ["A"],
+    "229": ["A", "B"],
+    "232": ["A"],
+    "275": ["A"]
+  },
+  "pending_angle": {
+    "product_id": 226,
+    "angle": "B",
+    "attachment_id": 228,
+    "status": "generated_delivered_pending_owner_review",
+    "release": "media-image-pipeline-v1-p226-b",
+    "hand": "LEFT"
+  },
+  "next_action": "WAIT_FOR_OWNER_REVIEW",
+  "last_release": "media-image-pipeline-v1-p226-b",
+  "last_release_asset": "radman-media-pipeline-v1-product-226-angle-B.zip",
+  "last_commit": "d74182e",
+  "notes": "Product 229 fully approved and already stored (byte-identical to approved, verified before this run). Product 226 angle A stored and committed; angle B generated, QA'd 4/4 READY 0 FAILED, delivered as pre-release pending owner review (review_only in apply-manifest.tsv). Never merge PR 36. Never touch WordPress or hosting. NOTE: the repo also hosts a separate concurrent radman-image-pipeline-v1 flow (product 384); its own media/approved/image-pipeline-state.json was left untouched to avoid clobbering."
+}
