@@ -15,10 +15,11 @@
     "366",
     "363",
     "360",
-    "357"
+    "357",
+    "354"
   ],
-  "current_product": "354",
-  "current_product_sku": "NM-3556",
+  "current_product": "351",
+  "current_product_sku": "NM-3557",
   "current_angle": "A",
   "approved_angles": {
     "384": {
@@ -222,11 +223,26 @@
         "approved_date": "2026-09-04",
         "stored": "media/approved/product-357"
       }
+    },
+    "354": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 355,
+        "release": "media-product-354-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-354"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 356,
+        "release": "media-product-354-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-354"
+      }
     }
   },
   "pending_angle": null,
   "queue": [
-    "354",
     "351",
     "348",
     "345",
@@ -270,9 +286,9 @@
     "217",
     "214"
   ],
-  "last_release": "media-product-357-review",
+  "last_release": "media-product-354-review",
   "last_commit": "8a4c4dd70f023fe10864bc4b76b7bca40db558fb",
-  "next_action": "RESUME 354 (NM-3556, light green agate طرح رولکس): step1-a & step1-b DONE (in workspace radman-354/outputs). NEXT: gen step2-a(from step1-a), step2-b(from step1-b), step3-a, step3-b, step4-a(RIGHT), step4-b(LEFT); verify; package+commit(base head)+release media-product-354-review+PR comment. Hit 10-image/turn cap after 357 full + 354 step1.",
+  "next_action": "RESUME 351 (NM-3557): download originals attach-352/353, run 4-step chain both angles, package+commit+release+PR comment.",
   "review_pack_rule": {
     "mandatory": true,
     "contact_sheet": "required per angle (original|step1|step2|step3|step4, labels outside, max 1600px wide, separate browser-viewable asset on the angle's pre-release, direct URL posted to response + PR #36)",
@@ -297,5 +313,5 @@
     }
   },
   "mode": "AUTONOMOUS_BATCH",
-  "last_commit_note": "357 fully stored (commit 57695c1974d8311b339f6883892a97a894cd0e1a) + released + PR comment. 354 started: step1 a/b done, image cap reached."
+  "last_commit_note": "354 fully stored + released + PR comment. Continuing autonomous batch to 351."
 }
