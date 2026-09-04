@@ -87,6 +87,74 @@
         "material": {"value": "نقره عیار ۹۲۵", "source_field": "attribute_material", "verified": true},
         "band": {"value": "نقره ماشینی", "source_field": "attribute_band", "verified": true}
       }
+    },
+    "378": {
+      "product_id": 378,
+      "sku": "NM-3612",
+      "weight_g": 10,
+      "regular_price_IRT": 7450000,
+      "stone": "فیروزه نیشابور",
+      "material": "نقره عیار ۹۲۵",
+      "band": "نقره ماشینی",
+      "sale_price": null,
+      "provenance": {
+        "weight_g": {"value": 10, "source_field": "_weight", "verified": true},
+        "regular_price_IRT": {"value": 7450000, "source_field": "_regular_price", "verified": true},
+        "stone": {"value": "فیروزه نیشابور", "source_field": "attribute_stone", "verified": true},
+        "material": {"value": "نقره عیار ۹۲۵", "source_field": "attribute_material", "verified": true},
+        "band": {"value": "نقره ماشینی", "source_field": "attribute_band", "verified": true}
+      }
+    },
+    "375": {
+      "product_id": 375,
+      "sku": "NM-3615",
+      "weight_g": 9,
+      "regular_price_IRT": 6200000,
+      "stone": "عقیق کبود",
+      "material": "نقره عیار ۹۲۵",
+      "band": "نقره ماشینی",
+      "sale_price": null,
+      "provenance": {
+        "weight_g": {"value": 9, "source_field": "_weight", "verified": true},
+        "regular_price_IRT": {"value": 6200000, "source_field": "_regular_price", "verified": true},
+        "stone": {"value": "عقیق کبود", "source_field": "attribute_stone", "verified": true},
+        "material": {"value": "نقره عیار ۹۲۵", "source_field": "attribute_material", "verified": true},
+        "band": {"value": "نقره ماشینی", "source_field": "attribute_band", "verified": true}
+      }
+    },
+    "372": {
+      "product_id": 372,
+      "sku": "NM-3618",
+      "weight_g": 11,
+      "regular_price_IRT": 8150000,
+      "stone": "یاقوت سرخ",
+      "material": "نقره عیار ۹۲۵",
+      "band": "نقره ماشینی",
+      "sale_price": null,
+      "provenance": {
+        "weight_g": {"value": 11, "source_field": "_weight", "verified": true},
+        "regular_price_IRT": {"value": 8150000, "source_field": "_regular_price", "verified": true},
+        "stone": {"value": "یاقوت سرخ", "source_field": "attribute_stone", "verified": true},
+        "material": {"value": "نقره عیار ۹۲۵", "source_field": "attribute_material", "verified": true},
+        "band": {"value": "نقره ماشینی", "source_field": "attribute_band", "verified": true}
+      }
+    },
+    "369": {
+      "product_id": 369,
+      "sku": "NM-3622",
+      "weight_g": 8,
+      "regular_price_IRT": 5850000,
+      "stone": "در نجف",
+      "material": "نقره عیار ۹۲۵",
+      "band": "نقره ماشینی",
+      "sale_price": null,
+      "provenance": {
+        "weight_g": {"value": 8, "source_field": "_weight", "verified": true},
+        "regular_price_IRT": {"value": 5850000, "source_field": "_regular_price", "verified": true},
+        "stone": {"value": "در نجف", "source_field": "attribute_stone", "verified": true},
+        "material": {"value": "نقره عیار ۹۲۵", "source_field": "attribute_material", "verified": true},
+        "band": {"value": "نقره ماشینی", "source_field": "attribute_band", "verified": true}
+      }
     }
   }
 }
