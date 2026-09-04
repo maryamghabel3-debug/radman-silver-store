@@ -288,7 +288,7 @@
   ],
   "last_release": "media-product-354-review",
   "last_commit": "8a4c4dd70f023fe10864bc4b76b7bca40db558fb",
-  "next_action": "RESUME 351 (NM-3557): download originals attach-352/353, run 4-step chain both angles, package+commit+release+PR comment.",
+  "next_action": "RESUME 351 (NM-3557, glossy black onyx طرح رولکس): DONE this turn: step1-b, step3-a (light stone surface), step3-b (charcoal velvet) in workspace radman-351/outputs. NOTE step3 outputs swapped vs prompt but both good quality. STILL NEEDED: step1-a (retry - transient empty-response error), step2-a(from step1-a), step2-b(from step1-b), step4-a(RIGHT), step4-b(LEFT). Then verify+package+commit+release media-product-351-review+PR comment. Hit 10-image cap after 354 full + 4 x 351 attempts.",
   "review_pack_rule": {
     "mandatory": true,
     "contact_sheet": "required per angle (original|step1|step2|step3|step4, labels outside, max 1600px wide, separate browser-viewable asset on the angle's pre-release, direct URL posted to response + PR #36)",
@@ -313,5 +313,5 @@
     }
   },
   "mode": "AUTONOMOUS_BATCH",
-  "last_commit_note": "354 fully stored + released + PR comment. Continuing autonomous batch to 351."
+  "last_commit_note": "354 fully stored (commit 4113bf0351194447845b99c2dbf4dc9c0ffad38c) + released + PR comment. 351 partial: step1-b, step3-a, step3-b done; image cap reached."
 }
