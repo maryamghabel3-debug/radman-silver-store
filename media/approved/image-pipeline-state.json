@@ -21,7 +21,7 @@
     "348"
   ],
   "current_product": "345",
-  "current_product_sku": null,
+  "current_product_sku": "NM-3559",
   "current_angle": "A",
   "approved_angles": {
     "384": {
@@ -320,7 +320,7 @@
   ],
   "last_release": "media-product-348-review",
   "last_commit": "8a4c4dd70f023fe10864bc4b76b7bca40db558fb",
-  "next_action": "RESUME 345: download originals from source zip (asset 535759319), identify SKU + featured/gallery-1 attachment ids, run 4-step chain both angles (PNG-encoded originals to avoid transient errors), package+commit+release media-product-345-review+PR comment.",
+  "next_action": "RESUME 345 (NM-3559, NATURAL NISHAPURI TURQUOISE with brown/tan matrix veining — preserve exact natural pattern, NOT a plain dome, no engraving; طرح رولکس). DONE: step1-a, step1-b, step2-a (in workspace radman-345/outputs; PNG originals at radman-345/originals/original-{a,b}-fresh.png - rebuild from .webp if missing). STILL NEEDED: step2-b(from step1-b), step3-a(velvet), step3-b(black glass), step4-a(RIGHT), step4-b(LEFT). Then verify+package+commit+release media-product-345-review+PR comment. featured=attach-346, gallery-1=attach-347.",
   "review_pack_rule": {
     "mandatory": true,
     "contact_sheet": "required per angle (original|step1|step2|step3|step4, labels outside, max 1600px wide, separate browser-viewable asset on the angle's pre-release, direct URL posted to response + PR #36)",
@@ -345,5 +345,5 @@
     }
   },
   "mode": "AUTONOMOUS_BATCH",
-  "last_commit_note": "348 fully stored + released + PR comment. Continuing autonomous batch to 345."
+  "last_commit_note": "348 fully stored (commit 132db46e) + released + PR comment. 345 started: step1-a/b + step2-a done, image cap reached."
 }
