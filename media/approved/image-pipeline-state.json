@@ -10,9 +10,10 @@
     "381",
     "378",
     "375",
-    "372"
+    "372",
+    "369"
   ],
-  "current_product": "369",
+  "current_product": "366",
   "current_product_sku": null,
   "current_angle": "A",
   "approved_angles": {
@@ -137,11 +138,26 @@
         "approved_date": "2026-09-04",
         "stored": "media/approved/product-372"
       }
+    },
+    "369": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 370,
+        "release": "media-product-369-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-369"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 371,
+        "release": "media-product-369-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-369"
+      }
     }
   },
   "pending_angle": null,
   "queue": [
-    "369",
     "366",
     "363",
     "360",
@@ -190,7 +206,7 @@
     "217",
     "214"
   ],
-  "last_release": "media-product-372-review",
+  "last_release": "media-product-369-review",
   "last_commit": "8a4c4dd70f023fe10864bc4b76b7bca40db558fb",
   "next_action": "AUTONOMOUS: process queue head 375 both angles, upload review, continue without waiting",
   "review_pack_rule": {
@@ -217,5 +233,5 @@
     }
   },
   "mode": "AUTONOMOUS_BATCH",
-  "last_commit_note": "372 A+B complete (8 webp); Dur-e-Najaf clear dome, 0 retries."
+  "last_commit_note": "369 A+B complete (8 webp); yellow aga یا اباعبدالله; step1-a transient retry, step4-b hand-side retry."
 }
