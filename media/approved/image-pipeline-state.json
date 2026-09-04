@@ -19,9 +19,10 @@
     "354",
     "351",
     "348",
-    "345"
+    "345",
+    "342"
   ],
-  "current_product": "342",
+  "current_product": "339",
   "current_product_sku": null,
   "current_angle": "A",
   "approved_angles": {
@@ -278,6 +279,10 @@
     "345": [
       "A",
       "B"
+    ],
+    "342": [
+      "A",
+      "B"
     ]
   },
   "pending_angle": null,
@@ -325,7 +330,7 @@
   ],
   "last_release": "media-product-348-review",
   "last_commit": "8a4c4dd70f023fe10864bc4b76b7bca40db558fb",
-  "next_action": "START 342 (descending). 10-image spec. Re-download originals fresh from release media-originals-v1 asset 535759319; featured aid=343, gallery-1 aid=344.",
+  "next_action": "START 339 (descending). 10-image spec. Re-download originals fresh from release media-originals-v1 asset 535759319; featured aid=340, gallery-1 aid=341. AWAIT owner approval after each product before next.",
   "review_pack_rule": {
     "mandatory": true,
     "contact_sheet": "required per angle (original|step1|step2|step3|step4, labels outside, max 1600px wide, separate browser-viewable asset on the angle's pre-release, direct URL posted to response + PR #36)",
@@ -350,6 +355,6 @@
     }
   },
   "mode": "AUTONOMOUS_BATCH",
-  "last_commit_note": "345 fully stored (10 images new layout) + contact sheet.",
+  "last_commit_note": "342 fully stored (10 images) + contact sheet + release media-product-342-complete.",
   "schema_note": "10 images/product; folders ecommerce/ + gallery/; extras editorial-closeup + premium-lifestyle; release tag media-product-{id}-complete"
 }
