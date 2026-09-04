@@ -12,9 +12,10 @@
     "375",
     "372",
     "369",
-    "366"
+    "366",
+    "363"
   ],
-  "current_product": "363",
+  "current_product": "360",
   "current_product_sku": null,
   "current_angle": "A",
   "approved_angles": {
@@ -171,11 +172,26 @@
         "approved_date": "2026-09-04",
         "stored": "media/approved/product-366"
       }
+    },
+    "363": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 364,
+        "release": "media-product-363-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-363"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 365,
+        "release": "media-product-363-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-363"
+      }
     }
   },
   "pending_angle": null,
   "queue": [
-    "363",
     "360",
     "357",
     "354",
@@ -222,7 +238,7 @@
     "217",
     "214"
   ],
-  "last_release": "media-product-366-review",
+  "last_release": "media-product-363-review",
   "last_commit": "8a4c4dd70f023fe10864bc4b76b7bca40db558fb",
   "next_action": "AUTONOMOUS: process queue head 375 both angles, upload review, continue without waiting",
   "review_pack_rule": {
@@ -249,5 +265,5 @@
     }
   },
   "mode": "AUTONOMOUS_BATCH",
-  "last_commit_note": "366 A+B complete (8 webp); green agعقیق سبز; step4-b hand-side retry; step1-b transient API retries."
+  "last_commit_note": "363 A+B complete (8 webp); red agعقیق سرخ حسین منی; 0 retries."
 }
