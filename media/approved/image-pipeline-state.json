@@ -23,7 +23,7 @@
     "342"
   ],
   "current_product": "339",
-  "current_product_sku": null,
+  "current_product_sku": "NM-3561",
   "current_angle": "A",
   "approved_angles": {
     "384": {
@@ -330,7 +330,7 @@
   ],
   "last_release": "media-product-348-review",
   "last_commit": "8a4c4dd70f023fe10864bc4b76b7bca40db558fb",
-  "next_action": "START 339 (descending). 10-image spec. Re-download originals fresh from release media-originals-v1 asset 535759319; featured aid=340, gallery-1 aid=341. AWAIT owner approval after each product before next.",
+  "next_action": "RESUME 339 (NM-3561, red/orange banded agate cabochon). DONE+VERIFIED: step1-a/b, step2-a/b, step3-a/b, step4-a/b (in radman-339/outputs, .webp persisted; step4 files already swapped to A=RIGHT,B=LEFT). STILL NEEDED: extra-editorial-closeup + extra-premium-lifestyle (image cap hit). Use JPG inputs from radman-339/originals/original-a-fresh.jpg. Then package 10 -> store media/approved/product-339/ (ecommerce/+gallery/) + contact-sheet + manifest + summary -> commit -> release media-product-339-complete -> PR#36 comment -> AWAIT owner approval.",
   "review_pack_rule": {
     "mandatory": true,
     "contact_sheet": "required per angle (original|step1|step2|step3|step4, labels outside, max 1600px wide, separate browser-viewable asset on the angle's pre-release, direct URL posted to response + PR #36)",
@@ -355,6 +355,6 @@
     }
   },
   "mode": "AUTONOMOUS_BATCH",
-  "last_commit_note": "342 fully stored (10 images) + contact sheet + release media-product-342-complete.",
+  "last_commit_note": "339 in progress: 8/10 verified, 2 extras pending (cap).",
   "schema_note": "10 images/product; folders ecommerce/ + gallery/; extras editorial-closeup + premium-lifestyle; release tag media-product-{id}-complete"
 }
