@@ -304,7 +304,7 @@
   ],
   "last_release": "media-product-351-review",
   "last_commit": "8a4c4dd70f023fe10864bc4b76b7bca40db558fb",
-  "next_action": "RESUME 348 (NM-3558): download originals attach-349/350, run 4-step chain both angles, package+commit+release+PR comment.",
+  "next_action": "RESUME 348 (NM-3558, emerald/jade green agate طرح رولکس): DONE step1-a (in workspace radman-348/outputs, PNG originals cached at radman-348/originals/original-{a,b}-fresh.png). STILL NEEDED: step1-b, step2-a(from step1-a), step2-b(from step1-b), step3-a(velvet), step3-b(black glass), step4-a(RIGHT), step4-b(LEFT). Then verify+package+commit+release media-product-348-review+PR comment. Use PNG-encoded originals to avoid transient empty-response errors. Hit 10-image cap (4x 351 step1-a retries + 351 step2-a/b + ... + 348 step1-a).",
   "review_pack_rule": {
     "mandatory": true,
     "contact_sheet": "required per angle (original|step1|step2|step3|step4, labels outside, max 1600px wide, separate browser-viewable asset on the angle's pre-release, direct URL posted to response + PR #36)",
@@ -329,5 +329,5 @@
     }
   },
   "mode": "AUTONOMOUS_BATCH",
-  "last_commit_note": "351 fully stored + released + PR comment (step1-a needed 4 retries + PNG-input workaround). Continuing autonomous batch to 348."
+  "last_commit_note": "351 fully stored (commit 194ee66f) + released + PR comment. 348 started: step1-a done, image cap reached."
 }
