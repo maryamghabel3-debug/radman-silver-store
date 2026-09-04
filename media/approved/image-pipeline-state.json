@@ -9,9 +9,10 @@
     "275",
     "381",
     "378",
-    "375"
+    "375",
+    "372"
   ],
-  "current_product": "372",
+  "current_product": "369",
   "current_product_sku": null,
   "current_angle": "A",
   "approved_angles": {
@@ -120,11 +121,26 @@
         "approved_date": "2026-09-04",
         "stored": "media/approved/product-375"
       }
+    },
+    "372": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 373,
+        "release": "media-product-372-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-372"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 374,
+        "release": "media-product-372-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-372"
+      }
     }
   },
   "pending_angle": null,
   "queue": [
-    "372",
     "369",
     "366",
     "363",
@@ -174,7 +190,7 @@
     "217",
     "214"
   ],
-  "last_release": "media-product-375-review",
+  "last_release": "media-product-372-review",
   "last_commit": "8a4c4dd70f023fe10864bc4b76b7bca40db558fb",
   "next_action": "AUTONOMOUS: process queue head 375 both angles, upload review, continue without waiting",
   "review_pack_rule": {
@@ -201,5 +217,5 @@
     }
   },
   "mode": "AUTONOMOUS_BATCH",
-  "last_commit_note": "375 A+B complete (8 webp); step4-b 1 retry (wrong hand-side fix)."
+  "last_commit_note": "372 A+B complete (8 webp); Dur-e-Najaf clear dome, 0 retries."
 }
