@@ -2,7 +2,8 @@
 Unit and Integration Tests for RADMAN Content Advisory Engine
 ==============================================================
 Validates Instagram luxury captions, Story CTAs, factual WooCommerce short
-descriptions, blog outlines, Fact-Lock rules, and Instagram calendar generation.
+descriptions, blog outlines, Fact-Lock rules, locked identity verification,
+and Instagram calendar generation.
 
 Runnable via:
   pytest tests/test_content_advisory.py
@@ -30,12 +31,77 @@ class TestContentAdvisory(unittest.TestCase):
     def setUp(self) -> None:
         self.advisor = ContentAdvisor()
         self.pilot_ids = [232, 205, 378, 375, 372, 369]
+        self.expected_skus = {
+            232: "NM-3596",
+            205: "NM-3605",
+            378: "NM-3548",
+            375: "NM-3549",
+            372: "NM-3550",
+            369: "NM-3551",
+        }
+        self.expected_stones = {
+            232: "آماتیست طبیعی دامله",
+            205: "عقیق باباقوری",
+            378: "عقیق سیاه",
+            375: "عقیق سوسنی",
+            372: "دُر نجف",
+            369: "عقیق زرد",
+        }
+        self.expected_weights = {
+            232: 8,
+            205: 8,
+            378: 12,
+            375: 12,
+            372: 12,
+            369: 12,
+        }
 
-    def test_all_six_products_analyzed(self) -> None:
+    def test_all_six_products_analyzed_with_correct_mappings(self) -> None:
         reports = self.advisor.analyze_batch(self.pilot_ids)
         self.assertEqual(len(reports), 6)
-        analyzed_ids = [r.product_id for r in reports]
-        self.assertEqual(analyzed_ids, self.pilot_ids)
+        for rep in reports:
+            pid = rep.product_id
+            self.assertEqual(rep.sku, self.expected_skus[pid], f"Wrong SKU for product {pid}")
+            self.assertEqual(rep.stone, self.expected_stones[pid], f"Wrong stone for product {pid}")
+            self.assertEqual(rep.weight_g, self.expected_weights[pid], f"Wrong weight for product {pid}")
+            self.assertEqual(rep.qa_verdict, "PASS")
+
+    def test_false_mappings_completely_purged(self) -> None:
+        reports = self.advisor.analyze_batch(self.pilot_ids)
+        rep_dict = {r.product_id: r for r in reports}
+
+        # Check that false SKUs are absent
+        false_skus = ["NM-3612", "NM-3615", "NM-3618", "NM-3622"]
+        for rep in reports:
+            self.assertNotIn(rep.sku, false_skus)
+
+        # Check specific product false stones
+        self.assertNotIn("فیروزه", rep_dict[378].stone)
+        self.assertNotIn("کبود", rep_dict[375].stone)
+        self.assertNotIn("یاقوت", rep_dict[372].stone)
+        self.assertEqual(rep_dict[369].stone, "عقیق زرد")
+
+    def test_locked_identity_tuple_enforcement(self) -> None:
+        # Correct identity tuple passes
+        valid, viols = RadmanBusinessRules.validate_locked_identity(
+            378, "NM-3548", "انگشتر نقره مردانه عقیق سیاه حکاکی حسبی الله", "عقیق سیاه"
+        )
+        self.assertTrue(valid)
+        self.assertEqual(len(viols), 0)
+
+        # Incorrect SKU fails
+        valid_bad_sku, viols_sku = RadmanBusinessRules.validate_locked_identity(
+            378, "NM-3612", "انگشتر نقره مردانه عقیق سیاه حکاکی حسبی الله", "عقیق سیاه"
+        )
+        self.assertFalse(valid_bad_sku)
+        self.assertIn("BR-IDENT-01", viols_sku[0])
+
+        # Incorrect stone fails
+        valid_bad_stone, viols_stone = RadmanBusinessRules.validate_locked_identity(
+            378, "NM-3548", "انگشتر نقره مردانه عقیق سیاه حکاکی حسبی الله", "فیروزه نیشابور"
+        )
+        self.assertFalse(valid_bad_stone)
+        self.assertIn("BR-IDENT-03", viols_stone[0])
 
     def test_instagram_captions_structure_and_constraints(self) -> None:
         reports = self.advisor.analyze_batch(self.pilot_ids)
@@ -44,16 +110,8 @@ class TestContentAdvisory(unittest.TestCase):
 
             # Check hashtags (3–5 hashtags)
             hashtags = [w for w in cap.split() if w.startswith("#")]
-            self.assertGreaterEqual(
-                len(hashtags),
-                3,
-                f"Product {rep.product_id} has fewer than 3 hashtags ({len(hashtags)})",
-            )
-            self.assertLessEqual(
-                len(hashtags),
-                5,
-                f"Product {rep.product_id} has more than 5 hashtags ({len(hashtags)})",
-            )
+            self.assertGreaterEqual(len(hashtags), 3, f"Product {rep.product_id} has fewer than 3 hashtags")
+            self.assertLessEqual(len(hashtags), 5, f"Product {rep.product_id} has more than 5 hashtags")
 
             # Check no price
             self.assertNotIn("تومان", cap)
@@ -124,12 +182,17 @@ class TestContentAdvisory(unittest.TestCase):
                 with open(fpath, encoding="utf-8") as f:
                     data = json.load(f)
                     self.assertEqual(data["product_id"], pid)
+                    self.assertEqual(data["sku"], self.expected_skus[pid])
+                    self.assertEqual(data["stone"], self.expected_stones[pid])
                     self.assertEqual(data["status"], "draft")
 
             # Check summary markdown
             summary_path = out_path / "content-summary.md"
             self.assertTrue(summary_path.exists())
-            self.assertIn("Content Advisory Pilot", summary_path.read_text(encoding="utf-8"))
+            summary_content = summary_path.read_text(encoding="utf-8")
+            self.assertIn("Content Advisory Pilot", summary_content)
+            self.assertIn("NM-3548", summary_content)
+            self.assertIn("NM-3551", summary_content)
 
             # Check Instagram calendar
             calendar_path = out_path / "instagram-calendar-week1.md"
@@ -137,6 +200,8 @@ class TestContentAdvisory(unittest.TestCase):
             cal_text = calendar_path.read_text(encoding="utf-8")
             self.assertIn("شنبه (Saturday)", cal_text)
             self.assertIn("پنج‌شنبه (Thursday)", cal_text)
+            self.assertIn("حسبی الله", cal_text)
+            self.assertIn("یا اباعبدالله", cal_text)
             for pid in self.pilot_ids:
                 self.assertIn(str(pid), cal_text)
 

@@ -4,13 +4,14 @@ Business Rules & Data Source Verification Engine
 Validates catalog items, pricing, inventory settings, content descriptions,
 and factual provenance against RADMAN SILVER 925 verified business rules.
 
-Authoritative Data-Source Rules (2026-09-03):
-1. Weight comes ONLY from WooCommerce meta _weight (or snapshot). Never infer or derive from price.
-2. Price comes ONLY from WooCommerce _regular_price. Never compute, round, or alter in SEO/GEO/AEO.
-3. PRICE_IN_META_DESCRIPTION = FORBIDDEN: Fixed prices in <meta description> go stale and are rejected.
-4. Adjectives like 'طبیعی' or stone specifics are ONLY allowed if present in the verified stone field.
-5. Every factual claim must have verified provenance {value, source_field, verified=True}.
-6. Forbidden unless verified: دست‌ساز, شناسنامه, اصالت‌نامه, بسته‌بندی, گارانتی, ضمانت, آبدار, سه پوست, نرخ مصوب, نرخ روز, عرضه مستقیم.
+Authoritative Data-Source Rules (2026-09-04):
+1. Locked Identity Tuple: (product_id, sku, title) must match verified host snapshot.
+2. Weight comes ONLY from WooCommerce meta _weight (or snapshot). Never infer or derive from price.
+3. Price comes ONLY from WooCommerce _regular_price. Never compute, round, or alter in SEO/GEO/AEO.
+4. PRICE_IN_META_DESCRIPTION = FORBIDDEN: Fixed prices in <meta description> go stale and are rejected.
+5. Adjectives like 'طبیعی' or stone specifics are ONLY allowed if present in the verified stone field.
+6. Every factual claim must have verified provenance {value, source_field, verified=True}.
+7. Forbidden unless verified: دست‌ساز, شناسنامه, اصالت‌نامه, بسته‌بندی, گارانتی, ضمانت, آبدار, سه پوست, نرخ مصوب, نرخ روز, عرضه مستقیم.
 """
 
 from __future__ import annotations
@@ -57,12 +58,25 @@ class RadmanBusinessRules:
     """Core business rule & provenance validator for RADMAN SILVER 925."""
 
     DEFAULT_RULES_PATH = Path(".agents/config/radman-business-rules.json")
-    DEFAULT_SNAPSHOT_PATH = Path("data/verified-product-snapshot-20260903.json")
+    DEFAULT_SNAPSHOT_PATH = Path("data/verified-product-snapshot-20260904.json")
 
     STANDARD_GRAM_RATE = 650_000
     LARGE_STONE_GRAM_RATE = 590_000
     PRICE_VARIANCE_GATE_THRESHOLD = 0.05  # 5%
     PRICE_IN_META_DESCRIPTION = "FORBIDDEN"
+
+    # Locked identity tuples from authoritative host snapshot (product_id -> {sku, title, stone})
+    LOCKED_PRODUCT_IDENTITIES: Dict[int, Dict[str, str]] = {
+        390: {"sku": "13204540", "title": "انگشتر نقره مردانه شجر طبیعی نقش آهو", "stone": "شجر طبیعی نقش آهو"},
+        275: {"sku": "NM-3582", "title": "انگشتر نقره مردانه عقیق سرخ ظریف", "stone": "عقیق سرخ معدنی، نگین ۱۴ میلی‌متر"},
+        232: {"sku": "NM-3596", "title": "انگشتر نقره مردانه آماتیست طبیعی دامله", "stone": "آماتیست طبیعی دامله"},
+        205: {"sku": "NM-3605", "title": "انگشتر نقره مردانه عقیق باباقوری", "stone": "عقیق باباقوری"},
+        137: {"sku": "1003", "title": "انگشتر نقره مردانه عقیق زرد فرم چهارگوش", "stone": "عقیق زرد چهارگوش"},
+        378: {"sku": "NM-3548", "title": "انگشتر نقره مردانه عقیق سیاه حکاکی حسبی الله", "stone": "عقیق سیاه"},
+        375: {"sku": "NM-3549", "title": "انگشتر نقره مردانه عقیق سوسنی نقش رزق و روزی", "stone": "عقیق سوسنی"},
+        372: {"sku": "NM-3550", "title": "انگشتر نقره مردانه دُر نجف اصل", "stone": "دُر نجف"},
+        369: {"sku": "NM-3551", "title": "انگشتر نقره مردانه عقیق زرد حکاکی یا اباعبدالله", "stone": "عقیق زرد"},
+    }
 
     PHONE_PATTERNS = [
         re.compile(r"09\d{9}"),
@@ -93,8 +107,10 @@ class RadmanBusinessRules:
         "شناسنامه",
         "اصالت‌نامه",
         "اصالت نامه",
-        "بسته‌بندی",
-        "بسته بندی",
+        "بسته‌بندی هدیه",
+        "بسته بندی هدیه",
+        "بسته‌بندی نفیس",
+        "بسته بندی نفیس",
         "گارانتی",
         "ضمانت",
         "آبدار",
@@ -136,6 +152,20 @@ class RadmanBusinessRules:
         if self.snapshot_path.exists():
             with open(self.snapshot_path, "r", encoding="utf-8") as f:
                 self.snapshot_data = json.load(f)
+
+    @classmethod
+    def validate_locked_identity(cls, product_id: int, sku: str, title: str, stone: Optional[str] = None) -> Tuple[bool, List[str]]:
+        """Rule 1: Locked Identity Tuple verification."""
+        violations = []
+        if product_id in cls.LOCKED_PRODUCT_IDENTITIES:
+            expected = cls.LOCKED_PRODUCT_IDENTITIES[product_id]
+            if sku.strip() != expected["sku"].strip():
+                violations.append(f"BR-IDENT-01: SKU mismatch for product {product_id}. Expected '{expected['sku']}', got '{sku}'.")
+            if title.strip() != expected["title"].strip():
+                violations.append(f"BR-IDENT-02: Title mismatch for product {product_id}. Expected '{expected['title']}', got '{title}'.")
+            if stone and expected.get("stone") and stone.strip() != expected["stone"].strip():
+                violations.append(f"BR-IDENT-03: Stone mismatch for product {product_id}. Expected '{expected['stone']}', got '{stone}'.")
+        return len(violations) == 0, violations
 
     @classmethod
     def get_gram_rate(cls, stone_type: str = "standard") -> int:
@@ -304,7 +334,24 @@ class RadmanBusinessRules:
         blockers: List[str] = []
         required_gates: List[str] = []
 
-        # 1. Check sale price
+        # 1. Check locked identity
+        pid = payload.get("product_id", payload.get("id"))
+        if pid:
+            try:
+                pid_int = int(pid)
+                sku = str(payload.get("sku", ""))
+                title = str(payload.get("title", payload.get("name", "")))
+                stone = payload.get("stone")
+                id_valid, id_viols = cls.validate_locked_identity(pid_int, sku, title, stone)
+                if not id_valid:
+                    violations.extend(id_viols)
+                    blockers.append("LOCKED_IDENTITY_MISMATCH")
+                else:
+                    passed_checks.append("CHECK_LOCKED_IDENTITY")
+            except (ValueError, TypeError):
+                pass
+
+        # 2. Check sale price
         sale_price = payload.get("sale_price")
         if sale_price is not None and str(sale_price).strip() not in ("", "None", "0"):
             violations.append("BR-PRC-01: sale_price cannot be set.")
@@ -312,7 +359,7 @@ class RadmanBusinessRules:
         else:
             passed_checks.append("CHECK_NO_SALE_PRICE")
 
-        # 2. Check stock model (1:1)
+        # 3. Check stock model (1:1)
         stock_qty = payload.get("stock_quantity")
         if stock_qty is not None and int(stock_qty) != 1:
             violations.append(f"BR-STK-01: Stock quantity must be 1 for unique luxury pieces, got {stock_qty}.")
@@ -320,7 +367,7 @@ class RadmanBusinessRules:
         else:
             passed_checks.append("CHECK_STOCK_1TO1")
 
-        # 3. Check draft status preservation
+        # 4. Check draft status preservation
         status = payload.get("status", "draft")
         if status != "draft":
             violations.append(f"BR-LFC-01: Automated status must be 'draft', cannot set '{status}' directly.")
@@ -328,7 +375,7 @@ class RadmanBusinessRules:
         else:
             passed_checks.append("CHECK_DRAFT_STATUS")
 
-        # 4. Check price floor
+        # 5. Check price floor
         weight = float(payload.get("weight_grams", payload.get("weight", payload.get("weight_g", 0.0))))
         proposed_price = int(payload.get("price", payload.get("regular_price", payload.get("regular_price_IRT", 0))))
         stone_type = payload.get("stone_type", "standard")
@@ -354,7 +401,7 @@ class RadmanBusinessRules:
         else:
             passed_checks.append("CHECK_PRICE_SKIPPED_MISSING_WEIGHT")
 
-        # 5. Check description content safety
+        # 6. Check description content safety
         description = payload.get("description", "")
         if description:
             content_res = cls.validate_content(description)
