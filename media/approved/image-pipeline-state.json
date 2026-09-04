@@ -14,10 +14,11 @@
     "369",
     "366",
     "363",
-    "360"
+    "360",
+    "357"
   ],
-  "current_product": "357",
-  "current_product_sku": "NM-3555",
+  "current_product": "354",
+  "current_product_sku": "NM-3556",
   "current_angle": "A",
   "approved_angles": {
     "384": {
@@ -205,11 +206,26 @@
         "approved_date": "2026-09-04",
         "stored": "media/approved/product-360"
       }
+    },
+    "357": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 358,
+        "release": "media-product-357-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-357"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 359,
+        "release": "media-product-357-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-357"
+      }
     }
   },
   "pending_angle": null,
   "queue": [
-    "357",
     "354",
     "351",
     "348",
@@ -254,9 +270,9 @@
     "217",
     "214"
   ],
-  "last_release": "media-product-360-review",
+  "last_release": "media-product-357-review",
   "last_commit": "8a4c4dd70f023fe10864bc4b76b7bca40db558fb",
-  "next_action": "RESUME 357: gen step1-b(retry), step2-a(from step1-a), step2-b(from step1-b), REGEN step4-b as LEFT hand; verify step3-a/b; then package+commit(base 034d52fa)+release+PR comment. 357 partial: step1-a,step3-a,step3-b,step4-a done; step4-b failed(wrong hand); step1-b,step2-a,step2-b pending. Turn image cap(10) reached.",
+  "next_action": "RESUME 354 (NM-3556): download originals attach-355/356, run 4-step chain both angles, package+commit+release+PR comment.",
   "review_pack_rule": {
     "mandatory": true,
     "contact_sheet": "required per angle (original|step1|step2|step3|step4, labels outside, max 1600px wide, separate browser-viewable asset on the angle's pre-release, direct URL posted to response + PR #36)",
@@ -281,5 +297,5 @@
     }
   },
   "mode": "AUTONOMOUS_BATCH",
-  "last_commit_note": "360 stored (commit 034d52fa). 357 in progress - hit 10-image/turn cap; 5/8 gens done, step4-b needs regen (LEFT hand)."
+  "last_commit_note": "357 stored. Continuing autonomous batch to 354."
 }
