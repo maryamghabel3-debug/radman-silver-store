@@ -17,7 +17,7 @@
     "360"
   ],
   "current_product": "357",
-  "current_product_sku": null,
+  "current_product_sku": "NM-3555",
   "current_angle": "A",
   "approved_angles": {
     "384": {
@@ -256,7 +256,7 @@
   ],
   "last_release": "media-product-360-review",
   "last_commit": "8a4c4dd70f023fe10864bc4b76b7bca40db558fb",
-  "next_action": "AUTONOMOUS: process queue head 357 both angles, upload review, continue without waiting",
+  "next_action": "RESUME 357: gen step1-b(retry), step2-a(from step1-a), step2-b(from step1-b), REGEN step4-b as LEFT hand; verify step3-a/b; then package+commit(base 034d52fa)+release+PR comment. 357 partial: step1-a,step3-a,step3-b,step4-a done; step4-b failed(wrong hand); step1-b,step2-a,step2-b pending. Turn image cap(10) reached.",
   "review_pack_rule": {
     "mandatory": true,
     "contact_sheet": "required per angle (original|step1|step2|step3|step4, labels outside, max 1600px wide, separate browser-viewable asset on the angle's pre-release, direct URL posted to response + PR #36)",
@@ -281,5 +281,5 @@
     }
   },
   "mode": "AUTONOMOUS_BATCH",
-  "last_commit_note": "360 A+B complete (8 webp); blue agate طرح رولکس Rolex-style, no engraving; 2 retries (both on-finger hand anatomy fixed)."
+  "last_commit_note": "360 stored (commit 034d52fa). 357 in progress - hit 10-image/turn cap; 5/8 gens done, step4-b needs regen (LEFT hand)."
 }
