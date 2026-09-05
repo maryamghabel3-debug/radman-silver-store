@@ -1,0 +1,9 @@
+product_id	sku	attachment_id	angle	step	approved_filename	wordpress_action
+381	NM-3547	382	A	step1	original-clean-a.webp	add_gallery_image
+381	NM-3547	382	A	step2	main-black-bg-a.webp	replace_featured_image
+381	NM-3547	382	A	step3	luxury-promo-a.webp	add_gallery_image
+381	NM-3547	382	A	step4	on-finger-a.webp	add_gallery_image
+381	NM-3547	383	B	step1	original-clean-b.webp	add_gallery_image
+381	NM-3547	383	B	step2	main-black-bg-b.webp	add_gallery_image
+381	NM-3547	383	B	step3	luxury-promo-b.webp	add_gallery_image
+381	NM-3547	383	B	step4	on-finger-b.webp	add_gallery_image

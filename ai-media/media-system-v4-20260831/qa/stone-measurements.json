@@ -1,0 +1,67 @@
+{
+ "REFERENCE141": {
+  "oriented_aspect": 1.548,
+  "oriented_dev_pct": 0.5,
+  "bbox_aspect": 1.388,
+  "bbox_dev_pct": 0.0,
+  "angle": 149.6,
+  "bbox": [
+   403,
+   355,
+   279,
+   201
+  ]
+ },
+ "A-main-ecommerce": {
+  "oriented_aspect": 1.537,
+  "oriented_dev_pct": 1.2,
+  "bbox_aspect": 1.389,
+  "bbox_dev_pct": 0.0,
+  "angle": 149.7,
+  "bbox": [
+   486,
+   379,
+   654,
+   471
+  ]
+ },
+ "B-campaign-museum": {
+  "oriented_aspect": 1.623,
+  "oriented_dev_pct": 4.3,
+  "bbox_aspect": 1.461,
+  "bbox_dev_pct": 5.3,
+  "angle": 148.9,
+  "bbox": [
+   333,
+   486,
+   355,
+   243
+  ]
+ },
+ "C-campaign-persian-light": {
+  "oriented_aspect": 1.591,
+  "oriented_dev_pct": 2.3,
+  "bbox_aspect": 1.434,
+  "bbox_dev_pct": 3.3,
+  "angle": 150.3,
+  "bbox": [
+   383,
+   498,
+   350,
+   244
+  ]
+ },
+ "D-onhand-lifestyle": {
+  "oriented_aspect": 1.383,
+  "oriented_dev_pct": 11.1,
+  "bbox_aspect": 1.215,
+  "bbox_dev_pct": 12.5,
+  "angle": 139.4,
+  "bbox": [
+   474,
+   449,
+   147,
+   121
+  ]
+ }
+}

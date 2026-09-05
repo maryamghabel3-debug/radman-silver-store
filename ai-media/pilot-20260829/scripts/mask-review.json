@@ -1,0 +1,13 @@
+{
+  "_comment": "Human-reviewed keep windows for watermark candidate components (fractions of W/H). Components whose centroid falls outside the window are dropped. Controls use 'none'. Based on overlay audit of 2026-08-29.",
+  "product-300-sku-NM-3574-featured-attachment-301.webp": {"x": [0.20, 1.00], "y": [0.70, 1.00]},
+  "product-211-sku-NM-3603-featured-attachment-212.webp": {"x": [0.50, 1.00], "y": [0.70, 1.00]},
+  "product-363-sku-NM-3553-featured-attachment-364.webp": {"x": [0.20, 1.00], "y": [0.68, 1.00]},
+  "product-175-sku-NM-3615-featured-attachment-176.webp": {"x": [0.20, 1.00], "y": [0.68, 1.00]},
+  "product-184-sku-NM-3612-featured-attachment-185.webp": {"x": [0.20, 1.00], "y": [0.70, 1.00]},
+  "product-390-sku-13204540-gallery-1-attachment-392.webp": {"x": [0.00, 0.80], "y": [0.66, 1.00]},
+  "product-278-sku-NM-3581-gallery-1-attachment-280.webp": {"x": [0.00, 0.52], "y": [0.66, 1.00]},
+  "product-214-sku-NM-3602-featured-attachment-215.webp": {"x": [0.45, 1.00], "y": [0.70, 1.00]},
+  "product-265-sku-12184564-featured-attachment-266.webp": "none",
+  "product-117-sku-1009-gallery-1-attachment-119.webp": "none"
+}

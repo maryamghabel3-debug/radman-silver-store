@@ -1,0 +1,23 @@
+{
+  "pipeline": "radman-silver-store-media-cleaning-single-ring-pilot",
+  "repo": "maryamghabel3-debug/radman-silver-store",
+  "head_branch": "ai-media-cleaning-pilot-20260829",
+  "base_branch": "main",
+  "pull_request": 36,
+  "completed_products": [205, 226, 229, 232, 275],
+  "current_product": null,
+  "current_product_sku": null,
+  "approved_angles": {
+    "205": ["A", "B"],
+    "226": ["A", "B"],
+    "229": ["A", "B"],
+    "232": ["A"],
+    "275": ["A"]
+  },
+  "pending_angle": null,
+  "next_action": "DETERMINE_NEXT_PRODUCT_AND_PROCESS_ANGLE_A",
+  "last_release": "media-image-pipeline-v1-p226-b",
+  "last_release_asset": "radman-media-pipeline-v1-product-226-angle-B.zip",
+  "last_commit": null,
+  "notes": "Product 226 is now COMPLETE (angle A + angle B both owner-approved and stored). The owner command 'خوبه، برو بعدی' approved product 226 angle B (latest contact sheet). Next step: process angle A of the next pending product. CAREFUL: the repo also runs a separate concurrent 'radman-image-pipeline-v1' flow (canonical media/approved/image-pipeline-state.json, currently product 390 angle A IN_REVIEW). The owner's one-angle-per-turn rule refers to the single-ring pilot; confirm the exact next product/angle to avoid double-processing product 390 or 226. Never merge PR 36. Never touch WordPress or hosting."
+}

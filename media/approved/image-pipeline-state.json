@@ -1,0 +1,360 @@
+{
+  "pipeline": "radman-image-pipeline-v1",
+  "source_release": "media-originals-v1",
+  "source_asset": "radman-product-images-20260829-052041.zip",
+  "branch": "ai-media-cleaning-pilot-20260829",
+  "completed_products": [
+    "384",
+    "387",
+    "275",
+    "381",
+    "378",
+    "375",
+    "372",
+    "369",
+    "366",
+    "363",
+    "360",
+    "357",
+    "354",
+    "351",
+    "348",
+    "345",
+    "342"
+  ],
+  "current_product": "339",
+  "current_product_sku": "NM-3561",
+  "current_angle": "A",
+  "approved_angles": {
+    "384": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 385,
+        "release": "media-image-pipeline-v1-p384-a",
+        "approved_date": "2026-09-03"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 386,
+        "release": "media-image-pipeline-v1-p384-b",
+        "approved_date": "2026-09-03"
+      }
+    },
+    "390": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 391,
+        "release": "media-image-pipeline-v1-p390-a",
+        "approved_date": "2026-09-03"
+      },
+      "B": {
+        "status": "IN_REVIEW",
+        "attachment_id": 392,
+        "release": "media-image-pipeline-v1-p390-b",
+        "approved_date": null,
+        "note": "step4 corrected on dedicated retry v3 (ring on ring finger, LEFT hand); sheet uploaded; awaiting owner review"
+      }
+    },
+    "387": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 391,
+        "release": "media-product-387-complete",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-387"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 389,
+        "release": "media-product-387-complete",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-387"
+      }
+    },
+    "275": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 276,
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-275"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 277,
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-275",
+        "note": "step3 v3 reseated to natural reclined angle per owner"
+      }
+    },
+    "381": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 382,
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-381"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 383,
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-381"
+      }
+    },
+    "378": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 379,
+        "release": "media-product-378-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-378"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 380,
+        "release": "media-product-378-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-378"
+      }
+    },
+    "375": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 376,
+        "release": "media-product-375-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-375"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 377,
+        "release": "media-product-375-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-375"
+      }
+    },
+    "372": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 373,
+        "release": "media-product-372-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-372"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 374,
+        "release": "media-product-372-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-372"
+      }
+    },
+    "369": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 370,
+        "release": "media-product-369-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-369"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 371,
+        "release": "media-product-369-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-369"
+      }
+    },
+    "366": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 367,
+        "release": "media-product-366-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-366"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 368,
+        "release": "media-product-366-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-366"
+      }
+    },
+    "363": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 364,
+        "release": "media-product-363-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-363"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 365,
+        "release": "media-product-363-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-363"
+      }
+    },
+    "360": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 361,
+        "release": "media-product-360-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-360"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 362,
+        "release": "media-product-360-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-360"
+      }
+    },
+    "357": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 358,
+        "release": "media-product-357-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-357"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 359,
+        "release": "media-product-357-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-357"
+      }
+    },
+    "354": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 355,
+        "release": "media-product-354-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-354"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 356,
+        "release": "media-product-354-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-354"
+      }
+    },
+    "351": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 352,
+        "release": "media-product-351-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-351"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 353,
+        "release": "media-product-351-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-351"
+      }
+    },
+    "348": {
+      "A": {
+        "status": "APPROVED",
+        "attachment_id": 349,
+        "release": "media-product-348-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-348"
+      },
+      "B": {
+        "status": "APPROVED",
+        "attachment_id": 350,
+        "release": "media-product-348-review",
+        "approved_date": "2026-09-04",
+        "stored": "media/approved/product-348"
+      }
+    },
+    "345": [
+      "A",
+      "B"
+    ],
+    "342": [
+      "A",
+      "B"
+    ]
+  },
+  "pending_angle": null,
+  "queue": [
+    "345",
+    "342",
+    "339",
+    "336",
+    "333",
+    "330",
+    "328",
+    "325",
+    "322",
+    "318",
+    "315",
+    "312",
+    "309",
+    "306",
+    "303",
+    "300",
+    "297",
+    "293",
+    "290",
+    "287",
+    "284",
+    "281",
+    "278",
+    "272",
+    "269",
+    "265",
+    "262",
+    "259",
+    "256",
+    "253",
+    "250",
+    "247",
+    "244",
+    "241",
+    "238",
+    "235",
+    "223",
+    "220",
+    "217",
+    "214"
+  ],
+  "last_release": "media-product-348-review",
+  "last_commit": "8a4c4dd70f023fe10864bc4b76b7bca40db558fb",
+  "next_action": "RESUME 339 (NM-3561, red/orange banded agate cabochon). DONE+VERIFIED: step1-a/b, step2-a/b, step3-a/b, step4-a/b (in radman-339/outputs, .webp persisted; step4 files already swapped to A=RIGHT,B=LEFT). STILL NEEDED: extra-editorial-closeup + extra-premium-lifestyle (image cap hit). Use JPG inputs from radman-339/originals/original-a-fresh.jpg. Then package 10 -> store media/approved/product-339/ (ecommerce/+gallery/) + contact-sheet + manifest + summary -> commit -> release media-product-339-complete -> PR#36 comment -> AWAIT owner approval.",
+  "review_pack_rule": {
+    "mandatory": true,
+    "contact_sheet": "required per angle (original|step1|step2|step3|step4, labels outside, max 1600px wide, separate browser-viewable asset on the angle's pre-release, direct URL posted to response + PR #36)",
+    "sheets_uploaded": {
+      "384-A": {
+        "release": "media-image-pipeline-v1-p384-a",
+        "asset": "contact-sheet-384-a.jpg"
+      },
+      "384-B": {
+        "release": "media-image-pipeline-v1-p384-b",
+        "asset": "contact-sheet-384-b.jpg"
+      },
+      "390-A": {
+        "release": "media-image-pipeline-v1-p390-a",
+        "asset": "contact-sheet-390-a.jpg"
+      },
+      "390-B": {
+        "release": "media-image-pipeline-v1-p390-b",
+        "asset": "contact-sheet-390-b.jpg",
+        "status": "READY_IN_REVIEW"
+      }
+    }
+  },
+  "mode": "AUTONOMOUS_BATCH",
+  "last_commit_note": "339 in progress: 8/10 verified, 2 extras pending (cap).",
+  "schema_note": "10 images/product; folders ecommerce/ + gallery/; extras editorial-closeup + premium-lifestyle; release tag media-product-{id}-complete"
+}
