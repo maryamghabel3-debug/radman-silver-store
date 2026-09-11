@@ -789,5 +789,18 @@
  "278-B": {
   "status": "NO_EDIT_NEEDED",
   "note": "no logo detected"
+ },
+ "281-A": {
+  "status": "EDITED_PENDING_REVIEW",
+  "passes": [
+   [
+    1,
+    0,
+    130.0
+   ]
+  ],
+  "mask_px": 72503,
+  "residual_px": 0,
+  "outside_changed": 0
  }
 }
