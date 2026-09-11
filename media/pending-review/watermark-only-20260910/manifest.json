@@ -981,5 +981,19 @@
  "300-B": {
   "status": "NO_EDIT_NEEDED",
   "note": "no logo detected"
+ },
+ "303-A": {
+  "status": "EDITED_PENDING_REVIEW",
+  "passes": [
+   [
+    1,
+    0,
+    132.0,
+    "pass-density"
+   ]
+  ],
+  "mask_px": 71116,
+  "residual_px": 0,
+  "outside_changed": 0
  }
 }
