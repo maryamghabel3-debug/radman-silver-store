@@ -787,25 +787,18 @@
   "outside_changed": 0
  },
  "278-B": {
-  "status": "NEEDS_SOURCE",
-  "residual_px": 179,
+  "status": "EDITED_PENDING_REVIEW",
   "passes": [
    [
     1,
-    125,
-    132.0
-   ],
-   [
-    2,
-    172,
-    132.0
-   ],
-   [
-    3,
-    179,
-    132.0
+    0,
+    132.0,
+    "pass-density"
    ]
-  ]
+  ],
+  "mask_px": 269260,
+  "residual_px": 0,
+  "outside_changed": 0
  },
  "281-A": {
   "status": "EDITED_PENDING_REVIEW",
