@@ -1261,5 +1261,19 @@
   "mask_px": 73443,
   "residual_px": 0,
   "outside_changed": 0
+ },
+ "333-B": {
+  "status": "EDITED_PENDING_REVIEW",
+  "passes": [
+   [
+    1,
+    0,
+    132.0,
+    "pass-density"
+   ]
+  ],
+  "mask_px": 90773,
+  "residual_px": 0,
+  "outside_changed": 0
  }
 }
