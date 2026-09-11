@@ -409,5 +409,18 @@
   "mask_px": 62568,
   "residual_px": 0,
   "outside_changed": 0
+ },
+ "223-A": {
+  "status": "EDITED_PENDING_REVIEW",
+  "passes": [
+   [
+    1,
+    0,
+    132.0
+   ]
+  ],
+  "mask_px": 99521,
+  "residual_px": 0,
+  "outside_changed": 0
  }
 }
