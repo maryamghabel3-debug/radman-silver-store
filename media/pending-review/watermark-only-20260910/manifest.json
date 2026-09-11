@@ -204,5 +204,26 @@
   "mask_px": 77354,
   "residual_px": 0,
   "outside_changed": 0
+ },
+ "193-B": {
+  "status": "NEEDS_SOURCE",
+  "residual_px": 2612,
+  "passes": [
+   [
+    1,
+    2621,
+    132.0
+   ],
+   [
+    2,
+    2625,
+    132.0
+   ],
+   [
+    3,
+    2612,
+    132.0
+   ]
+  ]
  }
 }
