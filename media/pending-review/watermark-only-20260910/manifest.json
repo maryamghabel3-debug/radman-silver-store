@@ -787,8 +787,25 @@
   "outside_changed": 0
  },
  "278-B": {
-  "status": "NO_EDIT_NEEDED",
-  "note": "no logo detected"
+  "status": "NEEDS_SOURCE",
+  "residual_px": 179,
+  "passes": [
+   [
+    1,
+    125,
+    132.0
+   ],
+   [
+    2,
+    172,
+    132.0
+   ],
+   [
+    3,
+    179,
+    132.0
+   ]
+  ]
  },
  "281-A": {
   "status": "EDITED_PENDING_REVIEW",
