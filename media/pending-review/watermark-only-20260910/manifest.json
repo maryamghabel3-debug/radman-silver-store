@@ -1121,5 +1121,19 @@
   "mask_px": 80716,
   "residual_px": 0,
   "outside_changed": 0
+ },
+ "318-A": {
+  "status": "EDITED_PENDING_REVIEW",
+  "passes": [
+   [
+    1,
+    0,
+    132.0,
+    "pass-density"
+   ]
+  ],
+  "mask_px": 78894,
+  "residual_px": 0,
+  "outside_changed": 0
  }
 }
