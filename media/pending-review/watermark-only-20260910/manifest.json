@@ -879,5 +879,19 @@
   "mask_px": 64246,
   "residual_px": 0,
   "outside_changed": 0
+ },
+ "290-A": {
+  "status": "EDITED_PENDING_REVIEW",
+  "passes": [
+   [
+    1,
+    0,
+    131.0,
+    "pass-density"
+   ]
+  ],
+  "mask_px": 67401,
+  "residual_px": 0,
+  "outside_changed": 0
  }
 }
