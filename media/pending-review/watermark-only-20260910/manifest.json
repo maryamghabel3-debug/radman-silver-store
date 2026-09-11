@@ -977,5 +977,9 @@
   "mask_px": 67370,
   "residual_px": 0,
   "outside_changed": 0
+ },
+ "300-B": {
+  "status": "NO_EDIT_NEEDED",
+  "note": "no logo detected"
  }
 }
