@@ -720,5 +720,18 @@
  "265-B": {
   "status": "NO_EDIT_NEEDED",
   "note": "no watermark present; detector false-positive on ring gold bezel (visually verified); copied unchanged"
+ },
+ "269-A": {
+  "status": "EDITED_PENDING_REVIEW",
+  "passes": [
+   [
+    1,
+    0,
+    132.0
+   ]
+  ],
+  "mask_px": 68760,
+  "residual_px": 0,
+  "outside_changed": 0
  }
 }
