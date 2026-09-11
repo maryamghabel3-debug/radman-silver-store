@@ -921,5 +921,19 @@
   "mask_px": 104613,
   "residual_px": 0,
   "outside_changed": 0
+ },
+ "293-B": {
+  "status": "EDITED_PENDING_REVIEW",
+  "passes": [
+   [
+    1,
+    0,
+    132.0,
+    "pass-density"
+   ]
+  ],
+  "mask_px": 89933,
+  "residual_px": 0,
+  "outside_changed": 0
  }
 }
