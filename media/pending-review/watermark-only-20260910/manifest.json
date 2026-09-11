@@ -448,5 +448,18 @@
   "mask_px": 75766,
   "residual_px": 0,
   "outside_changed": 0
+ },
+ "232-B": {
+  "status": "EDITED_PENDING_REVIEW",
+  "passes": [
+   [
+    1,
+    0,
+    131.0
+   ]
+  ],
+  "mask_px": 70507,
+  "residual_px": 0,
+  "outside_changed": 0
  }
 }
