@@ -1219,5 +1219,19 @@
   "mask_px": 77600,
   "residual_px": 0,
   "outside_changed": 0
+ },
+ "330-A": {
+  "status": "EDITED_PENDING_REVIEW",
+  "passes": [
+   [
+    1,
+    0,
+    130.0,
+    "pass-density"
+   ]
+  ],
+  "mask_px": 56213,
+  "residual_px": 0,
+  "outside_changed": 0
  }
 }
