@@ -785,5 +785,9 @@
   "mask_px": 156588,
   "residual_px": 0,
   "outside_changed": 0
+ },
+ "278-B": {
+  "status": "NO_EDIT_NEEDED",
+  "note": "no logo detected"
  }
 }
