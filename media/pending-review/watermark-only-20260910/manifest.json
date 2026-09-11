@@ -865,5 +865,19 @@
   "mask_px": 74029,
   "residual_px": 0,
   "outside_changed": 0
+ },
+ "287-B": {
+  "status": "EDITED_PENDING_REVIEW",
+  "passes": [
+   [
+    1,
+    0,
+    130.0,
+    "pass-density"
+   ]
+  ],
+  "mask_px": 64246,
+  "residual_px": 0,
+  "outside_changed": 0
  }
 }
