@@ -178,5 +178,18 @@
   "mask_px": 68785,
   "residual_px": 0,
   "outside_changed": 0
+ },
+ "190-B": {
+  "status": "EDITED_PENDING_REVIEW",
+  "passes": [
+   [
+    1,
+    16,
+    131.0
+   ]
+  ],
+  "mask_px": 86074,
+  "residual_px": 16,
+  "outside_changed": 0
  }
 }
