@@ -138,25 +138,17 @@
   "outside_changed": 0
  },
  "187-B": {
-  "status": "NEEDS_SOURCE",
-  "residual_px": 3970,
+  "status": "EDITED_PENDING_REVIEW",
   "passes": [
    [
     1,
-    3926,
-    131.0
-   ],
-   [
-    2,
-    3952,
-    131.0
-   ],
-   [
-    3,
-    3970,
+    0,
     131.0
    ]
-  ]
+  ],
+  "mask_px": 96957,
+  "residual_px": 0,
+  "outside_changed": 0
  },
  "190-A": {
   "status": "EDITED_PENDING_REVIEW",
