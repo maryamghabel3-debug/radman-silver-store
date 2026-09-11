@@ -123,5 +123,26 @@
   "mask_px": 72325,
   "residual_px": 0,
   "outside_changed": 0
+ },
+ "187-A": {
+  "status": "NEEDS_SOURCE",
+  "residual_px": 1198,
+  "passes": [
+   [
+    1,
+    1162,
+    132.0
+   ],
+   [
+    2,
+    1193,
+    132.0
+   ],
+   [
+    3,
+    1198,
+    132.0
+   ]
+  ]
  }
 }
