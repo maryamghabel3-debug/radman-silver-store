@@ -578,5 +578,9 @@
   "mask_px": 65969,
   "residual_px": 0,
   "outside_changed": 0
+ },
+ "247-B": {
+  "status": "NO_EDIT_NEEDED",
+  "note": "no logo detected"
  }
 }
