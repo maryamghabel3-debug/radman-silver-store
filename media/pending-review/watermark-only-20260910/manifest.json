@@ -718,24 +718,7 @@
   "note": "no logo detected"
  },
  "265-B": {
-  "status": "NEEDS_SOURCE",
-  "residual_px": 1259,
-  "passes": [
-   [
-    1,
-    1103,
-    136.0
-   ],
-   [
-    2,
-    1083,
-    136.0
-   ],
-   [
-    3,
-    1259,
-    138.0
-   ]
-  ]
+  "status": "NO_EDIT_NEEDED",
+  "note": "no watermark present; detector false-positive on ring gold bezel (visually verified); copied unchanged"
  }
 }
