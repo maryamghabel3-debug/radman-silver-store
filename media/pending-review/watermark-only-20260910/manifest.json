@@ -775,16 +775,10 @@
  },
  "278-A": {
   "status": "EDITED_PENDING_REVIEW",
-  "passes": [
-   [
-    1,
-    0,
-    132.0
-   ]
-  ],
-  "mask_px": 156588,
+  "note": "v2 reprocess after owner rejection: wider halo-inclusive mask over true logo area (bottom-right), residual 0 at 400% visual check",
   "residual_px": 0,
-  "outside_changed": 0
+  "outside_changed": 0,
+  "mask_px": 101797
  },
  "278-B": {
   "status": "EDITED_PENDING_REVIEW",
