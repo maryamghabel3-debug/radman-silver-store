@@ -72,6 +72,18 @@
       "ratio": "4x5",
       "status": "MISSING_INPUT",
       "source": "media/pending-review/watermark-only-20260910/cleaned/77-B-step1.webp"
+    },
+    {
+      "pid": 211,
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW"
+    },
+    {
+      "pid": 214,
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW"
     }
   ]
 }
