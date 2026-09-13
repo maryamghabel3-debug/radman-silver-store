@@ -1,0 +1,77 @@
+{
+  "branch": "ai-social-luxury-20260911",
+  "source_branch": "ai-watermark-only-20260910",
+  "run": "step3-4x5",
+  "items": [
+    {
+      "pid": 61,
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "media/pending-review/watermark-only-20260910/cleaned/61-A-step1.webp"
+    },
+    {
+      "pid": 61,
+      "angle": "B",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "media/pending-review/watermark-only-20260910/cleaned/61-B-step1.webp"
+    },
+    {
+      "pid": 65,
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "MISSING_INPUT",
+      "source": "media/pending-review/watermark-only-20260910/cleaned/65-A-step1.webp"
+    },
+    {
+      "pid": 65,
+      "angle": "B",
+      "ratio": "4x5",
+      "status": "MISSING_INPUT",
+      "source": "media/pending-review/watermark-only-20260910/cleaned/65-B-step1.webp"
+    },
+    {
+      "pid": 69,
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "MISSING_INPUT",
+      "source": "media/pending-review/watermark-only-20260910/cleaned/69-A-step1.webp"
+    },
+    {
+      "pid": 69,
+      "angle": "B",
+      "ratio": "4x5",
+      "status": "MISSING_INPUT",
+      "source": "media/pending-review/watermark-only-20260910/cleaned/69-B-step1.webp"
+    },
+    {
+      "pid": 73,
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "MISSING_INPUT",
+      "source": "media/pending-review/watermark-only-20260910/cleaned/73-A-step1.webp"
+    },
+    {
+      "pid": 73,
+      "angle": "B",
+      "ratio": "4x5",
+      "status": "MISSING_INPUT",
+      "source": "media/pending-review/watermark-only-20260910/cleaned/73-B-step1.webp"
+    },
+    {
+      "pid": 77,
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "MISSING_INPUT",
+      "source": "media/pending-review/watermark-only-20260910/cleaned/77-A-step1.webp"
+    },
+    {
+      "pid": 77,
+      "angle": "B",
+      "ratio": "4x5",
+      "status": "MISSING_INPUT",
+      "source": "media/pending-review/watermark-only-20260910/cleaned/77-B-step1.webp"
+    }
+  ]
+}
