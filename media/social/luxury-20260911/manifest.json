@@ -198,6 +198,20 @@
       "status": "GENERATED_PENDING_REVIEW"
     },
     {
+      "pid": 89,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-7.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/89/89-luxury-4x5.png",
+      "sha": "16f41526d8fd39f0eb50389b95ae5f1a407c739e",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/89-compare.png",
+      "review_sha": "6bdc04e972ab65fee62550dabfe3f183f4809a71",
+      "run": "luxury-v2-20260915",
+      "environment": "dark slate stone with faint sheen + cool key / warm accent rim",
+      "note": "Pose/twisted-rope shank/onyx from source photo; fine carving micro-detail re-rendered by model (same motif). Owner review required."
+    },
+    {
       "pid": 175,
       "angle": "A",
       "ratio": "4x5",
