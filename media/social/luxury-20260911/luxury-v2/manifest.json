@@ -35,6 +35,21 @@
       "environment": "polished black marble plinth + deep burgundy velvet + warm gallery rim light",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif). Owner review required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 89,
+      "sku": "1012",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/89/89-luxury-4x5.png",
+      "commit": "16f41526d8fd39f0eb50389b95ae5f1a407c739e",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/89-compare.png",
+      "qa_commit": "6bdc04e972ab65fee62550dabfe3f183f4809a71",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-7.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/89-ref.png",
+      "source_commit": "92736c927691df19cd65540dbeb8531556edb3b8",
+      "environment": "dark slate stone with faint sheen + cool key / warm accent rim",
+      "note": "Pose/twisted-rope shank/onyx from source photo; fine carving micro-detail re-rendered by model (same motif). Owner review required.",
+      "run": "luxury-v2-20260915"
     }
   ]
 }
