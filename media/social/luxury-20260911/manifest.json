@@ -45,6 +45,19 @@
       "source": "media/pending-review/watermark-only-20260910/cleaned/65-B-step1.webp"
     },
     {
+      "pid": "65",
+      "angle": "B",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/02-1.webp",
+      "file": "media/social/luxury-20260911/65/65-B-step3.png",
+      "sha": "909f70fec5aaf425b47424eb6265a954fccf0abe",
+      "review": "media/social/luxury-20260911/qa/65-B-review.png",
+      "review_sha": "fc1e29b079e9a825c8f6c0c9b4132d80a014c154",
+      "run": "step3-remaining-20260915",
+      "note": "style: charcoal #1A1A1A dramatic studio; underside band slimmer than reference (flagged for owner review); retry rejected FAILED_QA (bezel form + engraving changed)"
+    },
+    {
       "pid": 69,
       "angle": "A",
       "ratio": "4x5",
