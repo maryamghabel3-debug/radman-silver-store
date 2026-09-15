@@ -284,6 +284,21 @@
       "environment": "dark green marble + low side-back rim light",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 155,
+      "sku": "1035",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/155/155-luxury-4x5.png",
+      "commit": "15fa906ed77d0fa260e64e7df400ddb3bb2ca1af",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/155-compare.png",
+      "qa_commit": "cf4a88755ceb7e55132194da45f9bd2b13dfd16c",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-23.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/155-ref.png",
+      "source_commit": "c650d2b008e476d0b0a9afa1e0a3a8a3c20380d1",
+      "environment": "black terrazzo + warm grazing left light",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
