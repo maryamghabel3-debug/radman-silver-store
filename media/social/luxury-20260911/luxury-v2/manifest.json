@@ -140,6 +140,21 @@
       "environment": "dark walnut wood with fine grain + warm masculine directional light",
       "note": "Pose/black dome/beaded bezel/decorated shank from source photo; fine micro-detail re-rendered by model. Owner review required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 117,
+      "sku": "1009",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/117/117-luxury-4x5.png",
+      "commit": "f9308fa765f25aa31a8e701a1f3d580ad8e30dd1",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/117-compare.png",
+      "qa_commit": "4b9fe73fb89bceafd65eba544fde2ca2c8744116",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-14.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/117-ref.png",
+      "source_commit": "c09b2fad5177120e43ed7cd768e5240eac31f4d1",
+      "environment": "black velvet + warm side-back rim light (low), soft warm front-left fill",
+      "note": "Red agate portrait engraving + ornamental border kept per source (every line preserved, nothing re-invented). Fine micro-detail re-rendered by model - owner review required.",
+      "run": "luxury-v2-20260915"
     }
   ]
 }
