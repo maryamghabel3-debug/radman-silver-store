@@ -25,6 +25,19 @@
       "source": "media/pending-review/watermark-only-20260910/cleaned/65-A-step1.webp"
     },
     {
+      "pid": "65",
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-1.webp",
+      "file": "media/social/luxury-20260911/65/65-A-step3.png",
+      "sha": "1155e5ba66ca94cd857edd3a28ea2a2a1f91ea51",
+      "review": "media/social/luxury-20260911/qa/65-A-review.png",
+      "review_sha": "76778ffa20c2b0cfd0bef2e1443cb83c56b9bb38",
+      "run": "step3-remaining-20260915",
+      "note": "style: matte black velvet + soft top-left light"
+    },
+    {
       "pid": 65,
       "angle": "B",
       "ratio": "4x5",
@@ -72,6 +85,78 @@
       "ratio": "4x5",
       "status": "MISSING_INPUT",
       "source": "media/pending-review/watermark-only-20260910/cleaned/77-B-step1.webp"
+    },
+    {
+      "pid": 85,
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW"
+    },
+    {
+      "pid": 175,
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW"
+    },
+    {
+      "pid": 178,
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW"
+    },
+    {
+      "pid": 181,
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW"
+    },
+    {
+      "pid": 184,
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW"
+    },
+    {
+      "pid": 187,
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW"
+    },
+    {
+      "pid": 190,
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW"
+    },
+    {
+      "pid": 193,
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW"
+    },
+    {
+      "pid": 196,
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW"
+    },
+    {
+      "pid": 199,
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW"
+    },
+    {
+      "pid": 202,
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW"
+    },
+    {
+      "pid": 208,
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW"
     },
     {
       "pid": 211,
@@ -152,82 +237,11 @@
       "status": "GENERATED_PENDING_REVIEW"
     },
     {
-      "pid": 85,
-      "angle": "A",
-      "ratio": "4x5",
-      "status": "GENERATED_PENDING_REVIEW"
-    },
-    {
-      "pid": 175,
-      "angle": "A",
-      "ratio": "4x5",
-      "status": "GENERATED_PENDING_REVIEW"
-    },
-    {
-      "pid": 178,
-      "angle": "A",
-      "ratio": "4x5",
-      "status": "GENERATED_PENDING_REVIEW"
-    },
-    {
-      "pid": 181,
-      "angle": "A",
-      "ratio": "4x5",
-      "status": "GENERATED_PENDING_REVIEW"
-    },
-    {
-      "pid": 184,
-      "angle": "A",
-      "ratio": "4x5",
-      "status": "GENERATED_PENDING_REVIEW"
-    },
-    {
-      "pid": 187,
-      "angle": "A",
-      "ratio": "4x5",
-      "status": "GENERATED_PENDING_REVIEW"
-    },
-    {
-      "pid": 190,
-      "angle": "A",
-      "ratio": "4x5",
-      "status": "GENERATED_PENDING_REVIEW"
-    },
-    {
-      "pid": 193,
-      "angle": "A",
-      "ratio": "4x5",
-      "status": "GENERATED_PENDING_REVIEW"
-    },
-    {
-      "pid": 196,
-      "angle": "A",
-      "ratio": "4x5",
-      "status": "GENERATED_PENDING_REVIEW"
-    },
-    {
-      "pid": 199,
-      "angle": "A",
-      "ratio": "4x5",
-      "status": "GENERATED_PENDING_REVIEW"
-    },
-    {
-      "pid": 202,
-      "angle": "A",
-      "ratio": "4x5",
-      "status": "GENERATED_PENDING_REVIEW"
-    },
-    {
-      "pid": 208,
-      "angle": "A",
-      "ratio": "4x5",
-      "status": "GENERATED_PENDING_REVIEW"
-    },
-    {
       "pid": 265,
       "angle": "A",
       "ratio": "4x5",
       "status": "GENERATED_PENDING_REVIEW"
     }
-  ]
+  ],
+  "run_step3_remaining_20260915": true
 }
