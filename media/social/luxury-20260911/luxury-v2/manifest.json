@@ -125,6 +125,21 @@
       "environment": "polished dark glass with clean mirror reflection + single directional light",
       "note": "Pose/black cabochon/sculptural shank from source photo; ornament micro-detail re-rendered by model. Owner review required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 113,
+      "sku": "1008",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/113/113-luxury-4x5.png",
+      "commit": "033884b1092efbcf5b607dccd8ff7f2a689f2c6a",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/113-compare.png",
+      "qa_commit": "f7edfc2b5bc9aa4e16017bac406b8f47d554c107",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-13.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/113-ref.png",
+      "source_commit": "91820a95eba76b820089b9a5632e125b6f7e159f",
+      "environment": "dark walnut wood with fine grain + warm masculine directional light",
+      "note": "Pose/black dome/beaded bezel/decorated shank from source photo; fine micro-detail re-rendered by model. Owner review required.",
+      "run": "luxury-v2-20260915"
     }
   ]
 }
