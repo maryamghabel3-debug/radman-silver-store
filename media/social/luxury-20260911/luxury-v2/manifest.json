@@ -50,6 +50,21 @@
       "environment": "dark slate stone with faint sheen + cool key / warm accent rim",
       "note": "Pose/twisted-rope shank/onyx from source photo; fine carving micro-detail re-rendered by model (same motif). Owner review required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 93,
+      "sku": "1060",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/93/93-luxury-4x5.png",
+      "commit": "ce4bf65809e04f1ec250935f032b52ec5e9f5699",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/93-compare.png",
+      "qa_commit": "2a86bc857d06a7307ec950083b91cf42fea51a3a",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-8.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/93-ref.png",
+      "source_commit": "3cb725b3500787f8c9d66220312045e6f7712102",
+      "environment": "matte black linen fabric + soft side light",
+      "note": "Pose/pale agate/claw setting/shank from source photo; fine engraved micro-detail re-rendered by model. Owner review required.",
+      "run": "luxury-v2-20260915"
     }
   ]
 }
