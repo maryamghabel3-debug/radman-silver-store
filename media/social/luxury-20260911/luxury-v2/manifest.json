@@ -200,6 +200,21 @@
       "environment": "polished black acrylic + soft low-right key, white bounce, controlled mirror reflection",
       "note": "'Ya Aba al-Fazl' script on lilac agate kept per source, letters preserved. Fine micro-detail re-rendered by model - owner review required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 133,
+      "sku": "1004",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/133/133-luxury-4x5.png",
+      "commit": "9e92d0387b314276a67bfd0a2f067d272fe5a387",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/133-compare.png",
+      "qa_commit": "c1ff1cd9f65ffef7ec9edf43bd55cfb2eaa79395",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-18.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/133-ref.png",
+      "source_commit": "483841a23b7aecf6b3df0951fcec2d745a9344fe",
+      "environment": "grey concrete + cool hard grazing side light from left",
+      "note": "Square onyx + deep-relief shank ornament kept per source. Fine micro-detail re-rendered by model - owner review required.",
+      "run": "luxury-v2-20260915"
     }
   ]
 }
