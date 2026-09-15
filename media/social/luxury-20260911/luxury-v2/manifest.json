@@ -329,6 +329,21 @@
       "environment": "charcoal basalt steps + cool low back-right rim",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 167,
+      "sku": "1039",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/167/167-luxury-4x5.png",
+      "commit": "7532d3b1b013d04fd2b16022dd1909431352ebd0",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/167-compare.png",
+      "qa_commit": "a8a0985a2e785a2b5986355701ca535f7ecee36a",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-26.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/167-ref.png",
+      "source_commit": "fdb0e8c259c8ebed492b286351ac28acd4e6fb77",
+      "environment": "charcoal woven silk + narrow vertical slit beam (shaped light)",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
