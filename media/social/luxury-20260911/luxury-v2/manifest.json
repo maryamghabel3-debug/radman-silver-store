@@ -269,6 +269,21 @@
       "qa_note": "GENERATED_PENDING_REVIEW with engraving flag: floral/script composition preserved; leaf and stroke micro-shapes differ from source (model re-render). Owner decision needed. Evidence: qa/147-engraving-review.png.",
       "engraving_review": "media/social/luxury-20260911/luxury-v2/qa/147-engraving-review.png",
       "qa_reason": "Owner review (2026-09-15): engraving changed vs source — FAILED_QA. Pending owner decision on re-shoot."
+    },
+    {
+      "pid": 151,
+      "sku": "1037",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/151/151-luxury-4x5.png",
+      "commit": "776d2291fb3770713155306d870e2b56707cfc28",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/151-compare.png",
+      "qa_commit": "0958b079a93a4c3be6435268c65f9e972173c757",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-22.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/151-ref.png",
+      "source_commit": "c2e0527880262cb173a030d92c68bf39f13784f5",
+      "environment": "dark green marble + low side-back rim light",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
