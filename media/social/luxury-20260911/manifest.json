@@ -65,6 +65,19 @@
       "source": "media/pending-review/watermark-only-20260910/cleaned/69-A-step1.webp"
     },
     {
+      "pid": "69",
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-2.webp",
+      "file": "media/social/luxury-20260911/69/69-A-step3.png",
+      "sha": "f28d15ab05f039db17fdf0a922cd449dafe8c3c5",
+      "review": "media/social/luxury-20260911/qa/69-A-review.png",
+      "review_sha": "97962f58ad3acf7d2f8e4b846d35423144fa687e",
+      "run": "step3-remaining-20260915",
+      "note": "style: polished black marble + warm rim light"
+    },
+    {
       "pid": 69,
       "angle": "B",
       "ratio": "4x5",
