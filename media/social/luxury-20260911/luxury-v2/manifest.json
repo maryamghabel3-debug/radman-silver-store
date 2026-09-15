@@ -374,6 +374,21 @@
       "environment": "dark plinth in a single pool of warm gallery light",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 269,
+      "sku": "NM-3584",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/269/269-luxury-4x5.png",
+      "commit": "8708299cd1591e4b0d909a99cbe5c15fd3ccb35c",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/269-compare.png",
+      "qa_commit": "95dd9a5c86853aaa99442d7a990822e90552babf",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/269-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/269-ref.png",
+      "source_commit": "466f166cff65d505219627f7f45f65f90f7d1740",
+      "environment": "matte black velvet + dark-field sidelights + violet accent",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
