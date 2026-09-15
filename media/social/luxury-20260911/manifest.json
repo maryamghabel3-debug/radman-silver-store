@@ -254,6 +254,20 @@
       "note": "Pose/green stone carving/prong setting/shank from source photo; fine carved micro-detail re-rendered by model. Owner review required."
     },
     {
+      "pid": 105,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-11.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/105/105-luxury-4x5.png",
+      "sha": "fb580103b4e856127cdb2ff52265fec3bb2dee54",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/105-compare.png",
+      "review_sha": "e04cff3525a35d7d160360fba6ae83d08d5ac2b9",
+      "run": "luxury-v2-20260915",
+      "environment": "black pebbled leather plinth + warm gallery light and bokeh",
+      "note": "Pose/blue agate dense script/ornate shank from source photo; extremely fine engraving micro-detail re-rendered by model. Owner review required."
+    },
+    {
       "pid": 175,
       "angle": "A",
       "ratio": "4x5",
