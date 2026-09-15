@@ -324,6 +324,20 @@
       "note": "Square black onyx + hatch-engraved shank per source. Fine micro-detail re-rendered by model - owner review required."
     },
     {
+      "pid": 125,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-16.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/125/125-luxury-4x5.png",
+      "sha": "3d9272eada1fb28d801d682c78f6e959e95c6bbd",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/125-compare.png",
+      "review_sha": "0da81fc70cb6a75f72b28afbb854f637080c0658",
+      "run": "luxury-v2-20260915",
+      "environment": "dark light-table, warm transmitted backlight glowing through the green agate",
+      "note": "'Ya Ali' white script on green agate kept per source, letters preserved. Fine micro-detail re-rendered by model - owner review required."
+    },
+    {
       "pid": 175,
       "angle": "A",
       "ratio": "4x5",
