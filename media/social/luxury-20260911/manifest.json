@@ -218,12 +218,12 @@
       "status": "GENERATED_PENDING_REVIEW",
       "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-8.webp",
       "file": "media/social/luxury-20260911/luxury-v2/93/93-luxury-4x5.png",
-      "sha": "ce4bf65809e04f1ec250935f032b52ec5e9f5699",
+      "sha": "14cc293ce48b58f5d7be0b56bac304e7aed76f6a",
       "review": "media/social/luxury-20260911/luxury-v2/qa/93-compare.png",
-      "review_sha": "2a86bc857d06a7307ec950083b91cf42fea51a3a",
+      "review_sha": "8ecc116772151e8528fd021225ac237ebf45d288",
       "run": "luxury-v2-20260915",
-      "environment": "matte black linen fabric + soft side light",
-      "note": "Pose/pale agate/claw setting/shank from source photo; fine engraved micro-detail re-rendered by model. Owner review required."
+      "environment": "matte black linen + soft low-left light + white bounce (attempt 2)",
+      "note": "OWNER-FLAGGED ring. Att1 FAILED_QA (fine text became pseudo-text; preserved at rejected/). Att2: cartouche + ornate top band + border + text layout preserved like source; sub-mm letterforms approximate (model limit). Owner decision required."
     },
     {
       "pid": 97,
