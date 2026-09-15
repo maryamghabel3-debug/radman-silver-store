@@ -54,7 +54,7 @@
     {
       "pid": 93,
       "sku": "1060",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "FAILED_QA",
       "file": "media/social/luxury-20260911/luxury-v2/93/93-luxury-4x5.png",
       "commit": "ce4bf65809e04f1ec250935f032b52ec5e9f5699",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/93-compare.png",
@@ -64,7 +64,9 @@
       "source_commit": "3cb725b3500787f8c9d66220312045e6f7712102",
       "environment": "matte black linen fabric + soft side light",
       "note": "Pose/pale agate/claw setting/shank from source photo; fine engraved micro-detail re-rendered by model. Owner review required.",
-      "run": "luxury-v2-20260915"
+      "run": "luxury-v2-20260915",
+      "qa_note": "FAILED_QA (owner-flagged): the very fine dense text on the pale agate is replaced by pseudo-text texture in the output - engraving altered. Evidence: qa/93-engraving-review.png. Old file preserved at rejected/93-attempt1-FAILED_QA.png.",
+      "engraving_review": "media/social/luxury-20260911/luxury-v2/qa/93-engraving-review.png"
     },
     {
       "pid": 97,
@@ -199,7 +201,9 @@
       "source_commit": "2fdf4a6d4db51842bc95a987281cd45e819a1f7e",
       "environment": "polished black acrylic + soft low-right key, white bounce, controlled mirror reflection",
       "note": "'Ya Aba al-Fazl' script on lilac agate kept per source, letters preserved. Fine micro-detail re-rendered by model - owner review required.",
-      "run": "luxury-v2-20260915"
+      "run": "luxury-v2-20260915",
+      "qa_note": "GENERATED_PENDING_REVIEW with engraving flag: wording + floral composition preserved; stroke micro-shapes differ from source (model re-render). Owner decision needed. Evidence: qa/129-engraving-review.png.",
+      "engraving_review": "media/social/luxury-20260911/luxury-v2/qa/129-engraving-review.png"
     },
     {
       "pid": 133,
@@ -259,7 +263,9 @@
       "source_commit": "fec47a90c88257850fb07a83d49031e1c761154c",
       "environment": "matte dark bronze-brown stone, museum vitrine, warm grazing beam, no mirror reflection",
       "note": "'Ya Aba Abdollah' script on pale agate kept per source, letters preserved. Att1 scene was too similar to 129 (replaced); att2 ok. Owner review required.",
-      "run": "luxury-v2-20260915"
+      "run": "luxury-v2-20260915",
+      "qa_note": "GENERATED_PENDING_REVIEW with engraving flag: floral/script composition preserved; leaf and stroke micro-shapes differ from source (model re-render). Owner decision needed. Evidence: qa/147-engraving-review.png.",
+      "engraving_review": "media/social/luxury-20260911/luxury-v2/qa/147-engraving-review.png"
     }
   ]
 }
