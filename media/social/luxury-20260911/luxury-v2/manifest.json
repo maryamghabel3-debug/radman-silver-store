@@ -155,6 +155,21 @@
       "environment": "black velvet + warm side-back rim light (low), soft warm front-left fill",
       "note": "Red agate portrait engraving + ornamental border kept per source (every line preserved, nothing re-invented). Fine micro-detail re-rendered by model - owner review required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 121,
+      "sku": "1007",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/121/121-luxury-4x5.png",
+      "commit": "dd115bc049cb0867773d75c63e915864690e4f95",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/121-compare.png",
+      "qa_commit": "6f9dbe1bc561e53bc14fc3d9c90ab6820dc4a102",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-15.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/121-ref.png",
+      "source_commit": "1c55306dbc3d030f1aa207e446c2cd15e6a9c07e",
+      "environment": "brushed graphite slab + single hard gridded side light from right",
+      "note": "Square black onyx + hatch-engraved shank per source. Fine micro-detail re-rendered by model - owner review required.",
+      "run": "luxury-v2-20260915"
     }
   ]
 }
