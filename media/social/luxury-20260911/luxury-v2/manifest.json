@@ -65,6 +65,21 @@
       "environment": "matte black linen fabric + soft side light",
       "note": "Pose/pale agate/claw setting/shank from source photo; fine engraved micro-detail re-rendered by model. Owner review required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 97,
+      "sku": "1061",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/97/97-luxury-4x5.png",
+      "commit": "29a508c5342f3d8fdecd2917f70ef0210b9ac412",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/97-compare.png",
+      "qa_commit": "c009a5ee58d869d56b1df6acbd9e5a6b65d94020",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-9.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/97-ref.png",
+      "source_commit": "7a33922ee2b5098fac022e43bc47efe46c7fd881",
+      "environment": "smooth charcoal studio surface + narrow beam from upper left",
+      "note": "Pose/onyx carving/bezel/ribs from source photo; fine carved micro-detail re-rendered by model (same motif). Owner review required.",
+      "run": "luxury-v2-20260915"
     }
   ]
 }
