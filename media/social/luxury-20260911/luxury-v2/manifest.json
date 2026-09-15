@@ -185,6 +185,21 @@
       "environment": "dark light-table, warm transmitted backlight glowing through the green agate",
       "note": "'Ya Ali' white script on green agate kept per source, letters preserved. Fine micro-detail re-rendered by model - owner review required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 129,
+      "sku": "1005",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/129/129-luxury-4x5.png",
+      "commit": "d4b0c3bdaf588feeddd27c75a866389eafc8bc48",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/129-compare.png",
+      "qa_commit": "1281e14ee02409bda821f5f92c64965c18b84f2a",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-17.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/129-ref.png",
+      "source_commit": "2fdf4a6d4db51842bc95a987281cd45e819a1f7e",
+      "environment": "polished black acrylic + soft low-right key, white bounce, controlled mirror reflection",
+      "note": "'Ya Aba al-Fazl' script on lilac agate kept per source, letters preserved. Fine micro-detail re-rendered by model - owner review required.",
+      "run": "luxury-v2-20260915"
     }
   ]
 }
