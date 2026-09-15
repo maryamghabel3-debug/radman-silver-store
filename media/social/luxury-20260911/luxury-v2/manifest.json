@@ -245,6 +245,21 @@
       "environment": "matte black velvet + dark-field lighting (two side-behind diffused lights for facet brilliance)",
       "note": "Moissanite dome + two-tone ornate shank kept per source. Fine micro-detail re-rendered by model - owner review required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 147,
+      "sku": "1034",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/147/147-luxury-4x5.png",
+      "commit": "2dffc8e8d5adacfd05fc53be46665b84388be008",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/147-compare.png",
+      "qa_commit": "30df38303cfa93b268564b4043c6bae82875b021",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-21.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/147-ref.png",
+      "source_commit": "fec47a90c88257850fb07a83d49031e1c761154c",
+      "environment": "matte dark bronze-brown stone, museum vitrine, warm grazing beam, no mirror reflection",
+      "note": "'Ya Aba Abdollah' script on pale agate kept per source, letters preserved. Att1 scene was too similar to 129 (replaced); att2 ok. Owner review required.",
+      "run": "luxury-v2-20260915"
     }
   ]
 }
