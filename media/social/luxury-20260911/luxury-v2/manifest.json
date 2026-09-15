@@ -359,6 +359,21 @@
       "environment": "aged patinated copper + warm low-left key",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 256,
+      "sku": "NM-3588",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/256/256-luxury-4x5.png",
+      "commit": "ec0b235e4eb33608505a6d5b628a7f9584c0f34c",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/256-compare.png",
+      "qa_commit": "d963e4b96a6532d7b672c33a816279d929116517",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/256-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/256-ref.png",
+      "source_commit": "12f753e4f27c9ad1af0a33676808f4339fa9f262",
+      "environment": "dark plinth in a single pool of warm gallery light",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
