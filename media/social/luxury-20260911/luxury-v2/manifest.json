@@ -110,6 +110,21 @@
       "environment": "black pebbled leather plinth + warm gallery light and bokeh",
       "note": "Pose/blue agate dense script/ornate shank from source photo; extremely fine engraving micro-detail re-rendered by model. Owner review required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 109,
+      "sku": "1011",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/109/109-luxury-4x5.png",
+      "commit": "7dd4f8176a2c65fb857211a2aafd7c88e6993708",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/109-compare.png",
+      "qa_commit": "7256b2537f1f33ed0396b0282e6a2ddfca4b2c13",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-12.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/109-ref.png",
+      "source_commit": "43689be865cf0f46ede3ed1e7ee278654b35d6fb",
+      "environment": "polished dark glass with clean mirror reflection + single directional light",
+      "note": "Pose/black cabochon/sculptural shank from source photo; ornament micro-detail re-rendered by model. Owner review required.",
+      "run": "luxury-v2-20260915"
     }
   ]
 }
