@@ -366,6 +366,20 @@
       "note": "Square onyx + deep-relief shank ornament kept per source. Fine micro-detail re-rendered by model - owner review required."
     },
     {
+      "pid": 137,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/137-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/137/137-luxury-4x5.png",
+      "sha": "883b921bcfd3510eed88e265098693c98c30e2f5",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/137-compare.png",
+      "review_sha": "ec42853df41f83d95b652f73bb1b1f661d79d16d",
+      "run": "luxury-v2-20260915",
+      "environment": "dark oxblood leather + warm low-left key (no light through the stone)",
+      "note": "Att1 FAILED_QA: transmitted glow washed the stone milky. Att2 passes: rich amber kept. Beads/shank per source. Owner review required."
+    },
+    {
       "pid": 175,
       "angle": "A",
       "ratio": "4x5",
