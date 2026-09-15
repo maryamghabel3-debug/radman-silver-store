@@ -1,0 +1,40 @@
+{
+  "collection": "luxury-v2",
+  "created": "2026-09-15",
+  "branch": "ai-social-luxury-20260911",
+  "path": "media/social/luxury-20260911/luxury-v2",
+  "ratio": "4x5",
+  "size": "1080x1350",
+  "one_output_per_ring": true,
+  "policy": {
+    "pose": "taken from each ring's own main site photo; no imposed angle",
+    "environment": "rotated luxury settings (velvet/marble/walnut/charcoal/slate/linen)",
+    "forbidden": [
+      "white box",
+      "hands/human",
+      "text/logo/watermark",
+      "heavy smoke or glitter",
+      "extra rings",
+      "gold cast on silver",
+      "inventing hidden band parts"
+    ],
+    "status_rule": "any change to stone, engraving, shank or pose => FAILED_QA; only the owner may APPROVE"
+  },
+  "items": [
+    {
+      "pid": 81,
+      "sku": "1015",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/81/81-luxury-4x5.png",
+      "commit": "d0c6cfca2e8b41fdb4614b086974dc08e12f65fb",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/81-compare.png",
+      "qa_commit": "0e418da0007b89dfa6dbab98175de3892d1d8f74",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-5.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/81-ref.png",
+      "source_commit": "80eb255fbafd759a7bc35adb5e326ea7ee40ab31",
+      "environment": "polished black marble plinth + deep burgundy velvet + warm gallery rim light",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif). Owner review required.",
+      "run": "luxury-v2-20260915"
+    }
+  ]
+}
