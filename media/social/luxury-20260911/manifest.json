@@ -296,6 +296,20 @@
       "note": "Pose/black dome/beaded bezel/decorated shank from source photo; fine micro-detail re-rendered by model. Owner review required."
     },
     {
+      "pid": 117,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-14.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/117/117-luxury-4x5.png",
+      "sha": "f9308fa765f25aa31a8e701a1f3d580ad8e30dd1",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/117-compare.png",
+      "review_sha": "4b9fe73fb89bceafd65eba544fde2ca2c8744116",
+      "run": "luxury-v2-20260915",
+      "environment": "black velvet + warm side-back rim light (low), soft warm front-left fill",
+      "note": "Red agate portrait engraving + ornamental border kept per source (every line preserved, nothing re-invented). Fine micro-detail re-rendered by model - owner review required."
+    },
+    {
       "pid": 175,
       "angle": "A",
       "ratio": "4x5",
