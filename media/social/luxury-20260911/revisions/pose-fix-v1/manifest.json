@@ -1,0 +1,102 @@
+{
+  "revision": "pose-fix-v1",
+  "created": "2026-09-15",
+  "branch": "ai-social-luxury-20260911",
+  "path": "media/social/luxury-20260911/revisions/pose-fix-v1",
+  "scope": [
+    "65-A",
+    "65-B"
+  ],
+  "policy": {
+    "pose": "taken from the reference photo; no angle imposed (no upright/flat/45-degree stand)",
+    "protected": [
+      "stone colour+carving",
+      "all engraving lines",
+      "bezel",
+      "shoulders",
+      "shank thickness+cross-section",
+      "closed shank profile"
+    ],
+    "forbidden": [
+      "inventing hidden band parts",
+      "composite/cutout fallback",
+      "gold cast on silver"
+    ],
+    "status_rule": "any change to stone/engraving/shank/pose => FAILED_QA; only the owner may set APPROVED",
+    "attempts_allowed": 2,
+    "attempts_used": 4,
+    "generation_model": "real AI image editing with reference image (no rembg/opencv/cutout chain)"
+  },
+  "attempts": [
+    {
+      "file": "65-A",
+      "angle": "A",
+      "attempt": 1,
+      "status": "FAILED_QA",
+      "reason": "shank ribs thinner/flatter than reference; band loop invented beyond source; engraving glyph micro-shapes re-rendered",
+      "blob": "065a835f14e73a361828a94c262b7b39ca00504f",
+      "commit": "d7d50f0b7654c96c5b4be1f802109c958c063cd0",
+      "raw": "https://raw.githubusercontent.com/maryamghabel3-debug/radman-silver-store/ai-social-luxury-20260911/media/social/luxury-20260911/revisions/pose-fix-v1/rejected/65-A-posefix-v1-attempt1.png"
+    },
+    {
+      "file": "65-A",
+      "angle": "A",
+      "attempt": 2,
+      "status": "FAILED_QA",
+      "reason": "pose more upright than reference; bezel teeth coarser; ribs thinner; front loop invented; engraving re-rendered/stretched",
+      "blob": "761722376d9f93350cf5ff0e3636acf09c8b5fd7",
+      "commit": "c0c67f53a3f4f179987416874f02d129a6ef0d2c",
+      "raw": "https://raw.githubusercontent.com/maryamghabel3-debug/radman-silver-store/ai-social-luxury-20260911/media/social/luxury-20260911/revisions/pose-fix-v1/rejected/65-A-posefix-v1-attempt2.png"
+    },
+    {
+      "file": "65-B",
+      "angle": "B",
+      "attempt": 1,
+      "status": "FAILED_QA",
+      "reason": "bezel tooth pattern and bead rail changed; engraving glyph micro-shapes re-written",
+      "blob": "8ff148474c674164cbc6aaa35a891f5b24e515c2",
+      "commit": "e958310bbfc7b5e75d9d0a2ee9db2ff2ee47981b",
+      "raw": "https://raw.githubusercontent.com/maryamghabel3-debug/radman-silver-store/ai-social-luxury-20260911/media/social/luxury-20260911/revisions/pose-fix-v1/rejected/65-B-posefix-v1-attempt1.png"
+    },
+    {
+      "file": "65-B",
+      "angle": "B",
+      "attempt": 2,
+      "status": "FAILED_QA",
+      "note": "closest of the four",
+      "reason": "engraving glyph micro-shapes re-rendered vs source; stone tone ~1 stop lighter",
+      "passed": [
+        "pose/attitude",
+        "tilt",
+        "oval stone proportions",
+        "sawtooth bezel teeth",
+        "bead rail",
+        "rib thickness",
+        "open slot between ribs",
+        "contact shadow",
+        "environment"
+      ],
+      "blob": "bb08c3ade5607eceff61b02a2de6435c7653efc9",
+      "commit": "0f7baca26c0316d5ffe3cf2b5a940337b8da5095",
+      "raw": "https://raw.githubusercontent.com/maryamghabel3-debug/radman-silver-store/ai-social-luxury-20260911/media/social/luxury-20260911/revisions/pose-fix-v1/rejected/65-B-posefix-v1-attempt2.png"
+    }
+  ],
+  "compare_sheets": [
+    {
+      "file": "65-A-posefix-v1-compare.png",
+      "sha": "be65e71f861f8479ca1d2009cf74cd5bec8a4a30",
+      "raw": "https://raw.githubusercontent.com/maryamghabel3-debug/radman-silver-store/ai-social-luxury-20260911/media/social/luxury-20260911/revisions/pose-fix-v1/qa/65-A-posefix-v1-compare.png"
+    },
+    {
+      "file": "65-B-posefix-v1-compare.png",
+      "sha": "8b61c5db8c5bf748d12fa53a9ef3d858cfd54fd5",
+      "raw": "https://raw.githubusercontent.com/maryamghabel3-debug/radman-silver-store/ai-social-luxury-20260911/media/social/luxury-20260911/revisions/pose-fix-v1/qa/65-B-posefix-v1-compare.png"
+    }
+  ],
+  "supersedes_note": "Earlier step3 outputs at {BASE}/{pid}/{pid}-{angle}-step3.png are NOT accepted after this correction: 65-B is FAILED_QA (owner ruling: shank slimmer than reference) and 65-A is superseded by the same correction criteria. They were left untouched, not deleted.",
+  "references": {
+    "65-A": "https://radmansilver.ir/wp-content/uploads/2026/08/01-1.webp",
+    "65-B": "https://radmansilver.ir/wp-content/uploads/2026/08/02-1.webp"
+  },
+  "result": "0 accepted outputs. Blocked on a model with hard region protection; awaiting owner APPROVE_POSE_FIX before any other product."
+}
