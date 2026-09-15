@@ -95,6 +95,21 @@
       "environment": "graphite slab with brushed texture + cool key / warm distant accent",
       "note": "Pose/green stone carving/prong setting/shank from source photo; fine carved micro-detail re-rendered by model. Owner review required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 105,
+      "sku": "1010",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/105/105-luxury-4x5.png",
+      "commit": "fb580103b4e856127cdb2ff52265fec3bb2dee54",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/105-compare.png",
+      "qa_commit": "e04cff3525a35d7d160360fba6ae83d08d5ac2b9",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-11.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/105-ref.png",
+      "source_commit": "56b812fb7e4291bb83c6258cf0c22c7511904648",
+      "environment": "black pebbled leather plinth + warm gallery light and bokeh",
+      "note": "Pose/blue agate dense script/ornate shank from source photo; extremely fine engraving micro-detail re-rendered by model. Owner review required.",
+      "run": "luxury-v2-20260915"
     }
   ]
 }
