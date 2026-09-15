@@ -310,6 +310,20 @@
       "note": "Red agate portrait engraving + ornamental border kept per source (every line preserved, nothing re-invented). Fine micro-detail re-rendered by model - owner review required."
     },
     {
+      "pid": 121,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-15.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/121/121-luxury-4x5.png",
+      "sha": "dd115bc049cb0867773d75c63e915864690e4f95",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/121-compare.png",
+      "review_sha": "6f9dbe1bc561e53bc14fc3d9c90ab6820dc4a102",
+      "run": "luxury-v2-20260915",
+      "environment": "brushed graphite slab + single hard gridded side light from right",
+      "note": "Square black onyx + hatch-engraved shank per source. Fine micro-detail re-rendered by model - owner review required."
+    },
+    {
       "pid": 175,
       "angle": "A",
       "ratio": "4x5",
