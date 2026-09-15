@@ -394,6 +394,20 @@
       "note": "Moissanite dome + two-tone ornate shank kept per source. Fine micro-detail re-rendered by model - owner review required."
     },
     {
+      "pid": 147,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-21.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/147/147-luxury-4x5.png",
+      "sha": "2dffc8e8d5adacfd05fc53be46665b84388be008",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/147-compare.png",
+      "review_sha": "30df38303cfa93b268564b4043c6bae82875b021",
+      "run": "luxury-v2-20260915",
+      "environment": "matte dark bronze-brown stone, museum vitrine, warm grazing beam, no mirror reflection",
+      "note": "'Ya Aba Abdollah' script on pale agate kept per source, letters preserved. Att1 scene was too similar to 129 (replaced); att2 ok. Owner review required."
+    },
+    {
       "pid": 175,
       "angle": "A",
       "ratio": "4x5",
