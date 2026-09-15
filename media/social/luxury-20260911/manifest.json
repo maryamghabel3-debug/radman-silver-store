@@ -436,6 +436,20 @@
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
     },
     {
+      "pid": 159,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-24.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/159/159-luxury-4x5.png",
+      "sha": "b63bf8de6ed4fa373547d1ae8aaa6e52eaa27fdd",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/159-compare.png",
+      "review_sha": "067ca9b68868382da5293b45f1de555aaece88a3",
+      "run": "luxury-v2-20260915",
+      "environment": "smoked bronze mirror sheet + warm low-right key, bold reflection",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
+    },
+    {
       "pid": 175,
       "angle": "A",
       "ratio": "4x5",
