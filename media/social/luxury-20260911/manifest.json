@@ -85,6 +85,19 @@
       "source": "media/pending-review/watermark-only-20260910/cleaned/69-B-step1.webp"
     },
     {
+      "pid": "69",
+      "angle": "B",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/02-2.webp",
+      "file": "media/social/luxury-20260911/69/69-B-step3.png",
+      "sha": "e63f0cfe2beff426641f4ffb9221bf86d8a2a151",
+      "review": "media/social/luxury-20260911/qa/69-B-review.png",
+      "review_sha": "bca0dcec491109d35e3dc135db7026eb87970ebc",
+      "run": "step3-remaining-20260915",
+      "note": "style: dark matte walnut wood; attempt1 FAILED_QA (gold cast on silver), attempt2 passed"
+    },
+    {
       "pid": 73,
       "angle": "A",
       "ratio": "4x5",
