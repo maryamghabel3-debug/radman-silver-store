@@ -230,6 +230,21 @@
       "environment": "dark oxblood leather + warm low-left key (no light through the stone)",
       "note": "Att1 FAILED_QA: transmitted glow washed the stone milky. Att2 passes: rich amber kept. Beads/shank per source. Owner review required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 143,
+      "sku": "1002",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/143/143-luxury-4x5.png",
+      "commit": "cb6a89c94138da5d91360c79e73cdedba29749df",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/143-compare.png",
+      "qa_commit": "268c04c29fea46369b16c0ce812dffba6e4eac49",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-20.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/143-ref.png",
+      "source_commit": "cd555bc93a48d4f1b6753f1f897d30b2b0040dc8",
+      "environment": "matte black velvet + dark-field lighting (two side-behind diffused lights for facet brilliance)",
+      "note": "Moissanite dome + two-tone ornate shank kept per source. Fine micro-detail re-rendered by model - owner review required.",
+      "run": "luxury-v2-20260915"
     }
   ]
 }
