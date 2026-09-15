@@ -636,6 +636,20 @@
       "status": "GENERATED_PENDING_REVIEW"
     },
     {
+      "pid": 256,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/256-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/256/256-luxury-4x5.png",
+      "sha": "ec0b235e4eb33608505a6d5b628a7f9584c0f34c",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/256-compare.png",
+      "review_sha": "d963e4b96a6532d7b672c33a816279d929116517",
+      "run": "luxury-v2-20260915",
+      "environment": "dark plinth in a single pool of warm gallery light",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
+    },
+    {
       "pid": 265,
       "angle": "A",
       "ratio": "4x5",
