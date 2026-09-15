@@ -240,6 +240,20 @@
       "note": "Pose/onyx carving/bezel/ribs from source photo; fine carved micro-detail re-rendered by model (same motif). Owner review required."
     },
     {
+      "pid": 101,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-10.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/101/101-luxury-4x5.png",
+      "sha": "853d1b09f07344938a61c12816239e2fa88ba0bf",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/101-compare.png",
+      "review_sha": "a41fc270c06b590f5a8da0f163d2a93cdf816ecc",
+      "run": "luxury-v2-20260915",
+      "environment": "graphite slab with brushed texture + cool key / warm distant accent",
+      "note": "Pose/green stone carving/prong setting/shank from source photo; fine carved micro-detail re-rendered by model. Owner review required."
+    },
+    {
       "pid": 175,
       "angle": "A",
       "ratio": "4x5",
