@@ -145,6 +145,19 @@
       "source": "media/pending-review/watermark-only-20260910/cleaned/77-A-step1.webp"
     },
     {
+      "pid": "77",
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-4.webp",
+      "file": "media/social/luxury-20260911/77/77-A-step3.png",
+      "sha": "2089426466f86fbaf8bee979c88e8be51d9dfff2",
+      "review": "media/social/luxury-20260911/qa/77-A-review.png",
+      "review_sha": "7b1d1c415ae5e8da94b6d3b3c554a66da08dc1e1",
+      "run": "step3-remaining-20260915",
+      "note": "style: dark matte walnut wood"
+    },
+    {
       "pid": 77,
       "angle": "B",
       "ratio": "4x5",
