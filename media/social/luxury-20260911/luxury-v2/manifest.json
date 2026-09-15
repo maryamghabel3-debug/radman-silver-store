@@ -54,19 +54,17 @@
     {
       "pid": 93,
       "sku": "1060",
-      "status": "FAILED_QA",
+      "status": "GENERATED_PENDING_REVIEW",
       "file": "media/social/luxury-20260911/luxury-v2/93/93-luxury-4x5.png",
-      "commit": "ce4bf65809e04f1ec250935f032b52ec5e9f5699",
+      "commit": "14cc293ce48b58f5d7be0b56bac304e7aed76f6a",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/93-compare.png",
-      "qa_commit": "2a86bc857d06a7307ec950083b91cf42fea51a3a",
+      "qa_commit": "8ecc116772151e8528fd021225ac237ebf45d288",
       "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-8.webp",
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/93-ref.png",
-      "source_commit": "3cb725b3500787f8c9d66220312045e6f7712102",
-      "environment": "matte black linen fabric + soft side light",
-      "note": "Pose/pale agate/claw setting/shank from source photo; fine engraved micro-detail re-rendered by model. Owner review required.",
-      "run": "luxury-v2-20260915",
-      "qa_note": "FAILED_QA (owner-flagged): the very fine dense text on the pale agate is replaced by pseudo-text texture in the output - engraving altered. Evidence: qa/93-engraving-review.png. Old file preserved at rejected/93-attempt1-FAILED_QA.png.",
-      "engraving_review": "media/social/luxury-20260911/luxury-v2/qa/93-engraving-review.png"
+      "source_commit": "89dc1957f0476df8c999fed00968928648882285",
+      "environment": "matte black linen + soft low-left light + white bounce (attempt 2)",
+      "note": "OWNER-FLAGGED ring. Att1 FAILED_QA (fine text became pseudo-text; preserved at rejected/). Att2: cartouche + ornate top band + border + text layout preserved like source; sub-mm letterforms approximate (model limit). Owner decision required.",
+      "run": "luxury-v2-20260915"
     },
     {
       "pid": 97,
