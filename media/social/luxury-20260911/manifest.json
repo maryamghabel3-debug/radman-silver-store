@@ -105,6 +105,19 @@
       "source": "media/pending-review/watermark-only-20260910/cleaned/73-A-step1.webp"
     },
     {
+      "pid": "73",
+      "angle": "A",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-3.webp",
+      "file": "media/social/luxury-20260911/73/73-A-step3.png",
+      "sha": "5639cf91259f4862a618ede6326427064197a775",
+      "review": "media/social/luxury-20260911/qa/73-A-review.png",
+      "review_sha": "60574aefeeca34df35acc05b499f7785c371cd46",
+      "run": "step3-remaining-20260915",
+      "note": "style: charcoal #1A1A1A studio"
+    },
+    {
       "pid": 73,
       "angle": "B",
       "ratio": "4x5",
