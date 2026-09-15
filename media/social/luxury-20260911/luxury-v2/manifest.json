@@ -64,7 +64,10 @@
       "source_commit": "89dc1957f0476df8c999fed00968928648882285",
       "environment": "matte black linen + soft low-left light + white bounce (attempt 2)",
       "note": "OWNER-FLAGGED ring. Att1 FAILED_QA (fine text became pseudo-text; preserved at rejected/). Att2: cartouche + ornate top band + border + text layout preserved like source; sub-mm letterforms approximate (model limit). Owner decision required.",
-      "run": "luxury-v2-20260915"
+      "run": "luxury-v2-20260915",
+      "attempts": 2,
+      "qa_note": "Owner-flagged ring. Attempt1 FAILED_QA (fine text became pseudo-text; preserved under rejected/). Attempt2 (current): cartouche + ornate top band + border + text layout preserved as in source; sub-millimeter letterforms still approximate (model limit). Owner decision required.",
+      "engraving_review": "media/social/luxury-20260911/luxury-v2/qa/93-engraving-review-attempt2.png"
     },
     {
       "pid": 97,
@@ -265,5 +268,23 @@
       "qa_note": "GENERATED_PENDING_REVIEW with engraving flag: floral/script composition preserved; leaf and stroke micro-shapes differ from source (model re-render). Owner decision needed. Evidence: qa/147-engraving-review.png.",
       "engraving_review": "media/social/luxury-20260911/luxury-v2/qa/147-engraving-review.png"
     }
-  ]
+  ],
+  "rejected": [
+    {
+      "pid": 93,
+      "attempt": 1,
+      "status": "FAILED_QA",
+      "reason": "owner-flagged: the very fine dense text on the pale agate was replaced by pseudo-text texture",
+      "file": "media/social/luxury-20260911/luxury-v2/rejected/93-attempt1-FAILED_QA.png",
+      "sha": "b68d292900c5ea41b452fdee178b4f1e241fd2a9",
+      "raw": "https://raw.githubusercontent.com/maryamghabel3-debug/radman-silver-store/ai-social-luxury-20260911/media/social/luxury-20260911/luxury-v2/rejected/93-attempt1-FAILED_QA.png"
+    }
+  ],
+  "engraving_reviews": {
+    "93": {
+      "attempt1": "media/social/luxury-20260911/luxury-v2/qa/93-engraving-review.png",
+      "attempt2": "media/social/luxury-20260911/luxury-v2/qa/93-engraving-review-attempt2.png",
+      "sha": "b8b45fbed45f2966428072e0904ecbfee7672c98"
+    }
+  }
 }
