@@ -478,6 +478,20 @@
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
     },
     {
+      "pid": 171,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-27.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/171/171-luxury-4x5.png",
+      "sha": "3cb2d2e803eabf69ecf68fe94c501587c70abe4a",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/171-compare.png",
+      "review_sha": "08965b285f0bf173f9e7cb80b6d37e0fe63fe49d",
+      "run": "luxury-v2-20260915",
+      "environment": "aged patinated copper + warm low-left key",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
+    },
+    {
       "pid": 175,
       "angle": "A",
       "ratio": "4x5",
