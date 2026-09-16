@@ -682,6 +682,20 @@
       "status": "GENERATED_PENDING_REVIEW"
     },
     {
+      "pid": 190,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/190-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/190/190-luxury-4x5.png",
+      "sha": "5f6abce9afd72012d42d1a877af29c34543e391f",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/190-compare.png",
+      "review_sha": "ebdea0c292a3d7408474a4ea2ce1286227281240",
+      "run": "luxury-v2-20260915",
+      "environment": "deep olive-green velvet + cool back-right rim",
+      "note": "stone shows a slight warm gradient from the rim light; leaf-and-prong bezel kept - owner review at 300%"
+    },
+    {
       "pid": 193,
       "angle": "A",
       "ratio": "4x5",
