@@ -408,6 +408,21 @@
       "environment": "balanced frame · dark suit cuff · old seaside stone wall at night, harbour lights beyond (natural)",
       "note": "blue agate tone + pattern kept - review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 315,
+      "sku": "NM-3569",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/315/315-hand-4x5.png",
+      "commit": "4d4104ebe1568aeaf7e8fcd5ebb400ec3c313b4f",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/315-hand-compare.png",
+      "qa_commit": "95b008588dab43e33d7566af955d31917c831039",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/315-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/315-ref.png",
+      "source_commit": "48bd85b47ff2c574797746c746e5da1e8453508e",
+      "environment": "balanced frame · brown suit cuff · equestrian saddle leather, tack room (natural)",
+      "note": "tiger-eye chatoyant bands kept - review at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
