@@ -916,6 +916,20 @@
       "status": "GENERATED_PENDING_REVIEW"
     },
     {
+      "pid": 235,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/235-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/235/235-hand-4x5.png",
+      "sha": "6a019f85ccccf5fc2c277c3dfd1a95457ecdcf21",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/235-hand-compare.png",
+      "review_sha": "ea644be8c99bc790c5b579a01e1c20c257c68e32",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · whole hand + dark suit cuff · old private library, book spines behind (natural)",
+      "note": "brown suleimani agate tone + engraved shank kept exactly per owner rule; environment changed only - review at 300%"
+    },
+    {
       "pid": 238,
       "angle": "A",
       "ratio": "4x5",
