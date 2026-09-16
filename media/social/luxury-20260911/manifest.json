@@ -622,6 +622,20 @@
       "status": "GENERATED_PENDING_REVIEW"
     },
     {
+      "pid": 181,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/181-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/181/181-luxury-4x5.png",
+      "sha": "de9431d3f20b214acdbcf48da3238daaf555cc70",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/181-compare.png",
+      "review_sha": "dd666f1dc9e40ec2608ceb161facb5dfc9420739",
+      "run": "luxury-v2-20260915",
+      "environment": "brushed bronze plate + warm grazing light (v2 upgrade)",
+      "note": "v2 upgrade of an older ring: pose/stone/shank from source photo; fine details kept to source - owner review at 300% required."
+    },
+    {
       "pid": 184,
       "angle": "A",
       "ratio": "4x5",
