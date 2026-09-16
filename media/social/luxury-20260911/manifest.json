@@ -1054,12 +1054,12 @@
       "status": "GENERATED_PENDING_REVIEW",
       "source": "https://radmansilver.ir/wp-content/uploads/2026/08/265-A-step1.webp",
       "file": "media/social/luxury-20260911/luxury-v2/265/265-hand-4x5.png",
-      "sha": "ea6189663bd6c0c03a23c12a0c07efd0d4b54072",
+      "sha": "5c2d4e869b124885989b2465bd50af3032b9bb40",
       "review": "media/social/luxury-20260911/luxury-v2/qa/265-hand-compare.png",
-      "review_sha": "2aee2fb2f31b0d481aa66026a01d0f51c8a85d47",
+      "review_sha": "5a659cd76599e50f0611be758ea8cd8fd2fc2d06",
       "run": "luxury-hand-20260916",
-      "environment": "man's hand + dark jacket sleeve + deep emerald marble ledge + cool rim back-left, warm frontal fill",
-      "note": "ring worn on hand; the engraved «امیری حسین» panel is the key element - please check the letterforms at 300%"
+      "environment": "balanced frame · dark suit cuff · old courtyard well rim with brass bucket at dusk (natural)",
+      "note": "engraved «امیری حسین» is the key element: kept, verify at 300%"
     },
     {
       "pid": 269,
