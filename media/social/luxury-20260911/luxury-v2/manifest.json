@@ -590,6 +590,21 @@
       "run": "luxury-v2-20260915"
     },
     {
+      "pid": 196,
+      "sku": "NM-3608",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/196/196-luxury-4x5.png",
+      "commit": "d94ccff020378e2180d5daa2c62a0224bc18054c",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/196-compare.png",
+      "qa_commit": "92e0a09e43392f2f84367236368802be10eb1720",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/196-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/196-ref.png",
+      "source_commit": "1b258b8d92adbd352c4c879d36afa6eb39804441",
+      "environment": "crackled turquoise glazed ceramic + narrow cool back-left grazing light",
+      "note": "matte olive cabochon and openwork filigree preserved; only glaze reflections added - owner review at 300%",
+      "run": "luxury-v2-20260915"
+    },
+    {
       "pid": 256,
       "sku": "NM-3588",
       "status": "APPROVED",
