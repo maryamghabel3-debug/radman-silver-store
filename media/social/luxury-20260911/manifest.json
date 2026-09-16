@@ -582,6 +582,20 @@
       "status": "GENERATED_PENDING_REVIEW"
     },
     {
+      "pid": 175,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/175-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/175/175-luxury-4x5.png",
+      "sha": "cbe2682d0dc1767cd4245fb1a4b961712e938ed7",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/175-compare.png",
+      "review_sha": "dbdb7b335c8a6b896ac511c45600cb676af04ff6",
+      "run": "luxury-v2-20260915",
+      "environment": "dark emerald marble + cool back-right rim (v2 upgrade)",
+      "note": "v2 upgrade of an older ring: pose/stone/shank from source photo; fine details kept to source - owner review at 300% required."
+    },
+    {
       "pid": 178,
       "angle": "A",
       "ratio": "4x5",
