@@ -722,6 +722,20 @@
       "status": "GENERATED_PENDING_REVIEW"
     },
     {
+      "pid": 196,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/196-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/196/196-luxury-4x5.png",
+      "sha": "d94ccff020378e2180d5daa2c62a0224bc18054c",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/196-compare.png",
+      "review_sha": "92e0a09e43392f2f84367236368802be10eb1720",
+      "run": "luxury-v2-20260915",
+      "environment": "crackled turquoise glazed ceramic + narrow cool back-left grazing light",
+      "note": "matte olive cabochon and openwork filigree preserved; only glaze reflections added - owner review at 300%"
+    },
+    {
       "pid": 199,
       "angle": "A",
       "ratio": "4x5",
