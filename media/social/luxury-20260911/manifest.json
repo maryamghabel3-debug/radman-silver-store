@@ -1946,6 +1946,20 @@
       "note": "Pose/stone/shank from source photo; engraved script letters re-rendered by model (same wording) - owner review at 300% required."
     },
     {
+      "pid": 378,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/378-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/378/378-hand-4x5.png",
+      "sha": "4ba3abecfec368873734ff80c9cf00f59ed7e4c1",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/378-hand-compare.png",
+      "review_sha": "86ab3f7e3614c3663b1b8d3da28373f8ff2e2438",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · black suit cuff · old library lectern with a lit candle (natural)",
+      "note": "engraved «حسبی الله» is the key element: kept, verify at 300%"
+    },
+    {
       "pid": 390,
       "angle": "LUXURY",
       "ratio": "4x5",
