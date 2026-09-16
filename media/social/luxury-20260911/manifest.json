@@ -876,6 +876,20 @@
       "status": "GENERATED_PENDING_REVIEW"
     },
     {
+      "pid": 220,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/220-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/220/220-hand-4x5.png",
+      "sha": "88f86673caea1625322193a289d08472f65c42ac",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/220-hand-compare.png",
+      "review_sha": "26642e3d247a42504fa4e8875e71f0b6c22d3606",
+      "run": "luxury-hand-20260916",
+      "environment": "man's hand + dark blue suit · polished granite counter in a dark kitchen, under-cabinet glow from the right (natural)",
+      "note": "durr-e-najaf dome kept pale; granite counter + warm under-cabinet light - owner review at 300%"
+    },
+    {
       "pid": 232,
       "angle": "A",
       "ratio": "4x5",
