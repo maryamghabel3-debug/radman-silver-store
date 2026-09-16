@@ -1,0 +1,16 @@
+{
+  "run": "luxury-v2-20260916-agent",
+  "claimed_pids": [
+    369,
+    372,
+    375,
+    378,
+    390,
+    65,
+    69,
+    73
+  ],
+  "note": "This run is processing these pids. Another agent process must pick different pids to avoid manifest conflicts.",
+  "started": "2026-09-16",
+  "branch": "ai-social-luxury-20260911"
+}
