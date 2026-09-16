@@ -110,6 +110,21 @@
       "run": "luxury-hand-20260916"
     },
     {
+      "pid": 235,
+      "sku": "NM-3595",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/235/235-hand-4x5.png",
+      "commit": "6a019f85ccccf5fc2c277c3dfd1a95457ecdcf21",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/235-hand-compare.png",
+      "qa_commit": "ea644be8c99bc790c5b579a01e1c20c257c68e32",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/235-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/235-ref.png",
+      "source_commit": "0e36d841deded6401c02bb089c61554ec97ee328",
+      "environment": "balanced frame · whole hand + dark suit cuff · old private library, book spines behind (natural)",
+      "note": "brown suleimani agate tone + engraved shank kept exactly per owner rule; environment changed only - review at 300%",
+      "run": "luxury-hand-20260916"
+    },
+    {
       "pid": 259,
       "sku": "NM-3587",
       "status": "GENERATED_PENDING_REVIEW",
