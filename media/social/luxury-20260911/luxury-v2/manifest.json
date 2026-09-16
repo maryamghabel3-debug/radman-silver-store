@@ -67,6 +67,21 @@
       "run": "luxury-v2-20260915"
     },
     {
+      "pid": 77,
+      "sku": "1014",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/77/77-luxury-4x5.png",
+      "commit": "fc91544f74bd80e475c07a19b875314ae18c550c",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/77-compare.png",
+      "qa_commit": "144015dbdf1a3fd8e2694a1f22754e17ffbfc066",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-4.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/77-ref.png",
+      "source_commit": "ce800873f113800feca97c503c74c9065aaefe7b",
+      "environment": "black river pebbles + back-left rim (v2 upgrade)",
+      "note": "Rebuild/upgrade: pose/stone/shank from source photo; engraved script kept to source wording - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
+    },
+    {
       "pid": 81,
       "sku": "1015",
       "status": "APPROVED",
