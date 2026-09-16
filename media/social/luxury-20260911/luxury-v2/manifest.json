@@ -765,6 +765,21 @@
       "environment": "frosted milky jade glass + low back-right rim (soft glow)",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 357,
+      "sku": "NM-3555",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/357/357-luxury-4x5.png",
+      "commit": "feaccca946fda295cf6e530cf1077a1ebe2e1199",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/357-compare.png",
+      "qa_commit": "c379b09e1f489a18d1f9ae3a3c04684df41bb35d",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/357-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/357-ref.png",
+      "source_commit": "94b6f4f71eb36a195813d8a58ebe849ca4750eae",
+      "environment": "rose quartz slab + soft low key (delicate)",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
