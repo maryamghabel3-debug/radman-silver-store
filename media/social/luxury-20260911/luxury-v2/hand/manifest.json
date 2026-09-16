@@ -543,6 +543,21 @@
       "environment": "balanced frame · dark suit cuff · potter's wheel bench in a studio (natural)",
       "note": "suleimani banding kept exactly - review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 348,
+      "sku": "NM-3558",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/348/348-hand-4x5.png",
+      "commit": "3da4fa5051159414af59f5f923d8ea5adb00718e",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/348-hand-compare.png",
+      "qa_commit": "0fcfe75d66d7baeddf2fd55fc76d71b62d8e1346",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/348-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/348-ref.png",
+      "source_commit": "db2e44886214daeebf4ff7e7bf3f55a4b0391d4f",
+      "environment": "balanced frame · grey suit cuff · watchmaker's bench with tools and a movement (natural)",
+      "note": "vivid green agate kept exactly - review at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
