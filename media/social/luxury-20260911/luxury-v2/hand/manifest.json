@@ -108,6 +108,21 @@
       "environment": "man's hand + black suit sleeve + black lacquer table with soft reflection + cool side light L",
       "note": "ring worn on hand; engraved «یا ابا عبدالله» kept - please check the engraving at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 284,
+      "sku": "NM-3579",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/284/284-hand-4x5.png",
+      "commit": "4b0a3b9aef532a6fbbd313958608326ad43bac65",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/284-hand-compare.png",
+      "qa_commit": "c1650155b6c8fb260efff34f5e8faadc8575b394",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/284-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/284-ref.png",
+      "source_commit": "d06d0a70a705562d8c139bdf2147983411a2ed7c",
+      "environment": "man's hand + midnight-blue jacket sleeve + patinated bronze tabletop + warm low light R, cool rim back-left",
+      "note": "ring worn on hand; pale lilac cabochon tone kept; bronze adds warmth - owner review at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
