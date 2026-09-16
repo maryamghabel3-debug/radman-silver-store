@@ -633,6 +633,21 @@
       "environment": "balanced frame · dark suit cuff · orsi screen sill, patterned light (natural)",
       "note": "engraved «حسین منی» is the key element: kept, verify at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 366,
+      "sku": "NM-3552",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/366/366-hand-4x5.png",
+      "commit": "575df8b13435220042b444d1fca6b05be8a79199",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/366-hand-compare.png",
+      "qa_commit": "b6931ad2039d80f5fc815c21b96e137ddfa42e78",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/366-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/366-ref.png",
+      "source_commit": "31745c2d02a624a31b12ef57b2c5f5e1c9d4b5a6",
+      "environment": "balanced frame · dark suit cuff · caravanserai brick niche with brass oil lamp (natural)",
+      "note": "engraved «یا ابا عبدالله» is the key element: kept, verify at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
