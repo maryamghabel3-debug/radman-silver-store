@@ -1460,6 +1460,20 @@
       "approved_at": "2026-09-15"
     },
     {
+      "pid": 322,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/322-A-step1-1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/322/322-hand-4x5.png",
+      "sha": "0f75d9794c0eb8c5b6191bfa1c1d9bb3c4a37635",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/322-hand-compare.png",
+      "review_sha": "2f13ebf3c1343be5bb584a68436310c4a6ca4739",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · dark suit cuff · old country kitchen windowsill, copper pans behind (natural)",
+      "note": "bright yellow agate kept exactly - review at 300%"
+    },
+    {
       "pid": 325,
       "angle": "LUXURY",
       "ratio": "4x5",
