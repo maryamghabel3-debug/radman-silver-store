@@ -780,6 +780,20 @@
       "run": "luxury-v2-20260915",
       "environment": "brushed gunmetal plate + cool low-left key + blue background accent",
       "note": "APPROVED by owner (2026-09-15)"
+    },
+    {
+      "pid": 315,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/315-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/315/315-luxury-4x5.png",
+      "sha": "61f9705ac6b6ae2148178a881a31d19684f16c54",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/315-compare.png",
+      "review_sha": "f4684997626fb3972b3d9fe4079cd68b58059979",
+      "run": "luxury-v2-20260915",
+      "environment": "smoked oak + hard ribbon light along the chatoyant band",
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
