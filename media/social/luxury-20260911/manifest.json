@@ -682,6 +682,20 @@
       "run": "luxury-v2-20260915",
       "environment": "wet black slate + cool low back-left rim",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
+    },
+    {
+      "pid": 293,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/293-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/293/293-luxury-4x5.png",
+      "sha": "68d46ca9fcc616c8293e6af1dd214c494e3c0498",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/293-compare.png",
+      "review_sha": "448f43b3076cda867e69608d29627f7f604c27a6",
+      "run": "luxury-v2-20260915",
+      "environment": "smoked glass + warm transmitted glow through the carnelian",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
