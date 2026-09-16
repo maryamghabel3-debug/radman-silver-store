@@ -530,6 +530,21 @@
       "run": "luxury-v2-20260915"
     },
     {
+      "pid": 184,
+      "sku": "NM-3612",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/184/184-luxury-4x5.png",
+      "commit": "982b8d2db5848e0c191e019f1c9878a422e33b5a",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/184-compare.png",
+      "qa_commit": "b9177b2ca93a9aafe47062eb793c80ca010aa388",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/184-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/184-ref.png",
+      "source_commit": "b3408dfbe700b98cc13379c2424fc9c3b0a58ded",
+      "environment": "white-grey veined marble slab + broad soft side light from right",
+      "note": "stone reads slightly brighter red under the marble light; engraved layout motifs kept - owner review at 300%",
+      "run": "luxury-v2-20260915"
+    },
+    {
       "pid": 256,
       "sku": "NM-3588",
       "status": "APPROVED",
