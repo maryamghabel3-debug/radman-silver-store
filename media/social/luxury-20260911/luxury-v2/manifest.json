@@ -720,6 +720,21 @@
       "environment": "dusty volcanic tuff + warm narrow raking beam (reveals the agate banding)",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 348,
+      "sku": "NM-3558",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/348/348-luxury-4x5.png",
+      "commit": "2febb8449e5a977765122e454887b0c896962d15",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/348-compare.png",
+      "qa_commit": "af837047abcef9daf3c65248a9e930b957e16d8d",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/348-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/348-ref.png",
+      "source_commit": "7711095246f139888d2fae4e3aa302b5bd515854",
+      "environment": "petrified wood slab + warm low-right key",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
