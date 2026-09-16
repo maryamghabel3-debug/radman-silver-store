@@ -738,6 +738,20 @@
       "run": "luxury-v2-20260915",
       "environment": "olive-bronze glazed ceramic + warm low-left key",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
+    },
+    {
+      "pid": 306,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/306-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/306/306-luxury-4x5.png",
+      "sha": "bfa5e63255b3acaa7fd1b748d3024857ae1395a1",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/306-compare.png",
+      "review_sha": "aa848602faee3da7b61e675742b734baccaee641",
+      "run": "luxury-v2-20260915",
+      "environment": "smoked plum glass + soft back-right rim",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
