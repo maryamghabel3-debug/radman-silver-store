@@ -620,6 +620,21 @@
       "run": "luxury-v2-20260915"
     },
     {
+      "pid": 202,
+      "sku": "NM-3606",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/202/202-luxury-4x5.png",
+      "commit": "d825583ec6002170d9a5782db380fa4716b40af6",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/202-compare.png",
+      "qa_commit": "2e73565a7dcbb19392118df57f1da3ca9eb294cd",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/202-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/202-ref.png",
+      "source_commit": "1ac8e844360e4311ea7d2f9e85ab229b5f812d34",
+      "environment": "warm camel woven wool + warm back-right light",
+      "note": "crackled blue stone and vine bezel preserved; environment changed only - owner review at 300%",
+      "run": "luxury-v2-20260915"
+    },
+    {
       "pid": 256,
       "sku": "NM-3588",
       "status": "APPROVED",
