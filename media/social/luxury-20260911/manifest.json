@@ -878,6 +878,20 @@
       "run": "luxury-v2-20260915",
       "environment": "slanting shaft of warm light in a dim room (cinematic)",
       "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required."
+    },
+    {
+      "pid": 336,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/336-A-step2.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/336/336-luxury-4x5.png",
+      "sha": "4a5b13b6661f75dacbd867c5c2033a5aeb508c24",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/336-compare.png",
+      "review_sha": "399965c563141860348a1f5dc93d2c804e28ce9d",
+      "run": "luxury-v2-20260915",
+      "environment": "raked black sand ridges + soft cool low-left light",
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
