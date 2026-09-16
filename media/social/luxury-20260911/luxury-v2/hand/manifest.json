@@ -125,6 +125,21 @@
       "run": "luxury-hand-20260916"
     },
     {
+      "pid": 238,
+      "sku": "NM-3594",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/238/238-hand-4x5.png",
+      "commit": "8f8d26ab226a39a1728530ccb61db1f25e799a9e",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/238-hand-compare.png",
+      "qa_commit": "769bd6a18fe307fd29aee103da5393826247d7e1",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/238-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/238-ref.png",
+      "source_commit": "d6491aaa26c616613d771b01634cbe07b5b7c83b",
+      "environment": "balanced frame · whole hand + dark suit cuff · billiard table green felt + rail (natural)",
+      "note": "green dragon agate pattern + prongs kept exactly - review at 300%",
+      "run": "luxury-hand-20260916"
+    },
+    {
       "pid": 259,
       "sku": "NM-3587",
       "status": "GENERATED_PENDING_REVIEW",
