@@ -545,6 +545,21 @@
       "run": "luxury-v2-20260915"
     },
     {
+      "pid": 187,
+      "sku": "NM-3611",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/187/187-luxury-4x5.png",
+      "commit": "6fab9b6007fa83f073a0fc1639c2af91e44e7cac",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/187-compare.png",
+      "qa_commit": "73af82356e5e6d5bfc2c89ce740454aeec56d5e8",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/187-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/187-ref.png",
+      "source_commit": "f23734f359e6db657718e18fe085c05f3d8ea57f",
+      "environment": "raw blue-grey coarse quartzite slab + cool back-left rim + faint warm front-right fill",
+      "note": "honey stone reads marginally more amber under the quartzite light; engraving kept - owner review at 300%",
+      "run": "luxury-v2-20260915"
+    },
+    {
       "pid": 256,
       "sku": "NM-3588",
       "status": "APPROVED",
