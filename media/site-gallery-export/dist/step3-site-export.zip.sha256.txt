@@ -1,0 +1,3 @@
+# single file, no split needed: step3-site-export.zip
+# size: 17393829 bytes (16.6 MB), single file
+sha256  495ef6c855dd02cd27d853e10697fad8ab8b81036e254493cfc19e15f6768c32
