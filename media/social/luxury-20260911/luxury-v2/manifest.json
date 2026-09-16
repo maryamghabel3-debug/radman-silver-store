@@ -584,6 +584,21 @@
       "environment": "smoked oak + hard ribbon light along the chatoyant band",
       "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 318,
+      "sku": "NM-3568",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/318/318-luxury-4x5.png",
+      "commit": "b59303ee53fccb2379484e33d063f1ef8e013f8c",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/318-compare.png",
+      "qa_commit": "65a6df8e72bc058fcff7656d94d971b93b48a33e",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/318-A-step1-1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/318-ref.png",
+      "source_commit": "5b83b3a84221f037f57346dff8839caff6ccf33f",
+      "environment": "recessed stone niche + broad shadowless front-left panel",
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
