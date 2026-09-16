@@ -65,6 +65,21 @@
       "run": "luxury-hand-20260916"
     },
     {
+      "pid": 217,
+      "sku": "NM-3601",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/217/217-hand-4x5.png",
+      "commit": "e444385689e1ba7087515375f043d5fcf3c78acc",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/217-hand-compare.png",
+      "qa_commit": "c8878f0ac8ba52804335857f75be5951c65ab54e",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/217-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/217-ref.png",
+      "source_commit": "b5a0c70835f6666baa6503c1e3d22eccb1a394da",
+      "environment": "man's hand + black suit · carved stone balustrade of an old staircase at night, warm sconce + cool rim (natural)",
+      "note": "faceted amethyst kept; night balustrade setting - owner review at 300%",
+      "run": "luxury-hand-20260916"
+    },
+    {
       "pid": 259,
       "sku": "NM-3587",
       "status": "GENERATED_PENDING_REVIEW",
