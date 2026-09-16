@@ -1834,6 +1834,20 @@
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
     },
     {
+      "pid": 366,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/366-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/366/366-hand-4x5.png",
+      "sha": "575df8b13435220042b444d1fca6b05be8a79199",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/366-hand-compare.png",
+      "review_sha": "b6931ad2039d80f5fc815c21b96e137ddfa42e78",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · dark suit cuff · caravanserai brick niche with brass oil lamp (natural)",
+      "note": "engraved «یا ابا عبدالله» is the key element: kept, verify at 300%"
+    },
+    {
       "pid": 369,
       "angle": "LUXURY",
       "ratio": "4x5",
