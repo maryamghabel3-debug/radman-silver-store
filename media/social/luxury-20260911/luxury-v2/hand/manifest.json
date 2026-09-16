@@ -603,6 +603,21 @@
       "environment": "balanced frame · dark suit cuff · hammam wet marble ledge + brass bowl (natural)",
       "note": "pale rose agate tone kept exactly - review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 360,
+      "sku": "NM-3554",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/360/360-hand-4x5.png",
+      "commit": "3259f8d86b688f69a408e3fcf8766a9565a35b46",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/360-hand-compare.png",
+      "qa_commit": "6298e436db01f8ff6e023d3bf5a06eebf8a9fe59",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/360-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/360-ref.png",
+      "source_commit": "6d8ed978aae80a3697bda11c483ebca1f868eb7c",
+      "environment": "balanced frame · dark suit cuff · watch collector's desk, green leather pad + loupe (natural)",
+      "note": "silver ring form and link/engraved detailing kept exactly - review at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
