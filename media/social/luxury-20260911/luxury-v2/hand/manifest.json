@@ -80,6 +80,21 @@
       "run": "luxury-hand-20260916"
     },
     {
+      "pid": 220,
+      "sku": "NM-3600",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/220/220-hand-4x5.png",
+      "commit": "88f86673caea1625322193a289d08472f65c42ac",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/220-hand-compare.png",
+      "qa_commit": "26642e3d247a42504fa4e8875e71f0b6c22d3606",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/220-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/220-ref.png",
+      "source_commit": "4c5fba499de426a0e388a60ec30f0914be90735d",
+      "environment": "man's hand + dark blue suit · polished granite counter in a dark kitchen, under-cabinet glow from the right (natural)",
+      "note": "durr-e-najaf dome kept pale; granite counter + warm under-cabinet light - owner review at 300%",
+      "run": "luxury-hand-20260916"
+    },
+    {
       "pid": 259,
       "sku": "NM-3587",
       "status": "GENERATED_PENDING_REVIEW",
