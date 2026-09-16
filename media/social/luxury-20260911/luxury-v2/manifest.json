@@ -870,6 +870,21 @@
       "environment": "dark plum glass + soft low key",
       "note": "Pose/stone/shank from source photo; engraved script letters re-rendered by model (same wording) - owner review at 300% required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 378,
+      "sku": "NM-3548",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/378/378-luxury-4x5.png",
+      "commit": "479b972910ad0dec784d6b4d9185cb31b76e2e78",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/378-compare.png",
+      "qa_commit": "7cb29eed1d7143a21c45cc985bc731a5b545cbe9",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/378-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/378-ref.png",
+      "source_commit": "9debbe530175e34e2d2d07d9b3bd2c86c8ef7200",
+      "environment": "matte black lava stone + warm narrow beam",
+      "note": "Pose/stone/shank from source photo; engraved script letters re-rendered by model (same wording) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
