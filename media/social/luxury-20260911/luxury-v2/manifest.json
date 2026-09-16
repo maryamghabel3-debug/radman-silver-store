@@ -674,6 +674,21 @@
       "environment": "slanting shaft of warm light in a dim room (cinematic)",
       "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 336,
+      "sku": "NM-3562",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/336/336-luxury-4x5.png",
+      "commit": "4a5b13b6661f75dacbd867c5c2033a5aeb508c24",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/336-compare.png",
+      "qa_commit": "399965c563141860348a1f5dc93d2c804e28ce9d",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/336-A-step2.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/336-ref.png",
+      "source_commit": "4848dc497d15e2f74d148afc1829d92d83c313f6",
+      "environment": "raked black sand ridges + soft cool low-left light",
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
