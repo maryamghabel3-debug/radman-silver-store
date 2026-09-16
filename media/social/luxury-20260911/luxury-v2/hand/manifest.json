@@ -558,6 +558,21 @@
       "environment": "balanced frame · grey suit cuff · watchmaker's bench with tools and a movement (natural)",
       "note": "vivid green agate kept exactly - review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 351,
+      "sku": "NM-3557",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/351/351-hand-4x5.png",
+      "commit": "4f69e65ddfee34f634a964f7a79ad10e7a164bba",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/351-hand-compare.png",
+      "qa_commit": "b7682c5a29b88e2e97be093b429f8d413841455a",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/351-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/351-ref.png",
+      "source_commit": "f00adccb8644774973e44d0ac32f8b679d65e08f",
+      "environment": "balanced frame · black suit cuff · lighthouse lantern sill, lamp beam rim (natural)",
+      "note": "black agate kept exactly - review at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
