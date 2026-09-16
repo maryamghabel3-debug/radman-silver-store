@@ -614,6 +614,21 @@
       "environment": "wet amber lacquer + low backlight rim",
       "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 325,
+      "sku": "NM-3566",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/325/325-luxury-4x5.png",
+      "commit": "566a25e13cfccda0d9abecb3cab086b6f04c3465",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/325-compare.png",
+      "qa_commit": "a4ed5766f50be7ee56aca951c28b6e70cdf36b2f",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/325-A-step1-1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/325-ref.png",
+      "source_commit": "ee6666556bd09db9bee59c147d06ed6e1b316b1b",
+      "environment": "black void + twin soft low panels (cool left / warm right)",
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
