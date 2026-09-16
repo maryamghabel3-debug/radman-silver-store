@@ -348,6 +348,21 @@
       "environment": "balanced frame · whole hand + dark suit cuff · classic car walnut-chrome door trim at night (natural)",
       "note": "square black agate + rail kept exactly - review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 303,
+      "sku": "NM-3573",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/303/303-hand-4x5.png",
+      "commit": "6c91883ef50fe9ce7368b82a4bf61b2bbda87f9c",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/303-hand-compare.png",
+      "qa_commit": "5a0ff5d9bf87aa008c2addec0f6ae5f9fd62a873",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/303-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/303-ref.png",
+      "source_commit": "13ebb94373d1d91b20e47d6b0acad8f0fcc90618",
+      "environment": "balanced frame · dark suit cuff · mosaic fountain rim, old courtyard at night (natural)",
+      "note": "green agate tone + engraved shank kept exactly - review at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
