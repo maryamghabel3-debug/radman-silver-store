@@ -112,6 +112,20 @@
       "note": "style: dark matte walnut wood; attempt1 FAILED_QA (gold cast on silver), attempt2 passed"
     },
     {
+      "pid": 69,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-2.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/69/69-luxury-4x5.png",
+      "sha": "9f926692584cb4e201f425519ec7fd35e8b96653",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/69-compare.png",
+      "review_sha": "9f4cf8fda124b7bba9dcd4e0540f74546f0b6ad4",
+      "run": "luxury-v2-20260915",
+      "environment": "midnight-blue silk + cool cross-light",
+      "note": "Pose/stone/shank from source photo; engraved script letters re-rendered by model (same wording) - owner review at 300% required."
+    },
+    {
       "pid": 73,
       "angle": "A",
       "ratio": "4x5",
