@@ -605,6 +605,21 @@
       "run": "luxury-v2-20260915"
     },
     {
+      "pid": 199,
+      "sku": "NM-3607",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/199/199-luxury-4x5.png",
+      "commit": "41a371718fb40272c5a48a2224fa50c55c360b37",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/199-compare.png",
+      "qa_commit": "608755a1b5eaea9b125245145eab062ebc199a2d",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/199-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/199-ref.png",
+      "source_commit": "7a8f6335e31e963ddef20e54d6ba557ae55c2fea",
+      "environment": "dark charcoal soapstone slab + soft low side light from left",
+      "note": "pale pink cabochon tone preserved; scroll shank and script kept - owner review at 300%",
+      "run": "luxury-v2-20260915"
+    },
+    {
       "pid": 256,
       "sku": "NM-3588",
       "status": "APPROVED",
