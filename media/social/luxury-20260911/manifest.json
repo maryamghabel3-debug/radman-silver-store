@@ -702,6 +702,20 @@
       "status": "GENERATED_PENDING_REVIEW"
     },
     {
+      "pid": 193,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/193-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/193/193-luxury-4x5.png",
+      "sha": "04f7cfd5f54bd24ce8db00a6520b1a212f9e71b5",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/193-compare.png",
+      "review_sha": "3815f13792eabdec4a94db430a739110999342e1",
+      "run": "luxury-v2-20260915",
+      "environment": "warm chalky plaster surface + soft grazing side light from left",
+      "note": "carved star on the amber and leaf prongs preserved; ring sits smaller in frame - owner review at 300%"
+    },
+    {
       "pid": 196,
       "angle": "A",
       "ratio": "4x5",
