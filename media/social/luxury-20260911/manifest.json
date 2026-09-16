@@ -1430,6 +1430,20 @@
       "approved_at": "2026-09-15"
     },
     {
+      "pid": 318,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/318-A-step1-1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/318/318-hand-4x5.png",
+      "sha": "3b0875b10ea375f5b54f45f138efa68a7a2d6ef0",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/318-hand-compare.png",
+      "review_sha": "0a519de949c5d943c8da833f22b1003ecc1f550b",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · dark suit cuff · carved stone bench in an old courtyard at dusk (natural)",
+      "note": "engraved shmایل portrait is the key element: kept, verify at 300%"
+    },
+    {
       "pid": 322,
       "angle": "LUXURY",
       "ratio": "4x5",
