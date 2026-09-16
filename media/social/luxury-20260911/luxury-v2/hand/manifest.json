@@ -50,6 +50,21 @@
       "run": "luxury-hand-20260916"
     },
     {
+      "pid": 214,
+      "sku": "NM-3602",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/214/214-hand-4x5.png",
+      "commit": "01817063f0e785be8966cea23a834067ecd6fc37",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/214-hand-compare.png",
+      "qa_commit": "51fd78c82f95f7d14a2b51b2724ad3dfdfa69e8f",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/214-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/214-ref.png",
+      "source_commit": "b8e4cefcdda023d34a980326867379c577adac90",
+      "environment": "man's hand + charcoal suit · joiner's workbench in a dark workshop with wood shavings (natural)",
+      "note": "shajar stone with its natural tree pattern kept; workshop bench adds context - owner review at 300%",
+      "run": "luxury-hand-20260916"
+    },
+    {
       "pid": 259,
       "sku": "NM-3587",
       "status": "GENERATED_PENDING_REVIEW",
