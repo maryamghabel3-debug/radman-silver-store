@@ -573,6 +573,21 @@
       "environment": "balanced frame · black suit cuff · lighthouse lantern sill, lamp beam rim (natural)",
       "note": "black agate kept exactly - review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 354,
+      "sku": "NM-3556",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/354/354-hand-4x5.png",
+      "commit": "bd7c64f8f68b3392430791f17314593d25907753",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/354-hand-compare.png",
+      "qa_commit": "95a7fa2d45214044e0232906eef79f31f0b210b0",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/354-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/354-ref.png",
+      "source_commit": "ec77155d9a6b87199f449dd07b81d6c38cc7305b",
+      "environment": "balanced frame · green-brown suit cuff · antique map room, open atlas (natural)",
+      "note": "khaki-green agate kept exactly - review at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
