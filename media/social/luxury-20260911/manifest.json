@@ -1174,6 +1174,20 @@
       "note": "APPROVED by owner (2026-09-15)"
     },
     {
+      "pid": 290,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/290-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/290/290-hand-4x5.png",
+      "sha": "89c74d04a02e38c39b2d81a3d3fba07d170417cc",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/290-hand-compare.png",
+      "review_sha": "4a61edfb978e03d84324eb681c5515fbdc7b1062",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · whole hand + dark suit cuff · stone planter rim, conservatory at night (natural)",
+      "note": "dark green agate tone kept exactly - review at 300%"
+    },
+    {
       "pid": 293,
       "angle": "LUXURY",
       "ratio": "4x5",
