@@ -708,6 +708,21 @@
       "environment": "balanced frame · black suit cuff · old library lectern with a lit candle (natural)",
       "note": "engraved «حسبی الله» is the key element: kept, verify at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 390,
+      "sku": "13204540",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/390/390-hand-4x5.png",
+      "commit": "1e40d7779a408fa0caf80ae4daab1d77241457c9",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/390-hand-compare.png",
+      "qa_commit": "8ac98d46415aa717adea22b7523f9bfa193b0631",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/390-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/390-ref.png",
+      "source_commit": "4cb0030056e3de320b078395e3c81864ab83d4ec",
+      "environment": "balanced frame · dark suit cuff · walled rose garden basin rim at dusk (natural)",
+      "note": "shajar deer-motif stone kept exactly (pattern is the key element) - owner review at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
