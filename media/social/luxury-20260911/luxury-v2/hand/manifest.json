@@ -438,6 +438,21 @@
       "environment": "balanced frame · dark suit cuff · carved stone bench in an old courtyard at dusk (natural)",
       "note": "engraved shmایل portrait is the key element: kept, verify at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 322,
+      "sku": "NM-3567",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/322/322-hand-4x5.png",
+      "commit": "0f75d9794c0eb8c5b6191bfa1c1d9bb3c4a37635",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/322-hand-compare.png",
+      "qa_commit": "2f13ebf3c1343be5bb584a68436310c4a6ca4739",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/322-A-step1-1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/322-ref.png",
+      "source_commit": "934d44ee7a83b4dc19676711440995d415a4bf10",
+      "environment": "balanced frame · dark suit cuff · old country kitchen windowsill, copper pans behind (natural)",
+      "note": "bright yellow agate kept exactly - review at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
