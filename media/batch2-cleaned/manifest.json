@@ -1,28 +1,240 @@
 {
   "batch": "batch2",
   "mission": "watermark-removal",
-  "model": "LaMa (big-lama) AI masked inpainting",
-  "overall_status": "BATCH2_COMPLETE_PENDING_REVIEW",
+  "overall_status": "REJECTED_BY_OWNER",
+  "rejection_note": "Owner rejected entire batch (2198900-A product erased; 12164727-E no-logo edited). Cleaned files kept as-is, NOT replaced/merged. Analysis-only stage.",
+  "root_causes": [
+    "color-gold detector matched skin & gold metal",
+    "outside_mask_maxdiff=0 does not prove safety when mask falls on product",
+    "NO_WATERMARK logic ran inpaint on logo-free images"
+  ],
   "totals": {
     "images": 191,
-    "cleaned": 186,
-    "no_watermark": 5,
-    "needs_source": 0,
-    "failed": 0
+    "list_no_logo": 13,
+    "list_safe_logo": 119,
+    "list_risky": 59
   },
-  "no_watermark_files": [
+  "LIST_NO_LOGO": [
     "071645461-B-step1.jpg",
+    "071845711-A-step1.jpg",
     "071845711-B-step1.jpg",
+    "10204813-A-step1.jpg",
     "12164727-B-step1.jpg",
     "12164727-C-step1.jpg",
-    "12164727-D-step1.jpg"
+    "12164727-D-step1.jpg",
+    "12164727-E-step1.jpg",
+    "14254825-A-step1.jpg",
+    "15184805-A-step1.jpg",
+    "16144827-A-step1.jpg",
+    "17254537-A-step1.jpg",
+    "30089-A-step1.jpg"
+  ],
+  "LIST_SAFE_LOGO": [
+    "00164408-A-step1.jpeg",
+    "00164426-A-step1.jpeg",
+    "00164827-A-step1.jpeg",
+    "06164666-A-step1.jpg",
+    "06164666-B-step1.jpg",
+    "071445722-B-step1.jpg",
+    "071645460-A-step1.jpg",
+    "071645460-B-step1.jpg",
+    "071645461-A-step1.jpg",
+    "071645462-A-step1.jpg",
+    "071645462-B-step1.jpg",
+    "071645463-A-step1.jpg",
+    "071645463-B-step1.jpg",
+    "071645740-A-step1.jpg",
+    "071645740-B-step1.jpg",
+    "071645741-A-step1.jpg",
+    "071645741-B-step1.jpg",
+    "07164826-A-step1.jpeg",
+    "07164826-B-step1.jpeg",
+    "071845710-A-step1.jpg",
+    "071845710-B-step1.jpg",
+    "071845712-A-step1.jpg",
+    "071845712-B-step1.jpg",
+    "071845713-A-step1.jpg",
+    "071845713-B-step1.jpg",
+    "081445480-A-step1.jpg",
+    "081445480-B-step1.jpg",
+    "081445481-B-step1.jpg",
+    "081445483-A-step1.jpg",
+    "081445484-A-step1.jpg",
+    "081445484-B-step1.jpg",
+    "081645420-A-step1.jpg",
+    "081645420-B-step1.jpg",
+    "081645421-A-step1.jpg",
+    "081645422-A-step1.jpg",
+    "081645423-A-step1.jpg",
+    "081645423-B-step1.jpg",
+    "081645431-A-step1.jpg",
+    "081645431-B-step1.jpg",
+    "081645432-A-step1.jpg",
+    "081645432-B-step1.jpg",
+    "081645433-A-step1.jpg",
+    "081645433-B-step1.jpg",
+    "081645434-A-step1.jpg",
+    "081645434-B-step1.jpg",
+    "081645435-A-step1.jpg",
+    "081645435-B-step1.jpg",
+    "081645437-A-step1.jpg",
+    "081645437-B-step1.jpg",
+    "081645438-A-step1.jpg",
+    "081645438-B-step1.jpg",
+    "081645452-A-step1.jpg",
+    "081645452-B-step1.jpg",
+    "081645471-A-step1.jpg",
+    "081645471-B-step1.jpg",
+    "081645472-A-step1.jpg",
+    "081645472-B-step1.jpg",
+    "081645473-B-step1.jpg",
+    "081645491-B-step1.jpg",
+    "081645492-B-step1.jpg",
+    "08164592-B-step1.jpg",
+    "081845436-A-step1.jpg",
+    "081845436-B-step1.jpg",
+    "081845730-B-step1.jpg",
+    "081845731-A-step1.jpg",
+    "081845731-B-step1.jpg",
+    "081845733-A-step1.jpg",
+    "081845733-B-step1.jpg",
+    "081845734-A-step1.jpg",
+    "081845734-B-step1.jpg",
+    "082045410-A-step1.jpg",
+    "082045410-B-step1.jpg",
+    "082045412-A-step1.jpg",
+    "082045412-B-step1.jpg",
+    "082045413-B-step1.jpg",
+    "082045415-A-step1.jpg",
+    "082045415-B-step1.jpg",
+    "082045416-A-step1.jpg",
+    "082045450-A-step1.jpg",
+    "082045450-B-step1.jpg",
+    "082045451-A-step1.jpg",
+    "082045451-B-step1.jpg",
+    "082045453-A-step1.jpg",
+    "082045453-B-step1.jpg",
+    "082045732-A-step1.jpg",
+    "082045732-B-step1.jpg",
+    "10144405-A-step1.jpg",
+    "10144405-B-step1.jpg",
+    "10164669-A-step1.jpeg",
+    "10164669-B-step1.jpeg",
+    "10164669-C-step1.jpeg",
+    "10165000-B-step1.jpg",
+    "1098900-A-step1.png",
+    "1098900-B-step1.png",
+    "11164750-A-step1.jpg",
+    "11164750-B-step1.jpg",
+    "11224537-A-step1.jpg",
+    "12124755-B-step1.jpg",
+    "12164727-A-step1.jpg",
+    "12184425-A-step1.jpeg",
+    "122545400-A-step1.jpg",
+    "122545400-B-step1.jpg",
+    "122545401-A-step1.jpg",
+    "122545401-B-step1.jpg",
+    "122545402-A-step1.jpg",
+    "122545402-B-step1.jpg",
+    "122545403-A-step1.jpg",
+    "122545403-B-step1.jpg",
+    "122545405-A-step1.jpg",
+    "122545406-A-step1.jpg",
+    "122545406-B-step1.jpg",
+    "122545407-C-step1.jpg",
+    "122545440-B-step1.jpg",
+    "122545441-A-step1.jpg",
+    "122545441-B-step1.jpg",
+    "122545445-A-step1.jpg",
+    "122545445-B-step1.jpg",
+    "122545445-C-step1.jpg",
+    "14254826-A-step1.jpg"
+  ],
+  "LIST_RISKY": [
+    "05144751-A-step1.jpg",
+    "05144751-B-step1.jpg",
+    "071445721-A-step1.jpg",
+    "071445721-B-step1.jpg",
+    "071445722-A-step1.jpg",
+    "071845711-C-step1.jpg",
+    "081445481-A-step1.jpg",
+    "081445482-A-step1.jpg",
+    "081445482-B-step1.jpg",
+    "081445483-B-step1.jpg",
+    "081445720-A-step1.jpg",
+    "081445720-B-step1.jpg",
+    "081645421-B-step1.jpg",
+    "081645422-B-step1.jpg",
+    "081645430-A-step1.jpg",
+    "081645430-B-step1.jpg",
+    "0816454700-A-step1.jpg",
+    "0816454700-B-step1.jpg",
+    "081645473-A-step1.jpg",
+    "081645490-A-step1.jpg",
+    "081645490-B-step1.jpg",
+    "081645491-A-step1.jpg",
+    "081645492-A-step1.jpg",
+    "08164592-A-step1.jpg",
+    "081845730-A-step1.jpg",
+    "082045411-A-step1.jpg",
+    "082045411-B-step1.jpg",
+    "082045413-A-step1.jpg",
+    "082045416-B-step1.jpg",
+    "10124828-A-step1.jpg",
+    "10124828-B-step1.jpg",
+    "10124828-C-step1.jpg",
+    "10144532-A-step1.jpg",
+    "10144532-B-step1.jpg",
+    "10165000-A-step1.jpg",
+    "10194538-A-step1.jpg",
+    "10194538-B-step1.jpg",
+    "10204516-A-step1.jpg",
+    "11204804-A-step1.jpg",
+    "11224537-B-step1.jpg",
+    "12124755-A-step1.jpg",
+    "122545404-A-step1.jpg",
+    "122545404-B-step1.jpg",
+    "122545405-B-step1.jpg",
+    "122545407-A-step1.jpg",
+    "122545407-B-step1.jpg",
+    "122545440-A-step1.jpg",
+    "122545444-A-step1.jpg",
+    "122545444-B-step1.jpg",
+    "14254826-B-step1.jpg",
+    "17254537-B-step1.jpg",
+    "17254817-A-step1.jpeg",
+    "17254817-B-step1.jpeg",
+    "21254539-A-step1.jpg",
+    "21254539-B-step1.jpg",
+    "2198900-A-step1.jpeg",
+    "2198900-B-step1.jpeg",
+    "2198900-C-step1.jpeg",
+    "2409000-A-step1.jpg"
   ],
   "items": [
     {
       "file": "00164408-A-step1.jpeg",
       "sku": "00164408",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 77361,
+      "mask_pct": 5.372,
+      "mask_bbox": [
+        682,
+        843,
+        1123,
+        1168
+      ],
+      "dist_to_edges": {
+        "L": 682,
+        "R": 77,
+        "T": 843,
+        "B": 32
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.006,
       "cleaned": "media/batch2-cleaned/cleaned/00164408/00164408-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/00164408-A-review.png",
       "sha": "9d589afa499ed17d1eeebb3a0198580e69e115b8"
@@ -31,7 +243,25 @@
       "file": "00164426-A-step1.jpeg",
       "sku": "00164426",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 77979,
+      "mask_pct": 5.415,
+      "mask_bbox": [
+        682,
+        842,
+        1124,
+        1167
+      ],
+      "dist_to_edges": {
+        "L": 682,
+        "R": 76,
+        "T": 842,
+        "B": 33
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.006,
       "cleaned": "media/batch2-cleaned/cleaned/00164426/00164426-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/00164426-A-review.png",
       "sha": "004defd62f70928ad10e9065054ddd5286911eae"
@@ -40,7 +270,25 @@
       "file": "00164827-A-step1.jpeg",
       "sku": "00164827",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 77468,
+      "mask_pct": 5.38,
+      "mask_bbox": [
+        703,
+        862,
+        1144,
+        1187
+      ],
+      "dist_to_edges": {
+        "L": 703,
+        "R": 56,
+        "T": 862,
+        "B": 13
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.006,
       "cleaned": "media/batch2-cleaned/cleaned/00164827/00164827-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/00164827-A-review.png",
       "sha": "89299ed907065ef01cab38924e1461371d39a4f1"
@@ -49,7 +297,25 @@
       "file": "05144751-A-step1.jpg",
       "sku": "05144751",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 868521,
+      "mask_pct": 9.203,
+      "mask_bbox": [
+        914,
+        2070,
+        2900,
+        2874
+      ],
+      "dist_to_edges": {
+        "L": 914,
+        "R": 172,
+        "T": 2070,
+        "B": 198
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.006,
       "cleaned": "media/batch2-cleaned/cleaned/05144751/05144751-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/05144751-A-review.png",
       "sha": "3cac913ace0e0b29ed11aeab2a2b64f3f18686fd"
@@ -58,7 +324,25 @@
       "file": "05144751-B-step1.jpg",
       "sku": "05144751",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 799127,
+      "mask_pct": 8.468,
+      "mask_bbox": [
+        244,
+        2092,
+        2092,
+        2892
+      ],
+      "dist_to_edges": {
+        "L": 244,
+        "R": 980,
+        "T": 2092,
+        "B": 180
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.006,
       "cleaned": "media/batch2-cleaned/cleaned/05144751/05144751-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/05144751-B-review.png",
       "sha": "1bdc2d5a280258b0cb2823a1bd7bde2b4834e812"
@@ -67,7 +351,25 @@
       "file": "06164666-A-step1.jpg",
       "sku": "06164666",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 425136,
+      "mask_pct": 4.505,
+      "mask_bbox": [
+        1836,
+        2166,
+        2888,
+        2898
+      ],
+      "dist_to_edges": {
+        "L": 1836,
+        "R": 184,
+        "T": 2166,
+        "B": 174
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.021,
       "cleaned": "media/batch2-cleaned/cleaned/06164666/06164666-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/06164666-A-review.png",
       "sha": "4948d2b23084b52223b8c2b274d89dd7019e816a"
@@ -76,7 +378,25 @@
       "file": "06164666-B-step1.jpg",
       "sku": "06164666",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 447529,
+      "mask_pct": 4.742,
+      "mask_bbox": [
+        150,
+        2088,
+        1226,
+        2838
+      ],
+      "dist_to_edges": {
+        "L": 150,
+        "R": 1846,
+        "T": 2088,
+        "B": 234
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.017,
       "cleaned": "media/batch2-cleaned/cleaned/06164666/06164666-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/06164666-B-review.png",
       "sha": "2ac96be26e1b5e9e647b34bcf0d0eb950088b4ec"
@@ -85,7 +405,25 @@
       "file": "071445721-A-step1.jpg",
       "sku": "071445721",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 1234743,
+      "mask_pct": 13.084,
+      "mask_bbox": [
+        840,
+        1638,
+        2868,
+        2876
+      ],
+      "dist_to_edges": {
+        "L": 840,
+        "R": 204,
+        "T": 1638,
+        "B": 196
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.062,
       "cleaned": "media/batch2-cleaned/cleaned/071445721/071445721-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/071445721-A-review.png",
       "sha": "5273f54696ade07aa73f0b2d4f9ee09336992f2b"
@@ -94,7 +432,25 @@
       "file": "071445721-B-step1.jpg",
       "sku": "071445721",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 980501,
+      "mask_pct": 10.39,
+      "mask_bbox": [
+        184,
+        1936,
+        2164,
+        2832
+      ],
+      "dist_to_edges": {
+        "L": 184,
+        "R": 908,
+        "T": 1936,
+        "B": 240
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.042,
       "cleaned": "media/batch2-cleaned/cleaned/071445721/071445721-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/071445721-B-review.png",
       "sha": "61fd24fc8e66a8bb72e7aa7f5cbfabbc6bbcef79"
@@ -103,7 +459,25 @@
       "file": "071445722-A-step1.jpg",
       "sku": "071445722",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 774655,
+      "mask_pct": 8.209,
+      "mask_bbox": [
+        1066,
+        1948,
+        2892,
+        2918
+      ],
+      "dist_to_edges": {
+        "L": 1066,
+        "R": 180,
+        "T": 1948,
+        "B": 154
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.031,
       "cleaned": "media/batch2-cleaned/cleaned/071445722/071445722-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/071445722-A-review.png",
       "sha": "b1f09a5a987dc81f90f1107ab07b156b7cacf406"
@@ -112,7 +486,25 @@
       "file": "071445722-B-step1.jpg",
       "sku": "071445722",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 811806,
+      "mask_pct": 8.602,
+      "mask_bbox": [
+        206,
+        2126,
+        2034,
+        2878
+      ],
+      "dist_to_edges": {
+        "L": 206,
+        "R": 1038,
+        "T": 2126,
+        "B": 194
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.024,
       "cleaned": "media/batch2-cleaned/cleaned/071445722/071445722-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/071445722-B-review.png",
       "sha": "e88f5c9922e1cb5078060f4dffd6a830e63f2096"
@@ -121,7 +513,25 @@
       "file": "071645460-A-step1.jpg",
       "sku": "071645460",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 398706,
+      "mask_pct": 4.225,
+      "mask_bbox": [
+        1868,
+        2226,
+        2888,
+        2940
+      ],
+      "dist_to_edges": {
+        "L": 1868,
+        "R": 184,
+        "T": 2226,
+        "B": 132
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.005,
       "cleaned": "media/batch2-cleaned/cleaned/071645460/071645460-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/071645460-A-review.png",
       "sha": "1c792f390e5fb3ce40d6248b87046bc11790c881"
@@ -130,7 +540,25 @@
       "file": "071645460-B-step1.jpg",
       "sku": "071645460",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 457905,
+      "mask_pct": 4.852,
+      "mask_bbox": [
+        106,
+        2038,
+        1194,
+        2794
+      ],
+      "dist_to_edges": {
+        "L": 106,
+        "R": 1878,
+        "T": 2038,
+        "B": 278
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.008,
       "cleaned": "media/batch2-cleaned/cleaned/071645460/071645460-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/071645460-B-review.png",
       "sha": "9680876916b54fcf0de7b506e4ca05fe53731f2c"
@@ -139,7 +567,25 @@
       "file": "071645461-A-step1.jpg",
       "sku": "071645461",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 446619,
+      "mask_pct": 4.733,
+      "mask_bbox": [
+        1784,
+        2122,
+        2858,
+        2870
+      ],
+      "dist_to_edges": {
+        "L": 1784,
+        "R": 214,
+        "T": 2122,
+        "B": 202
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.02,
       "cleaned": "media/batch2-cleaned/cleaned/071645461/071645461-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/071645461-A-review.png",
       "sha": "876df2b928c83f0b2f8a4be6567f313c1f22751a"
@@ -148,7 +594,15 @@
       "file": "071645461-B-step1.jpg",
       "sku": "071645461",
       "angle": "B",
-      "status": "NO_WATERMARK",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "NO_LOGO",
+      "logo_present": false,
+      "mask_area_px": 0,
+      "mask_pct": 0.0,
+      "mask_bbox": null,
+      "dist_to_edges": null,
+      "contact_product_or_skin": false,
+      "skin_frac": 0.004,
       "cleaned": "media/batch2-cleaned/cleaned/071645461/071645461-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/071645461-B-review.png",
       "sha": "1325dedca63c075de1fe8c13e46dbf3662158018"
@@ -157,7 +611,25 @@
       "file": "071645462-A-step1.jpg",
       "sku": "071645462",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 420510,
+      "mask_pct": 4.456,
+      "mask_bbox": [
+        1826,
+        2250,
+        2870,
+        2978
+      ],
+      "dist_to_edges": {
+        "L": 1826,
+        "R": 202,
+        "T": 2250,
+        "B": 94
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.053,
       "cleaned": "media/batch2-cleaned/cleaned/071645462/071645462-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/071645462-A-review.png",
       "sha": "f3290bf8deb71473d8163a6d375b918f15ecc2a0"
@@ -166,7 +638,25 @@
       "file": "071645462-B-step1.jpg",
       "sku": "071645462",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 441190,
+      "mask_pct": 4.675,
+      "mask_bbox": [
+        270,
+        2108,
+        1340,
+        2852
+      ],
+      "dist_to_edges": {
+        "L": 270,
+        "R": 1732,
+        "T": 2108,
+        "B": 220
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.046,
       "cleaned": "media/batch2-cleaned/cleaned/071645462/071645462-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/071645462-B-review.png",
       "sha": "c6a882ecc3095f80a276129162122752ebc5b25c"
@@ -175,7 +665,25 @@
       "file": "071645463-A-step1.jpg",
       "sku": "071645463",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 466126,
+      "mask_pct": 4.939,
+      "mask_bbox": [
+        1726,
+        2114,
+        2822,
+        2874
+      ],
+      "dist_to_edges": {
+        "L": 1726,
+        "R": 250,
+        "T": 2114,
+        "B": 198
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.011,
       "cleaned": "media/batch2-cleaned/cleaned/071645463/071645463-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/071645463-A-review.png",
       "sha": "1e5e9d1eb3cb99449f1d5518824f8dee1c5204d4"
@@ -184,7 +692,25 @@
       "file": "071645463-B-step1.jpg",
       "sku": "071645463",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 464906,
+      "mask_pct": 4.926,
+      "mask_bbox": [
+        214,
+        2114,
+        1310,
+        2874
+      ],
+      "dist_to_edges": {
+        "L": 214,
+        "R": 1762,
+        "T": 2114,
+        "B": 198
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.015,
       "cleaned": "media/batch2-cleaned/cleaned/071645463/071645463-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/071645463-B-review.png",
       "sha": "64caa5f2d169e5104691afa074a1d0fd6f03170d"
@@ -193,7 +719,25 @@
       "file": "071645740-A-step1.jpg",
       "sku": "071645740",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 653745,
+      "mask_pct": 6.927,
+      "mask_bbox": [
+        1282,
+        2246,
+        2902,
+        2984
+      ],
+      "dist_to_edges": {
+        "L": 1282,
+        "R": 170,
+        "T": 2246,
+        "B": 88
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.021,
       "cleaned": "media/batch2-cleaned/cleaned/071645740/071645740-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/071645740-A-review.png",
       "sha": "fe0803d256e96f9805477b34cf0f420b0a5d4484"
@@ -202,7 +746,25 @@
       "file": "071645740-B-step1.jpg",
       "sku": "071645740",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 425680,
+      "mask_pct": 4.511,
+      "mask_bbox": [
+        98,
+        2066,
+        1150,
+        2798
+      ],
+      "dist_to_edges": {
+        "L": 98,
+        "R": 1922,
+        "T": 2066,
+        "B": 274
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.012,
       "cleaned": "media/batch2-cleaned/cleaned/071645740/071645740-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/071645740-B-review.png",
       "sha": "a855c8aa4627c49be0a6e550defbbc9fbaa27d22"
@@ -211,7 +773,25 @@
       "file": "071645741-A-step1.jpg",
       "sku": "071645741",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 441753,
+      "mask_pct": 4.681,
+      "mask_bbox": [
+        1774,
+        2122,
+        2844,
+        2866
+      ],
+      "dist_to_edges": {
+        "L": 1774,
+        "R": 228,
+        "T": 2122,
+        "B": 206
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.022,
       "cleaned": "media/batch2-cleaned/cleaned/071645741/071645741-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/071645741-A-review.png",
       "sha": "c5f6eb0c456f69fc46b4db041e8b2c01db14f5f3"
@@ -220,7 +800,25 @@
       "file": "071645741-B-step1.jpg",
       "sku": "071645741",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 458733,
+      "mask_pct": 4.861,
+      "mask_bbox": [
+        62,
+        2024,
+        1150,
+        2780
+      ],
+      "dist_to_edges": {
+        "L": 62,
+        "R": 1922,
+        "T": 2024,
+        "B": 292
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.017,
       "cleaned": "media/batch2-cleaned/cleaned/071645741/071645741-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/071645741-B-review.png",
       "sha": "4dfe427736cac805f8cf826b7a74dd1a2e101c2a"
@@ -229,7 +827,25 @@
       "file": "07164826-A-step1.jpeg",
       "sku": "07164826",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 747536,
+      "mask_pct": 7.921,
+      "mask_bbox": [
+        1076,
+        2132,
+        2904,
+        2918
+      ],
+      "dist_to_edges": {
+        "L": 1076,
+        "R": 168,
+        "T": 2132,
+        "B": 154
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.006,
       "cleaned": "media/batch2-cleaned/cleaned/07164826/07164826-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/07164826-A-review.png",
       "sha": "0ae6f42f30e438ad3c29c25d9acbd78ccbb67787"
@@ -238,7 +854,25 @@
       "file": "07164826-B-step1.jpeg",
       "sku": "07164826",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 832432,
+      "mask_pct": 8.821,
+      "mask_bbox": [
+        302,
+        2126,
+        2142,
+        2924
+      ],
+      "dist_to_edges": {
+        "L": 302,
+        "R": 930,
+        "T": 2126,
+        "B": 148
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.006,
       "cleaned": "media/batch2-cleaned/cleaned/07164826/07164826-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/07164826-B-review.png",
       "sha": "f609b2feb0524cb7d156c1d2780099efafbc65b6"
@@ -247,7 +881,25 @@
       "file": "071845710-A-step1.jpg",
       "sku": "071845710",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 698509,
+      "mask_pct": 7.402,
+      "mask_bbox": [
+        966,
+        2140,
+        2762,
+        2906
+      ],
+      "dist_to_edges": {
+        "L": 966,
+        "R": 310,
+        "T": 2140,
+        "B": 166
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.062,
       "cleaned": "media/batch2-cleaned/cleaned/071845710/071845710-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/071845710-A-review.png",
       "sha": "c840d32cc0ce9c55b022038b013d4afb7c532eaf"
@@ -256,7 +908,25 @@
       "file": "071845710-B-step1.jpg",
       "sku": "071845710",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 660120,
+      "mask_pct": 6.995,
+      "mask_bbox": [
+        196,
+        2140,
+        1866,
+        2922
+      ],
+      "dist_to_edges": {
+        "L": 196,
+        "R": 1206,
+        "T": 2140,
+        "B": 150
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.042,
       "cleaned": "media/batch2-cleaned/cleaned/071845710/071845710-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/071845710-B-review.png",
       "sha": "d9f043139877e3d82b95f0482b0f60ea822ebad2"
@@ -265,7 +935,25 @@
       "file": "071845711-A-step1.jpg",
       "sku": "071845711",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "NO_LOGO",
+      "logo_present": false,
+      "mask_area_px": 110955,
+      "mask_pct": 11.095,
+      "mask_bbox": [
+        578,
+        579,
+        1000,
+        1000
+      ],
+      "dist_to_edges": {
+        "L": 578,
+        "R": 0,
+        "T": 579,
+        "B": 0
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.574,
       "cleaned": "media/batch2-cleaned/cleaned/071845711/071845711-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/071845711-A-review.png",
       "sha": "1bebe301bc1eef5c3b7d5666c4be7378f2ac5941"
@@ -274,7 +962,15 @@
       "file": "071845711-B-step1.jpg",
       "sku": "071845711",
       "angle": "B",
-      "status": "NO_WATERMARK",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "NO_LOGO",
+      "logo_present": false,
+      "mask_area_px": 0,
+      "mask_pct": 0.0,
+      "mask_bbox": null,
+      "dist_to_edges": null,
+      "contact_product_or_skin": false,
+      "skin_frac": 0.012,
       "cleaned": "media/batch2-cleaned/cleaned/071845711/071845711-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/071845711-B-review.png",
       "sha": "b4c0e2918a14c48243e07748dddc6c7baef22cd6"
@@ -283,7 +979,25 @@
       "file": "071845711-C-step1.jpg",
       "sku": "071845711",
       "angle": "C",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 205891,
+      "mask_pct": 20.589,
+      "mask_bbox": [
+        143,
+        547,
+        1000,
+        1000
+      ],
+      "dist_to_edges": {
+        "L": 143,
+        "R": 0,
+        "T": 547,
+        "B": 0
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.434,
       "cleaned": "media/batch2-cleaned/cleaned/071845711/071845711-C-step1.webp",
       "qa": "media/batch2-cleaned/qa/071845711-C-review.png",
       "sha": "713050649524a9810b7dc440dac00cd614ead94f"
@@ -292,7 +1006,25 @@
       "file": "071845712-A-step1.jpg",
       "sku": "071845712",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 359778,
+      "mask_pct": 3.812,
+      "mask_bbox": [
+        1796,
+        2336,
+        2770,
+        3018
+      ],
+      "dist_to_edges": {
+        "L": 1796,
+        "R": 302,
+        "T": 2336,
+        "B": 54
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.005,
       "cleaned": "media/batch2-cleaned/cleaned/071845712/071845712-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/071845712-A-review.png",
       "sha": "8310b1a7ee88848916fb9907b35f00f2b1fe48c4"
@@ -301,7 +1033,25 @@
       "file": "071845712-B-step1.jpg",
       "sku": "071845712",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 421386,
+      "mask_pct": 4.465,
+      "mask_bbox": [
+        166,
+        2216,
+        1212,
+        2946
+      ],
+      "dist_to_edges": {
+        "L": 166,
+        "R": 1860,
+        "T": 2216,
+        "B": 126
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.006,
       "cleaned": "media/batch2-cleaned/cleaned/071845712/071845712-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/071845712-B-review.png",
       "sha": "2df1f75da6de80f738a693433a98fa793c4963d0"
@@ -310,7 +1060,25 @@
       "file": "071845713-A-step1.jpg",
       "sku": "071845713",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 362522,
+      "mask_pct": 3.841,
+      "mask_bbox": [
+        1780,
+        2228,
+        2756,
+        2914
+      ],
+      "dist_to_edges": {
+        "L": 1780,
+        "R": 316,
+        "T": 2228,
+        "B": 158
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.008,
       "cleaned": "media/batch2-cleaned/cleaned/071845713/071845713-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/071845713-A-review.png",
       "sha": "f09fb2c9397334c8e42c5cd87f204ce11a4653c5"
@@ -319,7 +1087,25 @@
       "file": "071845713-B-step1.jpg",
       "sku": "071845713",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 652553,
+      "mask_pct": 6.915,
+      "mask_bbox": [
+        238,
+        2240,
+        1918,
+        3006
+      ],
+      "dist_to_edges": {
+        "L": 238,
+        "R": 1154,
+        "T": 2240,
+        "B": 66
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.01,
       "cleaned": "media/batch2-cleaned/cleaned/071845713/071845713-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/071845713-B-review.png",
       "sha": "e595a9d21d1638113716ddf0a4c31f05701a5a97"
@@ -328,7 +1114,25 @@
       "file": "081445480-A-step1.jpg",
       "sku": "081445480",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 632061,
+      "mask_pct": 6.698,
+      "mask_bbox": [
+        1232,
+        2212,
+        2860,
+        3046
+      ],
+      "dist_to_edges": {
+        "L": 1232,
+        "R": 212,
+        "T": 2212,
+        "B": 26
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.037,
       "cleaned": "media/batch2-cleaned/cleaned/081445480/081445480-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081445480-A-review.png",
       "sha": "9820d3d2eecc3e11e49c8ad80054564c633d3a1f"
@@ -337,7 +1141,25 @@
       "file": "081445480-B-step1.jpg",
       "sku": "081445480",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 467555,
+      "mask_pct": 4.954,
+      "mask_bbox": [
+        170,
+        2122,
+        1266,
+        2884
+      ],
+      "dist_to_edges": {
+        "L": 170,
+        "R": 1806,
+        "T": 2122,
+        "B": 188
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.039,
       "cleaned": "media/batch2-cleaned/cleaned/081445480/081445480-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081445480-B-review.png",
       "sha": "b5b2190b8f45d1552c740187807890d856cb7469"
@@ -346,7 +1168,25 @@
       "file": "081445481-A-step1.jpg",
       "sku": "081445481",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 888283,
+      "mask_pct": 9.413,
+      "mask_bbox": [
+        976,
+        2026,
+        2842,
+        2854
+      ],
+      "dist_to_edges": {
+        "L": 976,
+        "R": 230,
+        "T": 2026,
+        "B": 218
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.025,
       "cleaned": "media/batch2-cleaned/cleaned/081445481/081445481-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081445481-A-review.png",
       "sha": "fd7d0fadbd9c029ad4726b3b8a96538fae0480c9"
@@ -355,7 +1195,25 @@
       "file": "081445481-B-step1.jpg",
       "sku": "081445481",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 763524,
+      "mask_pct": 8.091,
+      "mask_bbox": [
+        222,
+        2106,
+        2012,
+        2938
+      ],
+      "dist_to_edges": {
+        "L": 222,
+        "R": 1060,
+        "T": 2106,
+        "B": 134
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.029,
       "cleaned": "media/batch2-cleaned/cleaned/081445481/081445481-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081445481-B-review.png",
       "sha": "da7e607a83cf45934afa6ccadbe4b08a2abf5e60"
@@ -364,7 +1222,25 @@
       "file": "081445482-A-step1.jpg",
       "sku": "081445482",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 853285,
+      "mask_pct": 9.042,
+      "mask_bbox": [
+        974,
+        2038,
+        2846,
+        2858
+      ],
+      "dist_to_edges": {
+        "L": 974,
+        "R": 226,
+        "T": 2038,
+        "B": 214
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.02,
       "cleaned": "media/batch2-cleaned/cleaned/081445482/081445482-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081445482-A-review.png",
       "sha": "f422a9659c9dea28103ff16e53907415700b4d13"
@@ -373,7 +1249,25 @@
       "file": "081445482-B-step1.jpg",
       "sku": "081445482",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 728795,
+      "mask_pct": 7.723,
+      "mask_bbox": [
+        254,
+        1946,
+        2118,
+        2746
+      ],
+      "dist_to_edges": {
+        "L": 254,
+        "R": 954,
+        "T": 1946,
+        "B": 326
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.018,
       "cleaned": "media/batch2-cleaned/cleaned/081445482/081445482-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081445482-B-review.png",
       "sha": "744c6b3d1dbc847361d739913cbc5e0fe6eb13b3"
@@ -382,7 +1276,25 @@
       "file": "081445483-A-step1.jpg",
       "sku": "081445483",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 473993,
+      "mask_pct": 5.023,
+      "mask_bbox": [
+        1614,
+        2152,
+        2800,
+        2924
+      ],
+      "dist_to_edges": {
+        "L": 1614,
+        "R": 272,
+        "T": 2152,
+        "B": 148
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.03,
       "cleaned": "media/batch2-cleaned/cleaned/081445483/081445483-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081445483-A-review.png",
       "sha": "5a40101caf8badd2b11d7cade89cbbe178e98f11"
@@ -391,7 +1303,25 @@
       "file": "081445483-B-step1.jpg",
       "sku": "081445483",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 778700,
+      "mask_pct": 8.251,
+      "mask_bbox": [
+        176,
+        2028,
+        2112,
+        2796
+      ],
+      "dist_to_edges": {
+        "L": 176,
+        "R": 960,
+        "T": 2028,
+        "B": 276
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.025,
       "cleaned": "media/batch2-cleaned/cleaned/081445483/081445483-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081445483-B-review.png",
       "sha": "e41dab85da48f977781326fe55c5fbde5ba96c44"
@@ -400,7 +1330,25 @@
       "file": "081445484-A-step1.jpg",
       "sku": "081445484",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 847294,
+      "mask_pct": 8.978,
+      "mask_bbox": [
+        972,
+        2068,
+        2808,
+        2914
+      ],
+      "dist_to_edges": {
+        "L": 972,
+        "R": 264,
+        "T": 2068,
+        "B": 158
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.04,
       "cleaned": "media/batch2-cleaned/cleaned/081445484/081445484-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081445484-A-review.png",
       "sha": "6f587015894820b11efab8d937649332c00e6dc8"
@@ -409,7 +1357,25 @@
       "file": "081445484-B-step1.jpg",
       "sku": "081445484",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 713529,
+      "mask_pct": 7.561,
+      "mask_bbox": [
+        226,
+        2112,
+        1950,
+        2866
+      ],
+      "dist_to_edges": {
+        "L": 226,
+        "R": 1122,
+        "T": 2112,
+        "B": 206
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.037,
       "cleaned": "media/batch2-cleaned/cleaned/081445484/081445484-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081445484-B-review.png",
       "sha": "89d3cdc3875758eaee630e8ab1adba30eafe3aee"
@@ -418,7 +1384,25 @@
       "file": "081445720-A-step1.jpg",
       "sku": "081445720",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 774125,
+      "mask_pct": 8.203,
+      "mask_bbox": [
+        1002,
+        2088,
+        2962,
+        2940
+      ],
+      "dist_to_edges": {
+        "L": 1002,
+        "R": 110,
+        "T": 2088,
+        "B": 132
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.02,
       "cleaned": "media/batch2-cleaned/cleaned/081445720/081445720-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081445720-A-review.png",
       "sha": "b2512302295af66bd985616a91ee89625d8bde31"
@@ -427,7 +1411,25 @@
       "file": "081445720-B-step1.jpg",
       "sku": "081445720",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": false,
+      "mask_area_px": 61097,
+      "mask_pct": 0.647,
+      "mask_bbox": [
+        1714,
+        2034,
+        2104,
+        2462
+      ],
+      "dist_to_edges": {
+        "L": 1714,
+        "R": 968,
+        "T": 2034,
+        "B": 610
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.011,
       "cleaned": "media/batch2-cleaned/cleaned/081445720/081445720-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081445720-B-review.png",
       "sha": "11b5f520a86d2731350ed67cb0fc1d8ffd9b7856"
@@ -436,7 +1438,25 @@
       "file": "081645420-A-step1.jpg",
       "sku": "081645420",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 423526,
+      "mask_pct": 4.488,
+      "mask_bbox": [
+        1852,
+        2142,
+        2900,
+        2874
+      ],
+      "dist_to_edges": {
+        "L": 1852,
+        "R": 172,
+        "T": 2142,
+        "B": 198
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.036,
       "cleaned": "media/batch2-cleaned/cleaned/081645420/081645420-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645420-A-review.png",
       "sha": "51cd9ff90f198d9ec4740aad31017570c8fe0755"
@@ -445,7 +1465,25 @@
       "file": "081645420-B-step1.jpg",
       "sku": "081645420",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 496627,
+      "mask_pct": 5.262,
+      "mask_bbox": [
+        278,
+        2066,
+        1540,
+        2806
+      ],
+      "dist_to_edges": {
+        "L": 278,
+        "R": 1532,
+        "T": 2066,
+        "B": 266
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.029,
       "cleaned": "media/batch2-cleaned/cleaned/081645420/081645420-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645420-B-review.png",
       "sha": "67b5aa22d3d54b162f3be8eb727e1c6bad175646"
@@ -454,7 +1492,25 @@
       "file": "081645421-A-step1.jpg",
       "sku": "081645421",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 474105,
+      "mask_pct": 5.024,
+      "mask_bbox": [
+        1842,
+        2150,
+        2946,
+        2918
+      ],
+      "dist_to_edges": {
+        "L": 1842,
+        "R": 126,
+        "T": 2150,
+        "B": 154
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.009,
       "cleaned": "media/batch2-cleaned/cleaned/081645421/081645421-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645421-A-review.png",
       "sha": "18129ab818e97e65bc22d63daef8e92eba816445"
@@ -463,7 +1519,25 @@
       "file": "081645421-B-step1.jpg",
       "sku": "081645421",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 692544,
+      "mask_pct": 7.338,
+      "mask_bbox": [
+        194,
+        1942,
+        1920,
+        2692
+      ],
+      "dist_to_edges": {
+        "L": 194,
+        "R": 1152,
+        "T": 1942,
+        "B": 380
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.005,
       "cleaned": "media/batch2-cleaned/cleaned/081645421/081645421-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645421-B-review.png",
       "sha": "4625dd55548cc1af35b3e3e2821ed7b428cfec5e"
@@ -472,7 +1546,25 @@
       "file": "081645422-A-step1.jpg",
       "sku": "081645422",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 472607,
+      "mask_pct": 5.008,
+      "mask_bbox": [
+        1780,
+        2106,
+        2884,
+        2872
+      ],
+      "dist_to_edges": {
+        "L": 1780,
+        "R": 188,
+        "T": 2106,
+        "B": 200
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.026,
       "cleaned": "media/batch2-cleaned/cleaned/081645422/081645422-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645422-A-review.png",
       "sha": "7f6602ef87d9efb9422847fc57032c36fe46d733"
@@ -481,7 +1573,25 @@
       "file": "081645422-B-step1.jpg",
       "sku": "081645422",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 775924,
+      "mask_pct": 8.222,
+      "mask_bbox": [
+        166,
+        2004,
+        2024,
+        2764
+      ],
+      "dist_to_edges": {
+        "L": 166,
+        "R": 1048,
+        "T": 2004,
+        "B": 308
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.028,
       "cleaned": "media/batch2-cleaned/cleaned/081645422/081645422-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645422-B-review.png",
       "sha": "cf6b498a396092474c4261b627983fff7f686781"
@@ -490,7 +1600,25 @@
       "file": "081645423-A-step1.jpg",
       "sku": "081645423",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 391710,
+      "mask_pct": 4.151,
+      "mask_bbox": [
+        1974,
+        2202,
+        2984,
+        2910
+      ],
+      "dist_to_edges": {
+        "L": 1974,
+        "R": 88,
+        "T": 2202,
+        "B": 162
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.032,
       "cleaned": "media/batch2-cleaned/cleaned/081645423/081645423-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645423-A-review.png",
       "sha": "2f1f2208e3997ef213f6dd6631cd0fc516c2b1ee"
@@ -499,7 +1627,25 @@
       "file": "081645423-B-step1.jpg",
       "sku": "081645423",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 391731,
+      "mask_pct": 4.151,
+      "mask_bbox": [
+        90,
+        2164,
+        1102,
+        2872
+      ],
+      "dist_to_edges": {
+        "L": 90,
+        "R": 1970,
+        "T": 2164,
+        "B": 200
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.032,
       "cleaned": "media/batch2-cleaned/cleaned/081645423/081645423-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645423-B-review.png",
       "sha": "2cef5ca91c39e01ad60e4baf27b777b5bdd07ef6"
@@ -508,7 +1654,25 @@
       "file": "081645430-A-step1.jpg",
       "sku": "081645430",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 944531,
+      "mask_pct": 10.009,
+      "mask_bbox": [
+        1470,
+        1654,
+        2936,
+        2938
+      ],
+      "dist_to_edges": {
+        "L": 1470,
+        "R": 136,
+        "T": 1654,
+        "B": 134
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.076,
       "cleaned": "media/batch2-cleaned/cleaned/081645430/081645430-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645430-A-review.png",
       "sha": "9dd5e8f9ee15caf6d8b84891a61c300fc0c94d9d"
@@ -517,7 +1681,25 @@
       "file": "081645430-B-step1.jpg",
       "sku": "081645430",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 803791,
+      "mask_pct": 8.517,
+      "mask_bbox": [
+        102,
+        1706,
+        1516,
+        2880
+      ],
+      "dist_to_edges": {
+        "L": 102,
+        "R": 1556,
+        "T": 1706,
+        "B": 192
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.059,
       "cleaned": "media/batch2-cleaned/cleaned/081645430/081645430-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645430-B-review.png",
       "sha": "451c1fca550d9f4cd4c5219a8432605f22914393"
@@ -526,7 +1708,25 @@
       "file": "081645431-A-step1.jpg",
       "sku": "081645431",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 422058,
+      "mask_pct": 4.472,
+      "mask_bbox": [
+        1798,
+        2136,
+        2846,
+        2866
+      ],
+      "dist_to_edges": {
+        "L": 1798,
+        "R": 226,
+        "T": 2136,
+        "B": 206
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.003,
       "cleaned": "media/batch2-cleaned/cleaned/081645431/081645431-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645431-A-review.png",
       "sha": "f9b99b361203cd4ac3a83d41dcd60453bc846e77"
@@ -535,7 +1735,25 @@
       "file": "081645431-B-step1.jpg",
       "sku": "081645431",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 415433,
+      "mask_pct": 4.402,
+      "mask_bbox": [
+        264,
+        2082,
+        1304,
+        2808
+      ],
+      "dist_to_edges": {
+        "L": 264,
+        "R": 1768,
+        "T": 2082,
+        "B": 264
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.006,
       "cleaned": "media/batch2-cleaned/cleaned/081645431/081645431-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645431-B-review.png",
       "sha": "8e096f36cda11ca300d92cd539a5b29716d33b6c"
@@ -544,7 +1762,25 @@
       "file": "081645432-A-step1.jpg",
       "sku": "081645432",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 422091,
+      "mask_pct": 4.473,
+      "mask_bbox": [
+        1866,
+        2092,
+        2912,
+        2822
+      ],
+      "dist_to_edges": {
+        "L": 1866,
+        "R": 160,
+        "T": 2092,
+        "B": 250
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.012,
       "cleaned": "media/batch2-cleaned/cleaned/081645432/081645432-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645432-A-review.png",
       "sha": "1af0daac2bcf63a1f6d4513dcd41767fc071b2b8"
@@ -553,7 +1789,25 @@
       "file": "081645432-B-step1.jpg",
       "sku": "081645432",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 424272,
+      "mask_pct": 4.496,
+      "mask_bbox": [
+        166,
+        2252,
+        1216,
+        2984
+      ],
+      "dist_to_edges": {
+        "L": 166,
+        "R": 1856,
+        "T": 2252,
+        "B": 88
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.01,
       "cleaned": "media/batch2-cleaned/cleaned/081645432/081645432-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645432-B-review.png",
       "sha": "1d3119fa859cc1efa657360bede97717ac4384af"
@@ -562,7 +1816,25 @@
       "file": "081645433-A-step1.jpg",
       "sku": "081645433",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 408703,
+      "mask_pct": 4.331,
+      "mask_bbox": [
+        1872,
+        2166,
+        2904,
+        2886
+      ],
+      "dist_to_edges": {
+        "L": 1872,
+        "R": 168,
+        "T": 2166,
+        "B": 186
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.017,
       "cleaned": "media/batch2-cleaned/cleaned/081645433/081645433-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645433-A-review.png",
       "sha": "f9986f188c8d7c3330e725fc487f612c8008e702"
@@ -571,7 +1843,25 @@
       "file": "081645433-B-step1.jpg",
       "sku": "081645433",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 393723,
+      "mask_pct": 4.172,
+      "mask_bbox": [
+        278,
+        2186,
+        1292,
+        2896
+      ],
+      "dist_to_edges": {
+        "L": 278,
+        "R": 1780,
+        "T": 2186,
+        "B": 176
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.012,
       "cleaned": "media/batch2-cleaned/cleaned/081645433/081645433-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645433-B-review.png",
       "sha": "c1104ab8d32c1ac27385c55835498cdfba2afeed"
@@ -580,7 +1870,25 @@
       "file": "081645434-A-step1.jpg",
       "sku": "081645434",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 486608,
+      "mask_pct": 5.156,
+      "mask_bbox": [
+        1806,
+        2160,
+        2922,
+        2936
+      ],
+      "dist_to_edges": {
+        "L": 1806,
+        "R": 150,
+        "T": 2160,
+        "B": 136
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.005,
       "cleaned": "media/batch2-cleaned/cleaned/081645434/081645434-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645434-A-review.png",
       "sha": "0bd4c80e700aa519557d4ae16631b554d438282b"
@@ -589,7 +1897,25 @@
       "file": "081645434-B-step1.jpg",
       "sku": "081645434",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 447367,
+      "mask_pct": 4.74,
+      "mask_bbox": [
+        264,
+        2134,
+        1340,
+        2882
+      ],
+      "dist_to_edges": {
+        "L": 264,
+        "R": 1732,
+        "T": 2134,
+        "B": 190
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.005,
       "cleaned": "media/batch2-cleaned/cleaned/081645434/081645434-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645434-B-review.png",
       "sha": "4a5ba5a5d8cbdd43c7465408cc75bb3888fdcdff"
@@ -598,7 +1924,25 @@
       "file": "081645435-A-step1.jpg",
       "sku": "081645435",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 436161,
+      "mask_pct": 4.622,
+      "mask_bbox": [
+        1810,
+        2168,
+        2874,
+        2908
+      ],
+      "dist_to_edges": {
+        "L": 1810,
+        "R": 198,
+        "T": 2168,
+        "B": 164
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.004,
       "cleaned": "media/batch2-cleaned/cleaned/081645435/081645435-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645435-A-review.png",
       "sha": "10155bec061b1e510d4e74ce7a906adad7d51c26"
@@ -607,7 +1951,25 @@
       "file": "081645435-B-step1.jpg",
       "sku": "081645435",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 405884,
+      "mask_pct": 4.301,
+      "mask_bbox": [
+        232,
+        2102,
+        1260,
+        2820
+      ],
+      "dist_to_edges": {
+        "L": 232,
+        "R": 1812,
+        "T": 2102,
+        "B": 252
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.004,
       "cleaned": "media/batch2-cleaned/cleaned/081645435/081645435-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645435-B-review.png",
       "sha": "2ad24d3057a7da1b1542549b236ba9ec3a7ab8cd"
@@ -616,7 +1978,25 @@
       "file": "081645437-A-step1.jpg",
       "sku": "081645437",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 438418,
+      "mask_pct": 4.646,
+      "mask_bbox": [
+        1770,
+        2228,
+        2836,
+        2970
+      ],
+      "dist_to_edges": {
+        "L": 1770,
+        "R": 236,
+        "T": 2228,
+        "B": 102
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.005,
       "cleaned": "media/batch2-cleaned/cleaned/081645437/081645437-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645437-A-review.png",
       "sha": "1c35bee580c04a22e486d581d707e765e573d450"
@@ -625,7 +2005,25 @@
       "file": "081645437-B-step1.jpg",
       "sku": "081645437",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 444446,
+      "mask_pct": 4.71,
+      "mask_bbox": [
+        174,
+        2170,
+        1246,
+        2916
+      ],
+      "dist_to_edges": {
+        "L": 174,
+        "R": 1826,
+        "T": 2170,
+        "B": 156
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.005,
       "cleaned": "media/batch2-cleaned/cleaned/081645437/081645437-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645437-B-review.png",
       "sha": "1d613e6b0d590c90ba857b27394edb761c6305d3"
@@ -634,7 +2032,25 @@
       "file": "081645438-A-step1.jpg",
       "sku": "081645438",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 466928,
+      "mask_pct": 4.948,
+      "mask_bbox": [
+        1814,
+        2176,
+        2910,
+        2938
+      ],
+      "dist_to_edges": {
+        "L": 1814,
+        "R": 162,
+        "T": 2176,
+        "B": 134
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.008,
       "cleaned": "media/batch2-cleaned/cleaned/081645438/081645438-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645438-A-review.png",
       "sha": "1d246763f1dab90538e7e8cdf7bab3f15fc4a98f"
@@ -643,7 +2059,25 @@
       "file": "081645438-B-step1.jpg",
       "sku": "081645438",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 416674,
+      "mask_pct": 4.415,
+      "mask_bbox": [
+        322,
+        2168,
+        1364,
+        2894
+      ],
+      "dist_to_edges": {
+        "L": 322,
+        "R": 1708,
+        "T": 2168,
+        "B": 178
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.01,
       "cleaned": "media/batch2-cleaned/cleaned/081645438/081645438-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645438-B-review.png",
       "sha": "8eb00062d771e5fcbd8dbc5ed983df3097ead29e"
@@ -652,7 +2086,25 @@
       "file": "081645452-A-step1.jpg",
       "sku": "081645452",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 440873,
+      "mask_pct": 4.672,
+      "mask_bbox": [
+        1736,
+        2176,
+        2804,
+        2920
+      ],
+      "dist_to_edges": {
+        "L": 1736,
+        "R": 268,
+        "T": 2176,
+        "B": 152
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.03,
       "cleaned": "media/batch2-cleaned/cleaned/081645452/081645452-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645452-A-review.png",
       "sha": "d35ea18870853f5932a9e5cd7ef1a4a13d5f4423"
@@ -661,7 +2113,25 @@
       "file": "081645452-B-step1.jpg",
       "sku": "081645452",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 435724,
+      "mask_pct": 4.617,
+      "mask_bbox": [
+        334,
+        2168,
+        1396,
+        2908
+      ],
+      "dist_to_edges": {
+        "L": 334,
+        "R": 1676,
+        "T": 2168,
+        "B": 164
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.036,
       "cleaned": "media/batch2-cleaned/cleaned/081645452/081645452-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645452-B-review.png",
       "sha": "110912f09cfa4949e12a86d0c25bcce5933b7ac8"
@@ -670,7 +2140,25 @@
       "file": "0816454700-A-step1.jpg",
       "sku": "0816454700",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 815273,
+      "mask_pct": 8.639,
+      "mask_bbox": [
+        952,
+        2102,
+        2924,
+        2938
+      ],
+      "dist_to_edges": {
+        "L": 952,
+        "R": 148,
+        "T": 2102,
+        "B": 134
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.028,
       "cleaned": "media/batch2-cleaned/cleaned/0816454700/0816454700-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/0816454700-A-review.png",
       "sha": "8fb576dc606076487345ee0afe260b42d45afb01"
@@ -679,7 +2167,25 @@
       "file": "0816454700-B-step1.jpg",
       "sku": "0816454700",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 770515,
+      "mask_pct": 8.165,
+      "mask_bbox": [
+        260,
+        2012,
+        2148,
+        2812
+      ],
+      "dist_to_edges": {
+        "L": 260,
+        "R": 924,
+        "T": 2012,
+        "B": 260
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.028,
       "cleaned": "media/batch2-cleaned/cleaned/0816454700/0816454700-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/0816454700-B-review.png",
       "sha": "e745b3616eb7420d3df9d4d4318290f3a9782ba7"
@@ -688,7 +2194,25 @@
       "file": "081645471-A-step1.jpg",
       "sku": "081645471",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 777215,
+      "mask_pct": 8.236,
+      "mask_bbox": [
+        990,
+        2120,
+        2820,
+        2898
+      ],
+      "dist_to_edges": {
+        "L": 990,
+        "R": 252,
+        "T": 2120,
+        "B": 174
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.014,
       "cleaned": "media/batch2-cleaned/cleaned/081645471/081645471-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645471-A-review.png",
       "sha": "51830a7194161d16c5e5cc9a1a575c8f21031cb4"
@@ -697,7 +2221,25 @@
       "file": "081645471-B-step1.jpg",
       "sku": "081645471",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 439294,
+      "mask_pct": 4.655,
+      "mask_bbox": [
+        214,
+        2128,
+        1280,
+        2872
+      ],
+      "dist_to_edges": {
+        "L": 214,
+        "R": 1792,
+        "T": 2128,
+        "B": 200
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.02,
       "cleaned": "media/batch2-cleaned/cleaned/081645471/081645471-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645471-B-review.png",
       "sha": "823e16e2bc5c62c5c4b7278df0bb3a680663d187"
@@ -706,7 +2248,25 @@
       "file": "081645472-A-step1.jpg",
       "sku": "081645472",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 1359944,
+      "mask_pct": 8.106,
+      "mask_bbox": [
+        1376,
+        2808,
+        3824,
+        3925
+      ],
+      "dist_to_edges": {
+        "L": 1376,
+        "R": 272,
+        "T": 2808,
+        "B": 171
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.007,
       "cleaned": "media/batch2-cleaned/cleaned/081645472/081645472-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645472-A-review.png",
       "sha": "09ec1c28c0324686f54567abbd4015b848aa53de"
@@ -715,7 +2275,25 @@
       "file": "081645472-B-step1.jpg",
       "sku": "081645472",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 452002,
+      "mask_pct": 4.79,
+      "mask_bbox": [
+        168,
+        2124,
+        1250,
+        2874
+      ],
+      "dist_to_edges": {
+        "L": 168,
+        "R": 1822,
+        "T": 2124,
+        "B": 198
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.006,
       "cleaned": "media/batch2-cleaned/cleaned/081645472/081645472-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645472-B-review.png",
       "sha": "fc19203df381986d64d0a80719c9a89a45621e56"
@@ -724,7 +2302,25 @@
       "file": "081645473-A-step1.jpg",
       "sku": "081645473",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 833547,
+      "mask_pct": 8.833,
+      "mask_bbox": [
+        892,
+        2168,
+        2886,
+        3012
+      ],
+      "dist_to_edges": {
+        "L": 892,
+        "R": 186,
+        "T": 2168,
+        "B": 60
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.021,
       "cleaned": "media/batch2-cleaned/cleaned/081645473/081645473-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645473-A-review.png",
       "sha": "3b69b501b209b4c3affbef497011fb81abebe21a"
@@ -733,7 +2329,25 @@
       "file": "081645473-B-step1.jpg",
       "sku": "081645473",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 444020,
+      "mask_pct": 4.705,
+      "mask_bbox": [
+        298,
+        2156,
+        1370,
+        2902
+      ],
+      "dist_to_edges": {
+        "L": 298,
+        "R": 1702,
+        "T": 2156,
+        "B": 170
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.011,
       "cleaned": "media/batch2-cleaned/cleaned/081645473/081645473-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645473-B-review.png",
       "sha": "f796d84fa20dbe40e020bbbaffe0926dbc361f5b"
@@ -742,7 +2356,25 @@
       "file": "081645490-A-step1.jpg",
       "sku": "081645490",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 846204,
+      "mask_pct": 8.967,
+      "mask_bbox": [
+        854,
+        2066,
+        2894,
+        2892
+      ],
+      "dist_to_edges": {
+        "L": 854,
+        "R": 178,
+        "T": 2066,
+        "B": 180
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.021,
       "cleaned": "media/batch2-cleaned/cleaned/081645490/081645490-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645490-A-review.png",
       "sha": "5288d1e0feb2a746e50bd8c6c82c47d700eff782"
@@ -751,7 +2383,25 @@
       "file": "081645490-B-step1.jpg",
       "sku": "081645490",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 898475,
+      "mask_pct": 9.521,
+      "mask_bbox": [
+        232,
+        2020,
+        2128,
+        2888
+      ],
+      "dist_to_edges": {
+        "L": 232,
+        "R": 944,
+        "T": 2020,
+        "B": 184
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.02,
       "cleaned": "media/batch2-cleaned/cleaned/081645490/081645490-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645490-B-review.png",
       "sha": "60eafd57fa3d910fe4af16264f88853393b59122"
@@ -760,7 +2410,25 @@
       "file": "081645491-A-step1.jpg",
       "sku": "081645491",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 824273,
+      "mask_pct": 8.734,
+      "mask_bbox": [
+        924,
+        2074,
+        2816,
+        2946
+      ],
+      "dist_to_edges": {
+        "L": 924,
+        "R": 256,
+        "T": 2074,
+        "B": 126
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.007,
       "cleaned": "media/batch2-cleaned/cleaned/081645491/081645491-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645491-A-review.png",
       "sha": "957e8cd91756b2e464acf1817f7571c2f28a24c8"
@@ -769,7 +2437,25 @@
       "file": "081645491-B-step1.jpg",
       "sku": "081645491",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 755456,
+      "mask_pct": 8.005,
+      "mask_bbox": [
+        214,
+        2042,
+        1986,
+        2822
+      ],
+      "dist_to_edges": {
+        "L": 214,
+        "R": 1086,
+        "T": 2042,
+        "B": 250
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.005,
       "cleaned": "media/batch2-cleaned/cleaned/081645491/081645491-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645491-B-review.png",
       "sha": "a36ee4f5bf8bc261edb4dbcd4920130892d3100d"
@@ -778,7 +2464,25 @@
       "file": "081645492-A-step1.jpg",
       "sku": "081645492",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 853869,
+      "mask_pct": 9.048,
+      "mask_bbox": [
+        938,
+        2178,
+        2876,
+        3018
+      ],
+      "dist_to_edges": {
+        "L": 938,
+        "R": 196,
+        "T": 2178,
+        "B": 54
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.022,
       "cleaned": "media/batch2-cleaned/cleaned/081645492/081645492-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645492-A-review.png",
       "sha": "287ceb8857312ec1ff02b745455dc895707f7fd8"
@@ -787,7 +2491,25 @@
       "file": "081645492-B-step1.jpg",
       "sku": "081645492",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 706433,
+      "mask_pct": 7.486,
+      "mask_bbox": [
+        284,
+        2080,
+        1918,
+        2894
+      ],
+      "dist_to_edges": {
+        "L": 284,
+        "R": 1154,
+        "T": 2080,
+        "B": 178
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.025,
       "cleaned": "media/batch2-cleaned/cleaned/081645492/081645492-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081645492-B-review.png",
       "sha": "318980cf087a848bd11cfbf7c861d3fc29175538"
@@ -796,7 +2518,25 @@
       "file": "08164592-A-step1.jpg",
       "sku": "08164592",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 837230,
+      "mask_pct": 8.872,
+      "mask_bbox": [
+        966,
+        2138,
+        2860,
+        2990
+      ],
+      "dist_to_edges": {
+        "L": 966,
+        "R": 212,
+        "T": 2138,
+        "B": 82
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.011,
       "cleaned": "media/batch2-cleaned/cleaned/08164592/08164592-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/08164592-A-review.png",
       "sha": "156dbb875ee53bb140fc45867748dcfee84b7b2f"
@@ -805,7 +2545,25 @@
       "file": "08164592-B-step1.jpg",
       "sku": "08164592",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 771221,
+      "mask_pct": 8.172,
+      "mask_bbox": [
+        256,
+        2054,
+        1986,
+        2926
+      ],
+      "dist_to_edges": {
+        "L": 256,
+        "R": 1086,
+        "T": 2054,
+        "B": 146
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.008,
       "cleaned": "media/batch2-cleaned/cleaned/08164592/08164592-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/08164592-B-review.png",
       "sha": "7fc204e91b594a9e5985f6f942a428dffec1ebe7"
@@ -814,7 +2572,25 @@
       "file": "081845436-A-step1.jpg",
       "sku": "081845436",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 440080,
+      "mask_pct": 4.663,
+      "mask_bbox": [
+        1800,
+        2200,
+        2868,
+        2942
+      ],
+      "dist_to_edges": {
+        "L": 1800,
+        "R": 204,
+        "T": 2200,
+        "B": 130
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.005,
       "cleaned": "media/batch2-cleaned/cleaned/081845436/081845436-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081845436-A-review.png",
       "sha": "30d96823319f6ddf613e84841f3cfefde74e575c"
@@ -823,7 +2599,25 @@
       "file": "081845436-B-step1.jpg",
       "sku": "081845436",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 427884,
+      "mask_pct": 4.534,
+      "mask_bbox": [
+        238,
+        2262,
+        1292,
+        2996
+      ],
+      "dist_to_edges": {
+        "L": 238,
+        "R": 1780,
+        "T": 2262,
+        "B": 76
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.008,
       "cleaned": "media/batch2-cleaned/cleaned/081845436/081845436-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081845436-B-review.png",
       "sha": "0b2e15573bc0339e9ea94c247e7b80a71121d723"
@@ -832,7 +2626,25 @@
       "file": "081845730-A-step1.jpg",
       "sku": "081845730",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 849243,
+      "mask_pct": 8.999,
+      "mask_bbox": [
+        852,
+        2002,
+        2884,
+        2848
+      ],
+      "dist_to_edges": {
+        "L": 852,
+        "R": 188,
+        "T": 2002,
+        "B": 224
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.033,
       "cleaned": "media/batch2-cleaned/cleaned/081845730/081845730-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081845730-A-review.png",
       "sha": "2a3a2c167a2d8b3b9a359f10577291043d842411"
@@ -841,7 +2653,25 @@
       "file": "081845730-B-step1.jpg",
       "sku": "081845730",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 595397,
+      "mask_pct": 6.309,
+      "mask_bbox": [
+        292,
+        2324,
+        1872,
+        3034
+      ],
+      "dist_to_edges": {
+        "L": 292,
+        "R": 1200,
+        "T": 2324,
+        "B": 38
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.032,
       "cleaned": "media/batch2-cleaned/cleaned/081845730/081845730-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081845730-B-review.png",
       "sha": "19d6c275ec580d5f4633aebbd979128a39452eb8"
@@ -850,7 +2680,25 @@
       "file": "081845731-A-step1.jpg",
       "sku": "081845731",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 458834,
+      "mask_pct": 4.862,
+      "mask_bbox": [
+        1686,
+        2144,
+        2774,
+        2900
+      ],
+      "dist_to_edges": {
+        "L": 1686,
+        "R": 298,
+        "T": 2144,
+        "B": 172
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.006,
       "cleaned": "media/batch2-cleaned/cleaned/081845731/081845731-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081845731-A-review.png",
       "sha": "2405e1875d93d15c69cf231da84a6ea552f574b1"
@@ -859,7 +2707,25 @@
       "file": "081845731-B-step1.jpg",
       "sku": "081845731",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 431484,
+      "mask_pct": 4.572,
+      "mask_bbox": [
+        344,
+        2248,
+        1402,
+        2986
+      ],
+      "dist_to_edges": {
+        "L": 344,
+        "R": 1670,
+        "T": 2248,
+        "B": 86
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.009,
       "cleaned": "media/batch2-cleaned/cleaned/081845731/081845731-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081845731-B-review.png",
       "sha": "d2b8b4658f7886c1af45ce47edfbb2e836189807"
@@ -868,7 +2734,25 @@
       "file": "081845733-A-step1.jpg",
       "sku": "081845733",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 440382,
+      "mask_pct": 4.666,
+      "mask_bbox": [
+        1706,
+        2176,
+        2774,
+        2918
+      ],
+      "dist_to_edges": {
+        "L": 1706,
+        "R": 298,
+        "T": 2176,
+        "B": 154
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.006,
       "cleaned": "media/batch2-cleaned/cleaned/081845733/081845733-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081845733-A-review.png",
       "sha": "29a4d0e300cf8c3d33763af540ddd1409eb3eaf7"
@@ -877,7 +2761,25 @@
       "file": "081845733-B-step1.jpg",
       "sku": "081845733",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 455707,
+      "mask_pct": 4.829,
+      "mask_bbox": [
+        326,
+        2146,
+        1412,
+        2900
+      ],
+      "dist_to_edges": {
+        "L": 326,
+        "R": 1660,
+        "T": 2146,
+        "B": 172
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.005,
       "cleaned": "media/batch2-cleaned/cleaned/081845733/081845733-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081845733-B-review.png",
       "sha": "e58a51e57271406e12acd18c339fed87ea1c8d2e"
@@ -886,7 +2788,25 @@
       "file": "081845734-A-step1.jpg",
       "sku": "081845734",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 453334,
+      "mask_pct": 4.804,
+      "mask_bbox": [
+        1694,
+        2248,
+        2776,
+        3000
+      ],
+      "dist_to_edges": {
+        "L": 1694,
+        "R": 296,
+        "T": 2248,
+        "B": 72
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.007,
       "cleaned": "media/batch2-cleaned/cleaned/081845734/081845734-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/081845734-A-review.png",
       "sha": "416aab149ba69a317c52c4c7e62a5108f9dbf100"
@@ -895,7 +2815,25 @@
       "file": "081845734-B-step1.jpg",
       "sku": "081845734",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 436043,
+      "mask_pct": 4.62,
+      "mask_bbox": [
+        306,
+        2132,
+        1368,
+        2874
+      ],
+      "dist_to_edges": {
+        "L": 306,
+        "R": 1704,
+        "T": 2132,
+        "B": 198
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.008,
       "cleaned": "media/batch2-cleaned/cleaned/081845734/081845734-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/081845734-B-review.png",
       "sha": "e145be3a4b656b27cadd5f29553e69dadc0ca6aa"
@@ -904,7 +2842,25 @@
       "file": "082045410-A-step1.jpg",
       "sku": "082045410",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 446150,
+      "mask_pct": 4.728,
+      "mask_bbox": [
+        1782,
+        2116,
+        2856,
+        2864
+      ],
+      "dist_to_edges": {
+        "L": 1782,
+        "R": 216,
+        "T": 2116,
+        "B": 208
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.006,
       "cleaned": "media/batch2-cleaned/cleaned/082045410/082045410-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/082045410-A-review.png",
       "sha": "c56af1ffba9523aeef5da392de36d753f5bed12f"
@@ -913,7 +2869,25 @@
       "file": "082045410-B-step1.jpg",
       "sku": "082045410",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 437435,
+      "mask_pct": 4.635,
+      "mask_bbox": [
+        102,
+        2100,
+        1166,
+        2842
+      ],
+      "dist_to_edges": {
+        "L": 102,
+        "R": 1906,
+        "T": 2100,
+        "B": 230
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.008,
       "cleaned": "media/batch2-cleaned/cleaned/082045410/082045410-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/082045410-B-review.png",
       "sha": "2da59ab532e4feb25a318bfc51dd127e6c32b9b3"
@@ -922,7 +2896,25 @@
       "file": "082045411-A-step1.jpg",
       "sku": "082045411",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 846902,
+      "mask_pct": 8.974,
+      "mask_bbox": [
+        880,
+        2070,
+        2906,
+        2902
+      ],
+      "dist_to_edges": {
+        "L": 880,
+        "R": 166,
+        "T": 2070,
+        "B": 170
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.031,
       "cleaned": "media/batch2-cleaned/cleaned/082045411/082045411-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/082045411-A-review.png",
       "sha": "f6df05ab929ad1f420b954ffc0364c3be230b5e3"
@@ -931,7 +2923,25 @@
       "file": "082045411-B-step1.jpg",
       "sku": "082045411",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 828178,
+      "mask_pct": 8.776,
+      "mask_bbox": [
+        0,
+        2028,
+        1946,
+        2806
+      ],
+      "dist_to_edges": {
+        "L": 0,
+        "R": 1126,
+        "T": 2028,
+        "B": 266
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.03,
       "cleaned": "media/batch2-cleaned/cleaned/082045411/082045411-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/082045411-B-review.png",
       "sha": "0625f25018b075d1aa7498ed1977572a9d66647a"
@@ -940,7 +2950,25 @@
       "file": "082045412-A-step1.jpg",
       "sku": "082045412",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 458322,
+      "mask_pct": 4.857,
+      "mask_bbox": [
+        1840,
+        2150,
+        2928,
+        2906
+      ],
+      "dist_to_edges": {
+        "L": 1840,
+        "R": 144,
+        "T": 2150,
+        "B": 166
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.01,
       "cleaned": "media/batch2-cleaned/cleaned/082045412/082045412-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/082045412-A-review.png",
       "sha": "e8b8e4ee75347fa9bcf979a43b5cd2d114b93dad"
@@ -949,7 +2977,25 @@
       "file": "082045412-B-step1.jpg",
       "sku": "082045412",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 751687,
+      "mask_pct": 7.965,
+      "mask_bbox": [
+        206,
+        2182,
+        2048,
+        2950
+      ],
+      "dist_to_edges": {
+        "L": 206,
+        "R": 1024,
+        "T": 2182,
+        "B": 122
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.013,
       "cleaned": "media/batch2-cleaned/cleaned/082045412/082045412-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/082045412-B-review.png",
       "sha": "fb580416f06a1c46274501d61701b07a76d000f4"
@@ -958,7 +3004,25 @@
       "file": "082045413-A-step1.jpg",
       "sku": "082045413",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 810243,
+      "mask_pct": 8.586,
+      "mask_bbox": [
+        1056,
+        1988,
+        2900,
+        2918
+      ],
+      "dist_to_edges": {
+        "L": 1056,
+        "R": 172,
+        "T": 1988,
+        "B": 154
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.018,
       "cleaned": "media/batch2-cleaned/cleaned/082045413/082045413-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/082045413-A-review.png",
       "sha": "8f76e4bafb07cfe67253701e99fc457aba6a141d"
@@ -967,7 +3031,25 @@
       "file": "082045413-B-step1.jpg",
       "sku": "082045413",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 454445,
+      "mask_pct": 4.815,
+      "mask_bbox": [
+        178,
+        2122,
+        1260,
+        2874
+      ],
+      "dist_to_edges": {
+        "L": 178,
+        "R": 1812,
+        "T": 2122,
+        "B": 198
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.01,
       "cleaned": "media/batch2-cleaned/cleaned/082045413/082045413-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/082045413-B-review.png",
       "sha": "8af20b73746677a48a576b1b4cec397a5df1b6ee"
@@ -976,7 +3058,25 @@
       "file": "082045415-A-step1.jpg",
       "sku": "082045415",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 414636,
+      "mask_pct": 4.394,
+      "mask_bbox": [
+        1866,
+        2224,
+        2904,
+        2948
+      ],
+      "dist_to_edges": {
+        "L": 1866,
+        "R": 168,
+        "T": 2224,
+        "B": 124
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.04,
       "cleaned": "media/batch2-cleaned/cleaned/082045415/082045415-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/082045415-A-review.png",
       "sha": "19a4f99e26ab38509e04c822856571a78ddd24db"
@@ -985,7 +3085,25 @@
       "file": "082045415-B-step1.jpg",
       "sku": "082045415",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 604242,
+      "mask_pct": 6.403,
+      "mask_bbox": [
+        166,
+        2138,
+        1678,
+        2882
+      ],
+      "dist_to_edges": {
+        "L": 166,
+        "R": 1394,
+        "T": 2138,
+        "B": 190
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.038,
       "cleaned": "media/batch2-cleaned/cleaned/082045415/082045415-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/082045415-B-review.png",
       "sha": "91d8ec1ab9d279698fb354b2d360c57372e04957"
@@ -994,7 +3112,25 @@
       "file": "082045416-A-step1.jpg",
       "sku": "082045416",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 451560,
+      "mask_pct": 4.785,
+      "mask_bbox": [
+        1850,
+        2220,
+        2930,
+        2970
+      ],
+      "dist_to_edges": {
+        "L": 1850,
+        "R": 142,
+        "T": 2220,
+        "B": 102
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.008,
       "cleaned": "media/batch2-cleaned/cleaned/082045416/082045416-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/082045416-A-review.png",
       "sha": "2d0ae77651a934c7036418e941cf45128b1b71b5"
@@ -1003,7 +3139,25 @@
       "file": "082045416-B-step1.jpg",
       "sku": "082045416",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 873989,
+      "mask_pct": 9.261,
+      "mask_bbox": [
+        102,
+        2034,
+        2018,
+        2942
+      ],
+      "dist_to_edges": {
+        "L": 102,
+        "R": 1054,
+        "T": 2034,
+        "B": 130
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.015,
       "cleaned": "media/batch2-cleaned/cleaned/082045416/082045416-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/082045416-B-review.png",
       "sha": "447dc9d678904873a63abd78102033f370a42f58"
@@ -1012,7 +3166,25 @@
       "file": "082045450-A-step1.jpg",
       "sku": "082045450",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 390727,
+      "mask_pct": 4.14,
+      "mask_bbox": [
+        1806,
+        2236,
+        2818,
+        2942
+      ],
+      "dist_to_edges": {
+        "L": 1806,
+        "R": 254,
+        "T": 2236,
+        "B": 130
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.004,
       "cleaned": "media/batch2-cleaned/cleaned/082045450/082045450-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/082045450-A-review.png",
       "sha": "73803afccc094bb131c52a927e0e26ccf1407e04"
@@ -1021,7 +3193,25 @@
       "file": "082045450-B-step1.jpg",
       "sku": "082045450",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 457081,
+      "mask_pct": 4.843,
+      "mask_bbox": [
+        312,
+        2214,
+        1398,
+        2970
+      ],
+      "dist_to_edges": {
+        "L": 312,
+        "R": 1674,
+        "T": 2214,
+        "B": 102
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.004,
       "cleaned": "media/batch2-cleaned/cleaned/082045450/082045450-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/082045450-B-review.png",
       "sha": "2c6665ef09ca45cd3fbbc03153ae888cebf05c82"
@@ -1030,7 +3220,25 @@
       "file": "082045451-A-step1.jpg",
       "sku": "082045451",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 428562,
+      "mask_pct": 4.541,
+      "mask_bbox": [
+        1842,
+        2234,
+        2896,
+        2968
+      ],
+      "dist_to_edges": {
+        "L": 1842,
+        "R": 176,
+        "T": 2234,
+        "B": 104
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.015,
       "cleaned": "media/batch2-cleaned/cleaned/082045451/082045451-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/082045451-A-review.png",
       "sha": "0da9fa644db4ad57ac16c8749a1f29ab9c9e19e3"
@@ -1039,7 +3247,25 @@
       "file": "082045451-B-step1.jpg",
       "sku": "082045451",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 439346,
+      "mask_pct": 4.655,
+      "mask_bbox": [
+        274,
+        2116,
+        1340,
+        2860
+      ],
+      "dist_to_edges": {
+        "L": 274,
+        "R": 1732,
+        "T": 2116,
+        "B": 212
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.015,
       "cleaned": "media/batch2-cleaned/cleaned/082045451/082045451-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/082045451-B-review.png",
       "sha": "8c5fdd2e60065bd40e7ed5f9be334aae304cc803"
@@ -1048,7 +3274,25 @@
       "file": "082045453-A-step1.jpg",
       "sku": "082045453",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 456748,
+      "mask_pct": 4.84,
+      "mask_bbox": [
+        1768,
+        2222,
+        2854,
+        2978
+      ],
+      "dist_to_edges": {
+        "L": 1768,
+        "R": 218,
+        "T": 2222,
+        "B": 94
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.009,
       "cleaned": "media/batch2-cleaned/cleaned/082045453/082045453-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/082045453-A-review.png",
       "sha": "4661fd5989e6c88546014626dc7b84d1a02c4855"
@@ -1057,7 +3301,25 @@
       "file": "082045453-B-step1.jpg",
       "sku": "082045453",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 456520,
+      "mask_pct": 4.837,
+      "mask_bbox": [
+        236,
+        2020,
+        1322,
+        2774
+      ],
+      "dist_to_edges": {
+        "L": 236,
+        "R": 1750,
+        "T": 2020,
+        "B": 298
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.009,
       "cleaned": "media/batch2-cleaned/cleaned/082045453/082045453-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/082045453-B-review.png",
       "sha": "e561bcb2150ad208725b3a4993e66e7da16df946"
@@ -1066,7 +3328,25 @@
       "file": "082045732-A-step1.jpg",
       "sku": "082045732",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 462747,
+      "mask_pct": 4.903,
+      "mask_bbox": [
+        1686,
+        2228,
+        2778,
+        2988
+      ],
+      "dist_to_edges": {
+        "L": 1686,
+        "R": 294,
+        "T": 2228,
+        "B": 84
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.005,
       "cleaned": "media/batch2-cleaned/cleaned/082045732/082045732-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/082045732-A-review.png",
       "sha": "9f244551920f1f591db80f192c5df175cf6bebfd"
@@ -1075,7 +3355,25 @@
       "file": "082045732-B-step1.jpg",
       "sku": "082045732",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 392402,
+      "mask_pct": 4.158,
+      "mask_bbox": [
+        206,
+        2164,
+        1218,
+        2872
+      ],
+      "dist_to_edges": {
+        "L": 206,
+        "R": 1854,
+        "T": 2164,
+        "B": 200
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.004,
       "cleaned": "media/batch2-cleaned/cleaned/082045732/082045732-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/082045732-B-review.png",
       "sha": "30e656289950a78da475696b30345d613e3a05b6"
@@ -1084,7 +3382,25 @@
       "file": "10124828-A-step1.jpg",
       "sku": "10124828",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 5271928,
+      "mask_pct": 31.423,
+      "mask_bbox": [
+        0,
+        2376,
+        3826,
+        4096
+      ],
+      "dist_to_edges": {
+        "L": 0,
+        "R": 270,
+        "T": 2376,
+        "B": 0
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.722,
       "cleaned": "media/batch2-cleaned/cleaned/10124828/10124828-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/10124828-A-review.png",
       "sha": "15efbe97e43d9822dedae5b0bc86f100f6e5be31"
@@ -1093,7 +3409,25 @@
       "file": "10124828-B-step1.jpg",
       "sku": "10124828",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 4345477,
+      "mask_pct": 25.901,
+      "mask_bbox": [
+        0,
+        2458,
+        4096,
+        4056
+      ],
+      "dist_to_edges": {
+        "L": 0,
+        "R": 0,
+        "T": 2458,
+        "B": 40
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.814,
       "cleaned": "media/batch2-cleaned/cleaned/10124828/10124828-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/10124828-B-review.png",
       "sha": "98f7344e24a8e69091d305e368045ec28076fc9a"
@@ -1102,7 +3436,25 @@
       "file": "10124828-C-step1.jpg",
       "sku": "10124828",
       "angle": "C",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 5427360,
+      "mask_pct": 32.35,
+      "mask_bbox": [
+        0,
+        2376,
+        4096,
+        4096
+      ],
+      "dist_to_edges": {
+        "L": 0,
+        "R": 0,
+        "T": 2376,
+        "B": 0
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.612,
       "cleaned": "media/batch2-cleaned/cleaned/10124828/10124828-C-step1.webp",
       "qa": "media/batch2-cleaned/qa/10124828-C-review.png",
       "sha": "7c56b1cc8ad0aaa30f4efbcb76554abf7bf0142d"
@@ -1111,7 +3463,25 @@
       "file": "10144405-A-step1.jpg",
       "sku": "10144405",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 77748,
+      "mask_pct": 5.399,
+      "mask_bbox": [
+        662,
+        856,
+        1109,
+        1181
+      ],
+      "dist_to_edges": {
+        "L": 662,
+        "R": 91,
+        "T": 856,
+        "B": 19
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.004,
       "cleaned": "media/batch2-cleaned/cleaned/10144405/10144405-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/10144405-A-review.png",
       "sha": "3c41adbd435f9c1533fdb58d38532b0e5441b799"
@@ -1120,7 +3490,25 @@
       "file": "10144405-B-step1.jpg",
       "sku": "10144405",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 77658,
+      "mask_pct": 5.393,
+      "mask_bbox": [
+        97,
+        839,
+        539,
+        1164
+      ],
+      "dist_to_edges": {
+        "L": 97,
+        "R": 661,
+        "T": 839,
+        "B": 36
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.004,
       "cleaned": "media/batch2-cleaned/cleaned/10144405/10144405-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/10144405-B-review.png",
       "sha": "ae5e5b31b535e397edb0aed9306899e5b73671c7"
@@ -1129,7 +3517,25 @@
       "file": "10144532-A-step1.jpg",
       "sku": "10144532",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 922716,
+      "mask_pct": 9.777,
+      "mask_bbox": [
+        844,
+        2038,
+        2814,
+        2912
+      ],
+      "dist_to_edges": {
+        "L": 844,
+        "R": 258,
+        "T": 2038,
+        "B": 160
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.04,
       "cleaned": "media/batch2-cleaned/cleaned/10144532/10144532-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/10144532-A-review.png",
       "sha": "903ddd85f225d96796e0d996c90e7d138124dca9"
@@ -1138,7 +3544,25 @@
       "file": "10144532-B-step1.jpg",
       "sku": "10144532",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 801467,
+      "mask_pct": 8.493,
+      "mask_bbox": [
+        362,
+        1944,
+        2048,
+        2778
+      ],
+      "dist_to_edges": {
+        "L": 362,
+        "R": 1024,
+        "T": 1944,
+        "B": 294
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.03,
       "cleaned": "media/batch2-cleaned/cleaned/10144532/10144532-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/10144532-B-review.png",
       "sha": "2517e58880506086aaa19f764177acdada53ba12"
@@ -1147,7 +3571,25 @@
       "file": "10164669-A-step1.jpeg",
       "sku": "10164669",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 69949,
+      "mask_pct": 4.858,
+      "mask_bbox": [
+        755,
+        883,
+        1180,
+        1198
+      ],
+      "dist_to_edges": {
+        "L": 755,
+        "R": 20,
+        "T": 883,
+        "B": 2
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.006,
       "cleaned": "media/batch2-cleaned/cleaned/10164669/10164669-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/10164669-A-review.png",
       "sha": "fb5f2ed5c52e05f69b287b536e0b754a366f54fb"
@@ -1156,7 +3598,25 @@
       "file": "10164669-B-step1.jpeg",
       "sku": "10164669",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 72760,
+      "mask_pct": 5.053,
+      "mask_bbox": [
+        13,
+        835,
+        444,
+        1154
+      ],
+      "dist_to_edges": {
+        "L": 13,
+        "R": 756,
+        "T": 835,
+        "B": 46
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.005,
       "cleaned": "media/batch2-cleaned/cleaned/10164669/10164669-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/10164669-B-review.png",
       "sha": "b1bad785d65795611b56cecd5dfe9b0adf0b59a6"
@@ -1165,7 +3625,25 @@
       "file": "10164669-C-step1.jpeg",
       "sku": "10164669",
       "angle": "C",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 60534,
+      "mask_pct": 4.204,
+      "mask_bbox": [
+        12,
+        899,
+        409,
+        1195
+      ],
+      "dist_to_edges": {
+        "L": 12,
+        "R": 791,
+        "T": 899,
+        "B": 5
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.004,
       "cleaned": "media/batch2-cleaned/cleaned/10164669/10164669-C-step1.webp",
       "qa": "media/batch2-cleaned/qa/10164669-C-review.png",
       "sha": "67a791c59a3514b4813e88d4e2bdc23b87066daf"
@@ -1174,7 +3652,25 @@
       "file": "10165000-A-step1.jpg",
       "sku": "10165000",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 33988,
+      "mask_pct": 2.914,
+      "mask_bbox": [
+        664,
+        681,
+        970,
+        916
+      ],
+      "dist_to_edges": {
+        "L": 664,
+        "R": 110,
+        "T": 681,
+        "B": 164
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.037,
       "cleaned": "media/batch2-cleaned/cleaned/10165000/10165000-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/10165000-A-review.png",
       "sha": "33c095ede31c5ea4a27c67f5a77e1afab706c706"
@@ -1183,7 +3679,25 @@
       "file": "10165000-B-step1.jpg",
       "sku": "10165000",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 38926,
+      "mask_pct": 3.337,
+      "mask_bbox": [
+        50,
+        728,
+        375,
+        974
+      ],
+      "dist_to_edges": {
+        "L": 50,
+        "R": 705,
+        "T": 728,
+        "B": 106
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.036,
       "cleaned": "media/batch2-cleaned/cleaned/10165000/10165000-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/10165000-B-review.png",
       "sha": "7a9e1e745b1725776aa7890e57d87a6e2b656b09"
@@ -1192,7 +3706,25 @@
       "file": "10194538-A-step1.jpg",
       "sku": "10194538",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 1238450,
+      "mask_pct": 13.123,
+      "mask_bbox": [
+        744,
+        1836,
+        2848,
+        2924
+      ],
+      "dist_to_edges": {
+        "L": 744,
+        "R": 224,
+        "T": 1836,
+        "B": 148
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.05,
       "cleaned": "media/batch2-cleaned/cleaned/10194538/10194538-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/10194538-A-review.png",
       "sha": "96cbc33d015801c2d354b5e09ad69816d98a0ea0"
@@ -1201,7 +3733,25 @@
       "file": "10194538-B-step1.jpg",
       "sku": "10194538",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 1123907,
+      "mask_pct": 11.909,
+      "mask_bbox": [
+        272,
+        1756,
+        2402,
+        2872
+      ],
+      "dist_to_edges": {
+        "L": 272,
+        "R": 670,
+        "T": 1756,
+        "B": 200
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.033,
       "cleaned": "media/batch2-cleaned/cleaned/10194538/10194538-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/10194538-B-review.png",
       "sha": "14aaa4e32a14d5a61d08de8939fefbfcfb4b5802"
@@ -1210,7 +3760,25 @@
       "file": "10204516-A-step1.jpg",
       "sku": "10204516",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 949932,
+      "mask_pct": 10.066,
+      "mask_bbox": [
+        82,
+        2086,
+        2110,
+        2882
+      ],
+      "dist_to_edges": {
+        "L": 82,
+        "R": 962,
+        "T": 2086,
+        "B": 190
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.012,
       "cleaned": "media/batch2-cleaned/cleaned/10204516/10204516-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/10204516-A-review.png",
       "sha": "79f46836c596246ebbb8da4c485bcf771712924b"
@@ -1219,7 +3787,25 @@
       "file": "10204813-A-step1.jpg",
       "sku": "10204813",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "NO_LOGO",
+      "logo_present": false,
+      "mask_area_px": 2447601,
+      "mask_pct": 20.397,
+      "mask_bbox": [
+        93,
+        2362,
+        3000,
+        3971
+      ],
+      "dist_to_edges": {
+        "L": 93,
+        "R": 0,
+        "T": 2362,
+        "B": 29
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.509,
       "cleaned": "media/batch2-cleaned/cleaned/10204813/10204813-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/10204813-A-review.png",
       "sha": "8cfb339ab2d952dea309409ae7a2f3f7793550ae"
@@ -1228,7 +3814,25 @@
       "file": "1098900-A-step1.png",
       "sku": "1098900",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 163551,
+      "mask_pct": 4.437,
+      "mask_bbox": [
+        1195,
+        1384,
+        1847,
+        1837
+      ],
+      "dist_to_edges": {
+        "L": 1195,
+        "R": 73,
+        "T": 1384,
+        "B": 83
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.003,
       "cleaned": "media/batch2-cleaned/cleaned/1098900/1098900-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/1098900-A-review.png",
       "sha": "fc325e2d2f9277f0c25ff745c5f3897856627fd7"
@@ -1237,7 +3841,25 @@
       "file": "1098900-B-step1.png",
       "sku": "1098900",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 195019,
+      "mask_pct": 5.29,
+      "mask_bbox": [
+        41,
+        1384,
+        748,
+        1874
+      ],
+      "dist_to_edges": {
+        "L": 41,
+        "R": 1172,
+        "T": 1384,
+        "B": 46
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.003,
       "cleaned": "media/batch2-cleaned/cleaned/1098900/1098900-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/1098900-B-review.png",
       "sha": "78b12cf22b9bfaadb1dd95a59e7af4a47a061a8e"
@@ -1246,7 +3868,25 @@
       "file": "11164750-A-step1.jpg",
       "sku": "11164750",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 65474,
+      "mask_pct": 4.547,
+      "mask_bbox": [
+        745,
+        851,
+        1157,
+        1156
+      ],
+      "dist_to_edges": {
+        "L": 745,
+        "R": 43,
+        "T": 851,
+        "B": 44
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.003,
       "cleaned": "media/batch2-cleaned/cleaned/11164750/11164750-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/11164750-A-review.png",
       "sha": "16326601a242aea9ab2e722bb03f1f1ad3092b3c"
@@ -1255,7 +3895,25 @@
       "file": "11164750-B-step1.jpg",
       "sku": "11164750",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 64285,
+      "mask_pct": 4.464,
+      "mask_bbox": [
+        38,
+        825,
+        447,
+        1128
+      ],
+      "dist_to_edges": {
+        "L": 38,
+        "R": 753,
+        "T": 825,
+        "B": 72
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.004,
       "cleaned": "media/batch2-cleaned/cleaned/11164750/11164750-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/11164750-B-review.png",
       "sha": "430d2c9479be114e635522d37c5c8985687dc308"
@@ -1264,7 +3922,25 @@
       "file": "11204804-A-step1.jpg",
       "sku": "11204804",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 45198,
+      "mask_pct": 3.232,
+      "mask_bbox": [
+        397,
+        1043,
+        982,
+        1295
+      ],
+      "dist_to_edges": {
+        "L": 397,
+        "R": 98,
+        "T": 1043,
+        "B": 0
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.705,
       "cleaned": "media/batch2-cleaned/cleaned/11204804/11204804-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/11204804-A-review.png",
       "sha": "2929e1fae9d5a1587d9fa1701895bc5b62e85951"
@@ -1273,7 +3949,25 @@
       "file": "11224537-A-step1.jpg",
       "sku": "11224537",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 433566,
+      "mask_pct": 4.594,
+      "mask_bbox": [
+        1834,
+        2212,
+        2894,
+        2950
+      ],
+      "dist_to_edges": {
+        "L": 1834,
+        "R": 178,
+        "T": 2212,
+        "B": 122
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.029,
       "cleaned": "media/batch2-cleaned/cleaned/11224537/11224537-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/11224537-A-review.png",
       "sha": "03a705b9fe6cbc0ac8190a3c2e73598466027461"
@@ -1282,7 +3976,25 @@
       "file": "11224537-B-step1.jpg",
       "sku": "11224537",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 773737,
+      "mask_pct": 8.199,
+      "mask_bbox": [
+        144,
+        2214,
+        1994,
+        2954
+      ],
+      "dist_to_edges": {
+        "L": 144,
+        "R": 1078,
+        "T": 2214,
+        "B": 118
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.034,
       "cleaned": "media/batch2-cleaned/cleaned/11224537/11224537-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/11224537-B-review.png",
       "sha": "31fb7e0f4c2b5597e16faab3ed3a9b5bf416b876"
@@ -1291,7 +4003,25 @@
       "file": "12124755-A-step1.jpg",
       "sku": "12124755",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 974704,
+      "mask_pct": 10.328,
+      "mask_bbox": [
+        1024,
+        1940,
+        2780,
+        2974
+      ],
+      "dist_to_edges": {
+        "L": 1024,
+        "R": 292,
+        "T": 1940,
+        "B": 98
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.043,
       "cleaned": "media/batch2-cleaned/cleaned/12124755/12124755-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/12124755-A-review.png",
       "sha": "de330bf5f3f6662977dcab95da617e6f133fe58b"
@@ -1300,7 +4030,25 @@
       "file": "12124755-B-step1.jpg",
       "sku": "12124755",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 721351,
+      "mask_pct": 7.644,
+      "mask_bbox": [
+        410,
+        2078,
+        2022,
+        2840
+      ],
+      "dist_to_edges": {
+        "L": 410,
+        "R": 1050,
+        "T": 2078,
+        "B": 232
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.015,
       "cleaned": "media/batch2-cleaned/cleaned/12124755/12124755-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/12124755-B-review.png",
       "sha": "5d89ce8edc1eac69562b44116ed759c1f654318d"
@@ -1309,7 +4057,25 @@
       "file": "12164727-A-step1.jpg",
       "sku": "12164727",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 194911,
+      "mask_pct": 5.287,
+      "mask_bbox": [
+        1091,
+        1366,
+        1797,
+        1856
+      ],
+      "dist_to_edges": {
+        "L": 1091,
+        "R": 123,
+        "T": 1366,
+        "B": 64
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.01,
       "cleaned": "media/batch2-cleaned/cleaned/12164727/12164727-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/12164727-A-review.png",
       "sha": "fb80af6b57dc0170c0c31594c85bd705d7a794a7"
@@ -1318,7 +4084,15 @@
       "file": "12164727-B-step1.jpg",
       "sku": "12164727",
       "angle": "B",
-      "status": "NO_WATERMARK",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "NO_LOGO",
+      "logo_present": false,
+      "mask_area_px": 0,
+      "mask_pct": 0.0,
+      "mask_bbox": null,
+      "dist_to_edges": null,
+      "contact_product_or_skin": false,
+      "skin_frac": 0.0,
       "cleaned": "media/batch2-cleaned/cleaned/12164727/12164727-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/12164727-B-review.png",
       "sha": "205f084672f240bb17d184205719f4b688e4abe5"
@@ -1327,7 +4101,15 @@
       "file": "12164727-C-step1.jpg",
       "sku": "12164727",
       "angle": "C",
-      "status": "NO_WATERMARK",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "NO_LOGO",
+      "logo_present": false,
+      "mask_area_px": 0,
+      "mask_pct": 0.0,
+      "mask_bbox": null,
+      "dist_to_edges": null,
+      "contact_product_or_skin": false,
+      "skin_frac": 0.002,
       "cleaned": "media/batch2-cleaned/cleaned/12164727/12164727-C-step1.webp",
       "qa": "media/batch2-cleaned/qa/12164727-C-review.png",
       "sha": "0f866e7103d0b8dafd9c3829dd5430edd1818c1d"
@@ -1336,7 +4118,15 @@
       "file": "12164727-D-step1.jpg",
       "sku": "12164727",
       "angle": "D",
-      "status": "NO_WATERMARK",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "NO_LOGO",
+      "logo_present": false,
+      "mask_area_px": 0,
+      "mask_pct": 0.0,
+      "mask_bbox": null,
+      "dist_to_edges": null,
+      "contact_product_or_skin": false,
+      "skin_frac": 0.002,
       "cleaned": "media/batch2-cleaned/cleaned/12164727/12164727-D-step1.webp",
       "qa": "media/batch2-cleaned/qa/12164727-D-review.png",
       "sha": "1edd945c5e84dc4af86ea4b04dd6ccbca21496e0"
@@ -1345,7 +4135,25 @@
       "file": "12164727-E-step1.jpg",
       "sku": "12164727",
       "angle": "E",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "NO_LOGO",
+      "logo_present": false,
+      "mask_area_px": 498837,
+      "mask_pct": 40.595,
+      "mask_bbox": [
+        68,
+        548,
+        960,
+        1280
+      ],
+      "dist_to_edges": {
+        "L": 68,
+        "R": 0,
+        "T": 548,
+        "B": 0
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.589,
       "cleaned": "media/batch2-cleaned/cleaned/12164727/12164727-E-step1.webp",
       "qa": "media/batch2-cleaned/qa/12164727-E-review.png",
       "sha": "da47026244907cff8802729948b5938f618d96ea"
@@ -1354,7 +4162,25 @@
       "file": "12184425-A-step1.jpeg",
       "sku": "12184425",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 77738,
+      "mask_pct": 5.398,
+      "mask_bbox": [
+        688,
+        854,
+        1129,
+        1179
+      ],
+      "dist_to_edges": {
+        "L": 688,
+        "R": 71,
+        "T": 854,
+        "B": 21
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.021,
       "cleaned": "media/batch2-cleaned/cleaned/12184425/12184425-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/12184425-A-review.png",
       "sha": "576ebbf267f965f233609f4d3affabb05bc57c69"
@@ -1363,7 +4189,25 @@
       "file": "122545400-A-step1.jpg",
       "sku": "122545400",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 442044,
+      "mask_pct": 4.684,
+      "mask_bbox": [
+        1872,
+        2158,
+        2942,
+        2902
+      ],
+      "dist_to_edges": {
+        "L": 1872,
+        "R": 130,
+        "T": 2158,
+        "B": 170
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.006,
       "cleaned": "media/batch2-cleaned/cleaned/122545400/122545400-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545400-A-review.png",
       "sha": "68d4196989af99df16e451122b2a47370edb6a9e"
@@ -1372,7 +4216,25 @@
       "file": "122545400-B-step1.jpg",
       "sku": "122545400",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 441384,
+      "mask_pct": 4.677,
+      "mask_bbox": [
+        102,
+        2096,
+        1172,
+        2840
+      ],
+      "dist_to_edges": {
+        "L": 102,
+        "R": 1900,
+        "T": 2096,
+        "B": 232
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.006,
       "cleaned": "media/batch2-cleaned/cleaned/122545400/122545400-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545400-B-review.png",
       "sha": "da0da57d0443f77f53e68e150a1031fb80aa3ea6"
@@ -1381,7 +4243,25 @@
       "file": "122545401-A-step1.jpg",
       "sku": "122545401",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 437723,
+      "mask_pct": 4.638,
+      "mask_bbox": [
+        1766,
+        2128,
+        2832,
+        2870
+      ],
+      "dist_to_edges": {
+        "L": 1766,
+        "R": 240,
+        "T": 2128,
+        "B": 202
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.018,
       "cleaned": "media/batch2-cleaned/cleaned/122545401/122545401-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545401-A-review.png",
       "sha": "1c70431d1be253b3c6552730d51c2f77aa1479f0"
@@ -1390,7 +4270,25 @@
       "file": "122545401-B-step1.jpg",
       "sku": "122545401",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 449874,
+      "mask_pct": 4.767,
+      "mask_bbox": [
+        274,
+        2050,
+        1352,
+        2800
+      ],
+      "dist_to_edges": {
+        "L": 274,
+        "R": 1720,
+        "T": 2050,
+        "B": 272
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.013,
       "cleaned": "media/batch2-cleaned/cleaned/122545401/122545401-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545401-B-review.png",
       "sha": "249f386665bb22a87d31112312a5844f2806f409"
@@ -1399,7 +4297,25 @@
       "file": "122545402-A-step1.jpg",
       "sku": "122545402",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 614307,
+      "mask_pct": 6.509,
+      "mask_bbox": [
+        1336,
+        2096,
+        2890,
+        2852
+      ],
+      "dist_to_edges": {
+        "L": 1336,
+        "R": 182,
+        "T": 2096,
+        "B": 220
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.024,
       "cleaned": "media/batch2-cleaned/cleaned/122545402/122545402-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545402-A-review.png",
       "sha": "e2139f086010ed6ff4c2829c7510e1735c4cd1a7"
@@ -1408,7 +4324,25 @@
       "file": "122545402-B-step1.jpg",
       "sku": "122545402",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 785214,
+      "mask_pct": 8.32,
+      "mask_bbox": [
+        212,
+        2008,
+        2008,
+        2762
+      ],
+      "dist_to_edges": {
+        "L": 212,
+        "R": 1064,
+        "T": 2008,
+        "B": 310
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.021,
       "cleaned": "media/batch2-cleaned/cleaned/122545402/122545402-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545402-B-review.png",
       "sha": "483e308e4bfd170eb1e2b92695d5404fc0b6f16e"
@@ -1417,7 +4351,25 @@
       "file": "122545403-A-step1.jpg",
       "sku": "122545403",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 409223,
+      "mask_pct": 4.336,
+      "mask_bbox": [
+        1956,
+        2182,
+        2988,
+        2904
+      ],
+      "dist_to_edges": {
+        "L": 1956,
+        "R": 84,
+        "T": 2182,
+        "B": 168
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.007,
       "cleaned": "media/batch2-cleaned/cleaned/122545403/122545403-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545403-A-review.png",
       "sha": "a548b8dd7d70223e75781c04c8e9092f44cc24cc"
@@ -1426,7 +4378,25 @@
       "file": "122545403-B-step1.jpg",
       "sku": "122545403",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 446062,
+      "mask_pct": 4.727,
+      "mask_bbox": [
+        162,
+        2110,
+        1236,
+        2858
+      ],
+      "dist_to_edges": {
+        "L": 162,
+        "R": 1836,
+        "T": 2110,
+        "B": 214
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.006,
       "cleaned": "media/batch2-cleaned/cleaned/122545403/122545403-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545403-B-review.png",
       "sha": "e47c4aad7d24ca46bb0f1780047b521108ead113"
@@ -1435,7 +4405,25 @@
       "file": "122545404-A-step1.jpg",
       "sku": "122545404",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": false,
+      "mask_area_px": 1036004,
+      "mask_pct": 10.978,
+      "mask_bbox": [
+        902,
+        2090,
+        2932,
+        2946
+      ],
+      "dist_to_edges": {
+        "L": 902,
+        "R": 140,
+        "T": 2090,
+        "B": 126
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.029,
       "cleaned": "media/batch2-cleaned/cleaned/122545404/122545404-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545404-A-review.png",
       "sha": "643154554acc6556847aae9bc17836fafc8320f3"
@@ -1444,7 +4432,25 @@
       "file": "122545404-B-step1.jpg",
       "sku": "122545404",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": false,
+      "mask_area_px": 1101184,
+      "mask_pct": 11.669,
+      "mask_bbox": [
+        174,
+        1984,
+        2148,
+        2870
+      ],
+      "dist_to_edges": {
+        "L": 174,
+        "R": 924,
+        "T": 1984,
+        "B": 202
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.023,
       "cleaned": "media/batch2-cleaned/cleaned/122545404/122545404-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545404-B-review.png",
       "sha": "2e3bbcbe5eaaf1472d8e6032655cecc4f7f2ffe9"
@@ -1453,7 +4459,25 @@
       "file": "122545405-A-step1.jpg",
       "sku": "122545405",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 711351,
+      "mask_pct": 7.538,
+      "mask_bbox": [
+        1154,
+        2106,
+        2898,
+        2860
+      ],
+      "dist_to_edges": {
+        "L": 1154,
+        "R": 174,
+        "T": 2106,
+        "B": 212
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.004,
       "cleaned": "media/batch2-cleaned/cleaned/122545405/122545405-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545405-A-review.png",
       "sha": "b4bed70dd3d6e0c7099b3e7948ba52e7d50f3ef8"
@@ -1462,7 +4486,25 @@
       "file": "122545405-B-step1.jpg",
       "sku": "122545405",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 770685,
+      "mask_pct": 8.166,
+      "mask_bbox": [
+        186,
+        1954,
+        2034,
+        2710
+      ],
+      "dist_to_edges": {
+        "L": 186,
+        "R": 1038,
+        "T": 1954,
+        "B": 362
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.008,
       "cleaned": "media/batch2-cleaned/cleaned/122545405/122545405-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545405-B-review.png",
       "sha": "fea7f478723e2840a0754ee8cbb6c78dfb603230"
@@ -1471,7 +4513,25 @@
       "file": "122545406-A-step1.jpg",
       "sku": "122545406",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 799234,
+      "mask_pct": 8.469,
+      "mask_bbox": [
+        1070,
+        2160,
+        2910,
+        2948
+      ],
+      "dist_to_edges": {
+        "L": 1070,
+        "R": 162,
+        "T": 2160,
+        "B": 124
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.036,
       "cleaned": "media/batch2-cleaned/cleaned/122545406/122545406-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545406-A-review.png",
       "sha": "db5cbb60ee0be5de44010f2f808c81eeeaabe096"
@@ -1480,7 +4540,25 @@
       "file": "122545406-B-step1.jpg",
       "sku": "122545406",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 756451,
+      "mask_pct": 8.016,
+      "mask_bbox": [
+        178,
+        2076,
+        1962,
+        2828
+      ],
+      "dist_to_edges": {
+        "L": 178,
+        "R": 1110,
+        "T": 2076,
+        "B": 244
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.058,
       "cleaned": "media/batch2-cleaned/cleaned/122545406/122545406-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545406-B-review.png",
       "sha": "63c0f17c33edc1e2b669b5df9ce1e731f1243f3b"
@@ -1489,7 +4567,25 @@
       "file": "122545407-A-step1.jpg",
       "sku": "122545407",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 843592,
+      "mask_pct": 8.939,
+      "mask_bbox": [
+        1008,
+        2086,
+        2940,
+        2926
+      ],
+      "dist_to_edges": {
+        "L": 1008,
+        "R": 132,
+        "T": 2086,
+        "B": 146
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.056,
       "cleaned": "media/batch2-cleaned/cleaned/122545407/122545407-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545407-A-review.png",
       "sha": "990e78e9a1472e6c6606c08f4b1c0bb0c316b0af"
@@ -1498,7 +4594,25 @@
       "file": "122545407-B-step1.jpg",
       "sku": "122545407",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 828051,
+      "mask_pct": 8.774,
+      "mask_bbox": [
+        104,
+        2004,
+        2046,
+        2752
+      ],
+      "dist_to_edges": {
+        "L": 104,
+        "R": 1026,
+        "T": 2004,
+        "B": 320
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.047,
       "cleaned": "media/batch2-cleaned/cleaned/122545407/122545407-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545407-B-review.png",
       "sha": "d38ff941e0e29b28b4a2babec7495b73b66cac2e"
@@ -1507,7 +4621,25 @@
       "file": "122545407-C-step1.jpg",
       "sku": "122545407",
       "angle": "C",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 723490,
+      "mask_pct": 7.666,
+      "mask_bbox": [
+        158,
+        2036,
+        1924,
+        2800
+      ],
+      "dist_to_edges": {
+        "L": 158,
+        "R": 1148,
+        "T": 2036,
+        "B": 272
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.069,
       "cleaned": "media/batch2-cleaned/cleaned/122545407/122545407-C-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545407-C-review.png",
       "sha": "7ad0ff3cd138c10ef35ca5c34a50ad958921655f"
@@ -1516,7 +4648,25 @@
       "file": "122545440-A-step1.jpg",
       "sku": "122545440",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 1092908,
+      "mask_pct": 11.581,
+      "mask_bbox": [
+        1030,
+        1816,
+        2926,
+        2928
+      ],
+      "dist_to_edges": {
+        "L": 1030,
+        "R": 146,
+        "T": 1816,
+        "B": 144
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.047,
       "cleaned": "media/batch2-cleaned/cleaned/122545440/122545440-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545440-A-review.png",
       "sha": "95a14159da507e34e133d4dbf334076c4ec7fb7c"
@@ -1525,7 +4675,25 @@
       "file": "122545440-B-step1.jpg",
       "sku": "122545440",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 513575,
+      "mask_pct": 5.442,
+      "mask_bbox": [
+        234,
+        2124,
+        1556,
+        2886
+      ],
+      "dist_to_edges": {
+        "L": 234,
+        "R": 1516,
+        "T": 2124,
+        "B": 186
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.042,
       "cleaned": "media/batch2-cleaned/cleaned/122545440/122545440-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545440-B-review.png",
       "sha": "f0a94c79c9e58deadcc5a1f32eea8d5d407d435e"
@@ -1534,7 +4702,25 @@
       "file": "122545441-A-step1.jpg",
       "sku": "122545441",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 512045,
+      "mask_pct": 5.426,
+      "mask_bbox": [
+        1758,
+        2140,
+        2904,
+        2934
+      ],
+      "dist_to_edges": {
+        "L": 1758,
+        "R": 168,
+        "T": 2140,
+        "B": 138
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.043,
       "cleaned": "media/batch2-cleaned/cleaned/122545441/122545441-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545441-A-review.png",
       "sha": "063ca25d0f19714807be48f3c584c010961e71ce"
@@ -1543,7 +4729,25 @@
       "file": "122545441-B-step1.jpg",
       "sku": "122545441",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 774002,
+      "mask_pct": 8.202,
+      "mask_bbox": [
+        178,
+        2050,
+        1994,
+        2810
+      ],
+      "dist_to_edges": {
+        "L": 178,
+        "R": 1078,
+        "T": 2050,
+        "B": 262
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.058,
       "cleaned": "media/batch2-cleaned/cleaned/122545441/122545441-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545441-B-review.png",
       "sha": "0d93766c1d3320924b13e061be9e74e61fd0bd58"
@@ -1552,7 +4756,25 @@
       "file": "122545444-A-step1.jpg",
       "sku": "122545444",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 1056135,
+      "mask_pct": 11.191,
+      "mask_bbox": [
+        876,
+        1946,
+        2930,
+        2834
+      ],
+      "dist_to_edges": {
+        "L": 876,
+        "R": 142,
+        "T": 1946,
+        "B": 238
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.025,
       "cleaned": "media/batch2-cleaned/cleaned/122545444/122545444-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545444-A-review.png",
       "sha": "f1a92a990067f8fb8da362ef034921b06ccad347"
@@ -1561,7 +4783,25 @@
       "file": "122545444-B-step1.jpg",
       "sku": "122545444",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": false,
+      "mask_area_px": 1215912,
+      "mask_pct": 12.884,
+      "mask_bbox": [
+        170,
+        1818,
+        2114,
+        2832
+      ],
+      "dist_to_edges": {
+        "L": 170,
+        "R": 958,
+        "T": 1818,
+        "B": 240
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.012,
       "cleaned": "media/batch2-cleaned/cleaned/122545444/122545444-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545444-B-review.png",
       "sha": "897ecd6f1bfa7633b67c8eac75bb5a40fd0daa82"
@@ -1570,7 +4810,25 @@
       "file": "122545445-A-step1.jpg",
       "sku": "122545445",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 468916,
+      "mask_pct": 4.969,
+      "mask_bbox": [
+        1810,
+        2190,
+        2910,
+        2954
+      ],
+      "dist_to_edges": {
+        "L": 1810,
+        "R": 162,
+        "T": 2190,
+        "B": 118
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.005,
       "cleaned": "media/batch2-cleaned/cleaned/122545445/122545445-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545445-A-review.png",
       "sha": "5f72a15f8b71e9532442bc1bb76a03802f02d0e0"
@@ -1579,7 +4837,25 @@
       "file": "122545445-B-step1.jpg",
       "sku": "122545445",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 428020,
+      "mask_pct": 4.535,
+      "mask_bbox": [
+        1826,
+        2142,
+        2880,
+        2876
+      ],
+      "dist_to_edges": {
+        "L": 1826,
+        "R": 192,
+        "T": 2142,
+        "B": 196
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.007,
       "cleaned": "media/batch2-cleaned/cleaned/122545445/122545445-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545445-B-review.png",
       "sha": "516afb094c21056aea26999aedac8b80a88784d3"
@@ -1588,7 +4864,25 @@
       "file": "122545445-C-step1.jpg",
       "sku": "122545445",
       "angle": "C",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 471539,
+      "mask_pct": 4.997,
+      "mask_bbox": [
+        212,
+        2054,
+        1314,
+        2818
+      ],
+      "dist_to_edges": {
+        "L": 212,
+        "R": 1758,
+        "T": 2054,
+        "B": 254
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.004,
       "cleaned": "media/batch2-cleaned/cleaned/122545445/122545445-C-step1.webp",
       "qa": "media/batch2-cleaned/qa/122545445-C-review.png",
       "sha": "cc288e4f334c5744606a0bf34154b9c0e0e25c20"
@@ -1597,7 +4891,25 @@
       "file": "14254825-A-step1.jpg",
       "sku": "14254825",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "NO_LOGO",
+      "logo_present": false,
+      "mask_area_px": 10048,
+      "mask_pct": 0.31,
+      "mask_bbox": [
+        0,
+        1642,
+        145,
+        1800
+      ],
+      "dist_to_edges": {
+        "L": 0,
+        "R": 1655,
+        "T": 1642,
+        "B": 0
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.488,
       "cleaned": "media/batch2-cleaned/cleaned/14254825/14254825-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/14254825-A-review.png",
       "sha": "d8ea032548c7fc40a0807a41330ca02ade6aa7a9"
@@ -1606,7 +4918,25 @@
       "file": "14254826-A-step1.jpg",
       "sku": "14254826",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "SAFE",
+      "logo_present": true,
+      "mask_area_px": 61698,
+      "mask_pct": 2.975,
+      "mask_bbox": [
+        1024,
+        1138,
+        1425,
+        1436
+      ],
+      "dist_to_edges": {
+        "L": 1024,
+        "R": 15,
+        "T": 1138,
+        "B": 4
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.007,
       "cleaned": "media/batch2-cleaned/cleaned/14254826/14254826-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/14254826-A-review.png",
       "sha": "0bce9725eddd9416b5254355ec2658e6f00ed963"
@@ -1615,7 +4945,25 @@
       "file": "14254826-B-step1.jpg",
       "sku": "14254826",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 142987,
+      "mask_pct": 6.896,
+      "mask_bbox": [
+        26,
+        1058,
+        900,
+        1440
+      ],
+      "dist_to_edges": {
+        "L": 26,
+        "R": 540,
+        "T": 1058,
+        "B": 0
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.008,
       "cleaned": "media/batch2-cleaned/cleaned/14254826/14254826-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/14254826-B-review.png",
       "sha": "8f7f3c3bfd7e6065b2881fdf4c34a38e4b375d22"
@@ -1624,7 +4972,25 @@
       "file": "15184805-A-step1.jpg",
       "sku": "15184805",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "NO_LOGO",
+      "logo_present": false,
+      "mask_area_px": 3666,
+      "mask_pct": 0.355,
+      "mask_bbox": [
+        595,
+        759,
+        732,
+        864
+      ],
+      "dist_to_edges": {
+        "L": 595,
+        "R": 168,
+        "T": 759,
+        "B": 283
+      },
+      "contact_product_or_skin": false,
+      "skin_frac": 0.739,
       "cleaned": "media/batch2-cleaned/cleaned/15184805/15184805-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/15184805-A-review.png",
       "sha": "ab7b8a157ee55c1e36bee4a884ca9f8c06f7a325"
@@ -1633,7 +4999,25 @@
       "file": "16144827-A-step1.jpg",
       "sku": "16144827",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "NO_LOGO",
+      "logo_present": false,
+      "mask_area_px": 825225,
+      "mask_pct": 9.169,
+      "mask_bbox": [
+        424,
+        1664,
+        3000,
+        2600
+      ],
+      "dist_to_edges": {
+        "L": 424,
+        "R": 0,
+        "T": 1664,
+        "B": 400
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.834,
       "cleaned": "media/batch2-cleaned/cleaned/16144827/16144827-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/16144827-A-review.png",
       "sha": "d34417fd763b019682d67d3883877851a89f74eb"
@@ -1642,7 +5026,25 @@
       "file": "17254537-A-step1.jpg",
       "sku": "17254537",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "NO_LOGO",
+      "logo_present": false,
+      "mask_area_px": 5110156,
+      "mask_pct": 72.199,
+      "mask_bbox": [
+        0,
+        374,
+        2304,
+        3072
+      ],
+      "dist_to_edges": {
+        "L": 0,
+        "R": 0,
+        "T": 374,
+        "B": 0
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.635,
       "cleaned": "media/batch2-cleaned/cleaned/17254537/17254537-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/17254537-A-review.png",
       "sha": "bc7f4321bacbe8c4ca38e836e5a825bb1df8d646"
@@ -1651,7 +5053,25 @@
       "file": "17254537-B-step1.jpg",
       "sku": "17254537",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 5951860,
+      "mask_pct": 63.068,
+      "mask_bbox": [
+        0,
+        892,
+        3072,
+        3072
+      ],
+      "dist_to_edges": {
+        "L": 0,
+        "R": 0,
+        "T": 892,
+        "B": 0
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.728,
       "cleaned": "media/batch2-cleaned/cleaned/17254537/17254537-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/17254537-B-review.png",
       "sha": "24ea461639ee4f2de9f630b4017b62a0e5e50583"
@@ -1660,7 +5080,25 @@
       "file": "17254817-A-step1.jpeg",
       "sku": "17254817",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": false,
+      "mask_area_px": 1220134,
+      "mask_pct": 12.929,
+      "mask_bbox": [
+        1074,
+        1756,
+        2918,
+        2994
+      ],
+      "dist_to_edges": {
+        "L": 1074,
+        "R": 154,
+        "T": 1756,
+        "B": 78
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.038,
       "cleaned": "media/batch2-cleaned/cleaned/17254817/17254817-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/17254817-A-review.png",
       "sha": "422c7f96c189158676ab070a6efe88163bad171d"
@@ -1669,7 +5107,25 @@
       "file": "17254817-B-step1.jpeg",
       "sku": "17254817",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": false,
+      "mask_area_px": 1411975,
+      "mask_pct": 14.962,
+      "mask_bbox": [
+        142,
+        1642,
+        2160,
+        2952
+      ],
+      "dist_to_edges": {
+        "L": 142,
+        "R": 912,
+        "T": 1642,
+        "B": 120
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.045,
       "cleaned": "media/batch2-cleaned/cleaned/17254817/17254817-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/17254817-B-review.png",
       "sha": "76ff29644c57113281e290d29f9267bbd4e1879f"
@@ -1678,7 +5134,25 @@
       "file": "21254539-A-step1.jpg",
       "sku": "21254539",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 1023852,
+      "mask_pct": 10.849,
+      "mask_bbox": [
+        922,
+        1960,
+        2848,
+        2940
+      ],
+      "dist_to_edges": {
+        "L": 922,
+        "R": 224,
+        "T": 1960,
+        "B": 132
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.037,
       "cleaned": "media/batch2-cleaned/cleaned/21254539/21254539-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/21254539-A-review.png",
       "sha": "c4c42cc19111544d4de84dd75c9b653e3f6a6591"
@@ -1687,7 +5161,25 @@
       "file": "21254539-B-step1.jpg",
       "sku": "21254539",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 942926,
+      "mask_pct": 9.992,
+      "mask_bbox": [
+        444,
+        1880,
+        2260,
+        2900
+      ],
+      "dist_to_edges": {
+        "L": 444,
+        "R": 812,
+        "T": 1880,
+        "B": 172
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.058,
       "cleaned": "media/batch2-cleaned/cleaned/21254539/21254539-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/21254539-B-review.png",
       "sha": "db514dda41c65bff9257cdf7d1b3a739fdb09e50"
@@ -1696,7 +5188,25 @@
       "file": "2198900-A-step1.jpeg",
       "sku": "2198900",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 187786,
+      "mask_pct": 13.041,
+      "mask_bbox": [
+        375,
+        676,
+        1179,
+        1183
+      ],
+      "dist_to_edges": {
+        "L": 375,
+        "R": 21,
+        "T": 676,
+        "B": 17
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.042,
       "cleaned": "media/batch2-cleaned/cleaned/2198900/2198900-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/2198900-A-review.png",
       "sha": "6baa058429d6b11675c6d44dc419dacb85684074"
@@ -1705,7 +5215,25 @@
       "file": "2198900-B-step1.jpeg",
       "sku": "2198900",
       "angle": "B",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 117047,
+      "mask_pct": 8.128,
+      "mask_bbox": [
+        20,
+        718,
+        589,
+        1175
+      ],
+      "dist_to_edges": {
+        "L": 20,
+        "R": 611,
+        "T": 718,
+        "B": 25
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.024,
       "cleaned": "media/batch2-cleaned/cleaned/2198900/2198900-B-step1.webp",
       "qa": "media/batch2-cleaned/qa/2198900-B-review.png",
       "sha": "97496aff68d64d75692caed5a56c54b325d4d530"
@@ -1714,7 +5242,25 @@
       "file": "2198900-C-step1.jpeg",
       "sku": "2198900",
       "angle": "C",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": true,
+      "mask_area_px": 93654,
+      "mask_pct": 6.504,
+      "mask_bbox": [
+        17,
+        715,
+        460,
+        1169
+      ],
+      "dist_to_edges": {
+        "L": 17,
+        "R": 740,
+        "T": 715,
+        "B": 31
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.024,
       "cleaned": "media/batch2-cleaned/cleaned/2198900/2198900-C-step1.webp",
       "qa": "media/batch2-cleaned/qa/2198900-C-review.png",
       "sha": "2f41999ca00e039643c0ea27479de7241b4f4a97"
@@ -1723,7 +5269,25 @@
       "file": "2409000-A-step1.jpg",
       "sku": "2409000",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "RISKY",
+      "logo_present": false,
+      "mask_area_px": 129660,
+      "mask_pct": 6.253,
+      "mask_bbox": [
+        547,
+        1069,
+        1432,
+        1409
+      ],
+      "dist_to_edges": {
+        "L": 547,
+        "R": 8,
+        "T": 1069,
+        "B": 31
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.006,
       "cleaned": "media/batch2-cleaned/cleaned/2409000/2409000-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/2409000-A-review.png",
       "sha": "d8539f55d270dc21529c4e62b4f8df2220606ba9"
@@ -1732,7 +5296,25 @@
       "file": "30089-A-step1.jpg",
       "sku": "30089",
       "angle": "A",
-      "status": "CLEANED_PENDING_REVIEW",
+      "status": "REJECTED_BY_OWNER",
+      "analysis_class": "NO_LOGO",
+      "logo_present": false,
+      "mask_area_px": 482541,
+      "mask_pct": 39.269,
+      "mask_bbox": [
+        0,
+        226,
+        588,
+        1280
+      ],
+      "dist_to_edges": {
+        "L": 0,
+        "R": 372,
+        "T": 226,
+        "B": 0
+      },
+      "contact_product_or_skin": true,
+      "skin_frac": 0.37,
       "cleaned": "media/batch2-cleaned/cleaned/30089/30089-A-step1.webp",
       "qa": "media/batch2-cleaned/qa/30089-A-review.png",
       "sha": "912dabc7496f27dfb33ae47f0fc73353bbfd8c9e"
