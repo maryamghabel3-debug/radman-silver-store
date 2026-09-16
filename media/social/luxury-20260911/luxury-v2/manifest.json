@@ -735,6 +735,21 @@
       "environment": "petrified wood slab + warm low-right key",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 351,
+      "sku": "NM-3557",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/351/351-luxury-4x5.png",
+      "commit": "e4000f29c996914662b2746e9d0ec9d56f132209",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/351-compare.png",
+      "qa_commit": "2184a35380b50a693124dc099f444adcf3da1515",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/351-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/351-ref.png",
+      "source_commit": "d6aac8977196752c8bf0d8b1c8157da045b7fc95",
+      "environment": "slate-blue linen + soft cool key, warm micro-rim",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
