@@ -1048,6 +1048,20 @@
       "run": "luxury-v2-20260915",
       "environment": "polished onyx block + twin low rear lights (brilliant stone)",
       "note": "Pose/stone/shank from source photo; engraved script letters re-rendered by model (same wording) - owner review at 300% required."
+    },
+    {
+      "pid": 375,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/375-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/375/375-luxury-4x5.png",
+      "sha": "b4b3ba045c1368c5b61c62651625f2e14090b55c",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/375-compare.png",
+      "review_sha": "7de5e3ef1879abba4f885d0c0b0190c1849a7928",
+      "run": "luxury-v2-20260915",
+      "environment": "dark plum glass + soft low key",
+      "note": "Pose/stone/shank from source photo; engraved script letters re-rendered by model (same wording) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
