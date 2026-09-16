@@ -1314,6 +1314,20 @@
       "note": "APPROVED by owner (2026-09-15)"
     },
     {
+      "pid": 306,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/306-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/306/306-hand-4x5.png",
+      "sha": "623a975417822a87be94960be5e108162713ddcb",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/306-hand-compare.png",
+      "review_sha": "dd74098cbf09928e64fc2b9a8bd0f7564563c4ba",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · grey suit cuff · marble washstand of an old hotel suite, window light (natural)",
+      "note": "pale lilac agate tone preserved - review at 300%"
+    },
+    {
       "pid": 309,
       "angle": "LUXURY",
       "ratio": "4x5",
