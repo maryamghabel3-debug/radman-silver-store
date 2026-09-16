@@ -288,6 +288,21 @@
       "environment": "man's hand + graphite suit sleeve + charcoal slate slab + narrow cool rim back-right",
       "note": "ring worn on hand; rose cabochon and engraved shank kept - owner review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 290,
+      "sku": "NM-3577",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/290/290-hand-4x5.png",
+      "commit": "89c74d04a02e38c39b2d81a3d3fba07d170417cc",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/290-hand-compare.png",
+      "qa_commit": "4a61edfb978e03d84324eb681c5515fbdc7b1062",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/290-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/290-ref.png",
+      "source_commit": "8db4fb391507abb2a67f6b773bf8079538e704ac",
+      "environment": "balanced frame · whole hand + dark suit cuff · stone planter rim, conservatory at night (natural)",
+      "note": "dark green agate tone kept exactly - review at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
