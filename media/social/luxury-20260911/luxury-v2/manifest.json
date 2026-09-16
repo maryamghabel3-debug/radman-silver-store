@@ -825,6 +825,21 @@
       "environment": "dark reflective floor in a green light pool + controlled reflection",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 369,
+      "sku": "NM-3551",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/369/369-luxury-4x5.png",
+      "commit": "80e8a6a1b17b45b905affae6501b03400f1c0bb2",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/369-compare.png",
+      "qa_commit": "081da665afeaa949c28e6ac566aa7634ce5fc9aa",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/369-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/369-ref.png",
+      "source_commit": "43f5550bc77beb8a0cbfb0818f0ec321a9efd6eb",
+      "environment": "carved walnut panel + warm narrow beam on the script",
+      "note": "Pose/stone/shank from source photo; engraved script letters re-rendered by model (same wording) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
