@@ -908,6 +908,20 @@
       "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
       "approved_by": "owner",
       "approved_at": "2026-09-15"
+    },
+    {
+      "pid": 339,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/339-A-step2.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/339/339-luxury-4x5.png",
+      "sha": "ebc88a672c9763bdb8bc8dbee210b7c7f262a85c",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/339-compare.png",
+      "review_sha": "0915bac1b93d02d9859ec716deb5d90178dc88b4",
+      "run": "luxury-v2-20260915",
+      "environment": "dusty volcanic tuff + warm narrow raking beam (reveals the agate banding)",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
