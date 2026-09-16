@@ -1202,6 +1202,20 @@
       "note": "APPROVED by owner (2026-09-15)"
     },
     {
+      "pid": 293,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/293-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/293/293-hand-4x5.png",
+      "sha": "588e9c5b4d4594c24a5ee70993ccbdffafd73b19",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/293-hand-compare.png",
+      "review_sha": "9ac2fd5b5841497e9906982833c9acbb5743a910",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · whole hand + black suit cuff · mahogany edge by a marble chess set (natural)",
+      "note": "engraved «عین علی» calligraphy is the key element: kept, verify at 300%"
+    },
+    {
       "pid": 297,
       "angle": "LUXURY",
       "ratio": "4x5",
