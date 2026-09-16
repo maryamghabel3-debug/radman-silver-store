@@ -1890,6 +1890,20 @@
       "note": "Pose/stone/shank from source photo; engraved script letters re-rendered by model (same wording) - owner review at 300% required."
     },
     {
+      "pid": 372,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/372-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/372/372-hand-4x5.png",
+      "sha": "ddfde3a316ec483205ad868a5a6f474f56b481a9",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/372-hand-compare.png",
+      "review_sha": "6b5fc5f285a41eb7d0dbb6fede61a3f8907c9d66",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · dark suit cuff · apothecary marble shelf with brass scales (natural)",
+      "note": "durr-e-najaf dome kept pale and clear - review at 300%"
+    },
+    {
       "pid": 375,
       "angle": "LUXURY",
       "ratio": "4x5",
