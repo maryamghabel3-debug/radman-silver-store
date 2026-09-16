@@ -468,6 +468,21 @@
       "environment": "balanced frame · black suit cuff · smoking lounge side table, lamp glow (natural)",
       "note": "black agate kept exactly - review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 328,
+      "sku": "07164563",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/328/328-hand-4x5.png",
+      "commit": "e555b002d4c93a50df485bfac3708a9c1418f251",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/328-hand-compare.png",
+      "qa_commit": "a5f33c51bfda4ae17fcf8e8a027c7c9583846e36",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/328-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/328-ref.png",
+      "source_commit": "662f31f31084e90cad16cf0f406aaac5f2239563",
+      "environment": "balanced frame · dark suit cuff · old barbershop marble counter with a straight razor (natural)",
+      "note": "hadid stone + its engraved star kept exactly; engraving-heavy file - verify at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
