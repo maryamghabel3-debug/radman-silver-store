@@ -808,6 +808,20 @@
       "run": "luxury-v2-20260915",
       "environment": "recessed stone niche + broad shadowless front-left panel",
       "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required."
+    },
+    {
+      "pid": 322,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/322-A-step1-1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/322/322-luxury-4x5.png",
+      "sha": "22a6f821ed3d67bbf39f4298aae71018193fae68",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/322-compare.png",
+      "review_sha": "64c747442e75dfdb7282c693a96f6ea0bf37950f",
+      "run": "luxury-v2-20260915",
+      "environment": "wet amber lacquer + low backlight rim",
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
