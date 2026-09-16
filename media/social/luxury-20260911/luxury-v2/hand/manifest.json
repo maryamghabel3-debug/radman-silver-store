@@ -378,6 +378,21 @@
       "environment": "balanced frame · grey suit cuff · marble washstand of an old hotel suite, window light (natural)",
       "note": "pale lilac agate tone preserved - review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 309,
+      "sku": "NM-3571",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/309/309-hand-4x5.png",
+      "commit": "a5b0e339eeff2930fbe5f2b039254da1f39330fe",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/309-hand-compare.png",
+      "qa_commit": "ab6f002ed2497c987d36feda040396ad859c5f82",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/309-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/309-ref.png",
+      "source_commit": "59b843492cfa9242fdfd8a2fe8cacb030ec77a1b",
+      "environment": "balanced frame · dark suit cuff · mineral collection drawer, specimen cabinet (natural)",
+      "note": "large red mineral agate kept exactly - review at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
