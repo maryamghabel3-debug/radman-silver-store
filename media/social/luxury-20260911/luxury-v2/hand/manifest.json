@@ -63,6 +63,21 @@
       "environment": "man's hand + dark jacket sleeve + deep emerald marble ledge + cool rim back-left, warm frontal fill",
       "note": "ring worn on hand; the engraved «امیری حسین» panel is the key element - please check the letterforms at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 272,
+      "sku": "NM-3583",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/272/272-hand-4x5.png",
+      "commit": "900f27ac844310653b799896e39f92c4e0a435a6",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/272-hand-compare.png",
+      "qa_commit": "3ece75184ec039a89f71517b2249c4f5464afc67",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/272-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/272-ref.png",
+      "source_commit": "b10758232b9e3f3bbce5f327859fc0d390b1c28b",
+      "environment": "man's hand + black suit sleeve + midnight-blue velvet drapery + cool cross light",
+      "note": "ring worn on hand; lapis dome with its pyrite flecks kept; velvet adds luxury backdrop - owner review at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
