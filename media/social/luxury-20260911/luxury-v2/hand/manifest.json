@@ -393,6 +393,21 @@
       "environment": "balanced frame · dark suit cuff · mineral collection drawer, specimen cabinet (natural)",
       "note": "large red mineral agate kept exactly - review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 312,
+      "sku": "NM-3570",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/312/312-hand-4x5.png",
+      "commit": "2e2a1bf554aaea1ea5d8fb3cb07caa4a065a461d",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/312-hand-compare.png",
+      "qa_commit": "154cfd4608f39ecee1335a9cbf637a83fd518b92",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/312-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/312-ref.png",
+      "source_commit": "be3515326fe92c7a4a9cf62b3e525d9b7ddb5f62",
+      "environment": "balanced frame · dark suit cuff · old seaside stone wall at night, harbour lights beyond (natural)",
+      "note": "blue agate tone + pattern kept - review at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
