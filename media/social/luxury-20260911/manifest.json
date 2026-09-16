@@ -1020,6 +1020,20 @@
       "run": "luxury-v2-20260915",
       "environment": "dark reflective floor in a green light pool + controlled reflection",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
+    },
+    {
+      "pid": 369,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/369-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/369/369-luxury-4x5.png",
+      "sha": "80e8a6a1b17b45b905affae6501b03400f1c0bb2",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/369-compare.png",
+      "review_sha": "081da665afeaa949c28e6ac566aa7634ce5fc9aa",
+      "run": "luxury-v2-20260915",
+      "environment": "carved walnut panel + warm narrow beam on the script",
+      "note": "Pose/stone/shank from source photo; engraved script letters re-rendered by model (same wording) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
