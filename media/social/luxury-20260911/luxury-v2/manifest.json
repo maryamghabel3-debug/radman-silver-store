@@ -629,6 +629,21 @@
       "environment": "black void + twin soft low panels (cool left / warm right)",
       "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 328,
+      "sku": "07164563",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/328/328-luxury-4x5.png",
+      "commit": "7d57d8c49e483e1c3ba0ffa468d702b1e3cf8e0d",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/328-compare.png",
+      "qa_commit": "10c9036a4472cc5f0a8f7fae444949222355fa2b",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/328-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/328-ref.png",
+      "source_commit": "7ebb905ffed1da18178566f51182197825956020",
+      "environment": "forged steel plate + cool hard low-right kicker",
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
