@@ -950,6 +950,20 @@
       "run": "luxury-v2-20260915",
       "environment": "slate-blue linen + soft cool key, warm micro-rim",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
+    },
+    {
+      "pid": 354,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/354-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/354/354-luxury-4x5.png",
+      "sha": "c83a5d5b67e0b21accb8ddfcc58f363a856fb112",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/354-compare.png",
+      "review_sha": "73fb2939ddeacec0aef25ece094b3d5ada2d3b5f",
+      "run": "luxury-v2-20260915",
+      "environment": "frosted milky jade glass + low back-right rim (soft glow)",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
