@@ -303,6 +303,21 @@
       "environment": "balanced frame · whole hand + dark suit cuff · stone planter rim, conservatory at night (natural)",
       "note": "dark green agate tone kept exactly - review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 293,
+      "sku": "NM-3576",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/293/293-hand-4x5.png",
+      "commit": "588e9c5b4d4594c24a5ee70993ccbdffafd73b19",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/293-hand-compare.png",
+      "qa_commit": "9ac2fd5b5841497e9906982833c9acbb5743a910",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/293-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/293-ref.png",
+      "source_commit": "90214c7d6adb33284bf637ce2be15ac518180322",
+      "environment": "balanced frame · whole hand + black suit cuff · mahogany edge by a marble chess set (natural)",
+      "note": "engraved «عین علی» calligraphy is the key element: kept, verify at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
