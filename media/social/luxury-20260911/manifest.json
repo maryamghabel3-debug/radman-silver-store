@@ -18,6 +18,20 @@
       "source": "media/pending-review/watermark-only-20260910/cleaned/61-B-step1.webp"
     },
     {
+      "pid": 61,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/61-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/61/61-luxury-4x5.png",
+      "sha": "8561052685277dc4659b726fb6ca94bac946fa55",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/61-compare.png",
+      "review_sha": "916ef71e28aa7d68b2365959f0834bb3c1905c98",
+      "run": "luxury-v2-20260915",
+      "environment": "deep crimson velvet + warm low key (v2 upgrade)",
+      "note": "Rebuild/upgrade: pose/stone/shank from source photo; engraved script kept to source wording - owner review at 300% required."
+    },
+    {
       "pid": 65,
       "angle": "A",
       "ratio": "4x5",
