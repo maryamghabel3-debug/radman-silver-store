@@ -573,7 +573,7 @@
     {
       "pid": 315,
       "sku": "NM-3569",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/315/315-luxury-4x5.png",
       "commit": "61f9705ac6b6ae2148178a881a31d19684f16c54",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/315-compare.png",
@@ -583,12 +583,14 @@
       "source_commit": "f18d88707e3223f80d000b7a9f77a50980ff5d93",
       "environment": "smoked oak + hard ribbon light along the chatoyant band",
       "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 318,
       "sku": "NM-3568",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/318/318-luxury-4x5.png",
       "commit": "b59303ee53fccb2379484e33d063f1ef8e013f8c",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/318-compare.png",
@@ -598,12 +600,14 @@
       "source_commit": "5b83b3a84221f037f57346dff8839caff6ccf33f",
       "environment": "recessed stone niche + broad shadowless front-left panel",
       "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 322,
       "sku": "NM-3567",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/322/322-luxury-4x5.png",
       "commit": "22a6f821ed3d67bbf39f4298aae71018193fae68",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/322-compare.png",
@@ -613,12 +617,14 @@
       "source_commit": "6d7847d515d9cd47f06e70150b2da44a34f37c5b",
       "environment": "wet amber lacquer + low backlight rim",
       "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 325,
       "sku": "NM-3566",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/325/325-luxury-4x5.png",
       "commit": "566a25e13cfccda0d9abecb3cab086b6f04c3465",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/325-compare.png",
@@ -628,12 +634,14 @@
       "source_commit": "ee6666556bd09db9bee59c147d06ed6e1b316b1b",
       "environment": "black void + twin soft low panels (cool left / warm right)",
       "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 328,
       "sku": "07164563",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/328/328-luxury-4x5.png",
       "commit": "7d57d8c49e483e1c3ba0ffa468d702b1e3cf8e0d",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/328-compare.png",
@@ -643,12 +651,14 @@
       "source_commit": "7ebb905ffed1da18178566f51182197825956020",
       "environment": "forged steel plate + cool hard low-right kicker",
       "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 330,
       "sku": "NM-3564",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/330/330-luxury-4x5.png",
       "commit": "62b81b62f0e297b106d6b1d57905d359a9acf0e0",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/330-compare.png",
@@ -658,12 +668,14 @@
       "source_commit": "f871bca8b4eb4b10dca79717ea386155456d8809",
       "environment": "aged rosewood + narrow warm low-right beam",
       "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 333,
       "sku": "NM-3563",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/333/333-luxury-4x5.png",
       "commit": "55c11bf6817fb6d51529af91ba1e2ce526cc303c",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/333-compare.png",
@@ -673,12 +685,14 @@
       "source_commit": "b4830ecf0ff22b183c52890fd103c2e8d2d34be5",
       "environment": "slanting shaft of warm light in a dim room (cinematic)",
       "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 336,
       "sku": "NM-3562",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/336/336-luxury-4x5.png",
       "commit": "4a5b13b6661f75dacbd867c5c2033a5aeb508c24",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/336-compare.png",
@@ -688,7 +702,9 @@
       "source_commit": "4848dc497d15e2f74d148afc1829d92d83c313f6",
       "environment": "raked black sand ridges + soft cool low-left light",
       "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     }
   ],
   "rejected": [
@@ -709,5 +725,6 @@
       "sha": "b8b45fbed45f2966428072e0904ecbfee7672c98"
     }
   },
-  "approved_count": 30
+  "approved_count": 8,
+  "failed_count": 32
 }
