@@ -724,6 +724,20 @@
       "run": "luxury-v2-20260915",
       "environment": "polished obsidian + twin rear rim lines (sculptural)",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
+    },
+    {
+      "pid": 303,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/303-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/303/303-luxury-4x5.png",
+      "sha": "33197fd0ab1be4affe1f365bad833e4901b48e8a",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/303-compare.png",
+      "review_sha": "f50bd8ebc6174dd03a9cc9a88243eff25e75d573",
+      "run": "luxury-v2-20260915",
+      "environment": "olive-bronze glazed ceramic + warm low-left key",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
