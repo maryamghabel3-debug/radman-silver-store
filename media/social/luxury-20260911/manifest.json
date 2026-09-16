@@ -1694,6 +1694,20 @@
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
     },
     {
+      "pid": 351,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/351-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/351/351-hand-4x5.png",
+      "sha": "4f69e65ddfee34f634a964f7a79ad10e7a164bba",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/351-hand-compare.png",
+      "review_sha": "b7682c5a29b88e2e97be093b429f8d413841455a",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · black suit cuff · lighthouse lantern sill, lamp beam rim (natural)",
+      "note": "black agate kept exactly - review at 300%"
+    },
+    {
       "pid": 354,
       "angle": "LUXURY",
       "ratio": "4x5",
