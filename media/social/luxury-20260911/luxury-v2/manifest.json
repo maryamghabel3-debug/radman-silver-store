@@ -52,6 +52,21 @@
       "run": "luxury-v2-20260915"
     },
     {
+      "pid": 73,
+      "sku": "1062",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/73/73-luxury-4x5.png",
+      "commit": "a8974c3b2ed6603cd367ae4ec59d01be577bab34",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/73-compare.png",
+      "qa_commit": "71664ec28b01e8912bb792705f60e6f0b9a3236d",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-3.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/73-ref.png",
+      "source_commit": "97d6896fe7e551a212d3f83eb92c310220d858f8",
+      "environment": "aged patinated bronze plate + warm low-right key",
+      "note": "Pose/stone/shank from source photo; engraved script letters re-rendered by model (same wording) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
+    },
+    {
       "pid": 81,
       "sku": "1015",
       "status": "APPROVED",
