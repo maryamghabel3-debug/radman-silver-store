@@ -588,6 +588,21 @@
       "environment": "balanced frame · green-brown suit cuff · antique map room, open atlas (natural)",
       "note": "khaki-green agate kept exactly - review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 357,
+      "sku": "NM-3555",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/357/357-hand-4x5.png",
+      "commit": "6791525c23f678f1db86226d4b2964f76ca311e4",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/357-hand-compare.png",
+      "qa_commit": "ec45ba72d14db789b1d025a5a5031ef009ff651e",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/357-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/357-ref.png",
+      "source_commit": "455e0c3c983f56f9d1fffd3486f4462eb935cbc6",
+      "environment": "balanced frame · dark suit cuff · hammam wet marble ledge + brass bowl (natural)",
+      "note": "pale rose agate tone kept exactly - review at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
