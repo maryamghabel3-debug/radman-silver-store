@@ -752,6 +752,20 @@
       "run": "luxury-v2-20260915",
       "environment": "smoked plum glass + soft back-right rim",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
+    },
+    {
+      "pid": 309,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/309-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/309/309-luxury-4x5.png",
+      "sha": "c82948b9a5d41b21e1b5317d150bd4a2ab2fc696",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/309-compare.png",
+      "review_sha": "57acf47851d957ee521087311077bbf803a2bd0d",
+      "run": "luxury-v2-20260915",
+      "environment": "raw hematite mineral slab + warm low-right key",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
