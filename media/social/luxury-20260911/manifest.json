@@ -816,6 +816,20 @@
       "status": "GENERATED_PENDING_REVIEW"
     },
     {
+      "pid": 211,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/211-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/211/211-hand-4x5.png",
+      "sha": "13704d342c0a3e993ae42e912d5ce09bfae4557b",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/211-hand-compare.png",
+      "review_sha": "8bcaa07f87073197a459f3692a5403d02a7ab448",
+      "run": "luxury-hand-20260916",
+      "environment": "man's hand + dark brown suit · worn leather club chair beside a fireplace, warm glow from the right (natural)",
+      "note": "natural amethyst dome and inclusions kept; fireplace glow + leather armrest - owner review at 300%"
+    },
+    {
       "pid": 214,
       "angle": "A",
       "ratio": "4x5",
