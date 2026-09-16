@@ -166,6 +166,20 @@
       "note": "style: black marble + warm rim light"
     },
     {
+      "pid": 73,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-3.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/73/73-luxury-4x5.png",
+      "sha": "a8974c3b2ed6603cd367ae4ec59d01be577bab34",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/73-compare.png",
+      "review_sha": "71664ec28b01e8912bb792705f60e6f0b9a3236d",
+      "run": "luxury-v2-20260915",
+      "environment": "aged patinated bronze plate + warm low-right key",
+      "note": "Pose/stone/shank from source photo; engraved script letters re-rendered by model (same wording) - owner review at 300% required."
+    },
+    {
       "pid": 77,
       "angle": "A",
       "ratio": "4x5",
