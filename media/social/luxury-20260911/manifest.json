@@ -1490,6 +1490,20 @@
       "approved_at": "2026-09-15"
     },
     {
+      "pid": 325,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/325-A-step1-1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/325/325-hand-4x5.png",
+      "sha": "60afabd4be7e9de5582725d3b19bd532fda75789",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/325-hand-compare.png",
+      "review_sha": "ea1ac05e7175b350aec045330a2f072a3464ad3d",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · black suit cuff · smoking lounge side table, lamp glow (natural)",
+      "note": "black agate kept exactly - review at 300%"
+    },
+    {
       "pid": 328,
       "angle": "LUXURY",
       "ratio": "4x5",
