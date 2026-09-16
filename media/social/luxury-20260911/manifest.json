@@ -1006,6 +1006,20 @@
       "note": "ring worn on hand; pale lilac cabochon tone kept; bronze adds warmth - owner review at 300%"
     },
     {
+      "pid": 287,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/287-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/287/287-hand-4x5.png",
+      "sha": "c623c2628e7d080e73df2e8c2926e7a8b491f666",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/287-hand-compare.png",
+      "review_sha": "cad98eace95fd1ff4c40bc67d8bef1a52cd556d4",
+      "run": "luxury-hand-20260916",
+      "environment": "man's hand + graphite suit sleeve + charcoal slate slab + narrow cool rim back-right",
+      "note": "ring worn on hand; rose cabochon and engraved shank kept - owner review at 300%"
+    },
+    {
       "pid": 290,
       "angle": "LUXURY",
       "ratio": "4x5",
