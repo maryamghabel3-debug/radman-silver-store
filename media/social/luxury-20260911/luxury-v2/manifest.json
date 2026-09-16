@@ -22,6 +22,21 @@
   },
   "items": [
     {
+      "pid": 61,
+      "sku": "1057",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/61/61-luxury-4x5.png",
+      "commit": "8561052685277dc4659b726fb6ca94bac946fa55",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/61-compare.png",
+      "qa_commit": "916ef71e28aa7d68b2365959f0834bb3c1905c98",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/61-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/61-ref.png",
+      "source_commit": "2470583c2719e61ab3a6141da0fa346f4f9e32a4",
+      "environment": "deep crimson velvet + warm low key (v2 upgrade)",
+      "note": "Rebuild/upgrade: pose/stone/shank from source photo; engraved script kept to source wording - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
+    },
+    {
       "pid": 65,
       "sku": "1058",
       "status": "GENERATED_PENDING_REVIEW",
