@@ -1520,6 +1520,20 @@
       "approved_at": "2026-09-15"
     },
     {
+      "pid": 328,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/328-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/328/328-hand-4x5.png",
+      "sha": "e555b002d4c93a50df485bfac3708a9c1418f251",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/328-hand-compare.png",
+      "review_sha": "a5f33c51bfda4ae17fcf8e8a027c7c9583846e36",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · dark suit cuff · old barbershop marble counter with a straight razor (natural)",
+      "note": "hadid stone + its engraved star kept exactly; engraving-heavy file - verify at 300%"
+    },
+    {
       "pid": 330,
       "angle": "LUXURY",
       "ratio": "4x5",
