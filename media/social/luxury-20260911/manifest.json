@@ -956,12 +956,12 @@
       "status": "GENERATED_PENDING_REVIEW",
       "source": "https://radmansilver.ir/wp-content/uploads/2026/08/272-A-step1.webp",
       "file": "media/social/luxury-20260911/luxury-v2/272/272-hand-4x5.png",
-      "sha": "900f27ac844310653b799896e39f92c4e0a435a6",
+      "sha": "025ecdfecb05f5159996f04b000a58acc044b007",
       "review": "media/social/luxury-20260911/luxury-v2/qa/272-hand-compare.png",
-      "review_sha": "3ece75184ec039a89f71517b2249c4f5464afc67",
+      "review_sha": "fd41a1a3d58941fec7bf3557bfdc6b6060fe8f30",
       "run": "luxury-hand-20260916",
-      "environment": "man's hand + black suit sleeve + midnight-blue velvet drapery + cool cross light",
-      "note": "ring worn on hand; lapis dome with its pyrite flecks kept; velvet adds luxury backdrop - owner review at 300%"
+      "environment": "man's hand + black suit · hotel salon at night: dark stone table, out-of-focus leather armchair and distant lamp glow (natural interior)",
+      "note": "re-render of hand-b1 v1 (the velvet-drape backdrop was rejected as artificial); earlier version kept at revisions/hand-b1/272-hand-4x5-v1.png; lapis dome with pyrite flecks kept - owner review at 300%"
     },
     {
       "pid": 278,
