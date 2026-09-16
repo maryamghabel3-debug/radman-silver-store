@@ -1062,6 +1062,20 @@
       "run": "luxury-v2-20260915",
       "environment": "dark plum glass + soft low key",
       "note": "Pose/stone/shank from source photo; engraved script letters re-rendered by model (same wording) - owner review at 300% required."
+    },
+    {
+      "pid": 378,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/378-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/378/378-luxury-4x5.png",
+      "sha": "479b972910ad0dec784d6b4d9185cb31b76e2e78",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/378-compare.png",
+      "review_sha": "7cb29eed1d7143a21c45cc985bc731a5b545cbe9",
+      "run": "luxury-v2-20260915",
+      "environment": "matte black lava stone + warm narrow beam",
+      "note": "Pose/stone/shank from source photo; engraved script letters re-rendered by model (same wording) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
