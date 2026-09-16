@@ -1230,6 +1230,20 @@
       "note": "APPROVED by owner (2026-09-15)"
     },
     {
+      "pid": 297,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/297-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/297/297-hand-4x5.png",
+      "sha": "0b9d708c986750af603a8ca875d67837a3de03d2",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/297-hand-compare.png",
+      "review_sha": "2f71efc42b907736d87536f2a1f385441e8cb747",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · whole hand + charcoal suit cuff · wool roll on an atelier cutting table (natural)",
+      "note": "yellow damele dome + pointed prongs kept exactly - review at 300%"
+    },
+    {
       "pid": 300,
       "angle": "LUXURY",
       "ratio": "4x5",
