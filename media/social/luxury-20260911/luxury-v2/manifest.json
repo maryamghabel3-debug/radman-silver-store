@@ -599,6 +599,21 @@
       "environment": "recessed stone niche + broad shadowless front-left panel",
       "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 322,
+      "sku": "NM-3567",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/322/322-luxury-4x5.png",
+      "commit": "22a6f821ed3d67bbf39f4298aae71018193fae68",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/322-compare.png",
+      "qa_commit": "64c747442e75dfdb7282c693a96f6ea0bf37950f",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/322-A-step1-1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/322-ref.png",
+      "source_commit": "6d7847d515d9cd47f06e70150b2da44a34f37c5b",
+      "environment": "wet amber lacquer + low backlight rim",
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
