@@ -1806,6 +1806,20 @@
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
     },
     {
+      "pid": 363,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/363-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/363/363-hand-4x5.png",
+      "sha": "4df731122fd1679551703a846392778e135cc01f",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/363-hand-compare.png",
+      "review_sha": "281cdc93e5422edc5dea368101db9814518572f6",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · dark suit cuff · orsi screen sill, patterned light (natural)",
+      "note": "engraved «حسین منی» is the key element: kept, verify at 300%"
+    },
+    {
       "pid": 366,
       "angle": "LUXURY",
       "ratio": "4x5",
