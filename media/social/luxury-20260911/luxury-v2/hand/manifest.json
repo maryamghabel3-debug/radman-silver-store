@@ -78,6 +78,21 @@
       "environment": "man's hand + black suit sleeve + midnight-blue velvet drapery + cool cross light",
       "note": "ring worn on hand; lapis dome with its pyrite flecks kept; velvet adds luxury backdrop - owner review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 278,
+      "sku": "NM-3581",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/278/278-hand-4x5.png",
+      "commit": "5405d111b875bd5623ce9437bbe279f2162bef3e",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/278-hand-compare.png",
+      "qa_commit": "c5f7434b9d256b412c5c64f23e70a54ca90b7b24",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/278-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/278-ref.png",
+      "source_commit": "2ae446c821443c21a8409472293f4710b71ff573",
+      "environment": "man's hand + dark blazer sleeve + aged rosewood desk + warm grazing light R, cool rim back-left",
+      "note": "ring worn on hand; engraved «یا حسین» + star kept - please check the engraving at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
