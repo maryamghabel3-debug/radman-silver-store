@@ -1862,6 +1862,20 @@
       "note": "Pose/stone/shank from source photo; engraved script letters re-rendered by model (same wording) - owner review at 300% required."
     },
     {
+      "pid": 369,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/369-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/369/369-hand-4x5.png",
+      "sha": "d0b7784957c102a71ba3985738e461a9fc9ea53c",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/369-hand-compare.png",
+      "review_sha": "153cacd5a7d70773572e56e71d06240535296701",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · dark suit cuff · old stone threshold step with oil lantern at night (natural)",
+      "note": "engraved «یا ابا عبدالله» on yellow agate is the key element: kept, verify at 300%"
+    },
+    {
       "pid": 372,
       "angle": "LUXURY",
       "ratio": "4x5",
