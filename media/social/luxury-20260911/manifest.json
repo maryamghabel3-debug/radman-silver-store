@@ -58,6 +58,20 @@
       "note": "style: charcoal #1A1A1A dramatic studio; underside band slimmer than reference (flagged for owner review); retry rejected FAILED_QA (bezel form + engraving changed)"
     },
     {
+      "pid": 65,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/65/65-luxury-4x5.png",
+      "sha": "5e09dd9b39f62fdf61796fbc2c6fc68db3a54f39",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/65-compare.png",
+      "review_sha": "dc93794f84c4cfce9707ee9b24da83ab6f1f6ed0",
+      "run": "luxury-v2-20260915",
+      "environment": "onyx-black slab + cool back-left rim, warm fill",
+      "note": "Pose/stone/shank from source photo; engraved script letters re-rendered by model (same wording) - owner review at 300% required."
+    },
+    {
       "pid": 69,
       "angle": "A",
       "ratio": "4x5",
