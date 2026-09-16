@@ -1,0 +1,141 @@
+{
+  "batch": "batch2",
+  "mission": "watermark-removal",
+  "model": "LaMa (big-lama) AI masked inpainting",
+  "overall_status": "PILOT_PENDING_REVIEW",
+  "note": "Only 6 pilot images processed. Awaiting APPROVE_BATCH2_PILOT before the remaining 185. Owner must confirm authorization to remove the source watermark before approval.",
+  "items": [
+    {
+      "file": "00164408-A-step1.jpeg",
+      "status": "PILOT_PENDING_REVIEW",
+      "original": "media/batch2-cleaned/pilot/00164408-A-step1-original.jpeg",
+      "cleaned": "media/batch2-cleaned/pilot/00164408-A-step1-cleaned.png",
+      "mask": "media/batch2-cleaned/qa/00164408-A-step1-mask.png",
+      "zoom400": "media/batch2-cleaned/qa/00164408-A-step1-zoom400.png",
+      "dims": [
+        1200,
+        1200
+      ],
+      "logo_bbox": [
+        682,
+        843,
+        1123,
+        1168
+      ],
+      "qa": {
+        "outside_mask_maxdiff": 0,
+        "strong_logo_residual_px": 0
+      }
+    },
+    {
+      "file": "00164426-A-step1.jpeg",
+      "status": "PILOT_PENDING_REVIEW",
+      "original": "media/batch2-cleaned/pilot/00164426-A-step1-original.jpeg",
+      "cleaned": "media/batch2-cleaned/pilot/00164426-A-step1-cleaned.png",
+      "mask": "media/batch2-cleaned/qa/00164426-A-step1-mask.png",
+      "zoom400": "media/batch2-cleaned/qa/00164426-A-step1-zoom400.png",
+      "dims": [
+        1200,
+        1200
+      ],
+      "logo_bbox": [
+        682,
+        842,
+        1124,
+        1167
+      ],
+      "qa": {
+        "outside_mask_maxdiff": 0,
+        "strong_logo_residual_px": 0
+      }
+    },
+    {
+      "file": "00164827-A-step1.jpeg",
+      "status": "PILOT_PENDING_REVIEW",
+      "original": "media/batch2-cleaned/pilot/00164827-A-step1-original.jpeg",
+      "cleaned": "media/batch2-cleaned/pilot/00164827-A-step1-cleaned.png",
+      "mask": "media/batch2-cleaned/qa/00164827-A-step1-mask.png",
+      "zoom400": "media/batch2-cleaned/qa/00164827-A-step1-zoom400.png",
+      "dims": [
+        1200,
+        1200
+      ],
+      "logo_bbox": [
+        703,
+        862,
+        1144,
+        1187
+      ],
+      "qa": {
+        "outside_mask_maxdiff": 0,
+        "strong_logo_residual_px": 0
+      }
+    },
+    {
+      "file": "05144751-A-step1.jpg",
+      "status": "PILOT_PENDING_REVIEW",
+      "original": "media/batch2-cleaned/pilot/05144751-A-step1-original.jpg",
+      "cleaned": "media/batch2-cleaned/pilot/05144751-A-step1-cleaned.png",
+      "mask": "media/batch2-cleaned/qa/05144751-A-step1-mask.png",
+      "zoom400": "media/batch2-cleaned/qa/05144751-A-step1-zoom400.png",
+      "dims": [
+        3072,
+        3072
+      ],
+      "logo_bbox": [
+        958,
+        2115,
+        2857,
+        2830
+      ],
+      "qa": {
+        "outside_mask_maxdiff": 0,
+        "strong_logo_residual_px": 631
+      }
+    },
+    {
+      "file": "05144751-B-step1.jpg",
+      "status": "PILOT_PENDING_REVIEW",
+      "original": "media/batch2-cleaned/pilot/05144751-B-step1-original.jpg",
+      "cleaned": "media/batch2-cleaned/pilot/05144751-B-step1-cleaned.png",
+      "mask": "media/batch2-cleaned/qa/05144751-B-step1-mask.png",
+      "zoom400": "media/batch2-cleaned/qa/05144751-B-step1-zoom400.png",
+      "dims": [
+        3072,
+        3072
+      ],
+      "logo_bbox": [
+        290,
+        2136,
+        2048,
+        2847
+      ],
+      "qa": {
+        "outside_mask_maxdiff": 0,
+        "strong_logo_residual_px": 176
+      }
+    },
+    {
+      "file": "06164666-A-step1.jpg",
+      "status": "PILOT_PENDING_REVIEW",
+      "original": "media/batch2-cleaned/pilot/06164666-A-step1-original.jpg",
+      "cleaned": "media/batch2-cleaned/pilot/06164666-A-step1-cleaned.png",
+      "mask": "media/batch2-cleaned/qa/06164666-A-step1-mask.png",
+      "zoom400": "media/batch2-cleaned/qa/06164666-A-step1-zoom400.png",
+      "dims": [
+        3072,
+        3072
+      ],
+      "logo_bbox": [
+        1882,
+        2210,
+        2843,
+        2853
+      ],
+      "qa": {
+        "outside_mask_maxdiff": 0,
+        "strong_logo_residual_px": 0
+      }
+    }
+  ]
+}
