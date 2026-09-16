@@ -850,6 +850,20 @@
       "run": "luxury-v2-20260915",
       "environment": "forged steel plate + cool hard low-right kicker",
       "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required."
+    },
+    {
+      "pid": 330,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/330-A-step1-1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/330/330-luxury-4x5.png",
+      "sha": "62b81b62f0e297b106d6b1d57905d359a9acf0e0",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/330-compare.png",
+      "review_sha": "fb17b086c2dca56d0f3695074bfe93461567e41b",
+      "run": "luxury-v2-20260915",
+      "environment": "aged rosewood + narrow warm low-right beam",
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
