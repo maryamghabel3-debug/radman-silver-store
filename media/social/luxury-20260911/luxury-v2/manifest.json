@@ -449,6 +449,21 @@
       "environment": "polished obsidian + twin rear rim lines (sculptural)",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 303,
+      "sku": "NM-3573",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/303/303-luxury-4x5.png",
+      "commit": "33197fd0ab1be4affe1f365bad833e4901b48e8a",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/303-compare.png",
+      "qa_commit": "f50bd8ebc6174dd03a9cc9a88243eff25e75d573",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/303-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/303-ref.png",
+      "source_commit": "3c3aa62129dad879955be6daa59172c04ce998f6",
+      "environment": "olive-bronze glazed ceramic + warm low-left key",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
