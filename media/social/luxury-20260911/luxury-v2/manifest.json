@@ -840,6 +840,21 @@
       "environment": "carved walnut panel + warm narrow beam on the script",
       "note": "Pose/stone/shank from source photo; engraved script letters re-rendered by model (same wording) - owner review at 300% required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 372,
+      "sku": "NM-3550",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/372/372-luxury-4x5.png",
+      "commit": "09236585e5524dcac90958fff817cc5409fb1e66",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/372-compare.png",
+      "qa_commit": "c5bf38f3917e87f72b4c9b4822c55f58eb85c05e",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/372-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/372-ref.png",
+      "source_commit": "addf39b7adb7af50cafb21c0c7b45ba97c0e8e22",
+      "environment": "polished onyx block + twin low rear lights (brilliant stone)",
+      "note": "Pose/stone/shank from source photo; engraved script letters re-rendered by model (same wording) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
