@@ -862,12 +862,12 @@
       "status": "GENERATED_PENDING_REVIEW",
       "source": "https://radmansilver.ir/wp-content/uploads/2026/08/217-A-step1.webp",
       "file": "media/social/luxury-20260911/luxury-v2/217/217-hand-4x5.png",
-      "sha": "0de7d883201af132cd2506222165390a5f43ea32",
+      "sha": "e836f2c4eca07cecf6d06f7bc0ae2bf1399a1c1d",
       "review": "media/social/luxury-20260911/luxury-v2/qa/217-hand-compare.png",
-      "review_sha": "5bb3e0f1843c978c53bc4af7a69712a9dd23114f",
+      "review_sha": "c4fbeba38d08cf2109f7f57c83dd2ed72c53fe59",
       "run": "luxury-hand-20260916",
-      "environment": "tight close-up · black suit · carved stone balustrade at night, sconce + rim (natural)",
-      "note": "tight-frame re-render; faceted amethyst unchanged - owner review at 300%"
+      "environment": "balanced frame · whole hand + black suit cuff · carved stone balustrade at night (natural)",
+      "note": "balanced re-render; faceted amethyst unchanged - review at 300%"
     },
     {
       "pid": 220,
