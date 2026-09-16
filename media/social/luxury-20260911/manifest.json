@@ -696,6 +696,20 @@
       "run": "luxury-v2-20260915",
       "environment": "smoked glass + warm transmitted glow through the carnelian",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
+    },
+    {
+      "pid": 297,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/297-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/297/297-luxury-4x5.png",
+      "sha": "d8b0dd1fc80737f7c25a13dbb506c5cfa0a4994c",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/297-compare.png",
+      "review_sha": "cc78340031b6ed461842f18fbce9ac26d5439349",
+      "run": "luxury-v2-20260915",
+      "environment": "cracked volcanic basalt + warm low-left key",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
