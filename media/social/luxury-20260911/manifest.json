@@ -936,6 +936,20 @@
       "run": "luxury-v2-20260915",
       "environment": "petrified wood slab + warm low-right key",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
+    },
+    {
+      "pid": 351,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/351-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/351/351-luxury-4x5.png",
+      "sha": "e4000f29c996914662b2746e9d0ec9d56f132209",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/351-compare.png",
+      "review_sha": "2184a35380b50a693124dc099f444adcf3da1515",
+      "run": "luxury-v2-20260915",
+      "environment": "slate-blue linen + soft cool key, warm micro-rim",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
