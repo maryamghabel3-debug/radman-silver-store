@@ -978,12 +978,12 @@
       "status": "GENERATED_PENDING_REVIEW",
       "source": "https://radmansilver.ir/wp-content/uploads/2026/08/259-A-step1.webp",
       "file": "media/social/luxury-20260911/luxury-v2/259/259-hand-4x5.png",
-      "sha": "b687ebdf0f10276a46fdf01766437fcd93c408f2",
+      "sha": "33316bdba0a89f98cea3c046bd11f63127a99e2c",
       "review": "media/social/luxury-20260911/luxury-v2/qa/259-hand-compare.png",
-      "review_sha": "d598ee78ceb2011e16f9004d687edac2f74c9013",
+      "review_sha": "e8afc98b13b493fd6f429acbbf0d8db7db22b775",
       "run": "luxury-hand-20260916",
-      "environment": "man's hand + charcoal suit · private study: aged walnut desk + old leather books (natural interior, no fabric backdrop)",
-      "note": "re-render of hand-b1 v1 with a natural, believable setting per owner note; earlier draped-backdrop version kept additively at revisions/hand-b1/259-hand-4x5-v1.png; stone and prongs unchanged - owner review at 300%"
+      "environment": "tight close-up · man's hand + charcoal suit · real walnut desk in a private study (natural)",
+      "note": "tight-frame re-render per owner note (ring should fill the frame); b2 version kept at revisions/hand-b2/259-hand-4x5-b2.png; stone/prongs unchanged - owner review at 300%"
     },
     {
       "pid": 262,
