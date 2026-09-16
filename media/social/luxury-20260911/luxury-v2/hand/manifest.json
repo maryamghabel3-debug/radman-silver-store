@@ -678,6 +678,21 @@
       "environment": "balanced frame · dark suit cuff · apothecary marble shelf with brass scales (natural)",
       "note": "durr-e-najaf dome kept pale and clear - review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 375,
+      "sku": "NM-3549",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/375/375-hand-4x5.png",
+      "commit": "94af02f60653ad62bd42e71c2ee92e13a397d74f",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/375-hand-compare.png",
+      "qa_commit": "4fc9fd628436705fe1d5f6d63eb71824739fa0cc",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/375-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/375-ref.png",
+      "source_commit": "83328705e9c076098a2a8c2271ec593edd64875f",
+      "environment": "balanced frame · dark suit cuff · grain merchant counter with brass scales and sacks (natural)",
+      "note": "engraved «رزق و روزی» is the key element: kept, verify at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
