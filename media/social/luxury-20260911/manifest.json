@@ -950,6 +950,20 @@
       "note": "APPROVED by owner (2026-09-15)"
     },
     {
+      "pid": 272,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/272-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/272/272-hand-4x5.png",
+      "sha": "900f27ac844310653b799896e39f92c4e0a435a6",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/272-hand-compare.png",
+      "review_sha": "3ece75184ec039a89f71517b2249c4f5464afc67",
+      "run": "luxury-hand-20260916",
+      "environment": "man's hand + black suit sleeve + midnight-blue velvet drapery + cool cross light",
+      "note": "ring worn on hand; lapis dome with its pyrite flecks kept; velvet adds luxury backdrop - owner review at 300%"
+    },
+    {
       "pid": 290,
       "angle": "LUXURY",
       "ratio": "4x5",
