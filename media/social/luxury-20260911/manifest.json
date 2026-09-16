@@ -1972,6 +1972,20 @@
       "run": "luxury-v2-20260915",
       "environment": "dark polished petrified wood + warm low-right key",
       "note": "Pose/stone/shank from source photo; engraved script letters re-rendered by model (same wording) - owner review at 300% required."
+    },
+    {
+      "pid": 390,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/390-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/390/390-hand-4x5.png",
+      "sha": "1e40d7779a408fa0caf80ae4daab1d77241457c9",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/390-hand-compare.png",
+      "review_sha": "8ac98d46415aa717adea22b7523f9bfa193b0631",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · dark suit cuff · walled rose garden basin rim at dusk (natural)",
+      "note": "shajar deer-motif stone kept exactly (pattern is the key element) - owner review at 300%"
     }
   ],
   "run_step3_remaining_20260915": true
