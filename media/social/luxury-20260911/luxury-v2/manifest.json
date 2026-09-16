@@ -515,6 +515,21 @@
       "run": "luxury-v2-20260915"
     },
     {
+      "pid": 181,
+      "sku": "NM-3613",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/181/181-luxury-4x5.png",
+      "commit": "de9431d3f20b214acdbcf48da3238daaf555cc70",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/181-compare.png",
+      "qa_commit": "dd666f1dc9e40ec2608ceb161facb5dfc9420739",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/181-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/181-ref.png",
+      "source_commit": "c0c960ea9ae9ea5e4f463ead1705fa2ba8501b07",
+      "environment": "brushed bronze plate + warm grazing light (v2 upgrade)",
+      "note": "v2 upgrade of an older ring: pose/stone/shank from source photo; fine details kept to source - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
+    },
+    {
       "pid": 256,
       "sku": "NM-3588",
       "status": "APPROVED",
