@@ -479,6 +479,21 @@
       "environment": "smoked plum glass + soft back-right rim",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 309,
+      "sku": "NM-3571",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/309/309-luxury-4x5.png",
+      "commit": "c82948b9a5d41b21e1b5317d150bd4a2ab2fc696",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/309-compare.png",
+      "qa_commit": "57acf47851d957ee521087311077bbf803a2bd0d",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/309-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/309-ref.png",
+      "source_commit": "fd1e31dca40b4226ea2075afbc7c00dafa716850",
+      "environment": "raw hematite mineral slab + warm low-right key",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
