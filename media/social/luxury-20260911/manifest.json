@@ -220,6 +220,20 @@
       "note": "style: matte black velvet"
     },
     {
+      "pid": 77,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-4.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/77/77-luxury-4x5.png",
+      "sha": "fc91544f74bd80e475c07a19b875314ae18c550c",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/77-compare.png",
+      "review_sha": "144015dbdf1a3fd8e2694a1f22754e17ffbfc066",
+      "run": "luxury-v2-20260915",
+      "environment": "black river pebbles + back-left rim (v2 upgrade)",
+      "note": "Rebuild/upgrade: pose/stone/shank from source photo; engraved script kept to source wording - owner review at 300% required."
+    },
+    {
       "pid": 81,
       "angle": "LUXURY",
       "ratio": "4x5",
