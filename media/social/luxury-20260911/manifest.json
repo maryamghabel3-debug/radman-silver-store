@@ -1610,6 +1610,20 @@
       "approved_at": "2026-09-15"
     },
     {
+      "pid": 336,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/336-A-step2.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/336/336-hand-4x5.png",
+      "sha": "32e8f46c3e8dc371839123661e458fc2f03a67a9",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/336-hand-compare.png",
+      "review_sha": "dc888d11ced46f000b9a72d15139ab6e0af536d4",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · navy suit cuff · teak rail of a classic boat at golden hour (natural)",
+      "note": "minimal black agate kept exactly - review at 300%"
+    },
+    {
       "pid": 339,
       "angle": "LUXURY",
       "ratio": "4x5",
