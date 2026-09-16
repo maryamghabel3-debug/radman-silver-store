@@ -560,6 +560,21 @@
       "run": "luxury-v2-20260915"
     },
     {
+      "pid": 190,
+      "sku": "NM-3610",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/190/190-luxury-4x5.png",
+      "commit": "5f6abce9afd72012d42d1a877af29c34543e391f",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/190-compare.png",
+      "qa_commit": "ebdea0c292a3d7408474a4ea2ce1286227281240",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/190-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/190-ref.png",
+      "source_commit": "280c58c697244f10b42636c5d9545738e46e2b9f",
+      "environment": "deep olive-green velvet + cool back-right rim",
+      "note": "stone shows a slight warm gradient from the rim light; leaf-and-prong bezel kept - owner review at 300%",
+      "run": "luxury-v2-20260915"
+    },
+    {
       "pid": 256,
       "sku": "NM-3588",
       "status": "APPROVED",
