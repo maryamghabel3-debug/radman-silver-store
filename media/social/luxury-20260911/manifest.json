@@ -1342,6 +1342,20 @@
       "note": "APPROVED by owner (2026-09-15)"
     },
     {
+      "pid": 309,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/309-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/309/309-hand-4x5.png",
+      "sha": "a5b0e339eeff2930fbe5f2b039254da1f39330fe",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/309-hand-compare.png",
+      "review_sha": "ab6f002ed2497c987d36feda040396ad859c5f82",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · dark suit cuff · mineral collection drawer, specimen cabinet (natural)",
+      "note": "large red mineral agate kept exactly - review at 300%"
+    },
+    {
       "pid": 312,
       "angle": "LUXURY",
       "ratio": "4x5",
