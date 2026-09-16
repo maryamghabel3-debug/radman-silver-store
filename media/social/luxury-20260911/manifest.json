@@ -762,6 +762,20 @@
       "status": "GENERATED_PENDING_REVIEW"
     },
     {
+      "pid": 202,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/202-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/202/202-luxury-4x5.png",
+      "sha": "d825583ec6002170d9a5782db380fa4716b40af6",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/202-compare.png",
+      "review_sha": "2e73565a7dcbb19392118df57f1da3ca9eb294cd",
+      "run": "luxury-v2-20260915",
+      "environment": "warm camel woven wool + warm back-right light",
+      "note": "crackled blue stone and vine bezel preserved; environment changed only - owner review at 300%"
+    },
+    {
       "pid": 208,
       "angle": "A",
       "ratio": "4x5",
