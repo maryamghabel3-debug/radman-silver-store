@@ -644,6 +644,21 @@
       "environment": "forged steel plate + cool hard low-right kicker",
       "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 330,
+      "sku": "NM-3564",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/330/330-luxury-4x5.png",
+      "commit": "62b81b62f0e297b106d6b1d57905d359a9acf0e0",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/330-compare.png",
+      "qa_commit": "fb17b086c2dca56d0f3695074bfe93461567e41b",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/330-A-step1-1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/330-ref.png",
+      "source_commit": "f871bca8b4eb4b10dca79717ea386155456d8809",
+      "environment": "aged rosewood + narrow warm low-right beam",
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
