@@ -796,6 +796,20 @@
       "status": "GENERATED_PENDING_REVIEW"
     },
     {
+      "pid": 208,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/208-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/208/208-hand-4x5.png",
+      "sha": "d8ab56406508b4d184e214ab22dcf84751d39034",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/208-hand-compare.png",
+      "review_sha": "c507adc4edb0942a643822af01a80c6464d7abbb",
+      "run": "luxury-hand-20260916",
+      "environment": "man's hand + dark grey suit · travertine window ledge of an old building, cool daylight from the left (natural)",
+      "note": "durr-e-najaf dome kept; natural travertine ledge + window light replace studio set - owner review at 300%"
+    },
+    {
       "pid": 211,
       "angle": "A",
       "ratio": "4x5",
