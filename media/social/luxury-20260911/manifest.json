@@ -822,6 +822,20 @@
       "run": "luxury-v2-20260915",
       "environment": "wet amber lacquer + low backlight rim",
       "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required."
+    },
+    {
+      "pid": 325,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/325-A-step1-1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/325/325-luxury-4x5.png",
+      "sha": "566a25e13cfccda0d9abecb3cab086b6f04c3465",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/325-compare.png",
+      "review_sha": "a4ed5766f50be7ee56aca951c28b6e70cdf36b2f",
+      "run": "luxury-v2-20260915",
+      "environment": "black void + twin soft low panels (cool left / warm right)",
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
