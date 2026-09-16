@@ -483,6 +483,21 @@
       "environment": "balanced frame · dark suit cuff · old barbershop marble counter with a straight razor (natural)",
       "note": "hadid stone + its engraved star kept exactly; engraving-heavy file - verify at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 330,
+      "sku": "NM-3564",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/330/330-hand-4x5.png",
+      "commit": "8a81496dde80a6a7d3f43859071d301a6e477f12",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/330-hand-compare.png",
+      "qa_commit": "4e374b5edab0ffa0f8d4c37558dab7f2ad4838cb",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/330-A-step1-1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/330-ref.png",
+      "source_commit": "428cbf1c2f7623328a3dd986f75ee5ae1360fbc8",
+      "environment": "balanced frame · brown suit cuff · teahouse brass tray beside a samovar (natural)",
+      "note": "shajar single-flower pattern kept exactly - review at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
