@@ -810,6 +810,21 @@
       "environment": "dark terracotta clay + warm narrow beam on the carving",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 366,
+      "sku": "NM-3552",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/366/366-luxury-4x5.png",
+      "commit": "a21faa370ee736a1757d11588634c2eb0043240c",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/366-compare.png",
+      "qa_commit": "d6d87a0340405c7757d81ee9d40cccf3bf3b382f",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/366-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/366-ref.png",
+      "source_commit": "8bf457a33b691572f3a31c6c698f527d10f8dbd6",
+      "environment": "dark reflective floor in a green light pool + controlled reflection",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
