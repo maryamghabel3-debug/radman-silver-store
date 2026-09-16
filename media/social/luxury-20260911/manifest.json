@@ -882,12 +882,12 @@
       "status": "GENERATED_PENDING_REVIEW",
       "source": "https://radmansilver.ir/wp-content/uploads/2026/08/220-A-step1.webp",
       "file": "media/social/luxury-20260911/luxury-v2/220/220-hand-4x5.png",
-      "sha": "7c758e9edabea0059e26d6d39cbd2b126f119bc4",
+      "sha": "2e3991c0dc16633efa17df735a6f8ab180269af9",
       "review": "media/social/luxury-20260911/luxury-v2/qa/220-hand-compare.png",
-      "review_sha": "a53e77b163cfe5a65f833ff4089f686a21b93532",
+      "review_sha": "3d93e1e94da66098615a61c895df94d8ba542993",
       "run": "luxury-hand-20260916",
-      "environment": "tight close-up · dark blue suit · granite counter, under-cabinet glow right (natural)",
-      "note": "tight-frame re-render; pale dome unchanged - owner review at 300%"
+      "environment": "balanced frame · whole hand + navy suit cuff · granite counter, under-cabinet glow (natural)",
+      "note": "balanced re-render; pale dome unchanged - review at 300%"
     },
     {
       "pid": 223,
