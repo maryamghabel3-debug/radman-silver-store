@@ -890,6 +890,20 @@
       "note": "durr-e-najaf dome kept pale; granite counter + warm under-cabinet light - owner review at 300%"
     },
     {
+      "pid": 223,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/223-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/223/223-hand-4x5.png",
+      "sha": "a2e21b681b2d5c3ce5867971a282beb8e0c4c791",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/223-hand-compare.png",
+      "review_sha": "36df8909dd6a40831116067cf709c721404b25c6",
+      "run": "luxury-hand-20260916",
+      "environment": "man's hand + dark grey suit · weathered stone parapet of an old terrace at dusk (natural outdoor)",
+      "note": "durr-e-najaf dome kept; dusk landscape beyond replaces studio - owner review at 300%"
+    },
+    {
       "pid": 232,
       "angle": "A",
       "ratio": "4x5",
