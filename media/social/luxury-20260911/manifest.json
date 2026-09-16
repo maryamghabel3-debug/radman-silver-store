@@ -856,6 +856,20 @@
       "status": "GENERATED_PENDING_REVIEW"
     },
     {
+      "pid": 217,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/217-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/217/217-hand-4x5.png",
+      "sha": "e444385689e1ba7087515375f043d5fcf3c78acc",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/217-hand-compare.png",
+      "review_sha": "c8878f0ac8ba52804335857f75be5951c65ab54e",
+      "run": "luxury-hand-20260916",
+      "environment": "man's hand + black suit · carved stone balustrade of an old staircase at night, warm sconce + cool rim (natural)",
+      "note": "faceted amethyst kept; night balustrade setting - owner review at 300%"
+    },
+    {
       "pid": 220,
       "angle": "A",
       "ratio": "4x5",
