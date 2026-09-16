@@ -114,6 +114,21 @@
       "approved_at": "2026-09-15"
     },
     {
+      "pid": 85,
+      "sku": "1013",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/85/85-luxury-4x5.png",
+      "commit": "208f88c73f3f692aa24fe5deeaabbcd001737913",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/85-compare.png",
+      "qa_commit": "0b9db0d96a73e5c263c1418a92c71595b2159ba9",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/85-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/85-ref.png",
+      "source_commit": "e3275ce1e9c12d7c34e4ebac320b2b88f466c31e",
+      "environment": "pale grey micro-cement + soft broad side light (v2 upgrade)",
+      "note": "v2 upgrade of an older ring: pose/stone/shank from source photo; fine details kept to source - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
+    },
+    {
       "pid": 89,
       "sku": "1012",
       "status": "APPROVED",
