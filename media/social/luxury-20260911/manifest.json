@@ -896,12 +896,12 @@
       "status": "GENERATED_PENDING_REVIEW",
       "source": "https://radmansilver.ir/wp-content/uploads/2026/08/223-A-step1.webp",
       "file": "media/social/luxury-20260911/luxury-v2/223/223-hand-4x5.png",
-      "sha": "a2e21b681b2d5c3ce5867971a282beb8e0c4c791",
+      "sha": "97c85fde31d31cf30dd0e12b599233adba88e7e4",
       "review": "media/social/luxury-20260911/luxury-v2/qa/223-hand-compare.png",
-      "review_sha": "36df8909dd6a40831116067cf709c721404b25c6",
+      "review_sha": "724c4944bbd0a6168c4a1d306284db1028c38ca1",
       "run": "luxury-hand-20260916",
-      "environment": "man's hand + dark grey suit · weathered stone parapet of an old terrace at dusk (natural outdoor)",
-      "note": "durr-e-najaf dome kept; dusk landscape beyond replaces studio - owner review at 300%"
+      "environment": "tight close-up · dark grey suit · weathered stone parapet at dusk (natural)",
+      "note": "tight-frame re-render; pale dome unchanged - owner review at 300%"
     },
     {
       "pid": 232,
