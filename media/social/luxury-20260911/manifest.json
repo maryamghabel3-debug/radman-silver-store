@@ -902,6 +902,20 @@
       "note": "ring worn on hand; suit + walnut setting upgraded per owner note; stone and prongs unchanged - owner review at 300%"
     },
     {
+      "pid": 262,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/262-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/262/262-hand-4x5.png",
+      "sha": "3268221b6f79d3f7db4266603176200c776ef223",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/262-hand-compare.png",
+      "review_sha": "9f3e28fcbe9d7ff42d608d79ae98bed9dbf4b525",
+      "run": "luxury-hand-20260916",
+      "environment": "man's hand + tailored navy suit sleeve + black quilted leather + cool rim behind-right, soft low fill L",
+      "note": "ring worn on hand; amber cabochon and tooth-prong setting kept; leather adds rim separation - owner review at 300%"
+    },
+    {
       "pid": 265,
       "angle": "A",
       "ratio": "4x5",
