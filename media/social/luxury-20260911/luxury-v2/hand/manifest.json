@@ -513,6 +513,21 @@
       "environment": "balanced frame · dark suit cuff · bookbinding press with linen paper (natural)",
       "note": "glossy yellow agate kept exactly - review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 336,
+      "sku": "NM-3562",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/336/336-hand-4x5.png",
+      "commit": "32e8f46c3e8dc371839123661e458fc2f03a67a9",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/336-hand-compare.png",
+      "qa_commit": "dc888d11ced46f000b9a72d15139ab6e0af536d4",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/336-A-step2.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/336-ref.png",
+      "source_commit": "1b6d6d7419aee5111326f382ed92a165c64bac5c",
+      "environment": "balanced frame · navy suit cuff · teak rail of a classic boat at golden hour (natural)",
+      "note": "minimal black agate kept exactly - review at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
