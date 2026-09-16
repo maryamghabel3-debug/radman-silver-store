@@ -864,6 +864,20 @@
       "run": "luxury-v2-20260915",
       "environment": "aged rosewood + narrow warm low-right beam",
       "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required."
+    },
+    {
+      "pid": 333,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/333-A-step1-1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/333/333-luxury-4x5.png",
+      "sha": "55c11bf6817fb6d51529af91ba1e2ce526cc303c",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/333-compare.png",
+      "review_sha": "28f618808cc531af5e199dadf2c0b7443b3841f4",
+      "run": "luxury-v2-20260915",
+      "environment": "slanting shaft of warm light in a dim room (cinematic)",
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
