@@ -1006,6 +1006,20 @@
       "run": "luxury-v2-20260915",
       "environment": "dark terracotta clay + warm narrow beam on the carving",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
+    },
+    {
+      "pid": 366,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/366-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/366/366-luxury-4x5.png",
+      "sha": "a21faa370ee736a1757d11588634c2eb0043240c",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/366-compare.png",
+      "review_sha": "d6d87a0340405c7757d81ee9d40cccf3bf3b382f",
+      "run": "luxury-v2-20260915",
+      "environment": "dark reflective floor in a green light pool + controlled reflection",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
