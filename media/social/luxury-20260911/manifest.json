@@ -1778,6 +1778,20 @@
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
     },
     {
+      "pid": 360,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/360-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/360/360-hand-4x5.png",
+      "sha": "3259f8d86b688f69a408e3fcf8766a9565a35b46",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/360-hand-compare.png",
+      "review_sha": "6298e436db01f8ff6e023d3bf5a06eebf8a9fe59",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · dark suit cuff · watch collector's desk, green leather pad + loupe (natural)",
+      "note": "silver ring form and link/engraved detailing kept exactly - review at 300%"
+    },
+    {
       "pid": 363,
       "angle": "LUXURY",
       "ratio": "4x5",
