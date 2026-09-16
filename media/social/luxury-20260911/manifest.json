@@ -992,6 +992,20 @@
       "note": "ring worn on hand; engraved «یا ابا عبدالله» kept - please check the engraving at 300%"
     },
     {
+      "pid": 284,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/284-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/284/284-hand-4x5.png",
+      "sha": "4b0a3b9aef532a6fbbd313958608326ad43bac65",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/284-hand-compare.png",
+      "review_sha": "c1650155b6c8fb260efff34f5e8faadc8575b394",
+      "run": "luxury-hand-20260916",
+      "environment": "man's hand + midnight-blue jacket sleeve + patinated bronze tabletop + warm low light R, cool rim back-left",
+      "note": "ring worn on hand; pale lilac cabochon tone kept; bronze adds warmth - owner review at 300%"
+    },
+    {
       "pid": 290,
       "angle": "LUXURY",
       "ratio": "4x5",
