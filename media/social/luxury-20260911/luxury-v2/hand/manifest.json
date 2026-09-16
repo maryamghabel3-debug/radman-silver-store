@@ -423,6 +423,21 @@
       "environment": "balanced frame · brown suit cuff · equestrian saddle leather, tack room (natural)",
       "note": "tiger-eye chatoyant bands kept - review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 318,
+      "sku": "NM-3568",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/318/318-hand-4x5.png",
+      "commit": "3b0875b10ea375f5b54f45f138efa68a7a2d6ef0",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/318-hand-compare.png",
+      "qa_commit": "0a519de949c5d943c8da833f22b1003ecc1f550b",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/318-A-step1-1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/318-ref.png",
+      "source_commit": "aeef1a582a63a8ad0bccb819739fe29a2c3a8815",
+      "environment": "balanced frame · dark suit cuff · carved stone bench in an old courtyard at dusk (natural)",
+      "note": "engraved shmایل portrait is the key element: kept, verify at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
