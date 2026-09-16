@@ -1258,6 +1258,20 @@
       "note": "APPROVED by owner (2026-09-15)"
     },
     {
+      "pid": 300,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/300-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/300/300-hand-4x5.png",
+      "sha": "4fa964e647752038690d594a4b33888a1db472c6",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/300-hand-compare.png",
+      "review_sha": "a7821e91206cc703f8cd192315ce54489a4a792f",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · whole hand + dark suit cuff · classic car walnut-chrome door trim at night (natural)",
+      "note": "square black agate + rail kept exactly - review at 300%"
+    },
+    {
       "pid": 303,
       "angle": "LUXURY",
       "ratio": "4x5",
