@@ -363,6 +363,21 @@
       "environment": "balanced frame · dark suit cuff · mosaic fountain rim, old courtyard at night (natural)",
       "note": "green agate tone + engraved shank kept exactly - review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 306,
+      "sku": "NM-3572",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/306/306-hand-4x5.png",
+      "commit": "623a975417822a87be94960be5e108162713ddcb",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/306-hand-compare.png",
+      "qa_commit": "dd74098cbf09928e64fc2b9a8bd0f7564563c4ba",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/306-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/306-ref.png",
+      "source_commit": "ee798ef07ee9fe4d955c2066c0f5a609a64edcc2",
+      "environment": "balanced frame · grey suit cuff · marble washstand of an old hotel suite, window light (natural)",
+      "note": "pale lilac agate tone preserved - review at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
