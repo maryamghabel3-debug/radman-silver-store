@@ -922,6 +922,20 @@
       "run": "luxury-v2-20260915",
       "environment": "dusty volcanic tuff + warm narrow raking beam (reveals the agate banding)",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
+    },
+    {
+      "pid": 348,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/348-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/348/348-luxury-4x5.png",
+      "sha": "2febb8449e5a977765122e454887b0c896962d15",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/348-compare.png",
+      "review_sha": "af837047abcef9daf3c65248a9e930b957e16d8d",
+      "run": "luxury-v2-20260915",
+      "environment": "petrified wood slab + warm low-right key",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
