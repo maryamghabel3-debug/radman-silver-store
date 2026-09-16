@@ -785,7 +785,7 @@
       "pid": 315,
       "angle": "LUXURY",
       "ratio": "4x5",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "source": "https://radmansilver.ir/wp-content/uploads/2026/08/315-A-step1.webp",
       "file": "media/social/luxury-20260911/luxury-v2/315/315-luxury-4x5.png",
       "sha": "61f9705ac6b6ae2148178a881a31d19684f16c54",
@@ -793,13 +793,15 @@
       "review_sha": "f4684997626fb3972b3d9fe4079cd68b58059979",
       "run": "luxury-v2-20260915",
       "environment": "smoked oak + hard ribbon light along the chatoyant band",
-      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required."
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 318,
       "angle": "LUXURY",
       "ratio": "4x5",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "source": "https://radmansilver.ir/wp-content/uploads/2026/08/318-A-step1-1.webp",
       "file": "media/social/luxury-20260911/luxury-v2/318/318-luxury-4x5.png",
       "sha": "b59303ee53fccb2379484e33d063f1ef8e013f8c",
@@ -807,13 +809,15 @@
       "review_sha": "65a6df8e72bc058fcff7656d94d971b93b48a33e",
       "run": "luxury-v2-20260915",
       "environment": "recessed stone niche + broad shadowless front-left panel",
-      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required."
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 322,
       "angle": "LUXURY",
       "ratio": "4x5",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "source": "https://radmansilver.ir/wp-content/uploads/2026/08/322-A-step1-1.webp",
       "file": "media/social/luxury-20260911/luxury-v2/322/322-luxury-4x5.png",
       "sha": "22a6f821ed3d67bbf39f4298aae71018193fae68",
@@ -821,13 +825,15 @@
       "review_sha": "64c747442e75dfdb7282c693a96f6ea0bf37950f",
       "run": "luxury-v2-20260915",
       "environment": "wet amber lacquer + low backlight rim",
-      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required."
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 325,
       "angle": "LUXURY",
       "ratio": "4x5",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "source": "https://radmansilver.ir/wp-content/uploads/2026/08/325-A-step1-1.webp",
       "file": "media/social/luxury-20260911/luxury-v2/325/325-luxury-4x5.png",
       "sha": "566a25e13cfccda0d9abecb3cab086b6f04c3465",
@@ -835,13 +841,15 @@
       "review_sha": "a4ed5766f50be7ee56aca951c28b6e70cdf36b2f",
       "run": "luxury-v2-20260915",
       "environment": "black void + twin soft low panels (cool left / warm right)",
-      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required."
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 328,
       "angle": "LUXURY",
       "ratio": "4x5",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "source": "https://radmansilver.ir/wp-content/uploads/2026/08/328-A-step1.webp",
       "file": "media/social/luxury-20260911/luxury-v2/328/328-luxury-4x5.png",
       "sha": "7d57d8c49e483e1c3ba0ffa468d702b1e3cf8e0d",
@@ -849,13 +857,15 @@
       "review_sha": "10c9036a4472cc5f0a8f7fae444949222355fa2b",
       "run": "luxury-v2-20260915",
       "environment": "forged steel plate + cool hard low-right kicker",
-      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required."
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 330,
       "angle": "LUXURY",
       "ratio": "4x5",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "source": "https://radmansilver.ir/wp-content/uploads/2026/08/330-A-step1-1.webp",
       "file": "media/social/luxury-20260911/luxury-v2/330/330-luxury-4x5.png",
       "sha": "62b81b62f0e297b106d6b1d57905d359a9acf0e0",
@@ -863,13 +873,15 @@
       "review_sha": "fb17b086c2dca56d0f3695074bfe93461567e41b",
       "run": "luxury-v2-20260915",
       "environment": "aged rosewood + narrow warm low-right beam",
-      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required."
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 333,
       "angle": "LUXURY",
       "ratio": "4x5",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "source": "https://radmansilver.ir/wp-content/uploads/2026/08/333-A-step1-1.webp",
       "file": "media/social/luxury-20260911/luxury-v2/333/333-luxury-4x5.png",
       "sha": "55c11bf6817fb6d51529af91ba1e2ce526cc303c",
@@ -877,13 +889,15 @@
       "review_sha": "28f618808cc531af5e199dadf2c0b7443b3841f4",
       "run": "luxury-v2-20260915",
       "environment": "slanting shaft of warm light in a dim room (cinematic)",
-      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required."
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 336,
       "angle": "LUXURY",
       "ratio": "4x5",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "source": "https://radmansilver.ir/wp-content/uploads/2026/08/336-A-step2.webp",
       "file": "media/social/luxury-20260911/luxury-v2/336/336-luxury-4x5.png",
       "sha": "4a5b13b6661f75dacbd867c5c2033a5aeb508c24",
@@ -891,7 +905,9 @@
       "review_sha": "399965c563141860348a1f5dc93d2c804e28ce9d",
       "run": "luxury-v2-20260915",
       "environment": "raked black sand ridges + soft cool low-left light",
-      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required."
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     }
   ],
   "run_step3_remaining_20260915": true
