@@ -1918,6 +1918,20 @@
       "note": "Pose/stone/shank from source photo; engraved script letters re-rendered by model (same wording) - owner review at 300% required."
     },
     {
+      "pid": 375,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/375-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/375/375-hand-4x5.png",
+      "sha": "94af02f60653ad62bd42e71c2ee92e13a397d74f",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/375-hand-compare.png",
+      "review_sha": "4fc9fd628436705fe1d5f6d63eb71824739fa0cc",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · dark suit cuff · grain merchant counter with brass scales and sacks (natural)",
+      "note": "engraved «رزق و روزی» is the key element: kept, verify at 300%"
+    },
+    {
       "pid": 378,
       "angle": "LUXURY",
       "ratio": "4x5",
