@@ -33,6 +33,21 @@
       "environment": "man's hand (relaxed, 3/4 side) + tailored charcoal suit sleeve + deep walnut-panelled wall + soft side light L / cool rim behind",
       "note": "ring worn on hand; suit + walnut setting upgraded per owner note; stone and prongs unchanged - owner review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 262,
+      "sku": "NM-3586",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/262/262-hand-4x5.png",
+      "commit": "3268221b6f79d3f7db4266603176200c776ef223",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/262-hand-compare.png",
+      "qa_commit": "9f3e28fcbe9d7ff42d608d79ae98bed9dbf4b525",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/262-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/262-ref.png",
+      "source_commit": "73fe79fafc35e83f97d9563524028e4a701e2743",
+      "environment": "man's hand + tailored navy suit sleeve + black quilted leather + cool rim behind-right, soft low fill L",
+      "note": "ring worn on hand; amber cabochon and tooth-prong setting kept; leather adds rim separation - owner review at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
