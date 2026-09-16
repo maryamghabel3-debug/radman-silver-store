@@ -668,6 +668,20 @@
       "run": "luxury-v2-20260915",
       "environment": "matte black velvet + dark-field sidelights + violet accent",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
+    },
+    {
+      "pid": 290,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/290-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/290/290-luxury-4x5.png",
+      "sha": "7f96b547a1d90ee9019b9901977c13677105d4b2",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/290-compare.png",
+      "review_sha": "75e86a086ccc46859dbef760a983c9201e412d48",
+      "run": "luxury-v2-20260915",
+      "environment": "wet black slate + cool low back-left rim",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
