@@ -200,6 +200,21 @@
       "run": "luxury-hand-20260916"
     },
     {
+      "pid": 269,
+      "sku": "NM-3584",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/269/269-hand-4x5.png",
+      "commit": "6d61ecf5d11bce1c54b89d813e15549253190a1c",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/269-hand-compare.png",
+      "qa_commit": "24beb9357527ed57997df25eb75cd672f1eb9f21",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/269-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/269-ref.png",
+      "source_commit": "0f246a5be094a490e4b0a0cae1556c077ed18410",
+      "environment": "balanced frame · whole hand + grey suit cuff · wine barrel in a dim cellar (natural)",
+      "note": "amethyst tone and setting kept exactly - review at 300%",
+      "run": "luxury-hand-20260916"
+    },
+    {
       "pid": 272,
       "sku": "NM-3583",
       "status": "GENERATED_PENDING_REVIEW",
