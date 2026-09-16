@@ -24,7 +24,7 @@
     {
       "pid": 81,
       "sku": "1015",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/81/81-luxury-4x5.png",
       "commit": "d0c6cfca2e8b41fdb4614b086974dc08e12f65fb",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/81-compare.png",
@@ -33,13 +33,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/81-ref.png",
       "source_commit": "80eb255fbafd759a7bc35adb5e326ea7ee40ab31",
       "environment": "polished black marble plinth + deep burgundy velvet + warm gallery rim light",
-      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif). Owner review required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 89,
       "sku": "1012",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/89/89-luxury-4x5.png",
       "commit": "16f41526d8fd39f0eb50389b95ae5f1a407c739e",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/89-compare.png",
@@ -48,13 +50,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/89-ref.png",
       "source_commit": "92736c927691df19cd65540dbeb8531556edb3b8",
       "environment": "dark slate stone with faint sheen + cool key / warm accent rim",
-      "note": "Pose/twisted-rope shank/onyx from source photo; fine carving micro-detail re-rendered by model (same motif). Owner review required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 93,
       "sku": "1060",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/93/93-luxury-4x5.png",
       "commit": "14cc293ce48b58f5d7be0b56bac304e7aed76f6a",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/93-compare.png",
@@ -63,16 +67,18 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/93-ref.png",
       "source_commit": "89dc1957f0476df8c999fed00968928648882285",
       "environment": "matte black linen + soft low-left light + white bounce (attempt 2)",
-      "note": "OWNER-FLAGGED ring. Att1 FAILED_QA (fine text became pseudo-text; preserved at rejected/). Att2: cartouche + ornate top band + border + text layout preserved like source; sub-mm letterforms approximate (model limit). Owner decision required.",
+      "note": "APPROVED by owner (2026-09-15)",
       "run": "luxury-v2-20260915",
       "attempts": 2,
       "qa_note": "Owner-flagged ring. Attempt1 FAILED_QA (fine text became pseudo-text; preserved under rejected/). Attempt2 (current): cartouche + ornate top band + border + text layout preserved as in source; sub-millimeter letterforms still approximate (model limit). Owner decision required.",
-      "engraving_review": "media/social/luxury-20260911/luxury-v2/qa/93-engraving-review-attempt2.png"
+      "engraving_review": "media/social/luxury-20260911/luxury-v2/qa/93-engraving-review-attempt2.png",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 97,
       "sku": "1061",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/97/97-luxury-4x5.png",
       "commit": "29a508c5342f3d8fdecd2917f70ef0210b9ac412",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/97-compare.png",
@@ -81,13 +87,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/97-ref.png",
       "source_commit": "7a33922ee2b5098fac022e43bc47efe46c7fd881",
       "environment": "smooth charcoal studio surface + narrow beam from upper left",
-      "note": "Pose/onyx carving/bezel/ribs from source photo; fine carved micro-detail re-rendered by model (same motif). Owner review required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 101,
       "sku": "1063",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/101/101-luxury-4x5.png",
       "commit": "853d1b09f07344938a61c12816239e2fa88ba0bf",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/101-compare.png",
@@ -96,13 +104,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/101-ref.png",
       "source_commit": "5830ec9778b195251663a7534958fd1fc206d296",
       "environment": "graphite slab with brushed texture + cool key / warm distant accent",
-      "note": "Pose/green stone carving/prong setting/shank from source photo; fine carved micro-detail re-rendered by model. Owner review required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 105,
       "sku": "1010",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/105/105-luxury-4x5.png",
       "commit": "fb580103b4e856127cdb2ff52265fec3bb2dee54",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/105-compare.png",
@@ -111,13 +121,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/105-ref.png",
       "source_commit": "56b812fb7e4291bb83c6258cf0c22c7511904648",
       "environment": "black pebbled leather plinth + warm gallery light and bokeh",
-      "note": "Pose/blue agate dense script/ornate shank from source photo; extremely fine engraving micro-detail re-rendered by model. Owner review required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 109,
       "sku": "1011",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/109/109-luxury-4x5.png",
       "commit": "7dd4f8176a2c65fb857211a2aafd7c88e6993708",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/109-compare.png",
@@ -126,13 +138,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/109-ref.png",
       "source_commit": "43689be865cf0f46ede3ed1e7ee278654b35d6fb",
       "environment": "polished dark glass with clean mirror reflection + single directional light",
-      "note": "Pose/black cabochon/sculptural shank from source photo; ornament micro-detail re-rendered by model. Owner review required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 113,
       "sku": "1008",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/113/113-luxury-4x5.png",
       "commit": "033884b1092efbcf5b607dccd8ff7f2a689f2c6a",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/113-compare.png",
@@ -141,13 +155,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/113-ref.png",
       "source_commit": "91820a95eba76b820089b9a5632e125b6f7e159f",
       "environment": "dark walnut wood with fine grain + warm masculine directional light",
-      "note": "Pose/black dome/beaded bezel/decorated shank from source photo; fine micro-detail re-rendered by model. Owner review required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 117,
       "sku": "1009",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/117/117-luxury-4x5.png",
       "commit": "f9308fa765f25aa31a8e701a1f3d580ad8e30dd1",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/117-compare.png",
@@ -156,13 +172,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/117-ref.png",
       "source_commit": "c09b2fad5177120e43ed7cd768e5240eac31f4d1",
       "environment": "black velvet + warm side-back rim light (low), soft warm front-left fill",
-      "note": "Red agate portrait engraving + ornamental border kept per source (every line preserved, nothing re-invented). Fine micro-detail re-rendered by model - owner review required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 121,
       "sku": "1007",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/121/121-luxury-4x5.png",
       "commit": "dd115bc049cb0867773d75c63e915864690e4f95",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/121-compare.png",
@@ -171,13 +189,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/121-ref.png",
       "source_commit": "1c55306dbc3d030f1aa207e446c2cd15e6a9c07e",
       "environment": "brushed graphite slab + single hard gridded side light from right",
-      "note": "Square black onyx + hatch-engraved shank per source. Fine micro-detail re-rendered by model - owner review required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 125,
       "sku": "1006",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/125/125-luxury-4x5.png",
       "commit": "3d9272eada1fb28d801d682c78f6e959e95c6bbd",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/125-compare.png",
@@ -186,8 +206,10 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/125-ref.png",
       "source_commit": "2ee94c9f975ee4336f6f3b1d5618199628b19864",
       "environment": "dark light-table, warm transmitted backlight glowing through the green agate",
-      "note": "'Ya Ali' white script on green agate kept per source, letters preserved. Fine micro-detail re-rendered by model - owner review required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 129,
@@ -210,7 +232,7 @@
     {
       "pid": 133,
       "sku": "1004",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/133/133-luxury-4x5.png",
       "commit": "9e92d0387b314276a67bfd0a2f067d272fe5a387",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/133-compare.png",
@@ -219,13 +241,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/133-ref.png",
       "source_commit": "483841a23b7aecf6b3df0951fcec2d745a9344fe",
       "environment": "grey concrete + cool hard grazing side light from left",
-      "note": "Square onyx + deep-relief shank ornament kept per source. Fine micro-detail re-rendered by model - owner review required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 137,
       "sku": "1003",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/137/137-luxury-4x5.png",
       "commit": "883b921bcfd3510eed88e265098693c98c30e2f5",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/137-compare.png",
@@ -234,13 +258,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/137-ref.png",
       "source_commit": "354d67966346b13e3718fcb8ab0587416c81921e",
       "environment": "dark oxblood leather + warm low-left key (no light through the stone)",
-      "note": "Att1 FAILED_QA: transmitted glow washed the stone milky. Att2 passes: rich amber kept. Beads/shank per source. Owner review required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 143,
       "sku": "1002",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/143/143-luxury-4x5.png",
       "commit": "cb6a89c94138da5d91360c79e73cdedba29749df",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/143-compare.png",
@@ -249,8 +275,10 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/143-ref.png",
       "source_commit": "cd555bc93a48d4f1b6753f1f897d30b2b0040dc8",
       "environment": "matte black velvet + dark-field lighting (two side-behind diffused lights for facet brilliance)",
-      "note": "Moissanite dome + two-tone ornate shank kept per source. Fine micro-detail re-rendered by model - owner review required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 147,
@@ -273,7 +301,7 @@
     {
       "pid": 151,
       "sku": "1037",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/151/151-luxury-4x5.png",
       "commit": "776d2291fb3770713155306d870e2b56707cfc28",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/151-compare.png",
@@ -282,13 +310,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/151-ref.png",
       "source_commit": "c2e0527880262cb173a030d92c68bf39f13784f5",
       "environment": "dark green marble + low side-back rim light",
-      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 155,
       "sku": "1035",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/155/155-luxury-4x5.png",
       "commit": "15fa906ed77d0fa260e64e7df400ddb3bb2ca1af",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/155-compare.png",
@@ -297,13 +327,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/155-ref.png",
       "source_commit": "c650d2b008e476d0b0a9afa1e0a3a8a3c20380d1",
       "environment": "black terrazzo + warm grazing left light",
-      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 159,
       "sku": "1036",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/159/159-luxury-4x5.png",
       "commit": "b63bf8de6ed4fa373547d1ae8aaa6e52eaa27fdd",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/159-compare.png",
@@ -312,13 +344,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/159-ref.png",
       "source_commit": "794bc3860996cb5546da7841840df4862ce1447a",
       "environment": "smoked bronze mirror sheet + warm low-right key, bold reflection",
-      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 163,
       "sku": "1038",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/163/163-luxury-4x5.png",
       "commit": "9f51ab046ec13689f27038fb5faa861d03bae716",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/163-compare.png",
@@ -327,13 +361,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/163-ref.png",
       "source_commit": "9b20eb128800a7fb00542e1ad78f8272b0268180",
       "environment": "charcoal basalt steps + cool low back-right rim",
-      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 167,
       "sku": "1039",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/167/167-luxury-4x5.png",
       "commit": "7532d3b1b013d04fd2b16022dd1909431352ebd0",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/167-compare.png",
@@ -342,13 +378,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/167-ref.png",
       "source_commit": "fdb0e8c259c8ebed492b286351ac28acd4e6fb77",
       "environment": "charcoal woven silk + narrow vertical slit beam (shaped light)",
-      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 171,
       "sku": "1040",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/171/171-luxury-4x5.png",
       "commit": "3cb2d2e803eabf69ecf68fe94c501587c70abe4a",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/171-compare.png",
@@ -357,13 +395,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/171-ref.png",
       "source_commit": "46f2dffcce82b3c0a8d299086302b99084f022e3",
       "environment": "aged patinated copper + warm low-left key",
-      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 256,
       "sku": "NM-3588",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/256/256-luxury-4x5.png",
       "commit": "ec0b235e4eb33608505a6d5b628a7f9584c0f34c",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/256-compare.png",
@@ -372,13 +412,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/256-ref.png",
       "source_commit": "12f753e4f27c9ad1af0a33676808f4339fa9f262",
       "environment": "dark plinth in a single pool of warm gallery light",
-      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 269,
       "sku": "NM-3584",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/269/269-luxury-4x5.png",
       "commit": "8708299cd1591e4b0d909a99cbe5c15fd3ccb35c",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/269-compare.png",
@@ -387,13 +429,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/269-ref.png",
       "source_commit": "466f166cff65d505219627f7f45f65f90f7d1740",
       "environment": "matte black velvet + dark-field sidelights + violet accent",
-      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 290,
       "sku": "NM-3577",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/290/290-luxury-4x5.png",
       "commit": "7f96b547a1d90ee9019b9901977c13677105d4b2",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/290-compare.png",
@@ -402,13 +446,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/290-ref.png",
       "source_commit": "e07da9a32e7ec492025c515c7812eb384808018d",
       "environment": "wet black slate + cool low back-left rim",
-      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 293,
       "sku": "NM-3576",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/293/293-luxury-4x5.png",
       "commit": "68d46ca9fcc616c8293e6af1dd214c494e3c0498",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/293-compare.png",
@@ -417,13 +463,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/293-ref.png",
       "source_commit": "0fe19a568c871b6464aee2f7fccb4e68e98fcdb0",
       "environment": "smoked glass + warm transmitted glow through the carnelian",
-      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 297,
       "sku": "NM-3575",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/297/297-luxury-4x5.png",
       "commit": "d8b0dd1fc80737f7c25a13dbb506c5cfa0a4994c",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/297-compare.png",
@@ -432,13 +480,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/297-ref.png",
       "source_commit": "d79b9fcdd8431a78e06d614a183b099ffa823be1",
       "environment": "cracked volcanic basalt + warm low-left key",
-      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 300,
       "sku": "NM-3574",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/300/300-luxury-4x5.png",
       "commit": "f17132eed49c87210562971b8dad805ffbd7a8fb",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/300-compare.png",
@@ -447,13 +497,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/300-ref.png",
       "source_commit": "96d35bb8b05d47ee06c78054d21af94218e5cdee",
       "environment": "polished obsidian + twin rear rim lines (sculptural)",
-      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 303,
       "sku": "NM-3573",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/303/303-luxury-4x5.png",
       "commit": "33197fd0ab1be4affe1f365bad833e4901b48e8a",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/303-compare.png",
@@ -462,13 +514,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/303-ref.png",
       "source_commit": "3c3aa62129dad879955be6daa59172c04ce998f6",
       "environment": "olive-bronze glazed ceramic + warm low-left key",
-      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 306,
       "sku": "NM-3572",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/306/306-luxury-4x5.png",
       "commit": "bfa5e63255b3acaa7fd1b748d3024857ae1395a1",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/306-compare.png",
@@ -477,13 +531,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/306-ref.png",
       "source_commit": "044e6302d2d11b82343e5d1c980e6f92670aedd8",
       "environment": "smoked plum glass + soft back-right rim",
-      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 309,
       "sku": "NM-3571",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/309/309-luxury-4x5.png",
       "commit": "c82948b9a5d41b21e1b5317d150bd4a2ab2fc696",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/309-compare.png",
@@ -492,13 +548,15 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/309-ref.png",
       "source_commit": "fd1e31dca40b4226ea2075afbc7c00dafa716850",
       "environment": "raw hematite mineral slab + warm low-right key",
-      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     },
     {
       "pid": 312,
       "sku": "NM-3570",
-      "status": "GENERATED_PENDING_REVIEW",
+      "status": "APPROVED",
       "file": "media/social/luxury-20260911/luxury-v2/312/312-luxury-4x5.png",
       "commit": "04af7a1028678ef3daf5acefd5fa6a168a68106e",
       "qa": "media/social/luxury-20260911/luxury-v2/qa/312-compare.png",
@@ -507,8 +565,10 @@
       "source_saved": "media/social/luxury-20260911/luxury-v2/source/312-ref.png",
       "source_commit": "79f30b2872cbea639c6bdd15b12eb9f4cc1f05a3",
       "environment": "brushed gunmetal plate + cool low-left key + blue background accent",
-      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
-      "run": "luxury-v2-20260915"
+      "note": "APPROVED by owner (2026-09-15)",
+      "run": "luxury-v2-20260915",
+      "approved_by": "owner",
+      "approved_at": "2026-09-15"
     }
   ],
   "rejected": [
@@ -528,5 +588,6 @@
       "attempt2": "media/social/luxury-20260911/luxury-v2/qa/93-engraving-review-attempt2.png",
       "sha": "b8b45fbed45f2966428072e0904ecbfee7672c98"
     }
-  }
+  },
+  "approved_count": 30
 }
