@@ -776,6 +776,20 @@
       "note": "crackled blue stone and vine bezel preserved; environment changed only - owner review at 300%"
     },
     {
+      "pid": 205,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/205-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/205/205-luxury-4x5.png",
+      "sha": "8d85ae2cc335e0f444e4dbc43e1fdb72a0e7c76f",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/205-compare.png",
+      "review_sha": "0027325b3a4439802dd388c11c1106386485d3bb",
+      "run": "luxury-v2-20260915",
+      "environment": "glossy black glazed ceramic tiles + broad low right-back light with mirror reflection",
+      "note": "banded amber cabochon preserved; mirror reflection added on the glossy tile - owner review at 300%"
+    },
+    {
       "pid": 208,
       "angle": "A",
       "ratio": "4x5",
