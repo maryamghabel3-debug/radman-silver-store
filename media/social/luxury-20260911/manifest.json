@@ -1722,6 +1722,20 @@
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
     },
     {
+      "pid": 354,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/354-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/354/354-hand-4x5.png",
+      "sha": "bd7c64f8f68b3392430791f17314593d25907753",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/354-hand-compare.png",
+      "review_sha": "95a7fa2d45214044e0232906eef79f31f0b210b0",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · green-brown suit cuff · antique map room, open atlas (natural)",
+      "note": "khaki-green agate kept exactly - review at 300%"
+    },
+    {
       "pid": 357,
       "angle": "LUXURY",
       "ratio": "4x5",
