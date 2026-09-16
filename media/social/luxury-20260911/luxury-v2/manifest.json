@@ -569,6 +569,21 @@
       "run": "luxury-v2-20260915",
       "approved_by": "owner",
       "approved_at": "2026-09-15"
+    },
+    {
+      "pid": 315,
+      "sku": "NM-3569",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/315/315-luxury-4x5.png",
+      "commit": "61f9705ac6b6ae2148178a881a31d19684f16c54",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/315-compare.png",
+      "qa_commit": "f4684997626fb3972b3d9fe4079cd68b58059979",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/315-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/315-ref.png",
+      "source_commit": "f18d88707e3223f80d000b7a9f77a50980ff5d93",
+      "environment": "smoked oak + hard ribbon light along the chatoyant band",
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
