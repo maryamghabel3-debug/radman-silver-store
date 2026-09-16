@@ -648,6 +648,21 @@
       "environment": "balanced frame · dark suit cuff · caravanserai brick niche with brass oil lamp (natural)",
       "note": "engraved «یا ابا عبدالله» is the key element: kept, verify at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 369,
+      "sku": "NM-3551",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/369/369-hand-4x5.png",
+      "commit": "d0b7784957c102a71ba3985738e461a9fc9ea53c",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/369-hand-compare.png",
+      "qa_commit": "153cacd5a7d70773572e56e71d06240535296701",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/369-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/369-ref.png",
+      "source_commit": "8d8ae1dd007ee49bb2033f615db08c234662a608",
+      "environment": "balanced frame · dark suit cuff · old stone threshold step with oil lantern at night (natural)",
+      "note": "engraved «یا ابا عبدالله» on yellow agate is the key element: kept, verify at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
