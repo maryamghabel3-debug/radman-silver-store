@@ -802,12 +802,12 @@
       "status": "GENERATED_PENDING_REVIEW",
       "source": "https://radmansilver.ir/wp-content/uploads/2026/08/208-A-step1.webp",
       "file": "media/social/luxury-20260911/luxury-v2/208/208-hand-4x5.png",
-      "sha": "0e6453265c43d6beef6511346eae98d748585bcc",
+      "sha": "c20e18f053180513a1ab292a9a074ef8e49612c6",
       "review": "media/social/luxury-20260911/luxury-v2/qa/208-hand-compare.png",
-      "review_sha": "7a2dbc321972b28fbe35016c69032b74f80f8235",
+      "review_sha": "05527f76f142e92a7936446fcc63770bb72c4a72",
       "run": "luxury-hand-20260916",
-      "environment": "tight close-up · dark grey suit · travertine window ledge, daylight from left (natural)",
-      "note": "tight-frame re-render; durr-e-najaf dome unchanged - owner review at 300%"
+      "environment": "balanced frame · whole hand + grey suit cuff · travertine ledge, daylight left (natural)",
+      "note": "balanced re-render; durr-e-najaf dome unchanged - review at 300%"
     },
     {
       "pid": 211,
