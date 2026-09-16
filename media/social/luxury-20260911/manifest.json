@@ -742,6 +742,20 @@
       "status": "GENERATED_PENDING_REVIEW"
     },
     {
+      "pid": 199,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/199-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/199/199-luxury-4x5.png",
+      "sha": "41a371718fb40272c5a48a2224fa50c55c360b37",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/199-compare.png",
+      "review_sha": "608755a1b5eaea9b125245145eab062ebc199a2d",
+      "run": "luxury-v2-20260915",
+      "environment": "dark charcoal soapstone slab + soft low side light from left",
+      "note": "pale pink cabochon tone preserved; scroll shank and script kept - owner review at 300%"
+    },
+    {
       "pid": 202,
       "angle": "A",
       "ratio": "4x5",
