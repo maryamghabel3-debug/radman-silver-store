@@ -710,6 +710,20 @@
       "run": "luxury-v2-20260915",
       "environment": "cracked volcanic basalt + warm low-left key",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
+    },
+    {
+      "pid": 300,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/300-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/300/300-luxury-4x5.png",
+      "sha": "f17132eed49c87210562971b8dad805ffbd7a8fb",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/300-compare.png",
+      "review_sha": "a32061a81e10c9e1cc77708122c2b03633120a80",
+      "run": "luxury-v2-20260915",
+      "environment": "polished obsidian + twin rear rim lines (sculptural)",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
