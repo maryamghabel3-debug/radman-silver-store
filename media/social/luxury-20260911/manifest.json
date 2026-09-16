@@ -794,6 +794,20 @@
       "run": "luxury-v2-20260915",
       "environment": "smoked oak + hard ribbon light along the chatoyant band",
       "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required."
+    },
+    {
+      "pid": 318,
+      "angle": "LUXURY",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/318-A-step1-1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/318/318-luxury-4x5.png",
+      "sha": "b59303ee53fccb2379484e33d063f1ef8e013f8c",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/318-compare.png",
+      "review_sha": "65a6df8e72bc058fcff7656d94d971b93b48a33e",
+      "run": "luxury-v2-20260915",
+      "environment": "recessed stone niche + broad shadowless front-left panel",
+      "note": "Pose/stone/mount from source photo; fine detail re-rendered by model (same motif) - owner review at 300% required."
     }
   ],
   "run_step3_remaining_20260915": true
