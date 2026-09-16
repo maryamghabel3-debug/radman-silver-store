@@ -1000,6 +1000,20 @@
       "note": "APPROVED by owner (2026-09-15)"
     },
     {
+      "pid": 256,
+      "angle": "LUXURY-HAND",
+      "ratio": "4x5",
+      "status": "GENERATED_PENDING_REVIEW",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/256-A-step1.webp",
+      "file": "media/social/luxury-20260911/luxury-v2/256/256-hand-4x5.png",
+      "sha": "82a10c193fff32154bb42b23398078d765f69578",
+      "review": "media/social/luxury-20260911/luxury-v2/qa/256-hand-compare.png",
+      "review_sha": "372d33b8ee1af6850b1b8c805866de888f635127",
+      "run": "luxury-hand-20260916",
+      "environment": "balanced frame · whole hand + black suit cuff · grand piano lid, dark music room (natural)",
+      "note": "engraved divine-names script is the key element: kept, please verify letterforms at 300%"
+    },
+    {
       "pid": 259,
       "angle": "LUXURY-HAND",
       "ratio": "4x5",
