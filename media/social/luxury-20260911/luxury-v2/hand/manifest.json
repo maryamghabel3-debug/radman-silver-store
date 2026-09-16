@@ -318,6 +318,21 @@
       "environment": "balanced frame · whole hand + black suit cuff · mahogany edge by a marble chess set (natural)",
       "note": "engraved «عین علی» calligraphy is the key element: kept, verify at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 297,
+      "sku": "NM-3575",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/297/297-hand-4x5.png",
+      "commit": "0b9d708c986750af603a8ca875d67837a3de03d2",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/297-hand-compare.png",
+      "qa_commit": "2f71efc42b907736d87536f2a1f385441e8cb747",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/297-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/297-ref.png",
+      "source_commit": "e0c078af787dbae291c87b96677f66a20565a6bf",
+      "environment": "balanced frame · whole hand + charcoal suit cuff · wool roll on an atelier cutting table (natural)",
+      "note": "yellow damele dome + pointed prongs kept exactly - review at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
