@@ -439,15 +439,15 @@
       "pid": 147,
       "angle": "LUXURY",
       "ratio": "4x5",
-      "status": "FAILED_QA",
+      "status": "GENERATED_PENDING_REVIEW",
       "source": "https://radmansilver.ir/wp-content/uploads/2026/08/01-21.webp",
       "file": "media/social/luxury-20260911/luxury-v2/147/147-luxury-4x5.png",
-      "sha": "2dffc8e8d5adacfd05fc53be46665b84388be008",
+      "sha": "d51ddca534d7062773043c6698a984af1af7054f",
       "review": "media/social/luxury-20260911/luxury-v2/qa/147-compare.png",
-      "review_sha": "30df38303cfa93b268564b4043c6bae82875b021",
+      "review_sha": "6d4b774cb6c4d1366ee7e85012fe3135db1131b7",
       "run": "luxury-v2-20260915",
-      "environment": "matte dark bronze-brown stone, museum vitrine, warm grazing beam, no mirror reflection",
-      "note": "Owner review (2026-09-15): engraving changed vs source — FAILED_QA. Pending owner decision on re-shoot."
+      "environment": "warm grey travertine + soft low-right key (REBUILD after FAILED_QA)",
+      "note": "Rebuild/upgrade: pose/stone/shank from source photo; engraved script kept to source wording - owner review at 300% required."
     },
     {
       "pid": 151,
