@@ -434,6 +434,21 @@
       "environment": "cracked volcanic basalt + warm low-left key",
       "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
       "run": "luxury-v2-20260915"
+    },
+    {
+      "pid": 300,
+      "sku": "NM-3574",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/300/300-luxury-4x5.png",
+      "commit": "f17132eed49c87210562971b8dad805ffbd7a8fb",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/300-compare.png",
+      "qa_commit": "a32061a81e10c9e1cc77708122c2b03633120a80",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/300-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/300-ref.png",
+      "source_commit": "96d35bb8b05d47ee06c78054d21af94218e5cdee",
+      "environment": "polished obsidian + twin rear rim lines (sculptural)",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
