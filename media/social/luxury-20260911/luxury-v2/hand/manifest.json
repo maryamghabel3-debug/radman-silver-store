@@ -528,6 +528,21 @@
       "environment": "balanced frame · navy suit cuff · teak rail of a classic boat at golden hour (natural)",
       "note": "minimal black agate kept exactly - review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 339,
+      "sku": "NM-3561",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/339/339-hand-4x5.png",
+      "commit": "ca3da94c1781d5397ac8fa08e925203d3e6a97da",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/339-hand-compare.png",
+      "qa_commit": "cb0bf654ab07096b5098abc92dd90989e7bd1940",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/339-A-step2.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/339-ref.png",
+      "source_commit": "937fefbb397a8307845bc0bce5aa845afc82253d",
+      "environment": "balanced frame · dark suit cuff · potter's wheel bench in a studio (natural)",
+      "note": "suleimani banding kept exactly - review at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
