@@ -498,6 +498,21 @@
       "environment": "balanced frame · brown suit cuff · teahouse brass tray beside a samovar (natural)",
       "note": "shajar single-flower pattern kept exactly - review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 333,
+      "sku": "NM-3563",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/333/333-hand-4x5.png",
+      "commit": "afd3d09674704922af60b15699599fbcb851dcb5",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/333-hand-compare.png",
+      "qa_commit": "e8cddd1c89103a502153b6659c219d6380e0385f",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/333-A-step1-1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/333-ref.png",
+      "source_commit": "0ef79ca01d3b86abbc10c011fe37ce7cb6c06eab",
+      "environment": "balanced frame · dark suit cuff · bookbinding press with linen paper (natural)",
+      "note": "glossy yellow agate kept exactly - review at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
