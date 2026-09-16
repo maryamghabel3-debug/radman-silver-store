@@ -618,6 +618,21 @@
       "environment": "balanced frame · dark suit cuff · watch collector's desk, green leather pad + loupe (natural)",
       "note": "silver ring form and link/engraved detailing kept exactly - review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 363,
+      "sku": "NM-3553",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/363/363-hand-4x5.png",
+      "commit": "4df731122fd1679551703a846392778e135cc01f",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/363-hand-compare.png",
+      "qa_commit": "281cdc93e5422edc5dea368101db9814518572f6",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/363-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/363-ref.png",
+      "source_commit": "f02aa9d2e0795642dd04cdbc086bc35161fd46ca",
+      "environment": "balanced frame · dark suit cuff · orsi screen sill, patterned light (natural)",
+      "note": "engraved «حسین منی» is the key element: kept, verify at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
