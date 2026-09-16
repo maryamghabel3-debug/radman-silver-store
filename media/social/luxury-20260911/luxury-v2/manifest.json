@@ -705,6 +705,21 @@
       "run": "luxury-v2-20260915",
       "approved_by": "owner",
       "approved_at": "2026-09-15"
+    },
+    {
+      "pid": 339,
+      "sku": "NM-3561",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/339/339-luxury-4x5.png",
+      "commit": "ebc88a672c9763bdb8bc8dbee210b7c7f262a85c",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/339-compare.png",
+      "qa_commit": "0915bac1b93d02d9859ec716deb5d90178dc88b4",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/339-A-step2.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/339-ref.png",
+      "source_commit": "53f77c2fed6bd798806285351b03641a92e74243",
+      "environment": "dusty volcanic tuff + warm narrow raking beam (reveals the agate banding)",
+      "note": "Pose/stone/shank from source photo; fine engraving micro-detail re-rendered by model (same motif) - owner review at 300% required.",
+      "run": "luxury-v2-20260915"
     }
   ],
   "rejected": [
