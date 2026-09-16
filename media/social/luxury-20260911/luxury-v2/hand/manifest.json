@@ -48,6 +48,21 @@
       "environment": "man's hand + tailored navy suit sleeve + black quilted leather + cool rim behind-right, soft low fill L",
       "note": "ring worn on hand; amber cabochon and tooth-prong setting kept; leather adds rim separation - owner review at 300%",
       "run": "luxury-hand-20260916"
+    },
+    {
+      "pid": 265,
+      "sku": "12184564",
+      "status": "GENERATED_PENDING_REVIEW",
+      "file": "media/social/luxury-20260911/luxury-v2/265/265-hand-4x5.png",
+      "commit": "ea6189663bd6c0c03a23c12a0c07efd0d4b54072",
+      "qa": "media/social/luxury-20260911/luxury-v2/qa/265-hand-compare.png",
+      "qa_commit": "2aee2fb2f31b0d481aa66026a01d0f51c8a85d47",
+      "source": "https://radmansilver.ir/wp-content/uploads/2026/08/265-A-step1.webp",
+      "source_saved": "media/social/luxury-20260911/luxury-v2/source/265-ref.png",
+      "source_commit": "c0f099c89458aa1e63097971b50a1f5c446e23a9",
+      "environment": "man's hand + dark jacket sleeve + deep emerald marble ledge + cool rim back-left, warm frontal fill",
+      "note": "ring worn on hand; the engraved «امیری حسین» panel is the key element - please check the letterforms at 300%",
+      "run": "luxury-hand-20260916"
     }
   ]
 }
