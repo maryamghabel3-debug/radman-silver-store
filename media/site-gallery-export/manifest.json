@@ -2301,5 +2301,27 @@
    "DEPLOY_ROWS": 63
   },
   "note": "single download bundle for the owner; the 6 batch2 files are cleaned-logo pilots for controlled Draft replacement (nothing published)"
+ },
+ "full_bundle_release": {
+  "file": "radman-full-step3-step4-20260917.zip",
+  "release_url": "https://github.com/maryamghabel3-debug/radman-silver-store/releases/tag/radman-full-step3-step4-20260917",
+  "download_url": "https://github.com/maryamghabel3-debug/radman-silver-store/releases/download/radman-full-step3-step4-20260917/radman-full-step3-step4-20260917.zip",
+  "size_bytes": 166446433,
+  "sha256": "f408cc856518cd6824f13169128af719ffd9cde4d8b7ca365e9f5bac7cdcea02",
+  "attached_to_commit": "a9ac641550644e54d640410709a6ae11dc5d6a3b",
+  "contents": {
+   "step3_v3": 10,
+   "step3_studio_approved": 38,
+   "step4": 47,
+   "images_total": 95
+  },
+  "verified": {
+   "ZIP_INTEGRITY": "PASS",
+   "IMAGE_DECODE": "95/95",
+   "CHECKSUMS": "PASS",
+   "DEPLOY_ROWS": 95
+  },
+  "skipped_known_already_attached": 42,
+  "note": "single download bundle; supersedes the earlier 63-image release as the complete set (adds the 38 agent-built studio images approved 2026-09-15)"
  }
 }
