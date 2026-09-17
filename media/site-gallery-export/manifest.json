@@ -2280,5 +2280,26 @@
    ],
    "supersedes_nothing": "the earlier 10 files stay FAILED_QA and their archive stays NOT_FOR_DEPLOY"
   }
- ]
+ ],
+ "bundle_release": {
+  "file": "radman-approved-media-20260917.zip",
+  "release_url": "https://github.com/maryamghabel3-debug/radman-silver-store/releases/tag/radman-approved-media-20260917",
+  "download_url": "https://github.com/maryamghabel3-debug/radman-silver-store/releases/download/radman-approved-media-20260917/radman-approved-media-20260917.zip",
+  "size_bytes": 107617493,
+  "sha256": "29951a1a69b81e70dcc95c2bd8c699e9cdb041d8ac1f1996a4fc8d08e64028a7",
+  "attached_to_commit": "81283b033da8401050dae9092a566c1e75cfa82f",
+  "contents": {
+   "step4": 47,
+   "step3_v3": 10,
+   "batch2_approved_pilot": 6,
+   "images_total": 63
+  },
+  "verified": {
+   "ZIP_INTEGRITY": "PASS",
+   "IMAGE_DECODE": "63/63",
+   "CHECKSUMS": "PASS",
+   "DEPLOY_ROWS": 63
+  },
+  "note": "single download bundle for the owner; the 6 batch2 files are cleaned-logo pilots for controlled Draft replacement (nothing published)"
+ }
 }
