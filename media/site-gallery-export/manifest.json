@@ -10,19 +10,21 @@
   "gallery_order": "keep the current main/gallery image; append new Step3 first, then new Step4 (rule 8)"
  },
  "summary": {
-  "step3_files_exported": 10,
-  "step3_unique_products_exported": 6,
+  "step3_files_exported": 0,
+  "step3_unique_products_exported": 0,
   "step3_held_ambiguous": 3,
   "step3_known_already_attached": 42,
   "step4_files_exported": 47,
   "step4_unique_products_exported": 47,
   "step4_with_both_A_and_B": 0,
   "step4_single_angle": 47,
-  "step3_owner_approved_for_append": 10,
+  "step3_owner_approved_for_append": 0,
   "step4_owner_approved_for_append": 47,
   "step4_released_from_hold": 47,
   "held_ambiguous_not_exported": 3,
-  "skipped_already_attached": 42
+  "skipped_already_attached": 42,
+  "step3_rejected_by_owner": 10,
+  "STEP3_NEW_DEPLOYABLE": 0
  },
  "items": [
   {
@@ -76,10 +78,10 @@
    "height": 1350,
    "actual_format": "PNG",
    "sha256": "3a4de937670a17c24315f11ec74792b158dcad3beeaa58fdcda762cccc64d6c2",
-   "notes": "new Step3 output not previously attached; owner approved the Step3+Step4 deploy (2026-09-17); appended after the current gallery image (rule 8).",
-   "qa_status": "OWNER_APPROVED",
-   "owner_approval_status": "OWNER_APPROVED",
-   "deployment_action": "APPEND_TO_GALLERY_AFTER_APPROVAL",
+   "notes": "IDENTITY_DRIFT: engraving and/or shank changed",
+   "qa_status": "FAILED_QA",
+   "owner_approval_status": "OWNER_REJECTED",
+   "deployment_action": "DO_NOT_DEPLOY",
    "export_path": "step3/61-B-step3.png"
   },
   {
@@ -95,10 +97,10 @@
    "height": 1350,
    "actual_format": "PNG",
    "sha256": "961e07cc47dd0e4095b21152226847aa190f83489d8218ab21ef4c6f6730dd91",
-   "notes": "new Step3 output not previously attached; owner approved the Step3+Step4 deploy (2026-09-17); appended after the current gallery image (rule 8).",
-   "qa_status": "OWNER_APPROVED",
-   "owner_approval_status": "OWNER_APPROVED",
-   "deployment_action": "APPEND_TO_GALLERY_AFTER_APPROVAL",
+   "notes": "IDENTITY_DRIFT: engraving and/or shank changed",
+   "qa_status": "FAILED_QA",
+   "owner_approval_status": "OWNER_REJECTED",
+   "deployment_action": "DO_NOT_DEPLOY",
    "export_path": "step3/65-A-step3.png"
   },
   {
@@ -114,10 +116,10 @@
    "height": 1350,
    "actual_format": "PNG",
    "sha256": "b2e4115f8cf8b25b94a19d3824fe7c8b46f3a409fa7690845f6d7cff3a341432",
-   "notes": "new Step3 output not previously attached; owner approved the Step3+Step4 deploy (2026-09-17); appended after the current gallery image (rule 8).",
-   "qa_status": "OWNER_APPROVED",
-   "owner_approval_status": "OWNER_APPROVED",
-   "deployment_action": "APPEND_TO_GALLERY_AFTER_APPROVAL",
+   "notes": "IDENTITY_DRIFT: engraving and/or shank changed",
+   "qa_status": "FAILED_QA",
+   "owner_approval_status": "OWNER_REJECTED",
+   "deployment_action": "DO_NOT_DEPLOY",
    "export_path": "step3/65-B-step3.png"
   },
   {
@@ -133,10 +135,10 @@
    "height": 1350,
    "actual_format": "PNG",
    "sha256": "aea848b5a0b3e884ba5a6ff2c626911d42f5a53ae23c034c73d594d2ac860c5a",
-   "notes": "new Step3 output not previously attached; owner approved the Step3+Step4 deploy (2026-09-17); appended after the current gallery image (rule 8).",
-   "qa_status": "OWNER_APPROVED",
-   "owner_approval_status": "OWNER_APPROVED",
-   "deployment_action": "APPEND_TO_GALLERY_AFTER_APPROVAL",
+   "notes": "IDENTITY_DRIFT: engraving and/or shank changed",
+   "qa_status": "FAILED_QA",
+   "owner_approval_status": "OWNER_REJECTED",
+   "deployment_action": "DO_NOT_DEPLOY",
    "export_path": "step3/69-A-step3.png"
   },
   {
@@ -152,10 +154,10 @@
    "height": 1350,
    "actual_format": "PNG",
    "sha256": "0a34f08f0421f596526aa131d7ed81bbbc52c87806402f06338c55caa27867fe",
-   "notes": "new Step3 output not previously attached; owner approved the Step3+Step4 deploy (2026-09-17); appended after the current gallery image (rule 8).",
-   "qa_status": "OWNER_APPROVED",
-   "owner_approval_status": "OWNER_APPROVED",
-   "deployment_action": "APPEND_TO_GALLERY_AFTER_APPROVAL",
+   "notes": "IDENTITY_DRIFT: engraving and/or shank changed",
+   "qa_status": "FAILED_QA",
+   "owner_approval_status": "OWNER_REJECTED",
+   "deployment_action": "DO_NOT_DEPLOY",
    "export_path": "step3/69-B-step3.png"
   },
   {
@@ -171,10 +173,10 @@
    "height": 1350,
    "actual_format": "PNG",
    "sha256": "855070f60fcdcb22076dfe51e4e80daf4c426ea9ba54983c502f4e31f1210cb1",
-   "notes": "new Step3 output not previously attached; owner approved the Step3+Step4 deploy (2026-09-17); appended after the current gallery image (rule 8).",
-   "qa_status": "OWNER_APPROVED",
-   "owner_approval_status": "OWNER_APPROVED",
-   "deployment_action": "APPEND_TO_GALLERY_AFTER_APPROVAL",
+   "notes": "IDENTITY_DRIFT: engraving and/or shank changed",
+   "qa_status": "FAILED_QA",
+   "owner_approval_status": "OWNER_REJECTED",
+   "deployment_action": "DO_NOT_DEPLOY",
    "export_path": "step3/73-A-step3.png"
   },
   {
@@ -190,10 +192,10 @@
    "height": 1350,
    "actual_format": "PNG",
    "sha256": "5c3131af8571b972a3e277a92562784e67e3e8038d60827274985dff15c9c87f",
-   "notes": "new Step3 output not previously attached; owner approved the Step3+Step4 deploy (2026-09-17); appended after the current gallery image (rule 8).",
-   "qa_status": "OWNER_APPROVED",
-   "owner_approval_status": "OWNER_APPROVED",
-   "deployment_action": "APPEND_TO_GALLERY_AFTER_APPROVAL",
+   "notes": "IDENTITY_DRIFT: engraving and/or shank changed",
+   "qa_status": "FAILED_QA",
+   "owner_approval_status": "OWNER_REJECTED",
+   "deployment_action": "DO_NOT_DEPLOY",
    "export_path": "step3/73-B-step3.png"
   },
   {
@@ -209,10 +211,10 @@
    "height": 1350,
    "actual_format": "PNG",
    "sha256": "0d5d4c44d9d39e8fde6c1e77b225a9ad96fff746e5d9ce2eb0faa4ddceafdef2",
-   "notes": "new Step3 output not previously attached; owner approved the Step3+Step4 deploy (2026-09-17); appended after the current gallery image (rule 8).",
-   "qa_status": "OWNER_APPROVED",
-   "owner_approval_status": "OWNER_APPROVED",
-   "deployment_action": "APPEND_TO_GALLERY_AFTER_APPROVAL",
+   "notes": "IDENTITY_DRIFT: engraving and/or shank changed",
+   "qa_status": "FAILED_QA",
+   "owner_approval_status": "OWNER_REJECTED",
+   "deployment_action": "DO_NOT_DEPLOY",
    "export_path": "step3/77-A-step3.png"
   },
   {
@@ -228,10 +230,10 @@
    "height": 1350,
    "actual_format": "PNG",
    "sha256": "ada674cc193e4d62d06ed3c2dc17e4e05dcc3682cec06c815414e8faf2b83a7c",
-   "notes": "new Step3 output not previously attached; owner approved the Step3+Step4 deploy (2026-09-17); appended after the current gallery image (rule 8).",
-   "qa_status": "OWNER_APPROVED",
-   "owner_approval_status": "OWNER_APPROVED",
-   "deployment_action": "APPEND_TO_GALLERY_AFTER_APPROVAL",
+   "notes": "IDENTITY_DRIFT: engraving and/or shank changed",
+   "qa_status": "FAILED_QA",
+   "owner_approval_status": "OWNER_REJECTED",
+   "deployment_action": "DO_NOT_DEPLOY",
    "export_path": "step3/77-B-step3.png"
   },
   {
@@ -779,10 +781,10 @@
    "height": 1152,
    "actual_format": "PNG",
    "sha256": "41272ffe274443c8ae6ad2ec230014febb30f1203e24d9a4763f6fae844d8ad5",
-   "notes": "new Step3 output not previously attached; owner approved the Step3+Step4 deploy (2026-09-17); appended after the current gallery image (rule 8).",
-   "qa_status": "OWNER_APPROVED",
-   "owner_approval_status": "OWNER_APPROVED",
-   "deployment_action": "APPEND_TO_GALLERY_AFTER_APPROVAL",
+   "notes": "IDENTITY_DRIFT: engraving and/or shank changed",
+   "qa_status": "FAILED_QA",
+   "owner_approval_status": "OWNER_REJECTED",
+   "deployment_action": "DO_NOT_DEPLOY",
    "export_path": "step3/256-A-step3.png"
   },
   {
@@ -1972,5 +1974,45 @@
   "deploy": "performed by the owner from the host - the agent does not connect to the site",
   "images_untouched": "no image was regenerated, edited, re-encoded or replaced by this update (manifest-only)"
  },
- "gallery_order": "keep the current main/gallery image -> append the approved Step3 images (10 files / 6 products) -> then the approved Step4 on-hand shots (47 files / 47 products)"
+ "gallery_order": "keep the current main/gallery image -> append the approved Step4 on-hand shots (47 files / 47 products). No Step3 file is deployable now.",
+ "dist_archives": {
+  "step3-site-export.zip": {
+   "path": "media/site-gallery-export/dist/step3-site-export.zip",
+   "size_bytes": 17393829,
+   "sha256": "495ef6c855dd02cd27d853e10697fad8ab8b81036e254493cfc19e15f6768c32",
+   "status": "NOT_FOR_DEPLOY",
+   "reason": "the 10 Step3 files it contains were rejected by the owner on 2026-09-17 (IDENTITY_DRIFT)",
+   "note": "file left in place for the audit trail, not deleted and not rebuilt per owner instruction"
+  },
+  "step4-site-export.zip": {
+   "path": "media/site-gallery-export/dist/step4-site-export.zip.part-00 … part-04",
+   "size_bytes": 99803620,
+   "sha256_after_join": "525231ba15a1cbd4c69b0b22afd864554e3fc93c69855377037ec8c1f8f34ac4",
+   "status": "UNCHANGED_FROM_APPROVED_2026-09-17",
+   "reason": "this correction concerns Step3 only"
+  }
+ },
+ "corrections": [
+  {
+   "date": "2026-09-17",
+   "scope": "Step3 only",
+   "action": "the 10 new Step3 files are rejected; the earlier general approval no longer covers them",
+   "rejected_count": 10,
+   "rejected": [
+    "61-B",
+    "65-A",
+    "65-B",
+    "69-A",
+    "69-B",
+    "73-A",
+    "73-B",
+    "77-A",
+    "77-B",
+    "256-A"
+   ],
+   "reason": "IDENTITY_DRIFT: engraving and/or shank changed",
+   "step4": "untouched - its approval and files stay as they were",
+   "step3_archive": "marked NOT_FOR_DEPLOY; no new archive is built"
+  }
+ ]
 }
