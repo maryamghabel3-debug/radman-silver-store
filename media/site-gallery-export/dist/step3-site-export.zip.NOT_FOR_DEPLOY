@@ -1,0 +1,12 @@
+NOT_FOR_DEPLOY
+media/site-gallery-export/dist/step3-site-export.zip
+
+The 10 Step3 files inside this archive were rejected by the owner on 2026-09-17:
+  REJECTED: 61-B, 65-A, 65-B, 69-A, 69-B, 73-A, 73-B, 77-A, 77-B, 256-A
+  reason: IDENTITY_DRIFT: engraving and/or shank changed
+  qa_status=FAILED_QA · owner_approval_status=OWNER_REJECTED · deployment_action=DO_NOT_DEPLOY
+
+Do not deploy, extract for upload, or redistribute this archive.
+It is kept in place for the audit trail only (not deleted, not rebuilt).
+archive sha256: 495ef6c855dd02cd27d853e10697fad8ab8b81036e254493cfc19e15f6768c32
+STEP3_NEW_DEPLOYABLE=0
