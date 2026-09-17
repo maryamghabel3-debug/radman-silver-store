@@ -15,12 +15,12 @@
    "height": 1350,
    "actual_format": "PNG",
    "sha256": "bf10965ccaa9cba30b7b6cada70d4046f4f28462bee440cc2ecc0442f4e9d500",
-   "qa_status": "GENERATED_PENDING_REVIEW",
-   "owner_approval_status": "PENDING_OWNER_REVIEW",
-   "deployment_action": "HOLD_PENDING_OWNER_APPROVAL",
+   "qa_status": "OWNER_APPROVED",
+   "owner_approval_status": "OWNER_APPROVED",
+   "deployment_action": "APPEND_TO_GALLERY_AFTER_APPROVAL",
    "compare_sheet": "media/social/luxury-20260911/luxury-v2/qa/65-A-v3-compare.png",
    "attempts": 2,
-   "notes": "pilot pair: engraving (white Persian calligraphy) is a reconstruction — highest drift risk; owner reviewing"
+   "notes": "owner accepted 2026-09-17 because the real product photo stays on the site as the identity reference. pilot pair: engraving (white Persian calligraphy) is a reconstruction — highest drift risk; owner reviewing"
   },
   {
    "product_id": 65,
@@ -35,12 +35,12 @@
    "height": 1350,
    "actual_format": "PNG",
    "sha256": "2d0685f4807657e6009a540d91ea82d1e4800d924bb3faa1411f65ce12d80ba6",
-   "qa_status": "GENERATED_PENDING_REVIEW",
-   "owner_approval_status": "PENDING_OWNER_REVIEW",
-   "deployment_action": "HOLD_PENDING_OWNER_APPROVAL",
+   "qa_status": "OWNER_APPROVED",
+   "owner_approval_status": "OWNER_APPROVED",
+   "deployment_action": "APPEND_TO_GALLERY_AFTER_APPROVAL",
    "compare_sheet": "media/social/luxury-20260911/luxury-v2/qa/65-B-v3-compare.png",
    "attempts": 2,
-   "notes": "pilot pair: engraving (white Persian calligraphy) is a reconstruction — highest drift risk; owner reviewing"
+   "notes": "owner accepted 2026-09-17 because the real product photo stays on the site as the identity reference. pilot pair: engraving (white Persian calligraphy) is a reconstruction — highest drift risk; owner reviewing"
   },
   {
    "product_id": 61,
@@ -55,12 +55,12 @@
    "height": 1350,
    "actual_format": "PNG",
    "sha256": "25186c68c1f51913a6c3a698fd9d013f105f0afccab9208315e9a6a4e1e57fdc",
-   "qa_status": "GENERATED_PENDING_REVIEW",
-   "owner_approval_status": "PENDING_OWNER_REVIEW",
-   "deployment_action": "HOLD_PENDING_OWNER_APPROVAL",
+   "qa_status": "OWNER_APPROVED",
+   "owner_approval_status": "OWNER_APPROVED",
+   "deployment_action": "APPEND_TO_GALLERY_AFTER_APPROVAL",
    "compare_sheet": "media/social/luxury-20260911/luxury-v2/qa/61-B-v3-compare.png",
    "attempts": 1,
-   "notes": "white cameo portrait + red carnelian + sawtooth bezel reproduced; the portrait's fine internal detail and the pierced gallery pattern are a reconstruction, not identical (identity risk: MEDIUM)"
+   "notes": "owner accepted 2026-09-17 because the real product photo stays on the site as the identity reference. white cameo portrait + red carnelian + sawtooth bezel reproduced; the portrait's fine internal detail and the pierced gallery pattern are a reconstruction, not identical (identity risk: MEDIUM)"
   },
   {
    "product_id": 69,
@@ -75,12 +75,12 @@
    "height": 1350,
    "actual_format": "PNG",
    "sha256": "b11ad1335d4319d265b9d57a1b06cc54e8728a5caa37b4dff2eba63d5e037ae0",
-   "qa_status": "GENERATED_PENDING_REVIEW",
-   "owner_approval_status": "PENDING_OWNER_REVIEW",
-   "deployment_action": "HOLD_PENDING_OWNER_APPROVAL",
+   "qa_status": "OWNER_APPROVED",
+   "owner_approval_status": "OWNER_APPROVED",
+   "deployment_action": "APPEND_TO_GALLERY_AFTER_APPROVAL",
    "compare_sheet": "media/social/luxury-20260911/luxury-v2/qa/69-A-v3-compare.png",
    "attempts": 1,
-   "notes": "turquoise-blue colour and the fish/koi engraving match the reference motif; stroke detail and the beaded bezel line are approximated (identity risk: MEDIUM)"
+   "notes": "owner accepted 2026-09-17 because the real product photo stays on the site as the identity reference. turquoise-blue colour and the fish/koi engraving match the reference motif; stroke detail and the beaded bezel line are approximated (identity risk: MEDIUM)"
   },
   {
    "product_id": 69,
@@ -95,12 +95,12 @@
    "height": 1350,
    "actual_format": "PNG",
    "sha256": "43dc996d223e8f0b491123d751350366fa80fd8487d2bdd0672b32121eea907e",
-   "qa_status": "GENERATED_PENDING_REVIEW",
-   "owner_approval_status": "PENDING_OWNER_REVIEW",
-   "deployment_action": "HOLD_PENDING_OWNER_APPROVAL",
+   "qa_status": "OWNER_APPROVED",
+   "owner_approval_status": "OWNER_APPROVED",
+   "deployment_action": "APPEND_TO_GALLERY_AFTER_APPROVAL",
    "compare_sheet": "media/social/luxury-20260911/luxury-v2/qa/69-B-v3-compare.png",
    "attempts": 1,
-   "notes": "same as 69-A (paired scene): motif and colour match, fine stroke detail approximated (identity risk: MEDIUM)"
+   "notes": "owner accepted 2026-09-17 because the real product photo stays on the site as the identity reference. same as 69-A (paired scene): motif and colour match, fine stroke detail approximated (identity risk: MEDIUM)"
   },
   {
    "product_id": 73,
@@ -115,12 +115,12 @@
    "height": 1350,
    "actual_format": "PNG",
    "sha256": "838fd2b7b0ba5f6873f5adafcdf8a8e4cc522c75b759f138d7243e59c0d1c016",
-   "qa_status": "GENERATED_PENDING_REVIEW",
-   "owner_approval_status": "PENDING_OWNER_REVIEW",
-   "deployment_action": "HOLD_PENDING_OWNER_APPROVAL",
+   "qa_status": "OWNER_APPROVED",
+   "owner_approval_status": "OWNER_APPROVED",
+   "deployment_action": "APPEND_TO_GALLERY_AFTER_APPROVAL",
    "compare_sheet": "media/social/luxury-20260911/luxury-v2/qa/73-A-v3-compare.png",
    "attempts": 1,
-   "notes": "orange carnelian with the engraved relief reproduced; relief detail slightly simplified (identity risk: MEDIUM)"
+   "notes": "owner accepted 2026-09-17 because the real product photo stays on the site as the identity reference. orange carnelian with the engraved relief reproduced; relief detail slightly simplified (identity risk: MEDIUM)"
   },
   {
    "product_id": 73,
@@ -135,12 +135,12 @@
    "height": 1350,
    "actual_format": "PNG",
    "sha256": "8d671bdc5b9f46fbba23abd14f5f683318cbc453548b73357e3a3b057e95fc0a",
-   "qa_status": "GENERATED_PENDING_REVIEW",
-   "owner_approval_status": "PENDING_OWNER_REVIEW",
-   "deployment_action": "HOLD_PENDING_OWNER_APPROVAL",
+   "qa_status": "OWNER_APPROVED",
+   "owner_approval_status": "OWNER_APPROVED",
+   "deployment_action": "APPEND_TO_GALLERY_AFTER_APPROVAL",
    "compare_sheet": "media/social/luxury-20260911/luxury-v2/qa/73-B-v3-compare.png",
    "attempts": 1,
-   "notes": "same as 73-A (paired scene) (identity risk: MEDIUM)"
+   "notes": "owner accepted 2026-09-17 because the real product photo stays on the site as the identity reference. same as 73-A (paired scene) (identity risk: MEDIUM)"
   },
   {
    "product_id": 77,
@@ -155,12 +155,12 @@
    "height": 1350,
    "actual_format": "PNG",
    "sha256": "ff9895134d3fe17170c093edfcc45a56d6f15924e807d95a86f6fd4e423b1ea8",
-   "qa_status": "GENERATED_PENDING_REVIEW",
-   "owner_approval_status": "PENDING_OWNER_REVIEW",
-   "deployment_action": "HOLD_PENDING_OWNER_APPROVAL",
+   "qa_status": "OWNER_APPROVED",
+   "owner_approval_status": "OWNER_APPROVED",
+   "deployment_action": "APPEND_TO_GALLERY_AFTER_APPROVAL",
    "compare_sheet": "media/social/luxury-20260911/luxury-v2/qa/77-A-v3-compare.png",
    "attempts": 1,
-   "notes": "green agate with white calligraphy + dome/mosque motif reproduced; letterforms are a reconstruction (bolder than the engraving) — highest drift risk of this batch (identity risk: HIGH)"
+   "notes": "owner accepted 2026-09-17 because the real product photo stays on the site as the identity reference. green agate with white calligraphy + dome/mosque motif reproduced; letterforms are a reconstruction (bolder than the engraving) — highest drift risk of this batch (identity risk: HIGH)"
   },
   {
    "product_id": 77,
@@ -175,12 +175,12 @@
    "height": 1350,
    "actual_format": "PNG",
    "sha256": "5089c78ae4b928059631b57e347b32d173d73da96884d3e8b325c482d9256144",
-   "qa_status": "GENERATED_PENDING_REVIEW",
-   "owner_approval_status": "PENDING_OWNER_REVIEW",
-   "deployment_action": "HOLD_PENDING_OWNER_APPROVAL",
+   "qa_status": "OWNER_APPROVED",
+   "owner_approval_status": "OWNER_APPROVED",
+   "deployment_action": "APPEND_TO_GALLERY_AFTER_APPROVAL",
    "compare_sheet": "media/social/luxury-20260911/luxury-v2/qa/77-B-v3-compare.png",
    "attempts": 1,
-   "notes": "same as 77-A (paired scene): letterforms reconstructed (identity risk: HIGH)"
+   "notes": "owner accepted 2026-09-17 because the real product photo stays on the site as the identity reference. same as 77-A (paired scene): letterforms reconstructed (identity risk: HIGH)"
   },
   {
    "product_id": 256,
@@ -195,12 +195,12 @@
    "height": 1350,
    "actual_format": "PNG",
    "sha256": "d8deacaa0ccdd053e502678fca636c97e7621cb37678b27d67ab28ab2637e83d",
-   "qa_status": "GENERATED_PENDING_REVIEW",
-   "owner_approval_status": "PENDING_OWNER_REVIEW",
-   "deployment_action": "HOLD_PENDING_OWNER_APPROVAL",
+   "qa_status": "OWNER_APPROVED",
+   "owner_approval_status": "OWNER_APPROVED",
+   "deployment_action": "APPEND_TO_GALLERY_AFTER_APPROVAL",
    "compare_sheet": "media/social/luxury-20260911/luxury-v2/qa/256-A-v3-compare.png",
    "attempts": 1,
-   "notes": "plain polished yellow cabochon (no engraving in the reference) — stone colour is close; the shank ornament is a reconstruction (identity risk: LOW-MEDIUM)"
+   "notes": "owner accepted 2026-09-17 because the real product photo stays on the site as the identity reference. plain polished yellow cabochon (no engraving in the reference) — stone colour is close; the shank ornament is a reconstruction (identity risk: LOW-MEDIUM)"
   }
  ],
  "note": "Step3 v3 rebuild of the 10 rejected files, built from the real store photos (product_id + SKU verified, no ?p= redirects). All rows: GENERATED_PENDING_REVIEW — nothing is approved and nothing is deployable until the owner says so.",
@@ -209,10 +209,18 @@
   "pilot_requests_used": 4,
   "batch_requests_used": 8,
   "image_requests_used_total": 12,
-  "approved": 0,
+  "approved": 10,
   "superseded": "the earlier FAILED_QA pilot rows for 65 are replaced by GENERATED_PENDING_REVIEW on owner request"
  },
  "review_sheets": {
   "all_10": "media/social/luxury-20260911/luxury-v2/montage/step3-v3-all10.png"
+ },
+ "approval": {
+  "token": "APPROVE_STEP3_V3",
+  "scope": "STEP3_V3_ONLY",
+  "date": "2026-09-17",
+  "deploy": "performed by the owner from the host",
+  "package": "media/site-gallery-export/dist/step3-site-export-v3.zip",
+  "csv": "media/site-gallery-export/step3-v3/deploy-step3-v3.csv"
  }
 }
