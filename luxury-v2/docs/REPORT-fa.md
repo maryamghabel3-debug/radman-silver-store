@@ -314,3 +314,10 @@
 - مسیر: `media/site-gallery-export/` روی `ai-social-luxury-20260911` — manifest.json/csv، CHECKSUMS، README، REPORT-fa.md، کانتکت‌شیت‌های Step3 (۲ صفحه) و Step4 (۴ صفحه)، و `dist/` (zip Step3 تکی ۱۶.۶MB + zip Step4 در ۵ پارت ۲۰MB).
 - شمارش واقعی: Step3 جدید صادرشده ۱۰ فایل/۶ محصول (61-B 65-A 65-B 69-A 69-B 73-A 73-B 77-A 77-B 256-A) · SKIP قبلاً‌وصل‌شده ۴۲ · AMBIGUOUS ۳ · Step4 داخل دست ۴۷ فایل/۴۷ محصول (تک‌زاویه، hand_side نامعلوم).
 - ZIP_INTEGRITY=PASS · SITE_UNCHANGED=YES · انتشار روی سایت منتظر `APPROVE_STEP3_STEP4_SITE_DEPLOY`.
+
+
+## TRANSFER‑۲ — بستهٔ Step3 v3 تأییدشده (۲۰۲۶-۰۹-۱۷)
+- مالک ۱۰ فایل v3 را پذیرفت (توکن `APPROVE_STEP3_V3`) چون عکس اصلی محصول روی سایت می‌مانَد؛ همه در manifest و `luxury-v2/v3/manifest.json` → `OWNER_APPROVED`.
+- بستهٔ جدید: `media/site-gallery-export/dist/step3-site-export-v3.zip` (۱۸.۴MB، تکی، sha256 `a048b469…`، `unzip -t` PASS) + `step3-v3/deploy-step3-v3.csv` (۱۰ ردیف APPEND + ۴۲ ردیف SKIP) + `step3-v3/manifest.json|csv` + CHECKSUMS + contact sheet.
+- فایل‌های مردود قبلی همان `FAILED_QA`/`DO_NOT_DEPLOY` ماندند و آرشیو قدیمی همچنان `NOT_FOR_DEPLOY` است. Step4 و زیپش دست‌نخورده (`525231ba…`).
+- ترتیب گالری: تصویر فعلی → ۱۰ فایل Step3 v3 → ۴۷ فایل Step4. هیچ تصویر جدیدی ساخته نشد.
