@@ -104,7 +104,8 @@
    "notes": "Step3 v3 rebuild; owner accepted 2026-09-17 (the real product photo stays on the site as the identity reference). Append after the current gallery image.",
    "version": "v3",
    "hand_side": null,
-   "source_commit": null
+   "source_commit": null,
+   "gallery_order": 1
   },
   {
    "product_id": 65,
@@ -143,7 +144,8 @@
    "notes": "Step3 v3 rebuild; owner accepted 2026-09-17 (the real product photo stays on the site as the identity reference). Append after the current gallery image.",
    "version": "v3",
    "hand_side": null,
-   "source_commit": null
+   "source_commit": null,
+   "gallery_order": 2
   },
   {
    "product_id": 65,
@@ -182,7 +184,8 @@
    "notes": "Step3 v3 rebuild; owner accepted 2026-09-17 (the real product photo stays on the site as the identity reference). Append after the current gallery image.",
    "version": "v3",
    "hand_side": null,
-   "source_commit": null
+   "source_commit": null,
+   "gallery_order": 3
   },
   {
    "product_id": 69,
@@ -221,7 +224,8 @@
    "notes": "Step3 v3 rebuild; owner accepted 2026-09-17 (the real product photo stays on the site as the identity reference). Append after the current gallery image.",
    "version": "v3",
    "hand_side": null,
-   "source_commit": null
+   "source_commit": null,
+   "gallery_order": 4
   },
   {
    "product_id": 69,
@@ -260,7 +264,8 @@
    "notes": "Step3 v3 rebuild; owner accepted 2026-09-17 (the real product photo stays on the site as the identity reference). Append after the current gallery image.",
    "version": "v3",
    "hand_side": null,
-   "source_commit": null
+   "source_commit": null,
+   "gallery_order": 5
   },
   {
    "product_id": 73,
@@ -299,7 +304,8 @@
    "notes": "Step3 v3 rebuild; owner accepted 2026-09-17 (the real product photo stays on the site as the identity reference). Append after the current gallery image.",
    "version": "v3",
    "hand_side": null,
-   "source_commit": null
+   "source_commit": null,
+   "gallery_order": 6
   },
   {
    "product_id": 73,
@@ -338,7 +344,8 @@
    "notes": "Step3 v3 rebuild; owner accepted 2026-09-17 (the real product photo stays on the site as the identity reference). Append after the current gallery image.",
    "version": "v3",
    "hand_side": null,
-   "source_commit": null
+   "source_commit": null,
+   "gallery_order": 7
   },
   {
    "product_id": 77,
@@ -377,7 +384,8 @@
    "notes": "Step3 v3 rebuild; owner accepted 2026-09-17 (the real product photo stays on the site as the identity reference). Append after the current gallery image.",
    "version": "v3",
    "hand_side": null,
-   "source_commit": null
+   "source_commit": null,
+   "gallery_order": 8
   },
   {
    "product_id": 77,
@@ -416,7 +424,8 @@
    "notes": "Step3 v3 rebuild; owner accepted 2026-09-17 (the real product photo stays on the site as the identity reference). Append after the current gallery image.",
    "version": "v3",
    "hand_side": null,
-   "source_commit": null
+   "source_commit": null,
+   "gallery_order": 9
   },
   {
    "product_id": 85,
@@ -987,7 +996,8 @@
    "notes": "Step3 v3 rebuild; owner accepted 2026-09-17 (the real product photo stays on the site as the identity reference). Append after the current gallery image.",
    "version": "v3",
    "hand_side": null,
-   "source_commit": null
+   "source_commit": null,
+   "gallery_order": 10
   },
   {
    "product_id": 259,
