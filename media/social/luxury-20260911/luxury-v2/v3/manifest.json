@@ -1,0 +1,63 @@
+{
+ "run": "luxury-step3-v3-20260917",
+ "branch": "ai-social-luxury-20260911",
+ "items": [
+  {
+   "product_id": 65,
+   "sku": "1058",
+   "step": "step3",
+   "angle": "A",
+   "version": "v3",
+   "source_branch": "ai-social-luxury-20260911",
+   "source_path": "media/social/luxury-20260911/luxury-v2/65/v3/65-A-step3-v3.png",
+   "source_reference": "https://radmansilver.ir/wp-content/uploads/2026/08/01-1.webp",
+   "width": 1080,
+   "height": 1350,
+   "actual_format": "PNG",
+   "sha256": "bf10965ccaa9cba30b7b6cada70d4046f4f28462bee440cc2ecc0442f4e9d500",
+   "qa_status": "FAILED_QA",
+   "owner_approval_status": "PENDING_OWNER_REVIEW",
+   "deployment_action": "DO_NOT_DEPLOY",
+   "compare_sheet": "media/social/luxury-20260911/luxury-v2/qa/65-A-v3-compare.png",
+   "notes": "v3 pilot: engraving not preserved vs the live store reference (letterforms/strokes and relief differ); identity drift persists after 2 attempts -> FAILED_QA per owner rule 3",
+   "attempts": 2
+  },
+  {
+   "product_id": 65,
+   "sku": "1058",
+   "step": "step3",
+   "angle": "B",
+   "version": "v3",
+   "source_branch": "ai-social-luxury-20260911",
+   "source_path": "media/social/luxury-20260911/luxury-v2/65/v3/65-B-step3-v3.png",
+   "source_reference": "https://radmansilver.ir/wp-content/uploads/2026/08/02-1.webp",
+   "width": 1080,
+   "height": 1350,
+   "actual_format": "PNG",
+   "sha256": "2d0685f4807657e6009a540d91ea82d1e4800d924bb3faa1411f65ce12d80ba6",
+   "qa_status": "FAILED_QA",
+   "owner_approval_status": "PENDING_OWNER_REVIEW",
+   "deployment_action": "DO_NOT_DEPLOY",
+   "compare_sheet": "media/social/luxury-20260911/luxury-v2/qa/65-B-v3-compare.png",
+   "notes": "v3 pilot: engraving not preserved vs the live store reference (letterforms/strokes and relief differ); identity drift persists after 2 attempts -> FAILED_QA per owner rule 3",
+   "attempts": 2
+  }
+ ],
+ "note": "Step3 v3 rebuild of the 10 rejected files. Each output is GENERATED_PENDING_REVIEW at best; the pilot pair 65-A/65-B failed preservation and is FAILED_QA. Nothing here is approved.",
+ "counters": {
+  "pilot_requested": 2,
+  "pilot_generated": 2,
+  "pilot_failed_qa": 2,
+  "image_requests_used_total": 4,
+  "remaining_products": [
+   "61-B",
+   "69-A",
+   "69-B",
+   "73-A",
+   "73-B",
+   "77-A",
+   "77-B",
+   "256-A"
+  ]
+ }
+}
