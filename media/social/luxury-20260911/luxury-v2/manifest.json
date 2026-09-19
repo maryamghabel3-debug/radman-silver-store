@@ -202,7 +202,7 @@
   {
    "pid": 105,
    "sku": "1010",
-   "status": "APPROVED",
+   "status": "OWNER_REJECTED",
    "file": "media/social/luxury-20260911/luxury-v2/105/105-luxury-4x5.png",
    "commit": "fb580103b4e856127cdb2ff52265fec3bb2dee54",
    "qa": "media/social/luxury-20260911/luxury-v2/qa/105-compare.png",
@@ -211,15 +211,20 @@
    "source_saved": "media/social/luxury-20260911/luxury-v2/source/105-ref.png",
    "source_commit": "56b812fb7e4291bb83c6258cf0c22c7511904648",
    "environment": "black pebbled leather plinth + warm gallery light and bokeh",
-   "note": "APPROVED by owner (2026-09-15)",
+   "note": "OWNER_REJECTED (2026-09-19): WRONG_PRODUCT — do not deploy. File kept on branch untouched (no overwrite).",
    "run": "luxury-v2-20260915",
-   "approved_by": "owner",
-   "approved_at": "2026-09-15"
+   "previous_status": "APPROVED",
+   "previous_approved_by": "owner",
+   "previous_approved_at": "2026-09-15",
+   "owner_reject_reason": "WRONG_PRODUCT",
+   "owner_rejected_by": "owner",
+   "owner_rejected_at": "2026-09-19",
+   "deploy_decision": "DO_NOT_DEPLOY"
   },
   {
    "pid": 109,
    "sku": "1011",
-   "status": "APPROVED",
+   "status": "OWNER_REJECTED",
    "file": "media/social/luxury-20260911/luxury-v2/109/109-luxury-4x5.png",
    "commit": "7dd4f8176a2c65fb857211a2aafd7c88e6993708",
    "qa": "media/social/luxury-20260911/luxury-v2/qa/109-compare.png",
@@ -228,10 +233,15 @@
    "source_saved": "media/social/luxury-20260911/luxury-v2/source/109-ref.png",
    "source_commit": "43689be865cf0f46ede3ed1e7ee278654b35d6fb",
    "environment": "polished dark glass with clean mirror reflection + single directional light",
-   "note": "APPROVED by owner (2026-09-15)",
+   "note": "OWNER_REJECTED (2026-09-19): IDENTITY_DRIFT_STONE_COLOR_AND_TEXT — do not deploy. File kept on branch untouched (no overwrite).",
    "run": "luxury-v2-20260915",
-   "approved_by": "owner",
-   "approved_at": "2026-09-15"
+   "previous_status": "APPROVED",
+   "previous_approved_by": "owner",
+   "previous_approved_at": "2026-09-15",
+   "owner_reject_reason": "IDENTITY_DRIFT_STONE_COLOR_AND_TEXT",
+   "owner_rejected_by": "owner",
+   "owner_rejected_at": "2026-09-19",
+   "deploy_decision": "DO_NOT_DEPLOY"
   },
   {
    "pid": 113,
@@ -287,7 +297,7 @@
   {
    "pid": 125,
    "sku": "1006",
-   "status": "APPROVED",
+   "status": "OWNER_REJECTED",
    "file": "media/social/luxury-20260911/luxury-v2/125/125-luxury-4x5.png",
    "commit": "3d9272eada1fb28d801d682c78f6e959e95c6bbd",
    "qa": "media/social/luxury-20260911/luxury-v2/qa/125-compare.png",
@@ -296,10 +306,15 @@
    "source_saved": "media/social/luxury-20260911/luxury-v2/source/125-ref.png",
    "source_commit": "2ee94c9f975ee4336f6f3b1d5618199628b19864",
    "environment": "dark light-table, warm transmitted backlight glowing through the green agate",
-   "note": "APPROVED by owner (2026-09-15)",
+   "note": "OWNER_REJECTED (2026-09-19): IDENTITY_DRIFT_ENGRAVING_DETAIL — do not deploy. File kept on branch untouched (no overwrite).",
    "run": "luxury-v2-20260915",
-   "approved_by": "owner",
-   "approved_at": "2026-09-15"
+   "previous_status": "APPROVED",
+   "previous_approved_by": "owner",
+   "previous_approved_at": "2026-09-15",
+   "owner_reject_reason": "IDENTITY_DRIFT_ENGRAVING_DETAIL",
+   "owner_rejected_by": "owner",
+   "owner_rejected_at": "2026-09-19",
+   "deploy_decision": "DO_NOT_DEPLOY"
   },
   {
    "pid": 129,
@@ -336,7 +351,7 @@
   {
    "pid": 137,
    "sku": "1003",
-   "status": "APPROVED",
+   "status": "OWNER_REJECTED",
    "file": "media/social/luxury-20260911/luxury-v2/137/137-luxury-4x5.png",
    "commit": "883b921bcfd3510eed88e265098693c98c30e2f5",
    "qa": "media/social/luxury-20260911/luxury-v2/qa/137-compare.png",
@@ -345,10 +360,15 @@
    "source_saved": "media/social/luxury-20260911/luxury-v2/source/137-ref.png",
    "source_commit": "354d67966346b13e3718fcb8ab0587416c81921e",
    "environment": "dark oxblood leather + warm low-left key (no light through the stone)",
-   "note": "APPROVED by owner (2026-09-15)",
+   "note": "OWNER_REJECTED (2026-09-19): IDENTITY_DRIFT_SHANK_ORNAMENT_REMOVED — do not deploy. File kept on branch untouched (no overwrite).",
    "run": "luxury-v2-20260915",
-   "approved_by": "owner",
-   "approved_at": "2026-09-15"
+   "previous_status": "APPROVED",
+   "previous_approved_by": "owner",
+   "previous_approved_at": "2026-09-15",
+   "owner_reject_reason": "IDENTITY_DRIFT_SHANK_ORNAMENT_REMOVED",
+   "owner_rejected_by": "owner",
+   "owner_rejected_at": "2026-09-19",
+   "deploy_decision": "DO_NOT_DEPLOY"
   },
   {
    "pid": 143,
@@ -1160,6 +1180,54 @@
    "file": "media/social/luxury-20260911/luxury-v2/rejected/93-attempt1-FAILED_QA.png",
    "sha": "b68d292900c5ea41b452fdee178b4f1e241fd2a9",
    "raw": "https://raw.githubusercontent.com/maryamghabel3-debug/radman-silver-store/ai-social-luxury-20260911/media/social/luxury-20260911/luxury-v2/rejected/93-attempt1-FAILED_QA.png"
+  },
+  {
+   "pid": 105,
+   "attempt": 1,
+   "status": "OWNER_REJECTED",
+   "reason": "WRONG_PRODUCT",
+   "file": "media/social/luxury-20260911/luxury-v2/105/105-luxury-4x5.png",
+   "sha": "cff1b58a9a603c80c5b1d766646e5426ac490619",
+   "size_bytes": 1685110,
+   "decided_by": "owner",
+   "decided_at": "2026-09-19",
+   "note": "was APPROVED 2026-09-15; approval withdrawn by the owner"
+  },
+  {
+   "pid": 109,
+   "attempt": 1,
+   "status": "OWNER_REJECTED",
+   "reason": "IDENTITY_DRIFT_STONE_COLOR_AND_TEXT",
+   "file": "media/social/luxury-20260911/luxury-v2/109/109-luxury-4x5.png",
+   "sha": "48642512d38111183174b330b17145ad2082f73b",
+   "size_bytes": 1525033,
+   "decided_by": "owner",
+   "decided_at": "2026-09-19",
+   "note": "was APPROVED 2026-09-15; approval withdrawn by the owner"
+  },
+  {
+   "pid": 125,
+   "attempt": 1,
+   "status": "OWNER_REJECTED",
+   "reason": "IDENTITY_DRIFT_ENGRAVING_DETAIL",
+   "file": "media/social/luxury-20260911/luxury-v2/125/125-luxury-4x5.png",
+   "sha": "87a93369a919bb50153e34df3283b27ad3d5251c",
+   "size_bytes": 1443345,
+   "decided_by": "owner",
+   "decided_at": "2026-09-19",
+   "note": "was APPROVED 2026-09-15; approval withdrawn by the owner"
+  },
+  {
+   "pid": 137,
+   "attempt": 1,
+   "status": "OWNER_REJECTED",
+   "reason": "IDENTITY_DRIFT_SHANK_ORNAMENT_REMOVED",
+   "file": "media/social/luxury-20260911/luxury-v2/137/137-luxury-4x5.png",
+   "sha": "e01668aaf18369ca73698c17dfcbc39110340352",
+   "size_bytes": 1504778,
+   "decided_by": "owner",
+   "decided_at": "2026-09-19",
+   "note": "was APPROVED 2026-09-15; approval withdrawn by the owner"
   }
  ],
  "engraving_reviews": {
@@ -1169,9 +1237,10 @@
    "sha": "b8b45fbed45f2966428072e0904ecbfee7672c98"
   }
  },
- "approved_count": 38,
+ "approved_count": 34,
+ "owner_rejected_count": 4,
  "failed_count": 2,
  "pending_count": 17,
  "duplicate_skipped_count": 13,
- "counts_updated": "2026-09-16"
+ "counts_updated": "2026-09-19"
 }
